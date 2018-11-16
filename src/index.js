@@ -1,5 +1,5 @@
 import './index.scss';
-import { PROFILE, PROJS} from './src/content';
+import { PROFILE, PROJS} from './content';
 
 import $ from 'jquery';
 
