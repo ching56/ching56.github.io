@@ -37,6 +37,17 @@ a {
   color: #686868;
 }
 
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 1.5rem;
+}
+
+.site-footer {
+  grid-column: 2;
+}
+
 main,
 article {
   min-width: 0;
@@ -89,6 +100,10 @@ time {
   .site-shell {
     grid-template-columns: 1fr;
     gap: 3rem;
+  }
+
+  .site-footer {
+    grid-column: 1;
   }
 
   .post-list li {

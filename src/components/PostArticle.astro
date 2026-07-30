@@ -1,8 +1,8 @@
 ---
-import { render, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPostDate } from "../lib/posts";
+import { getPostDate, getPostSlug } from "../lib/posts";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -11,9 +11,30 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const date = getPostDate(post.data.date, post.data.language);
+const slug = getPostSlug(post);
+const matchingPosts = (await getCollection("posts")).filter(
+  (candidate) => getPostSlug(candidate) === slug,
+);
+const translatedPost = matchingPosts.find(
+  (candidate) => candidate.data.language !== post.data.language,
+);
+const alternates = translatedPost
+  ? matchingPosts.map((candidate) => ({
+      language: candidate.data.language,
+      path: `/${candidate.data.language}/blog/${slug}/`,
+    }))
+  : [];
+const translatedPostPath = translatedPost
+  ? `/${translatedPost.data.language}/blog/${slug}/`
+  : undefined;
 ---
 
-<BaseLayout title={post.data.title} language={post.data.language}>
+<BaseLayout
+  title={post.data.title}
+  language={post.data.language}
+  alternates={alternates}
+  languageSwitchPath={translatedPostPath}
+>
   <article>
     <header class="post-header">
       <h1>{post.data.title}</h1>

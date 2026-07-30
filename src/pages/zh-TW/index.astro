@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { EDITION_HOME_ALTERNATES } from "../../config/i18n";
 import {
   getPostDate,
   getPostSlug,
@@ -10,7 +11,7 @@ const posts = (await getPostsByLanguage("zh-TW"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout language="zh-TW">
+<BaseLayout language="zh-TW" alternates={EDITION_HOME_ALTERNATES}>
   <h1>文章</h1>
   <ol class="post-list">
     {posts.map((post) => {

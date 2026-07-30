@@ -1,7 +1,10 @@
 export const SITE = {
   // The name is intentionally easy to replace; PRODUCT.md records it as open.
   title: "The Return",
-  description: "李至青的部落格",
+  description: {
+    "zh-TW": "李至青的部落格",
+    en: "Jhih Cing Li's blog",
+  },
   url: "https://jhihcing.li",
   author: {
     name: "Jhih Cing Li",

@@ -19,11 +19,11 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 02 (`.scratch/site-rebuild/issues/02-content-migration.md`) is resolved: all seven zh-TW posts plus `/zh-TW/about/` render, the public live-only writing is migrated, and Eleventy sources/dependencies are removed. No implementation is in flight. Exact next step on the next rebuild go-ahead: claim ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`). The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
+Ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`) is claimed and its implementation is green: both locale editions/chrome, hidden untranslated posts, conditional hreflang, English article routing, and the root Accept-Language HTTP redirect pass. Exact next step: commit the ticket-only implementation snapshot against `93e3d90`, run the required parallel Standards/Spec review, address actionable findings, then rerun `yarn run check` and `yarn test` before resolving. The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
 
 ## In progress
 
-- (none)
+- Ticket 03 bilingual structure implementation and review.
 
 ## Waiting on user
 

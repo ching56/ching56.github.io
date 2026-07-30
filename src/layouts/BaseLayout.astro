@@ -1,15 +1,27 @@
 ---
 import { SITE } from "../config/site.js";
+import { UI, type SiteLanguage } from "../config/i18n";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
-  language: "zh-TW" | "en";
+  language: SiteLanguage;
+  alternates?: ReadonlyArray<{
+    language: SiteLanguage;
+    path: string;
+  }>;
+  languageSwitchPath?: string;
 }
 
-const { title, language } = Astro.props;
+const {
+  title,
+  language,
+  alternates = [],
+  languageSwitchPath = UI[language].languageSwitch.href,
+} = Astro.props;
 const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
+const ui = UI[language];
 ---
 
 <!doctype html>
@@ -17,20 +29,35 @@ const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={SITE.description} />
+    <meta name="description" content={SITE.description[language]} />
     <meta name="author" content={SITE.author.name} />
     <link rel="canonical" href={canonicalUrl} />
+    {alternates.map((alternate) => (
+      <link
+        rel="alternate"
+        hreflang={alternate.language}
+        href={new URL(alternate.path, SITE.url)}
+      />
+    ))}
     <title>{pageTitle}</title>
   </head>
   <body>
     <div class="site-shell">
       <header class="site-header">
-        <a href="/zh-TW/">{SITE.title}</a>
+        <a href={ui.homePath}>{SITE.title}</a>
         <p>{SITE.author.name}</p>
+        <nav aria-label={ui.navigationLabel}>
+          <a href={ui.homePath}>{ui.postsLabel}</a>
+          {ui.aboutLabel && <a href="/zh-TW/about/">{ui.aboutLabel}</a>}
+          <a href={languageSwitchPath}>{ui.languageSwitch.label}</a>
+        </nav>
       </header>
       <main>
         <slot />
       </main>
+      <footer class="site-footer">
+        <a href={`mailto:${SITE.author.email}`}>{ui.emailLabel}</a>
+      </footer>
     </div>
   </body>
 </html>

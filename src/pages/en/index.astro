@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { EDITION_HOME_ALTERNATES } from "../../config/i18n";
+import {
+  getPostDate,
+  getPostSlug,
+  getPostsByLanguage,
+} from "../../lib/posts";
+
+const posts = (await getPostsByLanguage("en"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout language="en" alternates={EDITION_HOME_ALTERNATES}>
+  <h1>Posts</h1>
+  {posts.length === 0 ? (
+    <p>No English posts yet.</p>
+  ) : (
+    <ol class="post-list">
+      {posts.map((post) => {
+        const date = getPostDate(post.data.date, "en");
+
+        return (
+          <li>
+            <a href={`/en/blog/${getPostSlug(post)}/`}>{post.data.title}</a>
+            <time datetime={date.dateTime}>{date.label}</time>
+          </li>
+        );
+      })}
+    </ol>
+  )}
+</BaseLayout>

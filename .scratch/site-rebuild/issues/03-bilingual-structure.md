@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 — Astro scaffold + first post end-to-end. (Parallel with 02.)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] `/zh-TW/` and `/en/` both render with locale-appropriate chrome
 - [ ] Root `/` redirects by Accept-Language (zh → `/zh-TW/`, everything else → `/en/`); redirect is testable (Seam 2 style if implemented in code, or asserted config if a Cloudflare rule)

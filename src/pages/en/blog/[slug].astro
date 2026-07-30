@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import PostArticle from "../../../components/PostArticle.astro";
+import {
+  getPostSlug,
+  getPostsByLanguage,
+} from "../../../lib/posts";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+export async function getStaticPaths() {
+  const posts = await getPostsByLanguage("en");
+
+  return posts.map((post) => ({
+    params: { slug: getPostSlug(post) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<PostArticle post={post} />

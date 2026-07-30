@@ -74,6 +74,104 @@ const expectedPosts = [
   },
 ];
 
+test("an English reader can open the empty English edition", async () => {
+  const page = new URL("en/index.html", distDirectory);
+  const html = await readFile(page, "utf8");
+
+  assert.match(html, /<html lang="en">/);
+  assert.match(html, /<meta name="description" content="Jhih Cing Li's blog">/);
+  assert.match(html, /<h1[^>]*>Posts<\/h1>/);
+  assert.match(html, /No English posts yet\./);
+  assert.doesNotMatch(html, /<ol class="post-list">/);
+});
+
+test("readers can navigate and switch languages using locale-aware chrome", async () => {
+  const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
+    readFile(new URL("en/index.html", distDirectory), "utf8"),
+    readFile(listPage, "utf8"),
+    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+  ]);
+
+  assert.match(englishList, /<nav[^>]*aria-label="Primary navigation"/);
+  assert.match(englishList, /href="\/en\/"[^>]*>Posts<\/a>/);
+  assert.match(
+    englishList,
+    /href="\/zh-TW\/"[^>]*>Traditional Chinese<\/a>/,
+  );
+  assert.match(
+    englishList,
+    /href="mailto:jhihcing\.li@gmail\.com"[^>]*>Email<\/a>/,
+  );
+
+  assert.match(chineseList, /<nav[^>]*aria-label="主要導覽"/);
+  assert.match(chineseList, /href="\/zh-TW\/"[^>]*>文章<\/a>/);
+  assert.match(chineseList, /href="\/zh-TW\/about\/"[^>]*>關於<\/a>/);
+  assert.match(chineseList, /href="\/en\/"[^>]*>English<\/a>/);
+  assert.match(
+    chineseList,
+    /href="mailto:jhihcing\.li@gmail\.com"[^>]*>寄信<\/a>/,
+  );
+  assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
+
+  const englishChrome = ["header", "footer"]
+    .map((element) => englishList.match(new RegExp(`<${element}\\b[\\s\\S]*?<\\/${element}>`))?.[0] ?? "")
+    .join(" ");
+  assert.doesNotMatch(englishChrome, /文章|關於|寄信|主要導覽/);
+});
+
+test("hreflang alternates appear only for pages with a translated counterpart", async () => {
+  const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
+    readFile(new URL("en/index.html", distDirectory), "utf8"),
+    readFile(listPage, "utf8"),
+    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+  ]);
+  const listAlternates = [
+    '<link rel="alternate" hreflang="zh-TW" href="https://jhihcing.li/zh-TW/">',
+    '<link rel="alternate" hreflang="en" href="https://jhihcing.li/en/">',
+  ];
+
+  for (const alternate of listAlternates) {
+    assert.ok(chineseList.includes(alternate));
+    assert.ok(englishList.includes(alternate));
+  }
+
+  assert.doesNotMatch(chineseOnlyPost, /hreflang=/);
+});
+
+test("the root route redirects readers by their preferred supported language", async () => {
+  const { onRequest } = await import("../functions/index.js");
+  const cases = [
+    {
+      acceptLanguage: "zh-TW,zh;q=0.9,en;q=0.8",
+      location: "https://jhihcing.li/zh-TW/",
+    },
+    {
+      acceptLanguage: "en-US,en;q=0.9,zh-TW;q=0.8",
+      location: "https://jhihcing.li/en/",
+    },
+    {
+      acceptLanguage: "fr-FR,fr;q=0.9",
+      location: "https://jhihcing.li/en/",
+    },
+    {
+      acceptLanguage: null,
+      location: "https://jhihcing.li/en/",
+    },
+  ];
+
+  for (const { acceptLanguage, location } of cases) {
+    const headers = acceptLanguage
+      ? { "Accept-Language": acceptLanguage }
+      : undefined;
+    const request = new Request("https://jhihcing.li/", { headers });
+    const response = onRequest({ request });
+
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get("Location"), location);
+    assert.equal(response.headers.get("Vary"), "Accept-Language");
+  }
+});
+
 for (const post of expectedPosts) {
   test(`a reader can read the complete ${post.title} post`, async () => {
     const route = `/zh-TW/blog/${post.slug}/`;
@@ -132,6 +230,7 @@ test("a reader can open the complete zh-TW about page", async () => {
 test("content pages request neither webfonts nor Astro runtime JavaScript", async () => {
   const contentPages = [
     listPage,
+    new URL("en/index.html", distDirectory),
     new URL("zh-TW/about/index.html", distDirectory),
     ...expectedPosts.map(
       ({ slug }) => new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),

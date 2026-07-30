@@ -107,3 +107,23 @@
 - Intent: record the reviewed ticket 02 outcome and commit its final handoff without absorbing unrelated dirty work
 - Why: both duplication findings are fixed, all nine content artifacts now share the no-JS/no-webfont audit, `yarn run check` reports zero diagnostics, and `yarn test` passes all nine assertions
 - Result: done — ticket 02 is resolved; the obsolete GitHub Pages workflow is a reviewed, documented exception owned by ticket 05, and the next implementation frontier is ticket 03
+
+## 2026-07-30 19:00 · codex
+- Intent: claim site-rebuild ticket 03 and implement its bilingual structure through the agreed built-output and redirect HTTP seams, one red/green behavior at a time
+- Why: ticket 02 is resolved and ticket 03 is the next unblocked frontier; externally observed locale pages and Request-to-Response redirect behavior cover the reader-visible contract without coupling tests to Astro internals
+- Result: in progress — first add a failing artifact assertion for the `/en/` edition, then implement locale-aware chrome, language switching, partial-translation/hreflang rules, and the root Accept-Language redirect before the required review
+
+## 2026-07-30 19:05 · codex
+- Intent: add the deployment-facing root Pages Function only after pinning its Accept-Language choices and cache behavior through its public HTTP response
+- Why: Cloudflare Pages' documented file routing maps `functions/index.js` exactly to `/`; testing real `Request` inputs and `Response` status/headers keeps the dynamic redirect externally verifiable without introducing an Astro server adapter
+- Result: in progress — first capture the required red for Chinese, English/non-Chinese, missing-header, and `Vary: Accept-Language` behavior, then add the minimal Function
+
+## 2026-07-30 19:07 · codex
+- Intent: complete the partial-translation authoring skeleton with an English article route and extend the existing performance audit to the English edition
+- Why: the empty English list correctly hides zh-TW-only posts, but a future English Markdown entry would otherwise link to a missing page; no production translation may be invented solely to make that path externally exercisable today
+- Result: in progress — add the symmetric content-driven route without adding English content, remove the diagnostics hint, then run the complete artifact/HTTP suite
+
+## 2026-07-30 19:09 · codex
+- Intent: commit the green ticket 03 implementation snapshot and run the required two-axis review against task-start commit `93e3d90`
+- Why: Astro diagnostics are clean and all 13 artifact/HTTP assertions pass; the review skill needs a fixed committed diff and must evaluate repo standards independently from ticket/spec fidelity
+- Result: in progress — stage only ticket 03 files and this task's WORKLOG hunks, preserve pre-existing product-ideas/tooling work, then address every actionable review finding
