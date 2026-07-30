@@ -1,8 +1,7 @@
 ---
 title: "關於"
 date: 2022-12-22
-layout: layouts/post.njk
-tags: posts
+language: zh-TW
 ---
 
 我是李至青 Jhih Cing, Li。
@@ -11,4 +10,4 @@ tags: posts
 
 寫給所有迷惘、脆弱、無助、自卑的人，你們不是獨自一人。寫給幫助過我的人，是你們讓我有能力分享。寫給未來的我自己，故事是從這裡開始。
 
-透過 Email 找到我：jcli@pm.me 
+透過 Email 找到我：jcli@pm.me
