@@ -19,11 +19,11 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is claimed; implementation snapshot `5428ab6` and all actionable Standards review fixes are green. Exact next step: commit the centralized locale/feed URL changes, ask both reviewers for a focused closure audit against `427e78a...HEAD`, then resolve the ticket and commit the final handoff if no actionable findings remain. The reviewed eight-post claim is a pre-existing spec arithmetic error (resolved ticket 02 establishes seven migrated posts); the official Astro helper produces RSS 2.0, so the explicit Atom 1.0 ticket contract retains its custom static endpoint. The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
+Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is resolved: `/zh-TW/atom.xml` carries all seven migrated posts, `/en/atom.xml` is valid while empty, centralized metadata/locale routes drive both feeds, and every locale page discovers only its own feed. Required Standards/Spec review is closed with no actionable findings; `corepack yarn run check` and `corepack yarn test` are green. No implementation is in flight. Exact next step after the user's DNS move: claim ticket 05 (`.scratch/site-rebuild/issues/05-pages-cutover.md`) and follow its cutover checklist; do not delete the obsolete GitHub Pages workflow or `public/CNAME` before then.
 
 ## In progress
 
-- Ticket 04 — locale Atom feeds from centralized metadata, including a valid empty English feed and locale-specific discovery links.
+- (none)
 
 ## Waiting on user
 
@@ -33,7 +33,7 @@ Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is claimed; implemen
 
 ## Backlog
 
-- Rebuild work: tickets 01–03 are resolved; ticket 04 is in progress; ticket 07 remains unblocked. Tickets live in `.scratch/site-rebuild/issues/`.
+- Rebuild work: tickets 01–04 are resolved; ticket 05 waits on the user's DNS move; ticket 07 is technically unblocked but follows the Pages cutover in the settled execution order. Tickets live in `.scratch/site-rebuild/issues/`.
 - Site naming decision before launch (see Waiting on user).
 - Design session: visual world via impeccable new-work, after ticket 01 gives it a running surface (PRODUCT.md carries the taste evidence).
 - Configure impeccable live mode once the Astro dev server exists (skipped during init — old stack was about to be replaced).

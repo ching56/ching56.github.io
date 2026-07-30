@@ -167,3 +167,13 @@
 - Intent: address the complete ticket 04 review: refresh the stale handoff, centralize the locale registry/feed URL, and document why the two Spec findings do not expand or change this ticket
 - Why: Standards found one hard handoff violation plus two duplication judgments; the “eight posts” claim contradicts resolved ticket 02's seven-post source of truth, while Astro's official RSS helper emits RSS 2.0 and cannot satisfy the ticket's explicit Atom 1.0 contract
 - Result: in progress — derive feed paths from `UI`, derive static feed routes from its locale keys, retain the custom Atom endpoint, then rerun diagnostics and all built-output assertions
+
+## 2026-07-30 19:34 · codex
+- Intent: resolve ticket 04 and commit its final zero-context handoff after one last verification run
+- Why: the closure audit confirms both Standards duplications are fixed and no actionable Spec finding remains; only the milestone-stale STATE resume point remains to correct
+- Result: in progress — mark every acceptance criterion complete, return STATE to no implementation in flight, rerun the final bar, then commit only ticket-owned finalization hunks
+
+## 2026-07-30 19:35 · codex
+- Intent: record the completed ticket 04 review and verification outcome without rewriting prior append-only entries
+- Why: the final handoff must distinguish the implementation snapshot from its reviewed fixes and show that every acceptance criterion was exercised after the final code change
+- Result: done — implementation is `5428ab6`, actionable review fixes are `e4b0d15`, both closure reviewers report no remaining ticket defect, `corepack yarn run check` has zero diagnostics, and all 17 `corepack yarn test` assertions pass; this resolved handoff ships in the following commit
