@@ -1,0 +1,38 @@
+---
+import { UI, type SiteLanguage } from "../config/i18n";
+import {
+  getPostDate,
+  getPostSlug,
+  getPostsByLanguage,
+} from "../lib/posts";
+
+interface Props {
+  language: SiteLanguage;
+}
+
+const { language } = Astro.props;
+const ui = UI[language];
+const posts = (await getPostsByLanguage(language)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<h1>{ui.postsLabel}</h1>
+{posts.length === 0 ? (
+  <p>{ui.emptyPostsMessage}</p>
+) : (
+  <ol class="post-list">
+    {posts.map((post) => {
+      const date = getPostDate(post.data.date, language);
+
+      return (
+        <li>
+          <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
+            {post.data.title}
+          </a>
+          <time datetime={date.dateTime}>{date.label}</time>
+        </li>
+      );
+    })}
+  </ol>
+)}

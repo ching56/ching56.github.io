@@ -127,3 +127,13 @@
 - Intent: commit the green ticket 03 implementation snapshot and run the required two-axis review against task-start commit `93e3d90`
 - Why: Astro diagnostics are clean and all 13 artifact/HTTP assertions pass; the review skill needs a fixed committed diff and must evaluate repo standards independently from ticket/spec fidelity
 - Result: in progress — stage only ticket 03 files and this task's WORKLOG hunks, preserve pre-existing product-ideas/tooling work, then address every actionable review finding
+
+## 2026-07-30 19:13 · codex
+- Intent: address all required review findings before resolving ticket 03: harden Accept-Language quality handling, remove duplicated locale-list rendering, and refresh the handoff frontier
+- Why: the Spec review found valid `Q=0`/wildcard inputs that choose the wrong locale; the Standards review found the two list pages repeat query/sort/row logic and that the committed STATE resume point became stale at the snapshot milestone
+- Result: in progress — reproduce the negotiation bugs with HTTP-level red tests, fix them, extract one locale-aware post-list component, then run the final verification bar
+
+## 2026-07-30 19:15 · codex
+- Intent: resolve ticket 03 and commit the reviewed fixes plus final zero-context handoff
+- Why: both review axes are now satisfied, `yarn run check` reports zero errors/warnings/hints, and `yarn test` passes all 13 production-artifact and redirect HTTP assertions
+- Result: in progress — stage only ticket-owned review/finalization changes, commit them, then append the resulting commit hashes without absorbing unrelated work

@@ -3,6 +3,7 @@ export const UI = {
     homePath: "/zh-TW/",
     navigationLabel: "主要導覽",
     postsLabel: "文章",
+    emptyPostsMessage: "目前沒有文章。",
     aboutLabel: "關於",
     emailLabel: "寄信",
     languageSwitch: {
@@ -14,6 +15,7 @@ export const UI = {
     homePath: "/en/",
     navigationLabel: "Primary navigation",
     postsLabel: "Posts",
+    emptyPostsMessage: "No English posts yet.",
     aboutLabel: null,
     emailLabel: "Email",
     languageSwitch: {

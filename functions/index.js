@@ -20,34 +20,52 @@ function prefersTraditionalChinese(acceptLanguage) {
     .split(",")
     .map((value, position) => {
       const [language, ...parameters] = value.trim().split(";");
-      const qualityParameter = parameters.find((parameter) =>
-        parameter.trim().startsWith("q="),
-      );
-      const quality = qualityParameter
-        ? Number.parseFloat(qualityParameter.trim().slice(2))
-        : 1;
+      const qualityMatch = parameters
+        .map((parameter) => parameter.trim().match(/^q\s*=\s*(.*)$/i))
+        .find(Boolean);
+      const parsedQuality = qualityMatch ? Number(qualityMatch[1]) : 1;
+      const quality =
+        Number.isFinite(parsedQuality) &&
+        parsedQuality >= 0 &&
+        parsedQuality <= 1
+          ? parsedQuality
+          : 0;
 
       return {
         language: language.toLowerCase(),
         position,
-        quality: Number.isFinite(quality) ? quality : 0,
+        quality,
       };
-    })
-    .filter(({ quality }) => quality > 0)
-    .sort(
-      (left, right) =>
-        right.quality - left.quality || left.position - right.position,
-    );
+    });
+  const chinese = getLanguagePreference(preferences, "zh");
+  const english = getLanguagePreference(preferences, "en");
 
-  for (const { language } of preferences) {
-    if (language === "zh" || language.startsWith("zh-")) {
-      return true;
-    }
+  if (chinese.quality <= 0) return false;
+  if (english.quality <= 0) return true;
 
-    if (language === "en" || language.startsWith("en-") || language === "*") {
-      return false;
-    }
-  }
+  return (
+    chinese.quality > english.quality ||
+    (chinese.quality === english.quality &&
+      chinese.position < english.position)
+  );
+}
 
-  return false;
+function getLanguagePreference(preferences, languagePrefix) {
+  const explicit = preferences.filter(
+    ({ language }) =>
+      language === languagePrefix || language.startsWith(`${languagePrefix}-`),
+  );
+  const candidates = explicit.length
+    ? explicit
+    : preferences.filter(({ language }) => language === "*");
+
+  return candidates.reduce(
+    (best, candidate) =>
+      candidate.quality > best.quality ||
+      (candidate.quality === best.quality &&
+        candidate.position < best.position)
+        ? candidate
+        : best,
+    { quality: -1, position: Number.POSITIVE_INFINITY },
+  );
 }

@@ -19,11 +19,11 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`) is claimed and its implementation is green: both locale editions/chrome, hidden untranslated posts, conditional hreflang, English article routing, and the root Accept-Language HTTP redirect pass. Exact next step: commit the ticket-only implementation snapshot against `93e3d90`, run the required parallel Standards/Spec review, address actionable findings, then rerun `yarn run check` and `yarn test` before resolving. The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
+Ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`) is resolved: both locale editions, locale-aware chrome/language switching, hidden untranslated posts, conditional hreflang, and the root Accept-Language redirect are reviewed and green. No implementation is in flight. Exact next step on the next rebuild go-ahead: claim ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`). The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
 
 ## In progress
 
-- Ticket 03 bilingual structure implementation and review.
+- (none)
 
 ## Waiting on user
 
@@ -33,7 +33,7 @@ Ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`) is claimed 
 
 ## Backlog
 
-- Rebuild work: tickets 01–02 resolved; tickets 03/07 remain unblocked, with 03 the next numbered frontier. Tickets live in `.scratch/site-rebuild/issues/`.
+- Rebuild work: tickets 01–03 are resolved; tickets 04/07 are unblocked, with 04 the next numbered frontier. Tickets live in `.scratch/site-rebuild/issues/`.
 - Site naming decision before launch (see Waiting on user).
 - Design session: visual world via impeccable new-work, after ticket 01 gives it a running surface (PRODUCT.md carries the taste evidence).
 - Configure impeccable live mode once the Astro dev server exists (skipped during init — old stack was about to be replaced).

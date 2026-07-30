@@ -154,6 +154,14 @@ test("the root route redirects readers by their preferred supported language", a
       location: "https://jhihcing.li/en/",
     },
     {
+      acceptLanguage: "zh-TW;Q=0,en;q=1",
+      location: "https://jhihcing.li/en/",
+    },
+    {
+      acceptLanguage: "en;q=0,*;q=1,zh;q=0.5",
+      location: "https://jhihcing.li/zh-TW/",
+    },
+    {
       acceptLanguage: null,
       location: "https://jhihcing.li/en/",
     },
