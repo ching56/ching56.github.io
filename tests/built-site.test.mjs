@@ -78,22 +78,30 @@ const expectedPosts = [
 test("old WordPress URLs publish permanent redirects to their new homes", async () => {
   const redirects = await readRedirects();
   const expectedRedirects = [
-    ["/hello-world", "/zh-TW/blog/hello-world/", 301],
-    ["/about", "/zh-TW/about/", 301],
-    ["/2022-2", "/zh-TW/blog/2022/", 301],
-    ["/covid", "/zh-TW/blog/covid/", 301],
-    [
-      "/conservation-of-mass",
-      "/zh-TW/blog/conservation-of-mass/",
-      301,
-    ],
-    ["/2023-2024", "/zh-TW/blog/2023-2024/", 301],
-    ["/2025-2", "/zh-TW/blog/2025/", 301],
+    {
+      source: "/hello-world",
+      destination: "/zh-TW/blog/hello-world/",
+      status: 301,
+    },
+    { source: "/about", destination: "/zh-TW/about/", status: 301 },
+    { source: "/2022-2", destination: "/zh-TW/blog/2022/", status: 301 },
+    { source: "/covid", destination: "/zh-TW/blog/covid/", status: 301 },
+    {
+      source: "/conservation-of-mass",
+      destination: "/zh-TW/blog/conservation-of-mass/",
+      status: 301,
+    },
+    {
+      source: "/2023-2024",
+      destination: "/zh-TW/blog/2023-2024/",
+      status: 301,
+    },
+    { source: "/2025-2", destination: "/zh-TW/blog/2025/", status: 301 },
   ];
 
   for (const expected of expectedRedirects) {
     assert.deepEqual(
-      redirects.find(([source]) => source === expected[0]),
+      redirects.find(({ source }) => source === expected.source),
       expected,
     );
   }
@@ -538,6 +546,6 @@ async function readRedirects() {
     .filter((line) => line && !line.startsWith("#"))
     .map((line) => {
       const [source, destination, status] = line.split(/\s+/);
-      return [source, destination, Number(status)];
+      return { source, destination, status: Number(status) };
     });
 }

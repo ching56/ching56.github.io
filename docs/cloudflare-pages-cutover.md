@@ -102,12 +102,19 @@ Stop here if the Pages deployment or any `*.pages.dev` check fails.
 ## 3. User: attach the production hostnames
 
 1. Open the Pages project, then **Custom domains > Set up a domain**. Add
-   `jhihcing.li` and wait until it is Active. Because the zone is already on
-   Cloudflare, Pages creates the required proxied DNS record.
-2. Repeat **Set up a domain** for `www.jhihcing.li`; do not merely create a
-   standalone CNAME to `*.pages.dev`, because an unassociated Pages hostname
-   can return HTTP 522.
-3. Confirm both custom domains show Active and have valid HTTPS before adding
+   `jhihcing.li`. When Cloudflare reports the existing apex A record
+   (`66.235.200.145`) conflicts with the Pages record, approve replacing only
+   that old web record with the Pages-managed CNAME. Do not delete or modify
+   MX, TXT, CAA, mail, or verification records. Wait until the apex custom
+   domain is Active.
+2. Repeat **Set up a domain** for `www.jhihcing.li`. When prompted, approve
+   replacing only the old `www` CNAME (`jhihcing.li`) with the Pages-managed
+   CNAME. Do not merely create a standalone CNAME to `*.pages.dev`, because an
+   unassociated Pages hostname can return HTTP 522.
+3. In **DNS > Records**, confirm both `@` and `www` now show the
+   Pages-managed `PROJECT.pages.dev` target and **Proxied** (orange cloud), and
+   that the preserved non-web records are still present.
+4. Confirm both custom domains show Active and have valid HTTPS before adding
    the canonical redirect.
 
 See Cloudflare's [Pages custom-domain procedure](https://developers.cloudflare.com/pages/configuration/custom-domains/).
