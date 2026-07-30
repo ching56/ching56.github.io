@@ -74,3 +74,8 @@ typings/
 
 #build file
 dist 
+# Eleventy build output
+_site
+
+# WordPress export (private content)
+thereturn.WordPress.*.xml

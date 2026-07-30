@@ -1,20 +1,29 @@
 {
-  "name": "boilderplate",
+  "name": "jhihcing-blog",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Personal blog of Jhih Cing Li",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "watch": "eleventy --watch",
+    "debug": "DEBUG=* eleventy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.12.0",
-    "node-sass": "^4.9.2"
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-img": "^5.0.0",
+    "@11ty/eleventy-navigation": "^0.3.5",
+    "@11ty/eleventy-plugin-rss": "^2.0.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
+    "cross-env": "^7.0.3",
+    "luxon": "^3.5.0",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.3.1"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "@zachleat/heading-anchors": "^1.0.1"
   }
 }
