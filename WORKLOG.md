@@ -192,3 +192,13 @@
 - Intent: commit the green ticket 05 repository-preparation snapshot and run the required two-axis review against task-start commit `9f2de97`
 - Why: all safe repository acceptance work is complete, `corepack yarn run check` has zero diagnostics, all 18 `corepack yarn test` assertions pass, and account/DNS/live criteria remain explicitly unchecked and user-blocked
 - Result: in progress — stage only ticket-owned files and this task's appended WORKLOG hunks, preserve unrelated product-ideas/tooling work, commit the snapshot, then address every actionable Standards/Spec finding without falsely resolving the ticket
+
+## 2026-07-30 19:50 · codex
+- Intent: address every ticket 05 review finding before the blocked handoff: refresh STATE, name redirect fields, and make the Pages DNS-record replacement step explicit
+- Why: Standards found the handoff stale after commit `38994ee` plus a positional redirect-triple smell; Spec found the runbook could stall because it preserved old apex/`www` web records without explicitly authorizing Pages to replace only those two during custom-domain attachment
+- Result: in progress — apply the three bounded corrections, rerun the full verification bar, and commit the reviewed handoff while leaving account/live criteria unchecked
+
+## 2026-07-30 19:54 · codex
+- Intent: record the reviewed ticket 05 preparation outcome and leave an exact blocked handoff without rewriting prior append-only entries
+- Why: all three review findings are fixed, `corepack yarn run check` is clean, all 18 `corepack yarn test` assertions pass, but authoritative DNS and Cloudflare Pages account state still require the user's manual actions and live verification
+- Result: done — repository preparation is `38994ee`, review fixes are `9cda7ce`, the ticket remains correctly claimed, and the next agent must wait for the user to complete runbook sections 1–4 before running section 5 and deciding whether ticket 05 can resolve

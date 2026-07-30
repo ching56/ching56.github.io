@@ -14,3 +14,16 @@
 - [x] GitHub Pages workflow and CNAME removed; obsolete pre-rebuild STATE items marked cancelled
 - [x] No reference to the retired legacy domain remains in the repo
 - [x] STATE.md/WORKLOG.md updated
+
+## Comments
+
+### 2026-07-30 — repository preparation complete; waiting on user
+
+Read-only verification found the domain still authoritative on Bluehost and
+serving the pre-cutover host, so the live criteria remain unchecked. Commit
+`38994ee` adds the tested Cloudflare redirect artifact, exact account/cutover
+runbook, and single-deployment cleanup; `9cda7ce` addresses all required
+Standards/Spec review findings. The user must push the preparation, complete
+runbook sections 1–4, and report the zone plus both Pages custom domains Active.
+An agent then runs every section 5 production check before resolving this
+ticket. Do not start ticket 06 while this ticket remains claimed.

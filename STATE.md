@@ -19,16 +19,16 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 05 (`.scratch/site-rebuild/issues/05-pages-cutover.md`) is claimed but externally blocked. Read-only checks at 2026-07-30 19:38 Asia/Taipei found authoritative nameservers `ns1.bluehost.com` and `ns2.bluehost.com`, apex address `66.235.200.145`, and HTTP 403 Cloudflare challenges at the apex, `www`, and `/covid`; the Astro Pages site is not live. Safe repository preparation is green: `public/_redirects` carries all seven old WordPress 301 mappings (with trailing-slash variants), `docs/cloudflare-pages-cutover.md` gives exact account steps and production checks, the broken Eleventy-based GitHub Pages workflow plus unrelated legacy CNAME are removed, `corepack yarn run check` has zero diagnostics, and all 18 `corepack yarn test` assertions pass. Exact next step: commit only the ticket-owned preparatory snapshot, then run the required Standards/Spec review against task-start commit `9f2de97`.
+Ticket 05 (`.scratch/site-rebuild/issues/05-pages-cutover.md`) is claimed and paused at its user-only boundary; do not resolve it or start ticket 06. Read-only checks at 2026-07-30 19:38 Asia/Taipei found authoritative nameservers `ns1.bluehost.com` and `ns2.bluehost.com`, apex address `66.235.200.145`, and HTTP 403 Cloudflare challenges at the apex, `www`, and `/covid`; the Astro Pages site is not live. Safe repository preparation is complete in `38994ee` and reviewed fixes are in `9cda7ce`: all seven old WordPress redirect mappings are emitted, the obsolete GitHub deployment/CNAME are removed, the exact account/cutover procedure is in `docs/cloudflare-pages-cutover.md`, Standards findings (stale handoff, positional redirect fixtures) and the Spec finding (missing explicit replacement of the old apex/`www` web records) are addressed, `corepack yarn run check` has zero diagnostics, and all 18 `corepack yarn test` assertions pass. Exact next step: the user pushes these preparation commits to `origin/master` and follows runbook sections 1–4; after the user reports the zone and both Pages custom domains Active, an agent runs every read-only `dig`/`curl` check in section 5 and resolves ticket 05 only if all results match.
 
 ## In progress
 
-- Ticket 05 repository-side cutover preparation is implemented and verified; the preparatory commit and required review remain before handing the user the account-action checklist.
+- Ticket 05 repository preparation and review are complete; implementation is paused at the user-only DNS/Pages account actions.
 
 ## Waiting on user
 
 - **Site name decision**: "The Return" is explicitly NOT confirmed for the new site (PRODUCT.md § Brand Commitments). Keep name in one metadata source; decide before launch.
-- **DNS move and Pages setup**: user must add `jhihcing.li` as a Cloudflare free zone, preserve every non-web DNS record, change nameservers at Namecheap, connect this GitHub repo to a Cloudflare Pages project, attach apex/`www`, and deploy the `www` → apex rule. Agent must only prepare and verify these account actions.
+- **DNS move and Pages setup**: push commits `38994ee`, `9cda7ce`, and the following handoff commit to `origin/master`, then follow `docs/cloudflare-pages-cutover.md` sections 1–4: add `jhihcing.li` as a Cloudflare free zone, preserve every non-web DNS record, change nameservers at Namecheap, connect this GitHub repo to a Cloudflare Pages project, attach apex/`www` while replacing only their old web records, and deploy the `www` → apex rule. Agent must only prepare and verify these account actions.
 - (cancelled) push the obsolete migration commit / switch GitHub Pages source to Actions — do not execute either item.
 
 ## Backlog
