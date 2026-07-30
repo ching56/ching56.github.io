@@ -10,7 +10,7 @@ Guidance for any AI coding agent (Claude Code, Codex, etc.) working in this repo
 
 ## What this is
 
-Personal blog (working title "The Return", 李至青的部落格, zh-TW) being rebuilt as a static Astro 7 site for Cloudflare Pages. The title remains an open product decision; metadata is centralized so it can change once. The first Astro tracer is active, while legacy Eleventy source and deployment files remain only until their scheduled cleanup tickets. Content is being migrated from WordPress — `thereturn.WordPress.2024-12-20.xml` is stale and gitignored because it contains private drafts and commenter emails; never commit it. The pre-2025 Parcel site is preserved at the `old-blog` git tag.
+Personal blog (working title "The Return", 李至青的部落格, zh-TW) rebuilt as a static Astro 7 site for Cloudflare Pages. The title remains an open product decision; metadata is centralized so it can change once. The public WordPress content is migrated, while the Pages account and DNS cutover remain user-owned. `thereturn.WordPress.2024-12-20.xml` is stale and gitignored because it contains private drafts and commenter emails; never commit it. The pre-2025 Parcel site is preserved at the `old-blog` git tag.
 
 ## Commands
 
@@ -31,10 +31,10 @@ The active Astro scaffold uses the default project roots:
 - `src/pages/` — locale-prefixed list and post routes; the first tracer lives under `/zh-TW/`.
 - `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only baseline CSS.
 - `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no webfonts/runtime JS).
-- `public/` — copied verbatim into `dist/`; it still contains legacy files pending later cleanup.
+- `public/` — static assets and Cloudflare's `_redirects` file, copied verbatim into `dist/`.
 - `dist/` — generated build output, gitignored.
 
-The Eleventy sources, config, and dependencies are gone. The obsolete GitHub Pages workflow still invokes Eleventy and targets `_site/`; ticket 05 explicitly owns deleting it during the Cloudflare Pages cutover. Do not treat that workflow as the current local verification path.
+The Eleventy sources, config, dependencies, GitHub Pages workflow, and legacy CNAME are gone. Cloudflare Pages is the sole intended deployment path, but its account-side setup and production cutover remain user-owned. The local verification path is `yarn check` plus `yarn test`.
 
 ## Work log
 
@@ -82,5 +82,4 @@ Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/age
 
 ## Known inconsistencies
 
-- Astro locale feeds do not exist yet; ticket 04 introduces them from centralized site metadata.
-- `public/CNAME` still contains `www.jcli.io`, so Astro copies it into `dist/`; ticket 05 removes it at the Cloudflare cutover. Canonical page metadata already uses `https://jhihcing.li`.
+- None currently documented.

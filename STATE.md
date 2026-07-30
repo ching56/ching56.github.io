@@ -6,7 +6,7 @@
 
 1. **Framework**: rebuild on **Astro** (replaces the current Eleventy setup). Reason: user has a concrete island use case — a pottery-map mini app to embed in a "how to start pottery" post and a works page. The map app itself is a separate project; this repo only provides the island slot.
 2. **Deploy**: **Cloudflare Pages** (replaces GitHub Pages). DNS moves to Cloudflare (free zone); domain registration stays at Namecheap.
-3. **Domain**: canonical = `https://jhihcing.li` (apex). `www` 301 → apex. `jcli.io` will NOT be renewed (remove `public/CNAME` value on rebuild).
+3. **Domain**: canonical = `https://jhihcing.li` (apex). `www` 301 → apex. The retired legacy domain will not be renewed and must not appear in active repository content.
 4. **Analytics**: Cloudflare Web Analytics beacon (cookieless, no banner) + a weekly agent/cron snapshot via Cloudflare GraphQL API accumulating per-page counts into a JSON in this repo (free plan retention is only ~30d RUM / 7d unsampled, hence the snapshot). Numbers are sampled estimates; snapshot job needs a failure alert.
 5. **Likes**: self-built — Cloudflare Worker + D1, anonymous like button, no cookie/login. This Worker later doubles as API skeleton for the pottery-map app.
 6. **Comments/discussion**: none. Footer email link only. (Bluesky rejected: user has no social base there; audience is zh-TW.)
@@ -19,17 +19,17 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is resolved: `/zh-TW/atom.xml` carries all seven migrated posts, `/en/atom.xml` is valid while empty, centralized metadata/locale routes drive both feeds, and every locale page discovers only its own feed. Required Standards/Spec review is closed with no actionable findings; `corepack yarn run check` and `corepack yarn test` are green. No implementation is in flight. Exact next step after the user's DNS move: claim ticket 05 (`.scratch/site-rebuild/issues/05-pages-cutover.md`) and follow its cutover checklist; do not delete the obsolete GitHub Pages workflow or `public/CNAME` before then.
+Ticket 05 (`.scratch/site-rebuild/issues/05-pages-cutover.md`) is claimed but externally blocked. Read-only checks at 2026-07-30 19:38 Asia/Taipei found authoritative nameservers `ns1.bluehost.com` and `ns2.bluehost.com`, apex address `66.235.200.145`, and HTTP 403 Cloudflare challenges at the apex, `www`, and `/covid`; the Astro Pages site is not live. Safe repository preparation is green: `public/_redirects` carries all seven old WordPress 301 mappings (with trailing-slash variants), `docs/cloudflare-pages-cutover.md` gives exact account steps and production checks, the broken Eleventy-based GitHub Pages workflow plus unrelated legacy CNAME are removed, `corepack yarn run check` has zero diagnostics, and all 18 `corepack yarn test` assertions pass. Exact next step: commit only the ticket-owned preparatory snapshot, then run the required Standards/Spec review against task-start commit `9f2de97`.
 
 ## In progress
 
-- (none)
+- Ticket 05 repository-side cutover preparation is implemented and verified; the preparatory commit and required review remain before handing the user the account-action checklist.
 
 ## Waiting on user
 
 - **Site name decision**: "The Return" is explicitly NOT confirmed for the new site (PRODUCT.md § Brand Commitments). Keep name in one metadata source; decide before launch.
-- **DNS move**: add `jhihcing.li` as a Cloudflare free zone, then change nameservers at Namecheap (user-only action; agent can prepare instructions).
-- (superseded) old items — push migration commit / switch Pages source to GitHub Actions — are OBSOLETE if the Astro+Cloudflare rebuild proceeds; do not execute them.
+- **DNS move and Pages setup**: user must add `jhihcing.li` as a Cloudflare free zone, preserve every non-web DNS record, change nameservers at Namecheap, connect this GitHub repo to a Cloudflare Pages project, attach apex/`www`, and deploy the `www` → apex rule. Agent must only prepare and verify these account actions.
+- (cancelled) push the obsolete migration commit / switch GitHub Pages source to Actions — do not execute either item.
 
 ## Backlog
 

@@ -75,6 +75,30 @@ const expectedPosts = [
   },
 ];
 
+test("old WordPress URLs publish permanent redirects to their new homes", async () => {
+  const redirects = await readRedirects();
+  const expectedRedirects = [
+    ["/hello-world", "/zh-TW/blog/hello-world/", 301],
+    ["/about", "/zh-TW/about/", 301],
+    ["/2022-2", "/zh-TW/blog/2022/", 301],
+    ["/covid", "/zh-TW/blog/covid/", 301],
+    [
+      "/conservation-of-mass",
+      "/zh-TW/blog/conservation-of-mass/",
+      301,
+    ],
+    ["/2023-2024", "/zh-TW/blog/2023-2024/", 301],
+    ["/2025-2", "/zh-TW/blog/2025/", 301],
+  ];
+
+  for (const expected of expectedRedirects) {
+    assert.deepEqual(
+      redirects.find(([source]) => source === expected[0]),
+      expected,
+    );
+  }
+});
+
 test("each locale publishes a parseable Atom feed at its stable URL", async () => {
   for (const language of ["zh-TW", "en"]) {
     const root = await readAtomFeed(language);
@@ -503,4 +527,17 @@ async function walkFiles(directoryUrl, relativeDirectory = "") {
   }
 
   return files;
+}
+
+async function readRedirects() {
+  const contents = await readFile(new URL("_redirects", distDirectory), "utf8");
+
+  return contents
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"))
+    .map((line) => {
+      const [source, destination, status] = line.split(/\s+/);
+      return [source, destination, Number(status)];
+    });
 }

@@ -177,3 +177,18 @@
 - Intent: record the completed ticket 04 review and verification outcome without rewriting prior append-only entries
 - Why: the final handoff must distinguish the implementation snapshot from its reviewed fixes and show that every acceptance criterion was exercised after the final code change
 - Result: done — implementation is `5428ab6`, actionable review fixes are `e4b0d15`, both closure reviewers report no remaining ticket defect, `corepack yarn run check` has zero diagnostics, and all 17 `corepack yarn test` assertions pass; this resolved handoff ships in the following commit
+
+## 2026-07-30 19:38 · codex
+- Intent: claim site-rebuild ticket 05 and prepare every safe repository-side Cloudflare Pages cutover step while the manual DNS prerequisite remains unmet
+- Why: authoritative DNS still uses `ns1.bluehost.com`/`ns2.bluehost.com` and the live host serves the pre-cutover site; redirect artifacts and an exact runbook can be completed without changing accounts or prematurely removing the current deployment fallback
+- Result: in progress — pin the old-slug redirect contract at the built-output seam, add the Pages-ready mapping and cutover/verification instructions, then review and commit the coherent preparation without resolving the blocked ticket
+
+## 2026-07-30 19:45 · codex
+- Intent: retire the obsolete GitHub Pages workflow and legacy CNAME during ticket 05 preparation, then remove the retired domain string from current repository guidance
+- Why: read-only DNS proves current production is the external Bluehost/WordPress site, the workflow cannot deploy after Eleventy was removed, and the CNAME targets a deliberately abandoned domain; these repository artifacts are not a production fallback and deleting them cannot perform or disrupt the user-only cutover
+- Result: in progress — delete only the two ticket-owned artifacts, refresh active guidance/spec wording, verify the retired domain string is absent, and rerun the complete build bar
+
+## 2026-07-30 19:46 · codex
+- Intent: commit the green ticket 05 repository-preparation snapshot and run the required two-axis review against task-start commit `9f2de97`
+- Why: all safe repository acceptance work is complete, `corepack yarn run check` has zero diagnostics, all 18 `corepack yarn test` assertions pass, and account/DNS/live criteria remain explicitly unchecked and user-blocked
+- Result: in progress — stage only ticket-owned files and this task's appended WORKLOG hunks, preserve unrelated product-ideas/tooling work, commit the snapshot, then address every actionable Standards/Spec finding without falsely resolving the ticket
