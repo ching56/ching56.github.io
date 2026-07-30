@@ -19,7 +19,7 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 01 (`.scratch/site-rebuild/issues/01-astro-scaffold-tracer.md`) is resolved: Astro scaffold, one real zh-TW post, centralized metadata, and built-output assertions are complete. No implementation is in flight. On the user's next rebuild go-ahead, open ticket 02 (`.scratch/site-rebuild/issues/02-content-migration.md`) and begin by inventorying the five legacy Markdown posts against the live WordPress post list before moving files.
+Ticket 02 (`.scratch/site-rebuild/issues/02-content-migration.md`) is resolved: all seven zh-TW posts plus `/zh-TW/about/` render, the public live-only writing is migrated, and Eleventy sources/dependencies are removed. No implementation is in flight. Exact next step on the next rebuild go-ahead: claim ticket 03 (`.scratch/site-rebuild/issues/03-bilingual-structure.md`). The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
 
 ## In progress
 
@@ -33,7 +33,7 @@ Ticket 01 (`.scratch/site-rebuild/issues/01-astro-scaffold-tracer.md`) is resolv
 
 ## Backlog
 
-- Rebuild work: ticket 01 resolved; tickets 02/03/07 are now unblocked, with 02 the next execution-order frontier. Tickets live in `.scratch/site-rebuild/issues/`.
+- Rebuild work: tickets 01–02 resolved; tickets 03/07 remain unblocked, with 03 the next numbered frontier. Tickets live in `.scratch/site-rebuild/issues/`.
 - Site naming decision before launch (see Waiting on user).
 - Design session: visual world via impeccable new-work, after ticket 01 gives it a running surface (PRODUCT.md carries the taste evidence).
 - Configure impeccable live mode once the Astro dev server exists (skipped during init — old stack was about to be replaced).

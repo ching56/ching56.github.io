@@ -77,3 +77,33 @@
 - Intent: record the shared-matcher audit result without rewriting the entry above
 - Why: the final handoff should show that both inline and emitted CSS were verified with the same rule
 - Result: done — one matcher now rejects `@font-face` and every `@import` form in HTML and emitted CSS; the fresh production build and both assertions pass, and this change ships in the following commit
+
+## 2026-07-30 18:19 · codex
+- Intent: claim site-rebuild ticket 02 and inventory the five legacy Markdown posts against the live WordPress posts and about page before changing content
+- Why: the live site is the content source of truth, while the stale export is private and must not enter git; an explicit inventory prevents missing or accidentally importing non-public material
+- Result: in progress — verify only publicly rendered titles, dates, slugs, and article bodies, then start the first built-output red/green content slice
+
+## 2026-07-30 18:26 · codex
+- Intent: record the completed public-content inventory and start the built-output TDD slices with `Hello world!`
+- Why: WordPress.com's public API mirror returned only six `status: publish` posts and the selected public fields; adding the user-confirmed hidden `一切不滅定律` yields the required seven without touching drafts, comments, or the private export
+- Result: inventory complete — live-only posts are `2023 ~ 2024` (2024-12-22, old slug `2023-2024`) and `2025` (2026-01-01, old slug `2025-2`); the live copies also identify corrupt legacy characters that must be restored to `未來` and `解隔`; next add the failing `Hello world!` artifact assertion
+
+## 2026-07-30 18:38 · codex
+- Intent: remove the tracked Eleventy sources, config, and Eleventy-only dependencies after preserving all public writing in seven Astro post routes plus `/zh-TW/about/`
+- Why: the content slices and focused built-output assertions are green, so the legacy build can now be removed without risking the author's only copy; ticket 02 requires Astro to be the repo's single build story
+- Result: in progress — delete only `_config/`, `_data/`, `_includes/`, `content/`, and `eleventy.config.js`, update the Yarn manifest/lockfile, then run the full artifact suite
+
+## 2026-07-30 18:41 · codex
+- Intent: commit the ticket 02 implementation snapshot and run the required two-axis review against task-start commit `20b3d96`
+- Why: all nine built-output tests pass, Astro diagnostics are clean, and the code-review skill requires a fixed committed diff for independent Standards and Spec agents
+- Result: in progress — verify the cleanup diff, commit only ticket 02 files while preserving unrelated dirty work, then address every actionable review finding before resolving the ticket
+
+## 2026-07-30 18:50 · codex
+- Intent: address both code-review duplication findings, expand the no-JS/no-webfont audit across every migrated content page, and finish the ticket 02 handoff
+- Why: the Standards review found repeated post assertions and duplicated article markup; the Spec review otherwise confirmed the content implementation, while its workflow finding belongs explicitly to ticket 05 (`05-pages-cutover.md`) and must not expand this ticket into deployment changes
+- Result: in progress — introduce one shared article component and one enumerated post assertion table, rerun the final bar, resolve ticket 02, and commit only ticket-owned handoff hunks
+
+## 2026-07-30 18:54 · codex
+- Intent: record the reviewed ticket 02 outcome and commit its final handoff without absorbing unrelated dirty work
+- Why: both duplication findings are fixed, all nine content artifacts now share the no-JS/no-webfont audit, `yarn run check` reports zero diagnostics, and `yarn test` passes all nine assertions
+- Result: done — ticket 02 is resolved; the obsolete GitHub Pages workflow is a reviewed, documented exception owned by ticket 05, and the next implementation frontier is ticket 03

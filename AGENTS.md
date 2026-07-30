@@ -34,7 +34,7 @@ The active Astro scaffold uses the default project roots:
 - `public/` — copied verbatim into `dist/`; it still contains legacy files pending later cleanup.
 - `dist/` — generated build output, gitignored.
 
-Legacy Eleventy directories (`content/`, `_includes/`, `_data/`, `_config/`) and `eleventy.config.js` are deliberately still present for ticket 02. The existing GitHub Pages workflow still targets `_site/` and is obsolete; ticket 05 replaces it during the Cloudflare Pages cutover. Do not treat that workflow as the current local verification path.
+The Eleventy sources, config, and dependencies are gone. The obsolete GitHub Pages workflow still invokes Eleventy and targets `_site/`; ticket 05 explicitly owns deleting it during the Cloudflare Pages cutover. Do not treat that workflow as the current local verification path.
 
 ## Work log
 
@@ -82,5 +82,5 @@ Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/age
 
 ## Known inconsistencies
 
-- The inactive Eleventy Atom feed still has starter placeholders; ticket 02 removes the legacy setup and ticket 04 introduces locale feeds from Astro metadata.
+- Astro locale feeds do not exist yet; ticket 04 introduces them from centralized site metadata.
 - `public/CNAME` still contains `www.jcli.io`, so Astro copies it into `dist/`; ticket 05 removes it at the Cloudflare cutover. Canonical page metadata already uses `https://jhihcing.li`.

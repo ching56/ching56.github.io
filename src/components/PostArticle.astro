@@ -1,0 +1,26 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPostDate } from "../lib/posts";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = getPostDate(post.data.date, post.data.language);
+---
+
+<BaseLayout title={post.data.title} language={post.data.language}>
+  <article>
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <time datetime={date.dateTime}>{date.label}</time>
+    </header>
+    <div class="post-body">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

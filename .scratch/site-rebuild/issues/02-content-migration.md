@@ -4,11 +4,11 @@
 
 **Blocked by:** 01 — Astro scaffold + first post end-to-end.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] All 7 posts + about page render at `/zh-TW/...` URLs with correct titles, dates, and full body content
-- [ ] The 2 WordPress-only posts are migrated from the live site; no commenter emails or private drafts enter git
-- [ ] 「一切不滅定律」 is present and published
-- [ ] Eleventy config, layouts, `content/`, and Eleventy-only dependencies are removed; `astro build` is the only build
-- [ ] Post-build assertions enumerate and verify every post
-- [ ] STATE.md/WORKLOG.md updated
+- [x] All 7 posts + about page render at `/zh-TW/...` URLs with correct titles, dates, and full body content
+- [x] The 2 WordPress-only posts are migrated from the live site; no commenter emails or private drafts enter git
+- [x] 「一切不滅定律」 is present and published
+- [x] Eleventy config, layouts, `content/`, and Eleventy-only dependencies are removed; `astro build` is the only build
+- [x] Post-build assertions enumerate and verify every post
+- [x] STATE.md/WORKLOG.md updated
