@@ -57,3 +57,13 @@
 - Intent: record the completed ticket 01 audit and return the handoff to the next frontier
 - Why: the prior entry must remain unchanged while its result is captured append-only for the next agent
 - Result: done — the original 17:40 result is preserved; implementation is in `1b9a751`, review fixes are in `75946a5`, arbitrary remote stylesheets are now rejected, and the final `npm run check` + `npm test` pass; this audit ships in the following commit
+
+## 2026-07-30 18:08 · codex
+- Intent: close the last adversarial review gap by applying the font-rule assertion to inline page styles as well as emitted CSS files
+- Why: a page-level `@font-face` or `@import` could otherwise bypass the promised no-webfont regression guard
+- Result: in progress — strengthen the page assertion, rerun `npm test`, and append the verified outcome
+
+## 2026-07-30 18:09 · codex
+- Intent: record the final inline-style audit outcome without rewriting the entry above
+- Why: the next agent needs an append-only record that the strengthened assertion was actually exercised against a fresh production build
+- Result: done — `npm test` rebuilt both routes and both built-output assertions passed with inline and emitted font rules covered; the change ships in the following commit
