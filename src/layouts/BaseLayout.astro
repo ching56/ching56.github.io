@@ -1,0 +1,36 @@
+---
+import { SITE } from "../config/site.js";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  language: "zh-TW" | "en";
+}
+
+const { title, language } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
+const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
+---
+
+<!doctype html>
+<html lang={language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={SITE.description} />
+    <meta name="author" content={SITE.author.name} />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a href="/zh-TW/">{SITE.title}</a>
+        <p>{SITE.author.name}</p>
+      </header>
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

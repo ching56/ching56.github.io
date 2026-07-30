@@ -73,7 +73,9 @@ typings/
 .serverless
 
 #build file
-dist 
+dist
+# Astro generated content cache
+.astro/
 # Eleventy build output
 _site
 

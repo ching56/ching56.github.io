@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("posts", ({ data }) => data.language === "zh-TW"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const slugFromId = (id: string) => id.split("/").at(-1) ?? id;
+const formatDate = (date: Date) => new Intl.DateTimeFormat("zh-TW", {
+  dateStyle: "long",
+  timeZone: "UTC",
+}).format(date);
+---
+
+<BaseLayout language="zh-TW">
+  <h1>文章</h1>
+  <ol class="post-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/zh-TW/blog/${slugFromId(post.id)}/`}>{post.data.title}</a>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>
+          {formatDate(post.data.date)}
+        </time>
+      </li>
+    ))}
+  </ol>
+</BaseLayout>
