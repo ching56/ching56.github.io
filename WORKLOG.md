@@ -67,3 +67,13 @@
 - Intent: record the final inline-style audit outcome without rewriting the entry above
 - Why: the next agent needs an append-only record that the strengthened assertion was actually exercised against a fresh production build
 - Result: done — `npm test` rebuilt both routes and both built-output assertions passed with inline and emitted font rules covered; the change ships in the following commit
+
+## 2026-07-30 18:10 · codex
+- Intent: eliminate the remaining mismatch between inline and emitted CSS font-rule assertions
+- Why: the emitted-CSS matcher accepts only `@import url(...)`, while valid quoted `@import "…"` syntax must also fail the no-webfont guard
+- Result: in progress — share the broader matcher across both artifact types, rerun `npm test`, and append the outcome
+
+## 2026-07-30 18:11 · codex
+- Intent: record the shared-matcher audit result without rewriting the entry above
+- Why: the final handoff should show that both inline and emitted CSS were verified with the same rule
+- Result: done — one matcher now rejects `@font-face` and every `@import` form in HTML and emitted CSS; the fresh production build and both assertions pass, and this change ships in the following commit

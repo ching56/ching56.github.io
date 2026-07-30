@@ -9,6 +9,7 @@ const postPage = new URL(
   "zh-TW/blog/conservation-of-mass/index.html",
   distDirectory,
 );
+const forbiddenFontRule = /@font-face|@import\s+(?:url\s*\()?/i;
 
 test("a reader can open the zh-TW post list and read 一切不滅定律", async () => {
   const [listHtml, postHtml] = await Promise.all([
@@ -41,7 +42,7 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
 
   for (const html of [listHtml, postHtml]) {
     assert.doesNotMatch(html, /<script\b/i);
-    assert.doesNotMatch(html, /@font-face|@import\s+(?:url\s*\()?/i);
+    assert.doesNotMatch(html, forbiddenFontRule);
     assert.doesNotMatch(
       html,
       /<link\b[^>]*href="[^"]+\.(?:woff2?|ttf|otf|eot)(?:\?[^"]*)?"/i,
@@ -62,7 +63,7 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
   const stylesheets = outputFiles.filter((file) => file.endsWith(".css"));
   for (const stylesheet of stylesheets) {
     const css = await readFile(new URL(stylesheet, distDirectory), "utf8");
-    assert.doesNotMatch(css, /@font-face|@import\s+url/i);
+    assert.doesNotMatch(css, forbiddenFontRule);
   }
 });
 
