@@ -45,10 +45,12 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
       html,
       /<link\b[^>]*href="[^"]+\.(?:woff2?|ttf|otf|eot)(?:\?[^"]*)?"/i,
     );
-    assert.doesNotMatch(
-      html,
-      /(?:fonts\.(?:googleapis|gstatic)\.com|use\.typekit\.net)/i,
-    );
+
+    for (const link of html.matchAll(/<link\b[^>]*>/gi)) {
+      if (/\brel="stylesheet"/i.test(link[0])) {
+        assert.doesNotMatch(link[0], /\bhref="https?:\/\//i);
+      }
+    }
   }
 
   assert.deepEqual(

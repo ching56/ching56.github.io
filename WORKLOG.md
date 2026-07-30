@@ -36,7 +36,7 @@
 ## 2026-07-30 17:40 · codex
 - Intent: implement site-rebuild ticket 01 as a TDD tracer bullet: replace the active build with Astro, render one real zh-TW post end to end, and add assertions against `dist/`
 - Why: the user invoked `$implement`; ticket 01 is the unblocked frontier and establishes the agreed built-output test seam for later tickets
-- Result: implementation committed as `1b9a751`; `astro check` had zero errors, the dev server returned HTTP 200 for both routes, and the full `npm test` build + 2 built-output assertions passed
+- Result: implementation green — `astro check` has zero errors, the dev server returned HTTP 200 for both routes, and the full `npm test` build + 2 built-output assertions pass; required code review and final commit handoff remain
 
 ## 2026-07-30 18:00 · codex
 - Intent: address every hard/partial finding from the required two-axis review, update the now-stale Astro contributor guidance, and remove the route-helper duplication flagged as a judgement call
@@ -47,3 +47,13 @@
 - Intent: commit the reviewed ticket 01 fixes and final handoff state
 - Why: the `$implement` workflow requires the completed work on the current branch, and the issue tracker must not advertise a resolved ticket as ready for another agent
 - Result: done — review fixes and the resolved handoff ship in this commit
+
+## 2026-07-30 18:05 · codex
+- Intent: append the outcome of the 17:40 implementation entry without rewriting its original result, and close the last no-webfont assertion gap found by the final review
+- Why: `WORKLOG.md` is append-only, and a provider allowlist cannot prove that arbitrary remote font stylesheets are absent
+- Result: in progress — preserve the old entry, reject every remote stylesheet, rerun verification, and append the outcome
+
+## 2026-07-30 18:06 · codex
+- Intent: record the completed ticket 01 audit and return the handoff to the next frontier
+- Why: the prior entry must remain unchanged while its result is captured append-only for the next agent
+- Result: done — the original 17:40 result is preserved; implementation is in `1b9a751`, review fixes are in `75946a5`, arbitrary remote stylesheets are now rejected, and the final `npm run check` + `npm test` pass; this audit ships in the following commit
