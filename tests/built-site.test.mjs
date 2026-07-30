@@ -40,7 +40,11 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
   ]);
 
   for (const html of [listHtml, postHtml]) {
-    assert.doesNotMatch(html, /<(?:link|script)\b[^>]*(?:href|src)="[^"]+\.(?:woff2?|ttf|otf|eot|js)(?:\?[^"]*)?"/i);
+    assert.doesNotMatch(html, /<script\b/i);
+    assert.doesNotMatch(
+      html,
+      /<link\b[^>]*href="[^"]+\.(?:woff2?|ttf|otf|eot)(?:\?[^"]*)?"/i,
+    );
     assert.doesNotMatch(
       html,
       /(?:fonts\.(?:googleapis|gstatic)\.com|use\.typekit\.net)/i,

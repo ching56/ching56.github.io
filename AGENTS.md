@@ -10,28 +10,31 @@ Guidance for any AI coding agent (Claude Code, Codex, etc.) working in this repo
 
 ## What this is
 
-Personal blog ("The Return", 李至青的部落格, zh-TW) built with Eleventy 3 (ESM config), deployed to GitHub Pages via GitHub Actions with a custom domain (`public/CNAME`: www.jcli.io). Content is being migrated from WordPress — `thereturn.WordPress.2024-12-20.xml` is the export source (gitignored: it contains private drafts and commenter emails; never commit it). The pre-2025 Parcel site is preserved at the `old-blog` git tag.
+Personal blog (working title "The Return", 李至青的部落格, zh-TW) being rebuilt as a static Astro 7 site for Cloudflare Pages. The title remains an open product decision; metadata is centralized so it can change once. The first Astro tracer is active, while legacy Eleventy source and deployment files remain only until their scheduled cleanup tickets. Content is being migrated from WordPress — `thereturn.WordPress.2024-12-20.xml` is stale and gitignored because it contains private drafts and commenter emails; never commit it. The pre-2025 Parcel site is preserved at the `old-blog` git tag.
 
 ## Commands
 
-- `npx eleventy --serve` (or `yarn serve`) — dev server with live reload
-- `npx eleventy` (`yarn build`) — production build into `_site/`
-- `yarn debug` — build with `DEBUG=*`
+- `yarn serve` (or `yarn dev`) — Astro dev server with live reload
+- `yarn build` — production build into `dist/`
+- `yarn check` — Astro/TypeScript diagnostics
+- `yarn test` — production build followed by assertions against `dist/`
 
-There are no tests or linters; a clean `npx eleventy` build is the verification bar. Dependencies are managed with yarn (`yarn.lock`).
+There is no linter. A clean `yarn check` plus `yarn test` is the verification bar. Dependencies are managed with Yarn 1 (`yarn.lock`; version pinned in `package.json`).
 
 ## Architecture
 
-Eleventy directory layout is non-default, set in `eleventy.config.js`:
+The active Astro scaffold uses the default project roots:
 
-- `content/` — input root. Blog posts live in `content/blog/` as `YYYY-MM-DD-slug.md` with frontmatter `title`, `date`, `layout: layouts/post.njk`, `tags: posts`. The `posts` tag is what feeds the post list and the Atom feed.
-- `_includes/layouts/` — `base.njk` → `home.njk` / `post.njk`. `content/content.11tydata.js` sets `layouts/home.njk` as the directory default.
-- `_data/metadata.js` — site title/url/author, referenced by templates.
-- `_config/filters.js` — custom filters, registered as a plugin in the config.
-- `public/` — passthrough-copied verbatim into `_site/` root (e.g. `public/css` → `/css`).
-- `_site/` — build output, gitignored. Deployment is `.github/workflows/deploy.yml` (build + deploy to Pages on push to master).
+- `astro.config.mjs` — static output, canonical site URL, trailing-slash/directory routes.
+- `src/config/site.js` — the single source for site title, canonical URL, description, and author.
+- `src/content.config.ts` / `src/content/posts/` — typed Markdown collections organized by locale.
+- `src/pages/` — locale-prefixed list and post routes; the first tracer lives under `/zh-TW/`.
+- `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only baseline CSS.
+- `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no webfonts/runtime JS).
+- `public/` — copied verbatim into `dist/`; it still contains legacy files pending later cleanup.
+- `dist/` — generated build output, gitignored.
 
-Key config behaviors (`eleventy.config.js`): markdown/HTML are pre-processed with Nunjucks; `draft: true` frontmatter excludes a page from production builds only; the eleventy-img transform plugin rewrites all `<img>` in output HTML to avif/webp; `{% css %}` / `{% js %}` bundle shortcodes are available.
+Legacy Eleventy directories (`content/`, `_includes/`, `_data/`, `_config/`) and `eleventy.config.js` are deliberately still present for ticket 02. The existing GitHub Pages workflow still targets `_site/` and is obsolete; ticket 05 replaces it during the Cloudflare Pages cutover. Do not treat that workflow as the current local verification path.
 
 ## Work log
 
@@ -79,5 +82,5 @@ Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/age
 
 ## Known inconsistencies
 
-- The Atom feed metadata in `eleventy.config.js` still has starter-template placeholders ("Blog Title", example.com) that don't match `_data/metadata.js`.
-- `_data/metadata.js` says the site URL is `https://jhihcing.li/` but `public/CNAME` is `www.jcli.io`.
+- The inactive Eleventy Atom feed still has starter placeholders; ticket 02 removes the legacy setup and ticket 04 introduces locale feeds from Astro metadata.
+- `public/CNAME` still contains `www.jcli.io`, so Astro copies it into `dist/`; ticket 05 removes it at the Cloudflare cutover. Canonical page metadata already uses `https://jhihcing.li`.

@@ -36,4 +36,14 @@
 ## 2026-07-30 17:40 · codex
 - Intent: implement site-rebuild ticket 01 as a TDD tracer bullet: replace the active build with Astro, render one real zh-TW post end to end, and add assertions against `dist/`
 - Why: the user invoked `$implement`; ticket 01 is the unblocked frontier and establishes the agreed built-output test seam for later tickets
-- Result: implementation green — `astro check` has zero errors, the dev server returned HTTP 200 for both routes, and the full `npm test` build + 2 built-output assertions pass; required code review and final commit handoff remain
+- Result: implementation committed as `1b9a751`; `astro check` had zero errors, the dev server returned HTTP 200 for both routes, and the full `npm test` build + 2 built-output assertions passed
+
+## 2026-07-30 18:00 · codex
+- Intent: address every hard/partial finding from the required two-axis review, update the now-stale Astro contributor guidance, and remove the route-helper duplication flagged as a judgement call
+- Why: ticket 01 is not complete while its no-JS assertion has a blind spot or the next agent is directed to obsolete Eleventy commands
+- Result: done — `AGENTS.md` now documents the transitional Astro architecture, the assertion rejects every script tag, route helpers are shared, and `npm run check` + `npm test` pass
+
+## 2026-07-30 18:04 · codex
+- Intent: commit the reviewed ticket 01 fixes and final handoff state
+- Why: the `$implement` workflow requires the completed work on the current branch, and the issue tracker must not advertise a resolved ticket as ready for another agent
+- Result: done — review fixes and the resolved handoff ship in this commit

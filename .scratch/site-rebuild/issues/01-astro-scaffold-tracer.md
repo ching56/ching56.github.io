@@ -4,12 +4,12 @@
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] `astro build` completes cleanly; dev server serves the site
-- [ ] One real migrated post renders at its `/zh-TW/...` URL with correct title, date, and body
-- [ ] All text renders via a system-font stack; build output contains no font files and no framework runtime JS on content pages
-- [ ] Site title/author/canonical URL defined in exactly one place and consumed by layout + head metadata
-- [ ] Post-build assertion suite exists, runs against `dist/`, and passes (route presence, content, no-webfont/no-JS checks)
-- [ ] Eleventy remains untouched or removed only insofar as it doesn't block the Astro build (full cleanup is ticket 02)
-- [ ] STATE.md/WORKLOG.md updated per AGENTS.md
+- [x] `astro build` completes cleanly; dev server serves the site
+- [x] One real migrated post renders at its `/zh-TW/...` URL with correct title, date, and body
+- [x] All text renders via a system-font stack; build output contains no font files and no framework runtime JS on content pages
+- [x] Site title/author/canonical URL defined in exactly one place and consumed by layout + head metadata
+- [x] Post-build assertion suite exists, runs against `dist/`, and passes (route presence, content, no-webfont/no-JS checks)
+- [x] Eleventy remains untouched or removed only insofar as it doesn't block the Astro build (full cleanup is ticket 02)
+- [x] STATE.md/WORKLOG.md updated per AGENTS.md

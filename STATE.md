@@ -19,11 +19,11 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Implementing ticket 01 (`.scratch/site-rebuild/issues/01-astro-scaffold-tracer.md`): Astro scaffold + one real zh-TW post + built-output assertions. Green established: Astro 7 builds both expected routes, `astro check` reports zero errors, both built-output tests pass, and the dev server returned HTTP 200 for both routes. Exact next step: commit the verified implementation, run the required two-axis code review from pre-implementation commit `0941c1a`, fix any findings, then finalize the ticket handoff.
+Ticket 01 (`.scratch/site-rebuild/issues/01-astro-scaffold-tracer.md`) is resolved: Astro scaffold, one real zh-TW post, centralized metadata, and built-output assertions are complete. No implementation is in flight. On the user's next rebuild go-ahead, open ticket 02 (`.scratch/site-rebuild/issues/02-content-migration.md`) and begin by inventorying the five legacy Markdown posts against the live WordPress post list before moving files.
 
 ## In progress
 
-- Site rebuild ticket 01 — claimed by Codex via `$implement` on 2026-07-30.
+- (none)
 
 ## Waiting on user
 
@@ -33,7 +33,7 @@ Implementing ticket 01 (`.scratch/site-rebuild/issues/01-astro-scaffold-tracer.m
 
 ## Backlog
 
-- Rebuild work: ticketed in `.scratch/site-rebuild/issues/01..07` — do not duplicate here.
+- Rebuild work: ticket 01 resolved; tickets 02/03/07 are now unblocked, with 02 the next execution-order frontier. Tickets live in `.scratch/site-rebuild/issues/`.
 - Site naming decision before launch (see Waiting on user).
 - Design session: visual world via impeccable new-work, after ticket 01 gives it a running surface (PRODUCT.md carries the taste evidence).
 - Configure impeccable live mode once the Astro dev server exists (skipped during init — old stack was about to be replaced).
