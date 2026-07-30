@@ -19,7 +19,7 @@ Execution order: DNS move → Astro rebuild + content top-up → Pages cutover �
 
 ## Now
 
-Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is claimed and green before review: both strict-parsed Atom artifacts carry centralized metadata; zh-TW contains all seven migrated entries with canonical URLs/dates; English is valid with zero entries; every locale page discovers only its own feed. Exact next step: commit the isolated implementation snapshot, run the required Standards/Spec review against `427e78a`, address findings, then rerun `corepack yarn run check` and `corepack yarn test`. The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
+Ticket 04 (`.scratch/site-rebuild/issues/04-atom-feeds.md`) is claimed; implementation snapshot `5428ab6` and all actionable Standards review fixes are green. Exact next step: commit the centralized locale/feed URL changes, ask both reviewers for a focused closure audit against `427e78a...HEAD`, then resolve the ticket and commit the final handoff if no actionable findings remain. The reviewed eight-post claim is a pre-existing spec arithmetic error (resolved ticket 02 establishes seven migrated posts); the official Astro helper produces RSS 2.0, so the explicit Atom 1.0 ticket contract retains its custom static endpoint. The obsolete GitHub Pages workflow remains intentionally for ticket 05, which explicitly owns its deletion.
 
 ## In progress
 

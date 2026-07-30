@@ -1,12 +1,13 @@
 import type { APIRoute, GetStaticPaths } from "astro";
 
-import type { SiteLanguage } from "../../config/i18n";
+import {
+  SITE_LANGUAGES,
+  type SiteLanguage,
+} from "../../config/i18n";
 import { buildAtomFeed } from "../../lib/atom";
 
-export const getStaticPaths = (() => [
-  { params: { language: "zh-TW" } },
-  { params: { language: "en" } },
-]) satisfies GetStaticPaths;
+export const getStaticPaths = (() =>
+  SITE_LANGUAGES.map((language) => ({ params: { language } }))) satisfies GetStaticPaths;
 
 export const GET: APIRoute = async ({ params }) =>
   new Response(

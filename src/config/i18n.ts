@@ -1,3 +1,5 @@
+import { SITE } from "./site.js";
+
 export const UI = {
   "zh-TW": {
     homePath: "/zh-TW/",
@@ -26,6 +28,12 @@ export const UI = {
 } as const;
 
 export type SiteLanguage = keyof typeof UI;
+
+export const SITE_LANGUAGES = Object.keys(UI) as SiteLanguage[];
+
+export function getAtomFeedUrl(language: SiteLanguage) {
+  return new URL(`${UI[language].homePath}atom.xml`, SITE.url);
+}
 
 export const EDITION_HOME_ALTERNATES = [
   { language: "zh-TW", path: "/zh-TW/" },

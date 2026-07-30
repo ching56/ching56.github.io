@@ -162,3 +162,8 @@
 - Intent: commit the green ticket 04 implementation snapshot and run the required two-axis review against task-start commit `427e78a`
 - Why: both feeds pass strict XML/RFC-structure assertions, all locale entries/discovery links are covered through `dist/`, and the code-review skill requires a fixed committed diff for independent Standards and Spec agents
 - Result: in progress — stage only ticket 04 files and this task's appended WORKLOG hunks, preserve unrelated product-ideas/tooling changes, then address every actionable review finding before resolving the ticket
+
+## 2026-07-30 19:30 · codex
+- Intent: address the complete ticket 04 review: refresh the stale handoff, centralize the locale registry/feed URL, and document why the two Spec findings do not expand or change this ticket
+- Why: Standards found one hard handoff violation plus two duplication judgments; the “eight posts” claim contradicts resolved ticket 02's seven-post source of truth, while Astro's official RSS helper emits RSS 2.0 and cannot satisfy the ticket's explicit Atom 1.0 contract
+- Result: in progress — derive feed paths from `UI`, derive static feed routes from its locale keys, retain the custom Atom endpoint, then rerun diagnostics and all built-output assertions
