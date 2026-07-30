@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import test from "node:test";
+import sax from "sax";
 
 const distDirectory = new URL("../dist/", import.meta.url);
 const listPage = new URL("zh-TW/index.html", distDirectory);
@@ -73,6 +74,141 @@ const expectedPosts = [
     excerpts: ["開始學做茶壺", "Mew 的 farewell", "但絕對不降低標準"],
   },
 ];
+
+test("each locale publishes a parseable Atom feed at its stable URL", async () => {
+  for (const language of ["zh-TW", "en"]) {
+    const root = await readAtomFeed(language);
+
+    assert.equal(root.local, "feed");
+    assert.equal(root.uri, "http://www.w3.org/2005/Atom");
+  }
+});
+
+test("locale feeds expose required Atom metadata from the canonical site identity", async () => {
+  const expectedFeeds = [
+    {
+      language: "zh-TW",
+      subtitle: "李至青的部落格",
+      homeUrl: "https://jhihcing.li/zh-TW/",
+      feedUrl: "https://jhihcing.li/zh-TW/atom.xml",
+    },
+    {
+      language: "en",
+      subtitle: "Jhih Cing Li's blog",
+      homeUrl: "https://jhihcing.li/en/",
+      feedUrl: "https://jhihcing.li/en/atom.xml",
+    },
+  ];
+
+  for (const expected of expectedFeeds) {
+    const feed = await readAtomFeed(expected.language);
+    const author = requiredAtomChild(feed, "author");
+    const selfLink = atomChildren(feed, "link").find(
+      (link) => atomAttribute(link, "rel") === "self",
+    );
+    const alternateLink = atomChildren(feed, "link").find(
+      (link) => atomAttribute(link, "rel") === "alternate",
+    );
+
+    assert.equal(feed.attributes["xml:lang"]?.value, expected.language);
+    assert.equal(requiredAtomText(feed, "title"), "The Return");
+    assert.equal(requiredAtomText(feed, "subtitle"), expected.subtitle);
+    assert.equal(requiredAtomText(author, "name"), "Jhih Cing Li");
+    assert.equal(requiredAtomText(feed, "id"), expected.feedUrl);
+    assert.match(
+      requiredAtomText(feed, "updated"),
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/,
+    );
+    assert.ok(selfLink, "expected one Atom self link");
+    assert.equal(atomAttribute(selfLink, "href"), expected.feedUrl);
+    assert.equal(atomAttribute(selfLink, "type"), "application/atom+xml");
+    assert.ok(alternateLink, "expected one Atom alternate link");
+    assert.equal(atomAttribute(alternateLink, "href"), expected.homeUrl);
+    assert.equal(atomAttribute(alternateLink, "type"), "text/html");
+    assert.equal(atomAttribute(alternateLink, "hreflang"), expected.language);
+  }
+});
+
+test("locale feeds contain every post in that language and no untranslated posts", async () => {
+  const [chineseFeed, englishFeed] = await Promise.all([
+    readAtomFeed("zh-TW"),
+    readAtomFeed("en"),
+  ]);
+  const chineseEntries = atomChildren(chineseFeed, "entry");
+  const actualPosts = chineseEntries.map((entry) => {
+    const published = requiredAtomText(entry, "published");
+    const alternateLink = atomChildren(entry, "link").find(
+      (link) => atomAttribute(link, "rel") === "alternate",
+    );
+
+    assert.match(
+      published,
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/,
+    );
+    assert.equal(requiredAtomText(entry, "updated"), published);
+    assert.ok(alternateLink, "expected each Atom entry to have an alternate link");
+    assert.equal(atomAttribute(alternateLink, "type"), "text/html");
+    assert.equal(atomAttribute(alternateLink, "hreflang"), "zh-TW");
+
+    return {
+      title: requiredAtomText(entry, "title"),
+      date: published.slice(0, 10),
+      id: requiredAtomText(entry, "id"),
+      url: atomAttribute(alternateLink, "href"),
+    };
+  });
+  const expectedFeedPosts = [...expectedPosts]
+    .sort((a, b) => b.dateTime.localeCompare(a.dateTime))
+    .map((post) => {
+      const canonicalUrl = `https://jhihcing.li/zh-TW/blog/${post.slug}/`;
+
+      return {
+        title: post.title,
+        date: post.dateTime,
+        id: canonicalUrl,
+        url: canonicalUrl,
+      };
+    });
+
+  assert.deepEqual(actualPosts, expectedFeedPosts);
+  assert.equal(atomChildren(englishFeed, "entry").length, 0);
+});
+
+test("every locale page discovers only its own Atom feed", async () => {
+  const localePages = [
+    {
+      language: "en",
+      pages: [new URL("en/index.html", distDirectory)],
+    },
+    {
+      language: "zh-TW",
+      pages: [
+        listPage,
+        new URL("zh-TW/about/index.html", distDirectory),
+        ...expectedPosts.map(
+          ({ slug }) =>
+            new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),
+        ),
+      ],
+    },
+  ];
+
+  for (const locale of localePages) {
+    const expectedFeedUrl = `https://jhihcing.li/${locale.language}/atom.xml`;
+
+    for (const page of locale.pages) {
+      const html = await readFile(page, "utf8");
+      const atomLinks = [...html.matchAll(/<link\b[^>]*>/gi)]
+        .map(([link]) => link)
+        .filter((link) => /\btype="application\/atom\+xml"/i.test(link));
+
+      assert.equal(atomLinks.length, 1);
+      assert.match(atomLinks[0], /\brel="alternate"/i);
+      assert.match(atomLinks[0], /\btitle="The Return"/);
+      assert.ok(atomLinks[0].includes(`href="${expectedFeedUrl}"`));
+    }
+  }
+});
 
 test("an English reader can open the empty English edition", async () => {
   const page = new URL("en/index.html", distDirectory);
@@ -278,6 +414,76 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
 
 function escapeForRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+async function readAtomFeed(language) {
+  const xml = await readFile(
+    new URL(`${language}/atom.xml`, distDirectory),
+    "utf8",
+  );
+  return parseAtom(xml);
+}
+
+function parseAtom(xml) {
+  const parser = sax.parser(true, { xmlns: true });
+  let root;
+  const stack = [];
+
+  parser.onopentag = (node) => {
+    const element = {
+      local: node.local,
+      uri: node.uri,
+      attributes: node.attributes,
+      children: [],
+      text: "",
+    };
+    const parent = stack.at(-1);
+
+    if (parent) {
+      parent.children.push(element);
+    } else {
+      root = element;
+    }
+    stack.push(element);
+  };
+  parser.ontext = (text) => {
+    const current = stack.at(-1);
+    if (current) {
+      current.text += text;
+    }
+  };
+  parser.onclosetag = () => {
+    stack.pop();
+  };
+  parser.write(xml).close();
+
+  assert.ok(root, "expected the feed XML to have a root element");
+  return root;
+}
+
+function atomChildren(element, localName) {
+  return element.children.filter(
+    (child) =>
+      child.local === localName && child.uri === "http://www.w3.org/2005/Atom",
+  );
+}
+
+function requiredAtomChild(element, localName) {
+  const children = atomChildren(element, localName);
+  assert.equal(children.length, 1, `expected exactly one Atom ${localName}`);
+  return children[0];
+}
+
+function requiredAtomText(element, localName) {
+  const text = requiredAtomChild(element, localName).text.trim();
+  assert.notEqual(text, "", `expected Atom ${localName} to have text`);
+  return text;
+}
+
+function atomAttribute(element, localName) {
+  return Object.values(element.attributes).find(
+    (attribute) => attribute.local === localName && attribute.uri === "",
+  )?.value;
 }
 
 async function walkFiles(directoryUrl, relativeDirectory = "") {

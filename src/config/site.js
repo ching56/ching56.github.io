@@ -10,4 +10,6 @@ export const SITE = {
     name: "Jhih Cing Li",
     email: "jhihcing.li@gmail.com",
   },
+  // Used when a locale feed has no posts from which to derive its updated time.
+  emptyFeedUpdatedAt: "2026-07-30T00:00:00.000Z",
 };

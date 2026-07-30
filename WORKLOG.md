@@ -142,3 +142,23 @@
 - Intent: record the completed ticket 03 review and commit outcome without rewriting prior append-only entries
 - Why: the handoff should distinguish the initial implementation snapshot from the review fixes and show that no required work remains
 - Result: done — implementation is `7ac871b`; all Standards/Spec findings are addressed in `58f3156`; ticket 03 is resolved, `yarn run check` is clean, and all 13 `yarn test` assertions pass
+
+## 2026-07-30 19:20 · codex
+- Intent: claim site-rebuild ticket 04 and implement locale-specific Atom feeds through the agreed built-output seam, one red/green behavior at a time
+- Why: tickets 02 and 03 are resolved; feed-reader-visible XML artifacts and locale-page discovery links cover the complete ticket contract without testing Astro internals
+- Result: in progress — first assert that both stable feed URLs emit parseable Atom XML, then cover centralized metadata, complete zh-TW entries, the empty English feed, and locale-specific discovery before review
+
+## 2026-07-30 19:22 · codex
+- Intent: declare the existing `sax` XML parser as a direct test dependency before adding Atom artifact assertions
+- Why: “parse as valid Atom” must exercise emitted XML with a strict parser, and tests must not depend on `sax` remaining an incidental transitive dependency
+- Result: in progress — add the dev dependency with Yarn 1, then use it only at the built-output seam
+
+## 2026-07-30 19:25 · codex
+- Intent: record the XML-parser dependency and diagnostics outcomes without rewriting the entries above
+- Why: the initial sandboxed registry lookup failed, and Yarn 1 treats bare `yarn check` as its own networked command rather than this repo's script; both details matter to the next agent
+- Result: done — the approved Yarn retry declared `sax@^1.6.1`; `corepack yarn run check` invokes `astro check` correctly and reports zero errors, warnings, or hints
+
+## 2026-07-30 19:26 · codex
+- Intent: commit the green ticket 04 implementation snapshot and run the required two-axis review against task-start commit `427e78a`
+- Why: both feeds pass strict XML/RFC-structure assertions, all locale entries/discovery links are covered through `dist/`, and the code-review skill requires a fixed committed diff for independent Standards and Spec agents
+- Result: in progress — stage only ticket 04 files and this task's appended WORKLOG hunks, preserve unrelated product-ideas/tooling changes, then address every actionable review finding before resolving the ticket

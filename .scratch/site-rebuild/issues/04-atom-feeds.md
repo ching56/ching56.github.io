@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 — Full content migration; 03 — Bilingual structure.
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Both feeds exist at stable URLs and parse as valid Atom (assertion suite parses them, not eyeball checks)
 - [ ] Feed title/author/site URL come from the single metadata source; no placeholder strings anywhere
