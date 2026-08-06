@@ -202,3 +202,18 @@
 - Intent: record the reviewed ticket 05 preparation outcome and leave an exact blocked handoff without rewriting prior append-only entries
 - Why: all three review findings are fixed, `corepack yarn run check` is clean, all 18 `corepack yarn test` assertions pass, but authoritative DNS and Cloudflare Pages account state still require the user's manual actions and live verification
 - Result: done — repository preparation is `38994ee`, review fixes are `9cda7ce`, the ticket remains correctly claimed, and the next agent must wait for the user to complete runbook sections 1–4 before running section 5 and deciding whether ticket 05 can resolve
+
+## 2026-08-06 21:58 · codex
+- Intent: implement ticket 07 through the pre-agreed Worker HTTP seam, then add the progressively enhanced post-page control
+- Why: the user selected the available likes ticket; its public HTTP boundary supports red-green slices for count reads, increments, dedupe, rate limiting, and invalid requests without coupling tests to storage internals
+- Result: in progress — ticket claimed; first write a failing Worker-interface test against a simulated D1, then implement vertical slices, add built-output coverage, run check/full tests, perform the required two-axis review, and commit only ticket-scoped changes
+
+## 2026-08-06 22:01 · codex
+- Intent: add the pinned Wrangler development tool and Worker/D1 scripts for ticket 07
+- Why: the acceptance criteria require a locally demoable Worker with simulated D1, so the repository needs a reproducible dev command and local migration path rather than an unpinned global tool
+- Result: in progress — install Wrangler as a dev dependency, then add the Worker configuration and initial D1 migration
+
+## 2026-08-06 22:09 · codex
+- Intent: close ticket 07 after its required Standards/Spec review and correction pass
+- Why: implementation, local D1 migration, focused seams, typechecking, and the full suite are green; the independent review identified stale handoff state, permissive path validation, persistent identifiers, race-prone rate limiting, and an undeclared production route
+- Result: done — corrected every repository-actionable finding: only published paths are accepted, rate hashes include their minute window, stale privacy rows are deleted, rate admission is one atomic D1 statement, the production route is declarative, and local secret instructions use ignored `.dev.vars`; ticket 07 is resolved locally, while account-bound deployment/production verification remains sequenced after ticket 05

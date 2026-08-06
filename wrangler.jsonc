@@ -3,6 +3,9 @@
   "name": "jhihcing-api",
   "main": "worker/index.js",
   "compatibility_date": "2026-08-01",
+  "routes": [
+    { "pattern": "jhihcing.li/api/*", "zone_name": "jhihcing.li" }
+  ],
   "d1_databases": [
     {
       "binding": "LIKES_DB",

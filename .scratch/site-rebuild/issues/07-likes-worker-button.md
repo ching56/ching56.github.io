@@ -4,11 +4,17 @@
 
 **Blocked by:** 01 — Astro scaffold + first post end-to-end. (Parallel with 02/03; production verification after 05.)
 
-**Status:** claimed
+**Status:** resolved
 
-- [ ] Worker endpoints: get count, increment; unknown paths and bad methods handled sanely
-- [ ] HTTP black-box tests with local D1 cover: read, increment, dedupe window, rate limit, unknown path
-- [ ] No cookies, no accounts, no raw-IP storage; whatever dedupe key exists is hashed and windowed
-- [ ] Button on post pages shows current count, increments on press, disappears gracefully without JS
-- [ ] Post pages remain framework-JS-free — the button is vanilla JS, not an island
-- [ ] STATE.md/WORKLOG.md updated
+- [x] Worker endpoints: get count, increment; unknown paths and bad methods handled sanely
+- [x] HTTP black-box tests with local D1 cover: read, increment, dedupe window, rate limit, unknown path
+- [x] No cookies, no accounts, no raw-IP storage; whatever dedupe key exists is hashed and windowed
+- [x] Button on post pages shows current count, increments on press, disappears gracefully without JS
+- [x] Post pages remain framework-JS-free — the button is vanilla JS, not an island
+- [x] STATE.md/WORKLOG.md updated
+
+## Answer
+
+The `jhihcing-api` Worker exposes same-origin GET/POST `/api/likes` behavior backed by D1, accepts only published canonical post paths, atomically rate-limits window-specific client hashes, and uses expiring daily hashes for coarse dedupe without cookies, accounts, or raw-IP storage. Post pages include one hidden-by-default, localized vanilla-JavaScript control; JavaScript-disabled readers see nothing, and no Astro island/runtime is emitted.
+
+The Worker HTTP seam is covered with simulated-D1 black-box tests for reads, increments, same-window dedupe, later-window likes, rate limiting, unknown paths, and unsupported methods. The initial migration was also applied successfully to local Wrangler D1. Production account binding, secret creation, migration, deployment, and verification remain correctly sequenced after ticket 05; the production route is already declared in `wrangler.jsonc`.

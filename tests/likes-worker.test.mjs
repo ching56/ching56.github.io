@@ -32,10 +32,12 @@ class SimulatedStatement {
       return { count: this.database.counts.get(this.values[0]) ?? 0 };
     }
 
-    if (this.query.startsWith("SELECT request_count FROM rate_limits")) {
+    if (this.query.startsWith("INSERT INTO rate_limits") && this.query.includes("RETURNING")) {
       const key = `${this.values[0]}:${this.values[1]}`;
-      const count = this.database.rateWindows.get(key);
-      return count === undefined ? null : { request_count: count };
+      const count = this.database.rateWindows.get(key) ?? 0;
+      if (count >= this.values[2]) return null;
+      this.database.rateWindows.set(key, count + 1);
+      return { request_count: count + 1 };
     }
 
     throw new Error(`Unsupported first query: ${this.query}`);
@@ -57,6 +59,19 @@ class SimulatedStatement {
     if (this.query.startsWith("INSERT INTO rate_limits")) {
       const key = `${this.values[0]}:${this.values[1]}`;
       this.database.rateWindows.set(key, (this.database.rateWindows.get(key) ?? 0) + 1);
+      return { success: true };
+    }
+
+    if (this.query.startsWith("DELETE FROM rate_limits")) {
+      for (const key of this.database.rateWindows.keys()) {
+        if (Number(key.slice(key.lastIndexOf(":") + 1)) < this.values[0]) {
+          this.database.rateWindows.delete(key);
+        }
+      }
+      return { success: true };
+    }
+
+    if (this.query.startsWith("DELETE FROM like_dedupes")) {
       return { success: true };
     }
 
@@ -108,6 +123,22 @@ test("repeat increments in the dedupe window count once", async () => {
   });
 });
 
+test("the same reader can like again in a later dedupe window", async () => {
+  const environment = createEnvironment();
+  const makeRequest = () =>
+    new Request("https://jhihcing.li/api/likes", {
+      method: "POST",
+      headers: { "cf-connecting-ip": "203.0.113.8", "content-type": "application/json" },
+      body: JSON.stringify({ path: "/zh-TW/blog/covid/" }),
+    });
+
+  await worker.fetch(makeRequest(), environment);
+  environment.LIKES_NOW += 86_400;
+  const response = await worker.fetch(makeRequest(), environment);
+
+  assert.equal((await response.json()).count, 2);
+});
+
 test("requests beyond the client rate limit receive 429", async () => {
   const environment = createEnvironment();
   let response;
@@ -128,7 +159,9 @@ test("requests beyond the client rate limit receive 429", async () => {
 test("unknown paths and unsupported methods are rejected", async () => {
   const environment = createEnvironment();
   const unknownPost = await worker.fetch(
-    new Request("https://jhihcing.li/api/likes?path=%2Fnot-a-post"),
+    new Request(
+      "https://jhihcing.li/api/likes?path=%2Fzh-TW%2Fblog%2Fdoes-not-exist%2F",
+    ),
     environment,
   );
   const badMethod = await worker.fetch(

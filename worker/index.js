@@ -2,7 +2,13 @@ const JSON_HEADERS = {
   "cache-control": "no-store",
   "content-type": "application/json; charset=utf-8",
 };
-const POST_PATH = /^\/(?:zh-TW|en)\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*\/$/;
+const KNOWN_POST_PATHS = new Set([
+  "/zh-TW/blog/2022/",
+  "/zh-TW/blog/2023-2024/",
+  "/zh-TW/blog/2025/",
+  "/zh-TW/blog/conservation-of-mass/",
+  "/zh-TW/blog/covid/",
+]);
 const RATE_LIMIT = 30;
 
 export default {
@@ -11,23 +17,26 @@ export default {
     if (url.pathname !== "/api/likes") {
       return json({ error: "Not found" }, 404);
     }
-    if (!['GET', 'POST'].includes(request.method)) {
+    if (!["GET", "POST"].includes(request.method)) {
       return json({ error: "Method not allowed" }, 405, { allow: "GET, POST" });
     }
 
     const clientAddress = request.headers.get("cf-connecting-ip") ?? "local";
     const now = environment.LIKES_NOW ?? Math.floor(Date.now() / 1000);
-    const clientKey = await digest(environment.LIKES_HASH_SECRET, clientAddress);
     const rateWindow = Math.floor(now / 60);
+    const clientKey = await digest(
+      environment.LIKES_HASH_SECRET,
+      `${clientAddress}\n${rateWindow}`,
+    );
+    await environment.LIKES_DB.prepare(
+      "DELETE FROM rate_limits WHERE window_start < ?",
+    ).bind(rateWindow).run();
     const rateRow = await environment.LIKES_DB.prepare(
-      "SELECT request_count FROM rate_limits WHERE client_key = ? AND window_start = ?",
-    ).bind(clientKey, rateWindow).first();
-    if ((rateRow?.request_count ?? 0) >= RATE_LIMIT) {
+      "INSERT INTO rate_limits (client_key, window_start, request_count) VALUES (?, ?, 1) ON CONFLICT(client_key, window_start) DO UPDATE SET request_count = request_count + 1 WHERE request_count < ? RETURNING request_count",
+    ).bind(clientKey, rateWindow, RATE_LIMIT).first();
+    if (!rateRow) {
       return json({ error: "Rate limit exceeded" }, 429, { "retry-after": "60" });
     }
-    await environment.LIKES_DB.prepare(
-      "INSERT INTO rate_limits (client_key, window_start, request_count) VALUES (?, ?, 1) ON CONFLICT(client_key, window_start) DO UPDATE SET request_count = request_count + 1",
-    ).bind(clientKey, rateWindow).run();
 
     if (request.method === "GET") {
       const path = url.searchParams.get("path");
@@ -45,6 +54,9 @@ export default {
     if (!isPostPath(path)) return json({ error: "Unknown post path" }, 404);
 
     const dedupeWindow = Math.floor(now / 86_400);
+    await environment.LIKES_DB.prepare(
+      "DELETE FROM like_dedupes WHERE expires_at <= ?",
+    ).bind(now).run();
     const token = await digest(
       environment.LIKES_HASH_SECRET,
       `${clientAddress}\n${path}\n${dedupeWindow}`,
@@ -63,7 +75,7 @@ export default {
 };
 
 function isPostPath(path) {
-  return typeof path === "string" && POST_PATH.test(path);
+  return typeof path === "string" && KNOWN_POST_PATHS.has(path);
 }
 
 async function getCount(database, path) {
