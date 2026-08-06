@@ -4,28 +4,12 @@ import { join } from "node:path";
 import test from "node:test";
 import sax from "sax";
 
+import { SITE } from "../src/config/site.js";
+
 const distDirectory = new URL("../dist/", import.meta.url);
 const listPage = new URL("zh-TW/index.html", distDirectory);
 const forbiddenFontRule = /@font-face|@import\s+(?:url\s*\()?/i;
 const expectedPosts = [
-  {
-    slug: "hello-world",
-    title: "Hello world!",
-    dateTime: "2022-12-01",
-    dateLabel: "2022年12月1日",
-    excerpts: ["This is the first post."],
-  },
-  {
-    slug: "about",
-    title: "關於",
-    dateTime: "2022-12-22",
-    dateLabel: "2022年12月22日",
-    excerpts: [
-      "我是李至青 Jhih Cing, Li",
-      "故事是從這裡開始",
-      'href="mailto:jcli@pm.me"',
-    ],
-  },
   {
     slug: "2022",
     title: "2022",
@@ -80,10 +64,25 @@ test("old WordPress URLs publish permanent redirects to their new homes", async 
   const expectedRedirects = [
     {
       source: "/hello-world",
-      destination: "/zh-TW/blog/hello-world/",
+      destination: "/zh-TW/",
       status: 301,
     },
-    { source: "/about", destination: "/zh-TW/about/", status: 301 },
+    {
+      source: "/zh-TW/blog/hello-world/",
+      destination: "/zh-TW/",
+      status: 301,
+    },
+    { source: "/about", destination: "/zh-TW/#about", status: 301 },
+    {
+      source: "/zh-TW/about/",
+      destination: "/zh-TW/#about",
+      status: 301,
+    },
+    {
+      source: "/zh-TW/blog/about/",
+      destination: "/zh-TW/#about",
+      status: 301,
+    },
     { source: "/2022-2", destination: "/zh-TW/blog/2022/", status: 301 },
     { source: "/covid", destination: "/zh-TW/blog/covid/", status: 301 },
     {
@@ -143,7 +142,7 @@ test("locale feeds expose required Atom metadata from the canonical site identit
     );
 
     assert.equal(feed.attributes["xml:lang"]?.value, expected.language);
-    assert.equal(requiredAtomText(feed, "title"), "The Return");
+    assert.equal(requiredAtomText(feed, "title"), SITE.title);
     assert.equal(requiredAtomText(feed, "subtitle"), expected.subtitle);
     assert.equal(requiredAtomText(author, "name"), "Jhih Cing Li");
     assert.equal(requiredAtomText(feed, "id"), expected.feedUrl);
@@ -216,7 +215,6 @@ test("every locale page discovers only its own Atom feed", async () => {
       language: "zh-TW",
       pages: [
         listPage,
-        new URL("zh-TW/about/index.html", distDirectory),
         ...expectedPosts.map(
           ({ slug }) =>
             new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),
@@ -236,7 +234,9 @@ test("every locale page discovers only its own Atom feed", async () => {
 
       assert.equal(atomLinks.length, 1);
       assert.match(atomLinks[0], /\brel="alternate"/i);
-      assert.match(atomLinks[0], /\btitle="The Return"/);
+      assert.ok(
+        atomLinks[0].includes(`title="${escapeHtmlAttribute(SITE.title)}"`),
+      );
       assert.ok(atomLinks[0].includes(`href="${expectedFeedUrl}"`));
     }
   }
@@ -268,16 +268,16 @@ test("readers can navigate and switch languages using locale-aware chrome", asyn
   );
   assert.match(
     englishList,
-    /href="mailto:jhihcing\.li@gmail\.com"[^>]*>Email<\/a>/,
+    /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
   );
 
   assert.match(chineseList, /<nav[^>]*aria-label="主要導覽"/);
   assert.match(chineseList, /href="\/zh-TW\/"[^>]*>文章<\/a>/);
-  assert.match(chineseList, /href="\/zh-TW\/about\/"[^>]*>關於<\/a>/);
+  assert.match(chineseList, /href="\/zh-TW\/#about"[^>]*>關於<\/a>/);
   assert.match(chineseList, /href="\/en\/"[^>]*>English<\/a>/);
   assert.match(
     chineseList,
-    /href="mailto:jhihcing\.li@gmail\.com"[^>]*>寄信<\/a>/,
+    /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
   );
   assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
 
@@ -285,6 +285,100 @@ test("readers can navigate and switch languages using locale-aware chrome", asyn
     .map((element) => englishList.match(new RegExp(`<${element}\\b[\\s\\S]*?<\\/${element}>`))?.[0] ?? "")
     .join(" ");
   assert.doesNotMatch(englishChrome, /文章|關於|寄信|主要導覽/);
+
+  for (const [html, expectedLabel] of [
+    [englishList, "jcli@pm.me"],
+    [chineseList, "jcli@pm.me"],
+  ]) {
+    const footer = html.match(
+      /<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/,
+    )?.[0];
+
+    assert.ok(footer, "expected one footer");
+    assert.equal((footer.match(/<a\b/g) ?? []).length, 1);
+    assert.equal(footer.replace(/<[^>]+>/g, "").trim(), expectedLabel);
+  }
+});
+
+test("the approved Accession Tabs structure is semantic across reading surfaces", async () => {
+  const [englishList, chineseList, chinesePost] = await Promise.all([
+    readFile(new URL("en/index.html", distDirectory), "utf8"),
+    readFile(listPage, "utf8"),
+    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+  ]);
+
+  for (const html of [englishList, chineseList, chinesePost]) {
+    assert.match(html, /<body data-surface="accession-tabs">/);
+    assert.match(html, /direction seed f0bd5f13/);
+    assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
+    assert.doesNotMatch(html, /class="site-title"/);
+    assert.match(html, /<main id="main-content">/);
+    assert.doesNotMatch(html, /<h1[^>]*>\s*李至青\s*<\/h1>/);
+  }
+
+  assert.equal(SITE.title, SITE.author.displayName);
+
+  assert.match(
+    chineseList,
+    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/zh-TW\/"[^>]*aria-current="page"/,
+  );
+  assert.match(
+    englishList,
+    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/en\/"[^>]*aria-current="page"/,
+  );
+  assert.match(
+    chinesePost,
+    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/zh-TW\/"[^>]*aria-current="location"/,
+  );
+  assert.doesNotMatch(
+    chinesePost,
+    /<a\b[^>]*href="\/zh-TW\/"[^>]*aria-current="page"/,
+  );
+  assert.match(chineseList, /<ol class="post-list" data-register="chronological">/);
+  assert.match(
+    chineseList,
+    /<h1 id="register-heading" class="register-title">文章<\/h1>/,
+  );
+  assert.doesNotMatch(
+    chineseList,
+    /最近更新|5 篇文章|class="register-(?:update|stamp|year)"|ZH-TW ·/,
+  );
+  assert.equal(
+    [...chineseList.matchAll(/<li class="post-list-item">/g)].length,
+    expectedPosts.length,
+  );
+  assert.match(
+    chineseList,
+    /<section id="about" class="about-intro" aria-label="關於">/,
+  );
+  assert.doesNotMatch(chineseList, /<h[1-6][^>]*>關於(?:這裡)?<\/h[1-6]>/);
+  assert.match(
+    chineseList,
+    /<footer class="about-cta">[\s\S]*如果有一段文字讓你想起自己，歡迎寫信告訴我。[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
+  );
+  assert.match(chinesePost, /<article class="reading-article">/);
+  assert.match(
+    chinesePost,
+    /<footer class="reader-response">[\s\S]*讀完有想說的嗎？[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
+  );
+  assert.match(englishList, /<section class="register-panel"/);
+});
+
+test("drafts and permanent pages never publish as blog posts", async () => {
+  for (const slug of ["hello-world", "about"]) {
+    await assert.rejects(
+      readFile(
+        new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),
+        "utf8",
+      ),
+      (error) => error?.code === "ENOENT",
+    );
+  }
+
+  await assert.rejects(
+    readFile(new URL("zh-TW/about/index.html", distDirectory), "utf8"),
+    (error) => error?.code === "ENOENT",
+  );
 });
 
 test("hreflang alternates appear only for pages with a translated counterpart", async () => {
@@ -387,27 +481,23 @@ for (const post of expectedPosts) {
   });
 }
 
-test("a reader can open the complete zh-TW about page", async () => {
-  const page = new URL("zh-TW/about/index.html", distDirectory);
-  const html = await readFile(page, "utf8");
+test("the zh-TW homepage introduces the writer before the article register", async () => {
+  const html = await readFile(listPage, "utf8");
 
   assert.match(html, /<html lang="zh-TW">/);
-  assert.match(html, /<h1[^>]*>關於<\/h1>/);
-  assert.match(html, /datetime="2022-12-22"[^>]*>2022年12月22日<\/time>/);
+  assert.match(html, /<section id="about" class="about-intro" aria-label="關於">/);
   assert.match(html, /我是李至青 Jhih Cing, Li/);
+  assert.match(html, /我寫生活裡的變化、迷惘、幸運/);
+  assert.match(html, /沒有通知，沒有廣告，獨立於平台/);
   assert.match(html, /故事是從這裡開始/);
-  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/);
-  assert.match(
-    html,
-    /<link rel="canonical" href="https:\/\/jhihcing\.li\/zh-TW\/about\/">/,
-  );
+  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/);
+  assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
 });
 
 test("content pages request neither webfonts nor Astro runtime JavaScript", async () => {
   const contentPages = [
     listPage,
     new URL("en/index.html", distDirectory),
-    new URL("zh-TW/about/index.html", distDirectory),
     ...expectedPosts.map(
       ({ slug }) => new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),
     ),
@@ -444,8 +534,63 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
   }
 });
 
+test("the compact frameless content contract stays within its confirmed limits", async () => {
+  const css = await readFile(
+    new URL("../src/styles/global.css", import.meta.url),
+    "utf8",
+  );
+  const fontSizeDeclarations = [
+    ...css.matchAll(/font-size:\s*([^;]+);/g),
+  ];
+
+  for (const [, declaration] of fontSizeDeclarations) {
+    for (const [, size] of declaration.matchAll(/([\d.]+)rem/g)) {
+      assert.ok(
+        Number(size) <= 1.5,
+        `font-size exceeds 1.5rem: ${declaration.trim()}`,
+      );
+    }
+  }
+
+  for (const selector of [
+    ".site-header",
+    ".about-intro",
+    ".about-cta",
+    ".register-panel",
+    ".register-header",
+    ".post-list-item",
+    ".empty-register",
+    ".post-header",
+    ".post-body blockquote",
+    ".reader-response",
+    ".site-footer",
+  ]) {
+    const rule = css.match(
+      new RegExp(`${escapeForRegex(selector)}\\s*\\{([^}]*)\\}`),
+    );
+
+    assert.ok(rule, `expected a CSS rule for ${selector}`);
+    assert.doesNotMatch(
+      rule[1],
+      /\bborder(?:-(?:top|right|bottom|left|block|inline))?\s*:/,
+      `${selector} must not use a divider border`,
+    );
+  }
+});
+
 function escapeForRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function escapeHtmlText(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function escapeHtmlAttribute(value) {
+  return escapeHtmlText(value).replaceAll('"', "&quot;");
 }
 
 async function readAtomFeed(language) {

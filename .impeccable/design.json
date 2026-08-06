@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-06T12:27:55Z",
+  "title": "Design System: Accession Tabs",
+  "extensions": {
+    "colorMeta": {
+      "stock": {
+        "role": "neutral",
+        "displayName": "Cool Index Stock",
+        "canonical": "#f6f7f5",
+        "tonalRamp": ["oklch(15% 0.003 128.5)", "oklch(26% 0.003 128.5)", "oklch(38% 0.003 128.5)", "oklch(50% 0.003 128.5)", "oklch(62% 0.003 128.5)", "oklch(74% 0.003 128.5)", "oklch(86% 0.003 128.5)", "oklch(95% 0.003 128.5)"]
+      },
+      "stock-bright": {
+        "role": "neutral",
+        "displayName": "Bright Stock",
+        "canonical": "#fcfdfb",
+        "tonalRamp": ["oklch(15% 0.003 128.5)", "oklch(26% 0.003 128.5)", "oklch(38% 0.003 128.5)", "oklch(50% 0.003 128.5)", "oklch(62% 0.003 128.5)", "oklch(74% 0.003 128.5)", "oklch(86% 0.003 128.5)", "oklch(95% 0.003 128.5)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Near-black Ink",
+        "canonical": "#202322",
+        "tonalRamp": ["oklch(15% 0.005 174.0)", "oklch(26% 0.005 174.0)", "oklch(38% 0.005 174.0)", "oklch(50% 0.005 174.0)", "oklch(62% 0.005 174.0)", "oklch(74% 0.005 174.0)", "oklch(86% 0.005 174.0)", "oklch(95% 0.005 174.0)"]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Graphite",
+        "canonical": "#555c59",
+        "tonalRamp": ["oklch(15% 0.010 168.4)", "oklch(26% 0.010 168.4)", "oklch(38% 0.010 168.4)", "oklch(50% 0.010 168.4)", "oklch(62% 0.010 168.4)", "oklch(74% 0.010 168.4)", "oklch(86% 0.010 168.4)", "oklch(95% 0.010 168.4)"]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Pencil Rule",
+        "canonical": "#b9bfbb",
+        "tonalRamp": ["oklch(15% 0.009 157.0)", "oklch(26% 0.009 157.0)", "oklch(38% 0.009 157.0)", "oklch(50% 0.009 157.0)", "oklch(62% 0.009 157.0)", "oklch(74% 0.009 157.0)", "oklch(86% 0.009 157.0)", "oklch(95% 0.009 157.0)"]
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Registration Rule",
+        "canonical": "#777f7b",
+        "tonalRamp": ["oklch(15% 0.011 164.6)", "oklch(26% 0.011 164.6)", "oklch(38% 0.011 164.6)", "oklch(50% 0.011 164.6)", "oklch(62% 0.011 164.6)", "oklch(74% 0.011 164.6)", "oklch(86% 0.011 164.6)", "oklch(95% 0.011 164.6)"]
+      },
+      "cobalt": {
+        "role": "primary",
+        "displayName": "Cobalt Glass",
+        "canonical": "#4f73d9",
+        "tonalRamp": ["oklch(15% 0.161 266.8)", "oklch(26% 0.161 266.8)", "oklch(38% 0.161 266.8)", "oklch(50% 0.161 266.8)", "oklch(62% 0.161 266.8)", "oklch(74% 0.161 266.8)", "oklch(86% 0.161 266.8)", "oklch(95% 0.161 266.8)"]
+      },
+      "cobalt-deep": {
+        "role": "primary",
+        "displayName": "Deep Cobalt",
+        "canonical": "#294daf",
+        "tonalRamp": ["oklch(15% 0.162 265.2)", "oklch(26% 0.162 265.2)", "oklch(38% 0.162 265.2)", "oklch(50% 0.162 265.2)", "oklch(62% 0.162 265.2)", "oklch(74% 0.162 265.2)", "oklch(86% 0.162 265.2)", "oklch(95% 0.162 265.2)"]
+      },
+      "cobalt-ink": {
+        "role": "primary",
+        "displayName": "Cobalt Ink",
+        "canonical": "#14204a",
+        "tonalRamp": ["oklch(15% 0.080 266.0)", "oklch(26% 0.080 266.0)", "oklch(38% 0.080 266.0)", "oklch(50% 0.080 266.0)", "oklch(62% 0.080 266.0)", "oklch(74% 0.080 266.0)", "oklch(86% 0.080 266.0)", "oklch(95% 0.080 266.0)"]
+      },
+      "citron": {
+        "role": "secondary",
+        "displayName": "Citron Glass",
+        "canonical": "#d8e54a",
+        "tonalRamp": ["oklch(15% 0.173 114.1)", "oklch(26% 0.173 114.1)", "oklch(38% 0.173 114.1)", "oklch(50% 0.173 114.1)", "oklch(62% 0.173 114.1)", "oklch(74% 0.173 114.1)", "oklch(86% 0.173 114.1)", "oklch(95% 0.173 114.1)"]
+      },
+      "citron-deep": {
+        "role": "secondary",
+        "displayName": "Deep Citron",
+        "canonical": "#b9c528",
+        "tonalRamp": ["oklch(15% 0.167 114.2)", "oklch(26% 0.167 114.2)", "oklch(38% 0.167 114.2)", "oklch(50% 0.167 114.2)", "oklch(62% 0.167 114.2)", "oklch(74% 0.167 114.2)", "oklch(86% 0.167 114.2)", "oklch(95% 0.167 114.2)"]
+      },
+      "citron-ink": {
+        "role": "secondary",
+        "displayName": "Citron Ink",
+        "canonical": "#202300",
+        "tonalRamp": ["oklch(15% 0.065 114.0)", "oklch(26% 0.065 114.0)", "oklch(38% 0.065 114.0)", "oklch(50% 0.065 114.0)", "oklch(62% 0.065 114.0)", "oklch(74% 0.065 114.0)", "oklch(86% 0.065 114.0)", "oklch(95% 0.065 114.0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Register Display", "purpose": "Primary register and section headings." },
+      "headline": { "displayName": "Article Headline", "purpose": "Balanced long-form article titles." },
+      "title": { "displayName": "Register Title", "purpose": "Scan-friendly post and item titles." },
+      "body": { "displayName": "Reading Body", "purpose": "Unhurried Traditional Chinese and English prose." },
+      "subheading": { "displayName": "Reading Subheading", "purpose": "Secondary headings inside long-form prose." },
+      "metadata": { "displayName": "Reading Metadata", "purpose": "Localized dates and restrained secondary identity text." },
+      "utility": { "displayName": "Structural Utility", "purpose": "Footer copy and compact structural metadata." },
+      "navigation": { "displayName": "Tab Navigation", "purpose": "Compact functional labels in glass tabs." },
+      "label": { "displayName": "Accession Label", "purpose": "Uppercase stamps and tabular metadata." },
+      "signature": { "displayName": "Author Signature", "purpose": "The restrained author identity in the shared header." }
+    },
+    "shadows": [
+      { "name": "glass-rest", "value": "inset 0 1px 0 rgb(255 255 255 / 64%), inset 0 -1px 0 rgb(32 35 34 / 12%), 0 0.45rem 1.2rem rgb(32 35 34 / 10%)", "purpose": "Inset refraction and restrained ambient separation for glass tabs at rest." },
+      { "name": "glass-hover", "value": "inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(32 35 34 / 14%), 0 0.7rem 1.4rem rgb(32 35 34 / 14%)", "purpose": "A small optical lift on glass-tab hover." }
+    ],
+    "motion": [
+      { "name": "glass-state", "value": "180ms cubic-bezier(0.2, 0.8, 0.2, 1)", "purpose": "Moves and reshapes glass-tab depth on hover." },
+      { "name": "glass-color", "value": "180ms ease-out", "purpose": "Changes glass-tab background color between states." },
+      { "name": "register-state", "value": "160ms ease-out", "purpose": "Introduces the faint cobalt wash on register hover or focus-within." }
+    ],
+    "breakpoints": [
+      { "name": "stacked-reading", "value": "48rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Glass Navigation Tabs",
+      "kind": "nav",
+      "refersTo": "glass-tab",
+      "description": "The signature top-edge navigation in active cobalt, resting citron, and neutral clear glass.",
+      "html": "<nav class=\"ds-tab-list\" aria-label=\"主要導覽\"><a class=\"ds-glass-tab ds-glass-tab--cobalt ds-is-active\" href=\"/zh-TW/\" aria-current=\"page\">文章</a><a class=\"ds-glass-tab ds-glass-tab--citron\" href=\"/zh-TW/#about\">關於</a><a class=\"ds-glass-tab ds-glass-tab--clear\" href=\"/en/\">English</a></nav>",
+      "css": ".ds-tab-list { display: flex; gap: 0.35rem; align-items: end; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-glass-tab { position: relative; isolation: isolate; display: grid; place-items: center; min-width: 6.25rem; min-height: 3.5rem; padding: 0.85rem 1.25rem 0.75rem; overflow: hidden; border: 1px solid rgb(32 35 34 / 28%); border-bottom-color: var(--rule-strong); border-radius: 0.75rem 0.75rem 0 0; color: var(--ink); font-size: 0.9375rem; font-weight: 610; line-height: 1; text-align: center; text-decoration: none; white-space: nowrap; box-shadow: inset 0 1px 0 rgb(255 255 255 / 64%), inset 0 -1px 0 rgb(32 35 34 / 12%), 0 0.45rem 1.2rem rgb(32 35 34 / 10%); backdrop-filter: blur(14px) saturate(135%); transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 180ms ease-out; } .ds-glass-tab::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(155deg, rgb(255 255 255 / 58%), transparent 38%), linear-gradient(90deg, transparent 8%, rgb(255 255 255 / 20%) 50%, transparent 82%); content: \"\"; pointer-events: none; } .ds-glass-tab::after { position: absolute; z-index: -1; right: 0.55rem; bottom: 0.45rem; width: 1.8rem; height: 0.62rem; background: linear-gradient(110deg, transparent 8%, rgb(255 255 255 / 58%) 50%, transparent 88%); clip-path: polygon(18% 0, 100% 0, 78% 100%, 0 100%); filter: blur(0.5px); content: \"\"; pointer-events: none; } .ds-glass-tab:hover { z-index: 2; transform: translateY(-0.2rem); box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(32 35 34 / 14%), 0 0.7rem 1.4rem rgb(32 35 34 / 14%); } .ds-glass-tab:focus-visible { z-index: 3; outline: 3px solid var(--ink); outline-offset: 3px; } .ds-glass-tab--cobalt { color: #14204a; background-color: rgb(79 115 217 / 42%); } .ds-glass-tab--cobalt.ds-is-active { color: #fff; background-color: rgb(41 77 175 / 90%); } .ds-glass-tab--citron { color: #252800; background-color: rgb(216 229 74 / 58%); } .ds-glass-tab--clear { background-color: rgb(255 255 255 / 62%); } @media (prefers-reduced-motion: reduce) { .ds-glass-tab { transition-duration: 0.01ms; } } @media (forced-colors: active) { .ds-glass-tab { border-color: ButtonText; color: LinkText; background: ButtonFace; box-shadow: none; } .ds-glass-tab.ds-is-active { color: HighlightText; background: Highlight; } }"
+    },
+    {
+      "name": "Homepage Introduction",
+      "kind": "custom",
+      "refersTo": "homepage-introduction",
+      "description": "The title-free, three-paragraph author introduction and direct mail invitation that open the zh-TW homepage.",
+      "html": "<section id=\"about\" class=\"ds-homepage-introduction\" aria-label=\"關於\"><div class=\"ds-about-copy\"><p>我是李至青 Jhih Cing, Li。我寫程式，喜歡咖啡和文字。我寫生活裡的變化、迷惘、幸運，還有那些值得留下來的片刻。</p><p>我相信自己是幸運的人，期望透過寫作分享我的幸運給更多人。選擇部落格作為載體，是希望有一個安安靜靜的地方，讓我能夠傳達自己的想法，沒有通知，沒有廣告，獨立於平台。</p><p>寫給所有迷惘、脆弱、無助、自卑的人，你們不是獨自一人。寫給幫助過我的人，是你們讓我有能力分享。寫給未來的我自己，故事是從這裡開始。</p></div><footer class=\"ds-about-cta\"><p>如果有一段文字讓你想起自己，歡迎寫信告訴我。</p><a href=\"mailto:jcli@pm.me\">寫信給我</a></footer></section>",
+      "css": ".ds-homepage-introduction { width: min(100%, 70ch); margin-inline: auto; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-about-copy { max-width: 70ch; font-size: 1.0625rem; line-height: 1.9; overflow-wrap: anywhere; } .ds-about-copy p { margin-block: 0 1.4em; } .ds-about-copy p:first-child { margin-top: 0; font-size: clamp(1.0625rem, 2vw, 1.5rem); font-weight: 580; line-height: 1.65; text-wrap: balance; } .ds-about-copy p:last-child { margin-bottom: 0; } .ds-about-cta { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: baseline; justify-content: space-between; max-width: 70ch; margin-top: clamp(2.5rem, 5vw, 4rem); } .ds-about-cta p { margin: 0; color: var(--ink-muted); font-size: 0.9375rem; } .ds-about-cta a { display: inline-flex; align-items: center; min-height: 2.75rem; color: inherit; font-weight: 650; text-underline-offset: 0.2em; } .ds-about-cta a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }"
+    },
+    {
+      "name": "Register Header",
+      "kind": "custom",
+      "refersTo": "register-header",
+      "description": "A frameless reading-route header containing only the page topic, 文章.",
+      "html": "<section class=\"ds-register-panel\" aria-labelledby=\"ds-register-heading\"><header class=\"ds-register-header\"><h1 id=\"ds-register-heading\" class=\"ds-register-title\">文章</h1></header></section>",
+      "css": ".ds-register-panel { color: var(--ink); background: transparent; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-register-header { padding-bottom: 1.25rem; } .ds-register-title { margin: 0; font-size: 1.5rem; font-weight: 710; line-height: 1; letter-spacing: -0.02em; } @media (max-width: 48rem) { .ds-register-header { min-height: 6rem; } }"
+    },
+    {
+      "name": "Register Row",
+      "kind": "custom",
+      "refersTo": "register-row",
+      "description": "A semantic chronological row with accession number, linked title, date, and a faint cobalt interaction wash.",
+      "html": "<ol class=\"ds-register-list\"><li class=\"ds-register-row\"><span class=\"ds-accession-number\" aria-hidden=\"true\"></span><a href=\"#post\">一切不滅定律</a><time datetime=\"2023-01-27\">2023年1月27日</time></li></ol>",
+      "css": ".ds-register-list { display: grid; gap: 0.25rem; margin: 0; padding: 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; list-style: none; counter-reset: accession; } .ds-register-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto; gap: clamp(1rem, 2.5vw, 2rem); align-items: center; min-height: 5.25rem; padding: 1rem 0; counter-increment: accession; transition: background-color 160ms ease-out; } .ds-register-row:hover, .ds-register-row:focus-within { background: rgb(79 115 217 / 8%); } .ds-accession-number::before { color: var(--ink-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; font-weight: 650; letter-spacing: 0.1em; content: counter(accession, decimal-leading-zero); } .ds-register-row a { width: fit-content; color: inherit; font-size: clamp(1.0625rem, 1.5vw, 1.25rem); font-weight: 560; line-height: 1.35; text-decoration-color: transparent; text-underline-offset: 0.2em; text-decoration-thickness: 0.08em; transition: text-decoration-color 160ms ease-out; } .ds-register-row a:hover, .ds-register-row a:focus-visible { text-decoration-color: currentColor; } .ds-register-row a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; } .ds-register-row time { color: var(--ink-muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; } @media (max-width: 48rem) { .ds-register-row { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0.35rem 0.75rem; min-height: 5.5rem; padding-block: 1rem; } .ds-register-row time { grid-column: 2; } } @media (prefers-reduced-motion: reduce) { .ds-register-row, .ds-register-row a { transition-duration: 0.01ms; } }"
+    },
+    {
+      "name": "Article Header",
+      "kind": "custom",
+      "refersTo": "article-header",
+      "description": "A balanced frameless article title with date and accession metadata.",
+      "html": "<header class=\"ds-article-header\"><h1>2025</h1><time datetime=\"2026-01-01\">2026年1月1日</time><span class=\"ds-article-stamp\" aria-hidden=\"true\">ZH-TW · 2026-01-01</span></header>",
+      "css": ".ds-article-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem 2rem; align-items: end; padding: clamp(1.5rem, 4vw, 2.75rem) 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-article-header h1 { margin: 0; font-size: 1.5rem; line-height: 1.16; letter-spacing: -0.025em; text-wrap: balance; } .ds-article-header time { grid-column: 1; color: var(--ink-muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; } .ds-article-stamp { grid-row: 1 / span 2; grid-column: 2; align-self: center; max-width: 12rem; color: var(--ink-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; font-weight: 650; letter-spacing: 0.12em; text-align: right; text-transform: uppercase; } @media (max-width: 48rem) { .ds-article-header { grid-template-columns: minmax(0, 1fr); } .ds-article-header time, .ds-article-stamp { grid-row: auto; grid-column: 1; text-align: left; } .ds-article-stamp { order: 3; margin-top: 0.25rem; } }"
+    },
+    {
+      "name": "Reader Response",
+      "kind": "custom",
+      "refersTo": "reader-response",
+      "description": "A quiet, frameless article-ending question and canonical mail action after generous whitespace.",
+      "html": "<footer class=\"ds-reader-response\"><p>讀完有想說的嗎？</p><a href=\"mailto:jcli@pm.me\">寫信給我</a></footer>",
+      "css": ".ds-reader-response { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: baseline; justify-content: space-between; max-width: 70ch; margin-top: clamp(3.5rem, 8vw, 6rem); padding-block: 1.5rem; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-reader-response p { margin: 0; color: var(--ink-muted); font-size: 0.9375rem; } .ds-reader-response a { display: inline-flex; align-items: center; min-height: 2.75rem; color: inherit; font-weight: 650; text-underline-offset: 0.2em; } .ds-reader-response a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }"
+    },
+    {
+      "name": "Reading Blockquote",
+      "kind": "custom",
+      "refersTo": "reading-blockquote",
+      "description": "A flat long-form quotation distinguished by indentation and muted ink rather than a card or divider.",
+      "html": "<blockquote class=\"ds-reading-blockquote\">保留呼吸與停頓，讓文字本身維持重量。</blockquote>",
+      "css": ".ds-reading-blockquote { max-width: 70ch; margin-inline: 0; padding: 1rem 1.25rem; color: var(--ink-muted); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 1.0625rem; line-height: 1.9; }"
+    },
+    {
+      "name": "Site Footer",
+      "kind": "custom",
+      "refersTo": "site-footer",
+      "description": "The restrained, frameless global close showing the canonical email address.",
+      "html": "<footer class=\"ds-site-footer\"><a href=\"mailto:jcli@pm.me\">jcli@pm.me</a></footer>",
+      "css": ".ds-site-footer { display: flex; justify-content: space-between; gap: 2rem; padding-block: 1.5rem 2rem; color: var(--ink-muted); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 0.8125rem; letter-spacing: 0.04em; } .ds-site-footer a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); text-underline-offset: 0.2em; text-decoration-thickness: 0.08em; } .ds-site-footer a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; } @media (max-width: 48rem) { .ds-site-footer { padding-bottom: 1.5rem; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Accession Tabs",
+    "overview": "Accession Tabs is a calm, interesting, wondering, modern, and quietly joyful system. It borrows the memory of notebook tabs and index stock, then translates them into modern web materials: cool paper, precise alignment, restrained registration marks, and fictional translucent cobalt/citron glass.\n\nThe system avoids depressing or boring minimalism and avoids literal archival bureaucracy. The confirmed site title and author identity are both `李至青`, so shared chrome renders that restrained signature once. Accession Tabs governs the durable material, type, and interaction language; the Compact Register arrangement is the composition for the current reading routes and remains specified in `.impeccable/surfaces/route-zh-tw.md`, not as a universal page template.",
+    "keyCharacteristics": [
+      "Cool index-stock surfaces with near-black ink and crisp spatial structure.",
+      "Translucent cobalt and citron glass reserved for familiar, functional navigation.",
+      "System-sans typography that stays clear across Traditional Chinese and English.",
+      "Restrained signatures, accession labels, and numeric marks instead of oversized branding.",
+      "Flat reading surfaces with selective, technically precise depth at interactive glass edges."
+    ],
+    "rules": [
+      { "name": "The Paper, Ink, Space Rule", "body": "Establish hierarchy with stock, ink, alignment, and whitespace before introducing an accent. Borders are reserved for controls, not for separating content sections or list items.", "section": "colors" },
+      { "name": "The Two Glass Accents Rule", "body": "Cobalt and citron belong to meaningful navigation and state, never to scattered decorative confetti.", "section": "colors" },
+      { "name": "The System Voice Rule", "body": "Use the platform system sans stack only; do not introduce webfonts or simulated display personalities.", "section": "typography" },
+      { "name": "The Restrained Signature Rule", "body": "Keep `李至青` at navigation scale and render the shared site-title/author identity once.", "section": "typography" },
+      { "name": "The Compact Type Ceiling Rule", "body": "No type exceeds `1.5rem`; use weight, spacing, and column relationships to establish hierarchy.", "section": "typography" },
+      { "name": "The Reading Measure Rule", "body": "Keep sustained prose at or below 70ch and preserve the implemented 1.9 body line-height.", "section": "layout" },
+      { "name": "The Selective Glass Rule", "body": "Reserve layered shadow and backdrop blur for functional glass navigation; reading surfaces stay flat, tonal, and frameless.", "section": "elevation" },
+      { "name": "The Top-edge Tab Rule", "body": "Round the exposed top of a navigation tab while keeping its bottom edge visually flush with the header.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do use cool stock, ink, alignment, and whitespace before reaching for accent color.",
+      "Do keep the shared `李至青` site title/author identity at restrained signature scale and render it once.",
+      "Do reserve the translucent cobalt/citron treatment for clear interactive state, with strong focus and forced-colors fallbacks.",
+      "Do keep reading text in the system sans stack at a maximum 70ch measure and honor reduced motion.",
+      "Do keep every type role at or below the confirmed `1.5rem` ceiling."
+    ],
+    "donts": [
+      "Don't turn the Compact Register's page topology into a mandatory layout for unrelated surfaces; its composition belongs to the route brief.",
+      "Don't introduce webfonts, handwritten imitation, or display-serif personality.",
+      "Don't enlarge `李至青` into a hero or duplicate it as adjacent title and author labels.",
+      "Don't restore oversized display headings; hierarchy must survive within the compact type ceiling.",
+      "Don't flatten the world into depressing or boring minimalism, and don't literalize it as archival bureaucracy.",
+      "Don't scatter cobalt and citron as decorative specks or apply glass depth to reading content.",
+      "Don't use borders to separate content sections, article rows, response endings, or the global footer."
+    ]
+  }
+}

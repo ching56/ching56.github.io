@@ -3,7 +3,21 @@ import { getCollection, type CollectionEntry } from "astro:content";
 type PostLanguage = CollectionEntry<"posts">["data"]["language"];
 
 export function getPostsByLanguage(language: PostLanguage) {
-  return getCollection("posts", ({ data }) => data.language === language);
+  return getCollection(
+    "posts",
+    ({ data }) =>
+      data.language === language &&
+      data.contentType === "post" &&
+      data.published,
+  );
+}
+
+export async function getPageByLanguage(language: PostLanguage, slug: string) {
+  return (await getCollection("posts", ({ data }) =>
+    data.language === language &&
+    data.contentType === "page" &&
+    data.published
+  )).find((entry) => getPostSlug(entry) === slug);
 }
 
 export function getPostSlug(post: Pick<CollectionEntry<"posts">, "id">) {

@@ -1,0 +1,26 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import { UI } from "../config/i18n";
+import { SITE } from "../config/site.js";
+
+interface Props {
+  page: CollectionEntry<"posts">;
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const ui = UI[page.data.language];
+---
+
+<section id="about" class="about-intro" aria-label={ui.aboutLabel}>
+  <div class="about-intro-main">
+    <div class="about-copy">
+      <Content />
+    </div>
+    <footer class="about-cta">
+      <p>{ui.aboutCtaPrompt}</p>
+      <a href={`mailto:${SITE.author.email}`}>{ui.responseLinkLabel}</a>
+    </footer>
+  </div>
+</section>

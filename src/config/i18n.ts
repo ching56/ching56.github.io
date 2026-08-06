@@ -4,10 +4,13 @@ export const UI = {
   "zh-TW": {
     homePath: "/zh-TW/",
     navigationLabel: "主要導覽",
+    skipContentLabel: "跳到主要內容",
     postsLabel: "文章",
     emptyPostsMessage: "目前沒有文章。",
     aboutLabel: "關於",
-    emailLabel: "寄信",
+    aboutCtaPrompt: "如果有一段文字讓你想起自己，歡迎寫信告訴我。",
+    responsePrompt: "讀完有想說的嗎？",
+    responseLinkLabel: "寫信給我",
     languageSwitch: {
       href: "/en/",
       label: "English",
@@ -16,10 +19,13 @@ export const UI = {
   en: {
     homePath: "/en/",
     navigationLabel: "Primary navigation",
+    skipContentLabel: "Skip to content",
     postsLabel: "Posts",
     emptyPostsMessage: "No English posts yet.",
     aboutLabel: null,
-    emailLabel: "Email",
+    aboutCtaPrompt: "If something here reminds you of your own story, write to me.",
+    responsePrompt: "Have something to share?",
+    responseLinkLabel: "Email me",
     languageSwitch: {
       href: "/zh-TW/",
       label: "Traditional Chinese",

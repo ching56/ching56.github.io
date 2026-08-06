@@ -11,6 +11,8 @@ const posts = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     language: z.enum(["zh-TW", "en"]),
+    contentType: z.enum(["post", "page"]).default("post"),
+    published: z.boolean().default(true),
   }),
 });
 

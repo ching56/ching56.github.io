@@ -27,6 +27,15 @@ const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
 const atomFeedUrl = getAtomFeedUrl(language);
 const ui = UI[language];
+const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
+const isPostsIndex = Astro.url.pathname === ui.homePath;
+const isBlogPostPage = Astro.url.pathname.startsWith(`${ui.homePath}blog/`);
+const isPostsPage = isPostsIndex || isBlogPostPage;
+const postsAriaCurrent = isPostsIndex
+  ? "page"
+  : isBlogPostPage
+    ? "location"
+    : undefined;
 ---
 
 <!doctype html>
@@ -52,22 +61,55 @@ const ui = UI[language];
     ))}
     <title>{pageTitle}</title>
   </head>
-  <body>
+  <body data-surface="accession-tabs">
+    <!--
+    THESIS: Accession Tabs turns a personal archive into a calm, tactile register and refuses the oversized-name minimalist blog.
+    OWN-WORLD: Cool index-card stock, near-black rules, restrained accession marks, and translucent cobalt/citron notebook-glass tabs.
+    STORY: Readers meet the author and the purpose of the writing, can respond directly, then scan real posts chronologically and settle into an unhurried reading column.
+    FIRST VIEWPORT: A compact signature and familiar top tabs lead into an open author introduction separated by composition and whitespace; the chronological register follows as the next distinct passage.
+    FORM: Approved Compact Register, first of three composition probes; direction seed f0bd5f13.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <a class="skip-link" href="#main-content">{ui.skipContentLabel}</a>
     <div class="site-shell">
       <header class="site-header">
-        <a href={ui.homePath}>{SITE.title}</a>
-        <p>{SITE.author.name}</p>
-        <nav aria-label={ui.navigationLabel}>
-          <a href={ui.homePath}>{ui.postsLabel}</a>
-          {ui.aboutLabel && <a href="/zh-TW/about/">{ui.aboutLabel}</a>}
-          <a href={languageSwitchPath}>{ui.languageSwitch.label}</a>
+        <div class="site-identity">
+          <a class="author-signature" href={ui.homePath}>
+            {SITE.author.displayName}
+          </a>
+          {showSecondarySiteTitle && (
+            <>
+              <span class="identity-rule" aria-hidden="true"></span>
+              <span class="site-title">{SITE.title}</span>
+            </>
+          )}
+        </div>
+        <nav class="site-nav" aria-label={ui.navigationLabel}>
+          <a
+            class:list={["nav-tab", "nav-tab--cobalt", { "is-active": isPostsPage }]}
+            href={ui.homePath}
+            aria-current={postsAriaCurrent}
+          >
+            {ui.postsLabel}
+          </a>
+          {ui.aboutLabel && (
+            <a
+              class="nav-tab nav-tab--citron"
+              href="/zh-TW/#about"
+            >
+              {ui.aboutLabel}
+            </a>
+          )}
+          <a class="nav-tab nav-tab--clear" href={languageSwitchPath}>
+            {ui.languageSwitch.label}
+          </a>
         </nav>
       </header>
-      <main>
+      <main id="main-content">
         <slot />
       </main>
       <footer class="site-footer">
-        <a href={`mailto:${SITE.author.email}`}>{ui.emailLabel}</a>
+        <a href={`mailto:${SITE.author.email}`}>{SITE.author.email}</a>
       </footer>
     </div>
   </body>

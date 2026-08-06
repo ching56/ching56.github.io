@@ -17,22 +17,27 @@ const posts = (await getPostsByLanguage(language)).sort(
 );
 ---
 
-<h1>{ui.postsLabel}</h1>
-{posts.length === 0 ? (
-  <p>{ui.emptyPostsMessage}</p>
-) : (
-  <ol class="post-list">
-    {posts.map((post) => {
-      const date = getPostDate(post.data.date, language);
+<section class="register-panel" aria-labelledby="register-heading">
+  <header class="register-header">
+    <h1 id="register-heading" class="register-title">{ui.postsLabel}</h1>
+  </header>
+  {posts.length === 0 ? (
+    <p class="empty-register">{ui.emptyPostsMessage}</p>
+  ) : (
+    <ol class="post-list" data-register="chronological">
+      {posts.map((post) => {
+        const date = getPostDate(post.data.date, language);
 
-      return (
-        <li>
-          <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
-            {post.data.title}
-          </a>
-          <time datetime={date.dateTime}>{date.label}</time>
-        </li>
-      );
-    })}
-  </ol>
-)}
+        return (
+          <li class="post-list-item">
+            <span class="accession-number" aria-hidden="true"></span>
+            <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
+              {post.data.title}
+            </a>
+            <time datetime={date.dateTime}>{date.label}</time>
+          </li>
+        );
+      })}
+    </ol>
+  )}
+</section>

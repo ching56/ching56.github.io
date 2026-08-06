@@ -1,9 +1,20 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import AboutSection from "../../components/AboutSection.astro";
 import PostList from "../../components/PostList.astro";
 import { EDITION_HOME_ALTERNATES } from "../../config/i18n";
+import { getPageByLanguage } from "../../lib/posts";
+
+const about = await getPageByLanguage("zh-TW", "about");
+
+if (!about) {
+  throw new Error("Missing the zh-TW about content entry");
+}
 ---
 
 <BaseLayout language="zh-TW" alternates={EDITION_HOME_ALTERNATES}>
-  <PostList language="zh-TW" />
+  <div class="home-flow">
+    <AboutSection page={about} />
+    <PostList language="zh-TW" />
+  </div>
 </BaseLayout>

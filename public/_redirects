@@ -1,9 +1,15 @@
 # Legacy WordPress permalinks. Keep both forms because old bookmarks may include
 # the trailing slash WordPress normally emitted.
-/hello-world /zh-TW/blog/hello-world/ 301
-/hello-world/ /zh-TW/blog/hello-world/ 301
-/about /zh-TW/about/ 301
-/about/ /zh-TW/about/ 301
+/hello-world /zh-TW/ 301
+/hello-world/ /zh-TW/ 301
+/zh-TW/blog/hello-world /zh-TW/ 301
+/zh-TW/blog/hello-world/ /zh-TW/ 301
+/about /zh-TW/#about 301
+/about/ /zh-TW/#about 301
+/zh-TW/about /zh-TW/#about 301
+/zh-TW/about/ /zh-TW/#about 301
+/zh-TW/blog/about /zh-TW/#about 301
+/zh-TW/blog/about/ /zh-TW/#about 301
 /2022-2 /zh-TW/blog/2022/ 301
 /2022-2/ /zh-TW/blog/2022/ 301
 /covid /zh-TW/blog/covid/ 301
