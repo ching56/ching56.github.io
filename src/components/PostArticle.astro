@@ -5,6 +5,7 @@ import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPostDate, getPostSlug } from "../lib/posts";
+import PostLikes from "./PostLikes.astro";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -52,6 +53,7 @@ const ui = UI[post.data.language];
     <div class="post-body">
       <Content />
     </div>
+    <PostLikes language={post.data.language} />
     <footer class="reader-response">
       <p>{ui.responsePrompt}</p>
       <a href={`mailto:${SITE.author.email}`}>{ui.responseLinkLabel}</a>

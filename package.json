@@ -8,9 +8,11 @@
     "build": "astro build",
     "check": "astro check",
     "dev": "astro dev",
+    "likes:dev": "wrangler dev --local",
+    "likes:migrate:local": "wrangler d1 migrations apply LIKES_DB --local",
     "preview": "astro preview",
     "serve": "astro dev",
-    "test": "astro build && node --test tests/built-site.test.mjs"
+    "test": "astro build && node --test tests/*.test.mjs"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
     "@astrojs/check": "^0.9.10",
     "astro": "^7.1.6",
     "sax": "^1.6.1",
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "wrangler": "^4.119.0"
   }
 }

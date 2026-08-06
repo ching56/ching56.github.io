@@ -381,6 +381,22 @@ test("drafts and permanent pages never publish as blog posts", async () => {
   );
 });
 
+
+test("post pages progressively enhance with the vanilla likes control", async () => {
+  for (const post of expectedPosts) {
+    const html = await readFile(
+      new URL(`zh-TW/blog/${post.slug}/index.html`, distDirectory),
+      "utf8",
+    );
+
+    assert.match(html, /<div class="post-likes" data-post-likes hidden>/);
+    assert.match(html, /<button type="button"[^>]*data-like-button/);
+    assert.match(html, /<output[^>]*data-like-count[^>]*>0<\/output>/);
+    assert.match(html, /<script src="\/likes\.js" defer><\/script>/);
+    assert.doesNotMatch(html, /astro-island|astro-slot|data-astro-cid/);
+  }
+});
+
 test("hreflang alternates appear only for pages with a translated counterpart", async () => {
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
@@ -507,8 +523,13 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
     walkFiles(distDirectory),
   ]);
 
-  for (const html of contentHtml) {
-    assert.doesNotMatch(html, /<script\b/i);
+  for (const [index, html] of contentHtml.entries()) {
+    const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map(([tag]) => tag);
+    if (index < 2) {
+      assert.deepEqual(scripts, []);
+    } else {
+      assert.deepEqual(scripts, ['<script src="/likes.js" defer>']);
+    }
     assert.doesNotMatch(html, forbiddenFontRule);
     assert.doesNotMatch(
       html,

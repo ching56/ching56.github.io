@@ -472,6 +472,34 @@ time {
   padding-block: 1.5rem;
 }
 
+.post-likes {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.post-likes button {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0;
+  color: var(--ink);
+  font: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.post-likes button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.post-likes output {
+  min-width: 1.5rem;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .reader-response p {
   margin: 0;
   color: var(--ink-muted);

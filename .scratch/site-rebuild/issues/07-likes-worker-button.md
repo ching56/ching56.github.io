@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 — Astro scaffold + first post end-to-end. (Parallel with 02/03; production verification after 05.)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] Worker endpoints: get count, increment; unknown paths and bad methods handled sanely
 - [ ] HTTP black-box tests with local D1 cover: read, increment, dedupe window, rate limit, unknown path

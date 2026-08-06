@@ -1,0 +1,18 @@
+---
+import type { SiteLanguage } from "../config/i18n";
+
+interface Props { language: SiteLanguage }
+const { language } = Astro.props;
+const copy = language === "zh-TW"
+  ? { label: "喜歡這篇文章", unavailable: "目前無法取得喜歡數" }
+  : { label: "Like this post", unavailable: "Likes are unavailable" };
+---
+
+<div class="post-likes" data-post-likes hidden>
+  <button type="button" data-like-button aria-describedby="likes-status">
+    <span>{copy.label}</span>
+    <output data-like-count aria-label={copy.label}>0</output>
+  </button>
+  <span id="likes-status" class="visually-hidden" data-likes-status data-error={copy.unavailable}></span>
+</div>
+<script is:inline src="/likes.js" defer></script>
