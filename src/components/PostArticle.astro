@@ -5,6 +5,7 @@ import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPostDate, getPostSlug } from "../lib/posts";
+import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
 
 interface Props {
@@ -50,6 +51,7 @@ const ui = UI[post.data.language];
         {post.data.language.toUpperCase()} · {date.dateTime}
       </span>
     </header>
+    {post.data.musicLinkCard && <MusicLinkCard card={post.data.musicLinkCard} />}
     <div class="post-body">
       <Content />
     </div>

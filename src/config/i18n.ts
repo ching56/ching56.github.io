@@ -32,7 +32,7 @@ export const UI = {
     threadsLinkLabel: "Talk with me there",
     languageSwitch: {
       href: "/zh-TW/",
-      label: "Traditional Chinese",
+      label: "繁體中文",
     },
   },
 } as const;

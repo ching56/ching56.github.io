@@ -30,7 +30,6 @@ const posts = (await getPostsByLanguage(language)).sort(
 
         return (
           <li class="post-list-item">
-            <span class="accession-number" aria-hidden="true"></span>
             <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
               {post.data.title}
             </a>

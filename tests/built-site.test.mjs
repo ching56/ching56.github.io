@@ -17,7 +17,7 @@ const expectedPosts = [
     dateTime: "2023-01-02",
     dateLabel: "2023年1月2日",
     excerpts: [
-      "《進入下一層新的夢之前》",
+      "進入下一層新的夢之前",
       "每一個平靜踏實的當下，才能好好地抵達未來",
       "才能不負幸運",
     ],
@@ -67,6 +67,18 @@ const expectedPosts = [
       "我本來不太喜歡這支瓶子，<br />",
       "不抱期待的嘗試最後常常意外表現得很好。",
       "謝謝自己沒有放棄你。",
+    ],
+  },
+];
+const expectedMusicLinkCards = [
+  {
+    slug: "2022",
+    name: "進入下一層新的夢之前",
+    performer: "椅子樂團",
+    providers: [
+      ["Apple Music", "https://music.apple.com/tw/song/1632142521"],
+      ["Spotify", "https://open.spotify.com/track/2LmNW7kMeYp2wUqMpIAge6"],
+      ["YouTube", "https://www.youtube.com/watch?v=Duq3FI0Ay5I"],
     ],
   },
 ];
@@ -270,7 +282,7 @@ test("an English reader can open the empty English edition", async () => {
   assert.doesNotMatch(html, /<ol class="post-list">/);
 });
 
-test("readers can navigate and switch languages using locale-aware chrome", async () => {
+test("readers can switch languages using locale-aware chrome", async () => {
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
@@ -278,46 +290,36 @@ test("readers can navigate and switch languages using locale-aware chrome", asyn
   ]);
 
   assert.match(englishList, /<nav[^>]*aria-label="Primary navigation"/);
-  assert.match(englishList, /href="\/en\/"[^>]*>Posts<\/a>/);
   assert.match(
     englishList,
-    /href="\/zh-TW\/"[^>]*>Traditional Chinese<\/a>/,
+    /class="language-link"[^>]*href="\/zh-TW\/"[^>]*>繁體中文<\/a>/,
   );
-  assert.match(
-    englishList,
-    /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
-  );
+  assert.doesNotMatch(englishList, /class="site-footer"|href="mailto:/);
 
   assert.match(chineseList, /<nav[^>]*aria-label="主要導覽"/);
-  assert.match(chineseList, /href="\/zh-TW\/"[^>]*>文章<\/a>/);
-  assert.match(chineseList, /href="\/zh-TW\/#about"[^>]*>關於<\/a>/);
-  assert.match(chineseList, /href="\/en\/"[^>]*>English<\/a>/);
+  assert.match(chineseList, /class="language-link"[^>]*href="\/en\/"[^>]*>English<\/a>/);
   assert.match(
     chineseList,
     /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
   );
   assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
 
+  for (const html of [englishList, chineseList, chineseOnlyPost]) {
+    const header = html.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
+    assert.doesNotMatch(header, />\s*(?:Posts|文章|關於)\s*</);
+  }
+
   const englishChrome = ["header", "footer"]
     .map((element) => englishList.match(new RegExp(`<${element}\\b[\\s\\S]*?<\\/${element}>`))?.[0] ?? "")
     .join(" ");
   assert.doesNotMatch(englishChrome, /文章|關於|寄信|主要導覽/);
 
-  for (const [html, expectedLabel] of [
-    [englishList, "jcli@pm.me"],
-    [chineseList, "jcli@pm.me"],
-  ]) {
-    const footer = html.match(
-      /<footer\b[^>]*class="site-footer"[^>]*>[\s\S]*?<\/footer>/,
-    )?.[0];
-
-    assert.ok(footer, "expected one footer");
-    assert.equal((footer.match(/<a\b/g) ?? []).length, 1);
-    assert.equal(footer.replace(/<[^>]+>/g, "").trim(), expectedLabel);
+  for (const html of [englishList, chineseList]) {
+    assert.doesNotMatch(html, /class="site-footer"/);
   }
 });
 
-test("the approved Accession Tabs structure is semantic across reading surfaces", async () => {
+test("the approved continuous journal structure is semantic across reading surfaces", async () => {
   const [englishList, chineseList, chinesePost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
@@ -325,32 +327,28 @@ test("the approved Accession Tabs structure is semantic across reading surfaces"
   ]);
 
   for (const html of [englishList, chineseList, chinesePost]) {
-    assert.match(html, /<body data-surface="accession-tabs">/);
+    assert.match(html, /<body data-surface="story-journal">/);
     assert.match(html, /direction seed f0bd5f13/);
     assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
     assert.doesNotMatch(html, /<h1[^>]*>\s*李至青\s*<\/h1>/);
+    assert.doesNotMatch(html, /nav-tab/);
   }
 
   assert.equal(SITE.title, SITE.author.displayName);
 
   assert.match(
     chineseList,
-    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/zh-TW\/"[^>]*aria-current="page"/,
+    /<a\b[^>]*class="language-link"[^>]*href="\/en\/"[^>]*>\s*English\s*<\/a>/,
   );
   assert.match(
     englishList,
-    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/en\/"[^>]*aria-current="page"/,
+    /<a\b[^>]*class="language-link"[^>]*href="\/zh-TW\/"[^>]*>\s*繁體中文\s*<\/a>/,
   );
-  assert.match(
-    chinesePost,
-    /<a\b[^>]*class="[^"]*nav-tab--cobalt[^"]*is-active[^"]*"[^>]*href="\/zh-TW\/"[^>]*aria-current="location"/,
-  );
-  assert.doesNotMatch(
-    chinesePost,
-    /<a\b[^>]*href="\/zh-TW\/"[^>]*aria-current="page"/,
-  );
+  const chineseHomepageHeader = chineseList.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
+  assert.doesNotMatch(chineseHomepageHeader, />\s*文章\s*</);
+  assert.doesNotMatch(chineseHomepageHeader, />\s*關於\s*</);
   assert.match(chineseList, /<ol class="post-list" data-register="chronological">/);
   assert.match(
     chineseList,
@@ -371,7 +369,11 @@ test("the approved Accession Tabs structure is semantic across reading surfaces"
   assert.doesNotMatch(chineseList, /<h[1-6][^>]*>關於(?:這裡)?<\/h[1-6]>/);
   assert.match(
     chineseList,
-    /<footer class="about-cta">[\s\S]*如果有一段文字讓你想起自己，歡迎寫信告訴我。[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
+    /<footer class="about-cta">[\s\S]*如果有一段文字讓你想起自己，歡迎寫信告訴我。[\s\S]*href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
+  );
+  assert.match(
+    chineseList,
+    /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true"><\/div>/,
   );
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(
@@ -379,31 +381,6 @@ test("the approved Accession Tabs structure is semantic across reading surfaces"
     /<footer class="reader-response">[\s\S]*讀完有想說的嗎？[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
   );
   assert.match(englishList, /<section class="register-panel"/);
-});
-
-test("optimized content images ship a srcset sized to the reading column", async () => {
-  const pages = (await walkFiles(distDirectory)).filter((path) =>
-    path.endsWith(".html"),
-  );
-
-  for (const page of pages) {
-    const html = await readFile(new URL(page, distDirectory), "utf8");
-    const images = html.match(/<img\b[^>]*\bsrc="\/_astro\/[^"]*"[^>]*>/g) ?? [];
-
-    for (const image of images) {
-      const srcset = image.match(/\bsrcset="([^"]*)"/)?.[1] ?? "";
-
-      assert.ok(
-        srcset.split(",").filter(Boolean).length >= 1,
-        `expected a srcset on ${image} in ${page}`,
-      );
-      assert.ok(
-        image.includes(`sizes="${ARTICLE_IMAGE_SIZES}"`),
-        `expected the reading-column sizes hint on ${image} in ${page}`,
-      );
-      assert.match(image, /\balt="[^"]+"/, `expected alt text on ${image} in ${page}`);
-    }
-  }
 });
 
 test("posts mirrored from Threads send responses to the Threads original", async () => {
@@ -491,6 +468,71 @@ test("drafts and permanent pages never publish as blog posts", async () => {
   );
 });
 
+test("optimized content images ship a srcset sized to the reading column", async () => {
+  const pages = (await walkFiles(distDirectory)).filter((path) =>
+    path.endsWith(".html"),
+  );
+
+  for (const page of pages) {
+    const html = await readFile(new URL(page, distDirectory), "utf8");
+    const images = html.match(/<img\b[^>]*\bsrc="\/_astro\/[^"]*"[^>]*>/g) ?? [];
+
+    for (const image of images) {
+      const srcset = image.match(/\bsrcset="([^"]*)"/)?.[1] ?? "";
+
+      assert.ok(
+        srcset.split(",").filter(Boolean).length >= 1,
+        `expected a srcset on ${image} in ${page}`,
+      );
+      assert.ok(
+        image.includes(`sizes="${ARTICLE_IMAGE_SIZES}"`),
+        `expected the reading-column sizes hint on ${image} in ${page}`,
+      );
+      assert.match(image, /\balt="[^"]+"/, `expected alt text on ${image} in ${page}`);
+    }
+  }
+});
+
+test("music link cards expose only verified outbound provider choices", async () => {
+  for (const expected of expectedMusicLinkCards) {
+    const html = await readFile(
+      new URL(`zh-TW/blog/${expected.slug}/index.html`, distDirectory),
+      "utf8",
+    );
+    const card = html.match(
+      /<aside class="music-link-card"[\s\S]*?<\/aside>/,
+    )?.[0];
+
+    assert.ok(card, `expected a music link card on ${expected.slug}`);
+    assert.ok(card.includes(expected.name));
+    assert.ok(card.includes(expected.performer));
+    assert.doesNotMatch(card, /<(?:iframe|img|script)\b/i);
+
+    let previousProviderIndex = -1;
+
+    for (const [provider, url] of expected.providers) {
+      const link = card.match(
+        new RegExp(`<a\\b[^>]*href="${escapeForRegex(url)}"[^>]*>[\\s\\S]*?<\\/a>`),
+      )?.[0];
+
+      assert.ok(link, `expected ${provider} on ${expected.slug}`);
+      assert.match(link, /target="_blank"/);
+      assert.match(link, /rel="noopener noreferrer"/);
+      assert.match(link, /class="external-link-icon"[^>]*aria-hidden="true"/);
+      assert.match(link, /另開新分頁/);
+
+      const providerIndex = card.indexOf(`>${provider}</span>`);
+      assert.ok(providerIndex > previousProviderIndex);
+      previousProviderIndex = providerIndex;
+    }
+  }
+
+  const unrelatedPost = await readFile(
+    new URL("zh-TW/blog/covid/index.html", distDirectory),
+    "utf8",
+  );
+  assert.doesNotMatch(unrelatedPost, /class="music-link-card"/);
+});
 
 test("post pages progressively enhance with the vanilla likes control", async () => {
   for (const post of expectedPosts) {
@@ -612,11 +654,12 @@ test("the zh-TW homepage introduces the writer before the article register", asy
 
   assert.match(html, /<html lang="zh-TW">/);
   assert.match(html, /<section id="about" class="about-intro" aria-label="關於">/);
-  assert.match(html, /我是李至青 Jhih Cing, Li/);
+  assert.match(html, /我是李至青。/);
+  assert.doesNotMatch(html, /Jhih Cing, Li/);
   assert.match(html, /我寫生活裡的變化、迷惘、幸運/);
   assert.match(html, /沒有通知，沒有廣告，獨立於平台/);
   assert.match(html, /故事是從這裡開始/);
-  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/);
+  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
 });
 
@@ -694,7 +737,7 @@ test("the compact frameless content contract stays within its confirmed limits",
     ".post-header",
     ".post-body blockquote",
     ".reader-response",
-    ".site-footer",
+    ".creative-coding-area",
   ]) {
     const rule = css.match(
       new RegExp(`${escapeForRegex(selector)}\\s*\\{([^}]*)\\}`),
@@ -707,6 +750,57 @@ test("the compact frameless content contract stays within its confirmed limits",
       `${selector} must not use a divider border`,
     );
   }
+
+  const signatureRule = css.match(/\.author-signature\s*\{([^}]*)\}/);
+  assert.ok(signatureRule, "expected a CSS rule for the site signature");
+  assert.match(signatureRule[1], /font-weight:\s*400;/);
+  assert.match(signatureRule[1], /letter-spacing:\s*0\.08em;/);
+
+  const linkRule = css.match(/^a\s*\{([^}]*)\}/m);
+  assert.ok(linkRule, "expected a global link rule");
+  assert.match(linkRule[1], /text-decoration:\s*none;/);
+
+  const languageRule = css.match(/\.language-link\s*\{([^}]*)\}/);
+  assert.ok(languageRule, "expected a CSS rule for the language utility");
+  assert.match(languageRule[1], /font-weight:\s*400;/);
+  assert.match(languageRule[1], /letter-spacing:\s*normal;/);
+
+  const chineseDocumentRule = css.match(/html:lang\(zh-TW\)\s*\{([^}]*)\}/);
+  assert.ok(chineseDocumentRule, "expected zh-TW line-breaking guidance");
+  assert.match(chineseDocumentRule[1], /line-break:\s*strict;/);
+
+  const articleTitleRule = css.match(/\.post-header h1\s*\{([^}]*)\}/);
+  assert.ok(articleTitleRule, "expected a CSS rule for article titles");
+  assert.match(articleTitleRule[1], /letter-spacing:\s*normal;/);
+  assert.doesNotMatch(
+    articleTitleRule[1],
+    /font-weight:/,
+    "article titles must retain their native authored emphasis",
+  );
+
+  for (const selector of [
+    ".about-copy h2",
+    ".register-title",
+    ".article-stamp",
+    ".music-link-card__work",
+    ".music-link-card__providers a",
+    ".reader-response a",
+  ]) {
+    const rule = css.match(
+      new RegExp(`${escapeForRegex(selector)}\\s*\\{([^}]*)\\}`),
+    );
+
+    assert.ok(rule, `expected a CSS rule for ${selector}`);
+    assert.match(
+      rule[1],
+      /font-weight:\s*400;/,
+      `${selector} must remain regular weight outside authored article content`,
+    );
+  }
+
+  const openingRule = css.match(/\.about-copy\s*>\s*p:first-child\s*\{([^}]*)\}/);
+  assert.ok(openingRule, "expected a CSS rule for the introduction opening");
+  assert.match(openingRule[1], /font-weight:\s*400;/);
 });
 
 function escapeForRegex(value) {

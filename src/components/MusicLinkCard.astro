@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type MusicLinkCard = NonNullable<
+  CollectionEntry<"posts">["data"]["musicLinkCard"]
+>;
+
+interface Props {
+  card: MusicLinkCard;
+}
+
+const { card } = Astro.props;
+const providerOrder = ["Apple Music", "Spotify", "YouTube"];
+const providers = [...card.providers].sort(
+  (left, right) =>
+    providerOrder.indexOf(left.name) - providerOrder.indexOf(right.name),
+);
+---
+
+<aside class="music-link-card" aria-label={`聆聽${card.name}`}>
+  <p class="music-link-card__work">{card.name}</p>
+  <p class="music-link-card__performer">{card.performer}</p>
+  <ul class="music-link-card__providers" aria-label="選擇音樂平台">
+    {
+      providers.map((provider) => (
+        <li>
+          <a
+            href={provider.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{provider.name}</span>
+            <svg
+              class="external-link-icon"
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+            >
+              <path d="M6 3h7v7M13 3 5.5 10.5M11 8.5V13H3V5h4.5" />
+            </svg>
+            <span class="visually-hidden">（另開新分頁）</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>

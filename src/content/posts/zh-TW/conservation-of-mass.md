@@ -3,9 +3,16 @@ title: "一切不滅定律"
 date: 2023-01-27
 language: zh-TW
 published: false
+musicLinkCard:
+  kind: album
+  name: "一切不滅定律"
+  performer: "昏鴉樂團"
+  providers:
+    - name: Apple Music
+      url: "https://music.apple.com/tw/album/1038872468"
+    - name: Spotify
+      url: "https://open.spotify.com/album/1eHOe6k6eztGQWJ8k5xSAa"
 ---
-
-《一切不滅定律》——昏鴉樂團
 
 看起來，幾乎就是真正的，但本質上完全不同，也無法互相取代。買單的時候，難道看不出來？我只是想要相信，相信更好的日子終於到來。
 

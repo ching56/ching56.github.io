@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>字體樣本 · 李至青</title>
+    <link rel="stylesheet" href="../src/styles/global.css" />
+    <style>
+      .specimen-shell {
+        width: min(100% - clamp(2rem, 6vw, 6rem), 72rem);
+        margin-inline: auto;
+        padding-block: clamp(3rem, 8vw, 6rem);
+      }
+
+      .specimen-header {
+        max-width: 70ch;
+      }
+
+      .specimen-header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+      }
+
+      .specimen-header p {
+        margin: 1rem 0 0;
+        color: var(--ink-muted);
+        font-size: 0.9375rem;
+        line-height: 1.65;
+      }
+
+      .specimen-section {
+        margin-top: clamp(4rem, 9vw, 7rem);
+      }
+
+      .specimen-section > h2 {
+        margin: 0 0 1.75rem;
+        font-size: 0.9375rem;
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: 0.02em;
+      }
+
+      .specimen-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+        gap: 2.5rem clamp(2rem, 6vw, 5rem);
+      }
+
+      .specimen-case {
+        min-width: 0;
+      }
+
+      .specimen-case--wide {
+        grid-column: 1 / -1;
+      }
+
+      .specimen-label {
+        margin: 0 0 0.75rem;
+        color: var(--ink-muted);
+        font-size: 0.75rem;
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: 0.08em;
+      }
+
+      .specimen-demo {
+        min-width: 0;
+      }
+
+      .specimen-meta {
+        margin: 0.75rem 0 0;
+        color: var(--ink-muted);
+        font-size: 0.75rem;
+        line-height: 1.45;
+      }
+
+      .specimen-demo .about-copy h2,
+      .specimen-demo .post-body :where(h2, h3, h4) {
+        margin-block: 0.75rem 0.35rem;
+      }
+
+      .specimen-demo .about-cta,
+      .specimen-demo .post-header,
+      .specimen-demo .music-link-card,
+      .specimen-demo .post-likes,
+      .specimen-demo .reader-response {
+        margin: 0;
+      }
+
+      .specimen-demo .post-header {
+        padding: 0;
+      }
+
+      .specimen-demo .post-body > :last-child {
+        margin-bottom: 0;
+      }
+
+      .specimen-demo .reader-response {
+        padding-block: 0;
+      }
+
+      .specimen-default {
+        margin: 0;
+      }
+
+      @media (max-width: 48rem) {
+        .specimen-shell {
+          width: min(100% - 2rem, 42rem);
+          padding-block: 2.5rem 4rem;
+        }
+
+        .specimen-section {
+          margin-top: 3.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+    THESIS: This specimen makes Story Journal's implemented typography visible without inventing a parallel design system.
+    OWN-WORLD: Cool stock, near-black ink, system sans, compact metadata, and open frameless spacing.
+    STORY: A maintainer can compare every active text role, then read its exact size, weight, leading, and tracking.
+    FIRST VIEWPORT: A quiet title introduces a linear specimen grouped into shared, homepage, article, and supporting roles.
+    FORM: Established-world documentation surface; no production route and no new visual identity.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <main class="specimen-shell">
+      <header class="specimen-header">
+        <h1>字體樣本</h1>
+        <p>
+          這份頁面直接載入網站的 <span lang="en">global.css</span>，並使用正式元件的 class。
+          樣本上方是實際呈現，下方是對應的尺寸、字重、行高與字距。
+        </p>
+      </header>
+
+      <section class="specimen-section" aria-labelledby="shared-heading">
+        <h2 id="shared-heading">共享介面</h2>
+        <div class="specimen-grid">
+          <article class="specimen-case">
+            <p class="specimen-label">網站名稱</p>
+            <div class="specimen-demo">
+              <a class="author-signature" href="#shared-heading">李至青</a>
+            </div>
+            <p class="specimen-meta">17px · 400 · normal · 0.08em</p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">語言切換</p>
+            <div class="specimen-demo">
+              <a class="language-link" href="#shared-heading">English</a>
+            </div>
+            <p class="specimen-meta">13px · 400 · 1 · normal</p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">次要網站名稱（條件式）</p>
+            <div class="specimen-demo">
+              <span class="site-title">The Return</span>
+            </div>
+            <p class="specimen-meta">14px · 400 · normal</p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">預設介面文字</p>
+            <div class="specimen-demo">
+              <p class="specimen-default">沒有英文文章。</p>
+            </div>
+            <p class="specimen-meta">16px · 400 · normal</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="specimen-section" aria-labelledby="homepage-heading">
+        <h2 id="homepage-heading">首頁</h2>
+        <div class="specimen-grid">
+          <article class="specimen-case specimen-case--wide">
+            <p class="specimen-label">關於：開場與內文</p>
+            <div class="specimen-demo about-copy">
+              <p>我是李至青。我寫程式，喜歡咖啡和文字。</p>
+              <p>我寫生活裡的變化、迷惘、幸運，還有那些值得留下來的片刻。</p>
+            </div>
+            <p class="specimen-meta">
+              開場 16px · 400 · 1.68<br />
+              內文 15px · 400 · 1.65
+            </p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">關於：備用小標</p>
+            <div class="specimen-demo about-copy">
+              <h2>寫作與生活</h2>
+            </div>
+            <p class="specimen-meta">13px · 400 · 1.65 · 0.1em</p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">關於：回信邀請</p>
+            <div class="specimen-demo about-cta">
+              <p>如果有一段文字讓你想起自己，歡迎寫信告訴我。</p>
+              <a href="mailto:jcli@pm.me">jcli@pm.me</a>
+            </div>
+            <p class="specimen-meta">15px · 400 · 1.65</p>
+          </article>
+
+          <article class="specimen-case specimen-case--wide">
+            <p class="specimen-label">文章清單</p>
+            <div class="specimen-demo">
+              <section class="register-panel" aria-labelledby="sample-register-heading">
+                <header class="register-header">
+                  <h1 id="sample-register-heading" class="register-title">文章</h1>
+                </header>
+                <ol class="post-list">
+                  <li class="post-list-item">
+                    <a href="#article-heading">一切不滅定律</a>
+                    <time datetime="2023-01-27">2023年1月27日</time>
+                  </li>
+                </ol>
+              </section>
+            </div>
+            <p class="specimen-meta">
+              標籤 15px · 400 · 1.3 · 0.02em<br />
+              標題 16px · 400 · 1.2 · #292c2b<br />
+              日期 13px · 400 · 1.2 · tabular
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="specimen-section" aria-labelledby="article-heading">
+        <h2 id="article-heading">文章頁</h2>
+        <div class="specimen-grid">
+          <article class="specimen-case specimen-case--wide">
+            <p class="specimen-label">文章標頭</p>
+            <div class="specimen-demo">
+              <header class="post-header">
+                <h1>一切不滅定律</h1>
+                <time datetime="2023-01-27">2023年1月27日</time>
+                <span class="article-stamp" aria-hidden="true">ZH-TW · 003</span>
+              </header>
+            </div>
+            <p class="specimen-meta">
+              標題 24px · browser bold · 1.16 · normal<br />
+              日期 14px · 400 · normal · tabular<br />
+              標記 12px · 400 · normal · 0.12em
+            </p>
+          </article>
+
+          <article class="specimen-case specimen-case--wide">
+            <p class="specimen-label">長文閱讀</p>
+            <div class="specimen-demo post-body">
+              <p>
+                故事往往不是從答案開始，而是從一個還沒有名字的問題開始。文字讓問題慢下來，也讓我們有機會重新看見它。
+              </p>
+              <p><strong>文章內容仍可使用語意粗體，保留作者原本的強調。</strong></p>
+              <h2>第二層標題</h2>
+              <h3>第三層標題</h3>
+              <h4>第四層標題</h4>
+              <blockquote>這是一段引用文字，保持相同的閱讀節奏，以較淡的墨色區分。</blockquote>
+              <pre><code>const story = "從這裡開始";</code></pre>
+            </div>
+            <p class="specimen-meta">
+              內文 17px · 400 · 1.9<br />
+              H2 24px · browser bold · 1.35<br />
+              H3 20px · browser bold · 1.35<br />
+              H4 17px · browser bold · 1.35<br />
+              程式碼 browser monospace
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="specimen-section" aria-labelledby="supporting-heading">
+        <h2 id="supporting-heading">輔助內容與互動</h2>
+        <div class="specimen-grid">
+          <article class="specimen-case">
+            <p class="specimen-label">音樂引用</p>
+            <div class="specimen-demo music-link-card">
+              <p class="music-link-card__work">What Was I Made For?</p>
+              <p class="music-link-card__performer">Billie Eilish</p>
+              <ul class="music-link-card__providers">
+                <li><a href="#supporting-heading">Apple Music</a></li>
+                <li><a href="#supporting-heading">Spotify</a></li>
+              </ul>
+            </div>
+            <p class="specimen-meta">
+              作品 17px · 400 · 1.4<br />
+              表演者 14px · 400 · 1.4<br />
+              平台 14px · 400 · normal
+            </p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">讀者回應</p>
+            <div class="specimen-demo reader-response">
+              <p>這篇文章讓你想到什麼？</p>
+              <a href="mailto:jcli@pm.me">jcli@pm.me</a>
+            </div>
+            <p class="specimen-meta">
+              提示 15px · 400 · normal<br />
+              信箱 16px · 400 · normal
+            </p>
+          </article>
+
+          <article class="specimen-case">
+            <p class="specimen-label">喜歡</p>
+            <div class="specimen-demo post-likes">
+              <button type="button">
+                <span>喜歡這篇文章</span>
+                <output>12</output>
+              </button>
+            </div>
+            <p class="specimen-meta">16px · 400 · normal · tabular count</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,40 +1,50 @@
 ---
-name: Accession Tabs
-description: A calm, quietly joyful reading system built from cool stock, precise spacing, and translucent notebook-glass navigation.
+name: Story Journal
+description: A calm, continuous storytelling journal built from cool stock, compact typography, and uninterrupted editorial flow.
 colors:
   stock: "#f6f7f5"
   stock-bright: "#fcfdfb"
   ink: "#202322"
+  ink-soft: "#292c2b"
   ink-muted: "#555c59"
   rule: "#b9bfbb"
-  rule-strong: "#777f7b"
   cobalt: "#4f73d9"
-  cobalt-deep: "#294daf"
-  cobalt-ink: "#14204a"
-  citron: "#d8e54a"
-  citron-deep: "#b9c528"
-  citron-ink: "#202300"
 typography:
   display:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "1.5rem"
-    fontWeight: 710
+    fontWeight: 400
     lineHeight: 1
     letterSpacing: "-0.02em"
   headline:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "1.5rem"
     lineHeight: 1.16
-    letterSpacing: "-0.025em"
+    letterSpacing: normal
   title:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "clamp(1.0625rem, 1.5vw, 1.25rem)"
-    fontWeight: 560
+    fontWeight: 400
     lineHeight: 1.35
   body:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "1.0625rem"
     lineHeight: 1.9
+  compact-body:
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    fontSize: "0.9375rem"
+    lineHeight: 1.65
+  compact-title:
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.2
+  register-label:
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    fontSize: "0.9375rem"
+    fontWeight: 400
+    lineHeight: 1.3
+    letterSpacing: "0.02em"
   subheading:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "1.5rem"
@@ -46,53 +56,44 @@ typography:
   utility:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "0.8125rem"
-    fontWeight: 650
+    fontWeight: 400
     lineHeight: 1.3
-  navigation:
+  response:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "0.9375rem"
-    fontWeight: 610
+    fontWeight: 400
     lineHeight: 1
   label:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "0.75rem"
-    fontWeight: 650
+    fontWeight: 400
     letterSpacing: "0.12em"
   signature:
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
     fontSize: "1.0625rem"
-    fontWeight: 630
-    letterSpacing: "0.04em"
-rounded:
-  tab-top: "0.75rem 0.75rem 0 0"
+    fontWeight: 400
+    letterSpacing: "0.08em"
 components:
-  glass-tab:
-    typography: "{typography.navigation}"
-    rounded: "{rounded.tab-top}"
-    padding: "0.85rem 1.25rem 0.75rem"
-  glass-tab-cobalt:
-    backgroundColor: "rgb(79 115 217 / 42%)"
-    textColor: "#14204a"
-  glass-tab-cobalt-active:
-    backgroundColor: "rgb(41 77 175 / 90%)"
-    textColor: "#fff"
-  glass-tab-citron:
-    backgroundColor: "rgb(216 229 74 / 58%)"
-    textColor: "#252800"
-  glass-tab-citron-active:
-    backgroundColor: "rgb(197 211 39 / 92%)"
-    textColor: "#202300"
-  glass-tab-clear:
-    backgroundColor: "rgb(255 255 255 / 62%)"
-    textColor: "{colors.ink}"
+  language-utility:
+    typography: "{typography.utility}"
+    textColor: "{colors.ink-muted}"
+    fontWeight: 400
+    letterSpacing: normal
+    minHeight: "2.75rem"
   homepage-introduction:
-    typography: "{typography.body}"
+    typography: "{typography.compact-body}"
+  homepage-contact:
+    typography: "{typography.compact-body}"
+    textColor: "{colors.ink}"
+    fontWeight: 400
+    textDecoration: "none"
   register-header:
-    typography: "{typography.display}"
-    padding: "0 0 1.25rem"
+    typography: "{typography.register-label}"
+    padding: "0 0 0.625rem"
   register-row:
-    typography: "{typography.title}"
-    padding: "1rem 0"
+    typography: "{typography.compact-title}"
+    textColor: "{colors.ink-soft}"
+    padding: "0.25rem 0"
   article-header:
     textColor: "{colors.ink}"
     typography: "{typography.headline}"
@@ -103,62 +104,50 @@ components:
     padding: "1rem 1.25rem"
   reader-response:
     textColor: "{colors.ink-muted}"
-    typography: "{typography.navigation}"
+    typography: "{typography.response}"
     padding: "1.5rem 0"
-  site-footer:
-    textColor: "{colors.ink-muted}"
-    typography: "{typography.utility}"
-    padding: "1.5rem 0 2rem"
 ---
 
-# Design System: Accession Tabs
+# Design System: Story Journal
 
 ## Overview
 
-**Creative North Star: "Accession Tabs"**
+**Creative North Star: "Story Journal"**
 
-Accession Tabs is a calm, interesting, wondering, modern, and quietly joyful system. It borrows the memory of notebook tabs and index stock, then translates them into modern web materials: cool paper, precise alignment, restrained registration marks, and fictional translucent cobalt/citron glass.
+Story Journal is a calm, interesting, wondering, modern, and quietly joyful system. It treats the homepage as one uninterrupted personal narrative: cool paper, precise alignment, restrained registration marks, and editorial whitespace carry readers from the author introduction into the chronology without app-like section controls.
 
-The system avoids depressing or boring minimalism and avoids literal archival bureaucracy. The confirmed site title and author identity are both `李至青`, so shared chrome renders that restrained signature once. Accession Tabs governs the durable material, type, and interaction language; the Compact Register arrangement is the composition for the current reading routes and remains specified in `.impeccable/surfaces/route-zh-tw.md`, not as a universal page template.
+The system avoids depressing or boring minimalism and avoids literal archival bureaucracy. The confirmed site title and author identity are both `李至青`, so shared chrome renders that restrained signature once. Story Journal governs the durable material, type, and uninterrupted reading rhythm; the current homepage arrangement remains specified in `.impeccable/surfaces/route-zh-tw.md`, not as a universal page template.
 
 **Key Characteristics:**
 
 - Cool index-stock surfaces with near-black ink and crisp spatial structure.
-- Translucent cobalt and citron glass reserved for familiar, functional navigation.
+- One continuous homepage narrative with no Posts/About section navigation.
 - System-sans typography that stays clear across Traditional Chinese and English.
 - Restrained signatures, accession labels, and numeric marks instead of oversized branding.
-- Flat reading surfaces with selective, technically precise depth at interactive glass edges.
+- Flat, frameless reading surfaces whose rhythm comes from spacing rather than boxes or borders.
 
 ## Colors
 
-The palette starts with paper, ink, and restrained registration accents; cobalt and citron provide the quietly joyful interactive voice.
+The palette starts with paper, ink, and restrained registration accents. A low-opacity cobalt wash is reserved for quiet hover feedback in the chronological register.
 
-### Primary
+### Accent
 
-- **Cobalt Glass** (`#4f73d9`): The clear blue identity of the primary navigation family and translucent resting states.
-- **Deep Cobalt** (`#294daf`): The denser active-state anchor beneath cobalt glass.
-- **Cobalt Ink** (`#14204a`): Hue-aligned text on resting cobalt glass.
-
-### Secondary
-
-- **Citron Glass** (`#d8e54a`): The bright, curious counterpoint used by the secondary navigation family.
-- **Deep Citron** (`#b9c528`): The grounded citron endpoint for state depth.
-- **Citron Ink** (`#202300`): Hue-aligned text on active citron glass.
+- **Cobalt Wash** (`#4f73d9` at 8%): A quiet focus-within or hover field for register rows; never a navigation surface or decorative block.
 
 ### Neutral
 
 - **Cool Index Stock** (`#f6f7f5`): The default page field.
-- **Bright Stock** (`#fcfdfb`): The lifted paper tone behind the ambient page wash and translucent navigation.
+- **Bright Stock** (`#fcfdfb`): The lifted paper tone behind the ambient page wash.
 - **Near-black Ink** (`#202322`): Primary copy, outlines, and focus visibility.
+- **Soft Near-black Ink** (`#292c2b`): A barely lifted black reserved for homepage article-list titles.
 - **Muted Graphite** (`#555c59`): Dates, stamps, secondary titles, and restrained metadata.
 - **Pencil Rule** (`#b9bfbb`): The conditional identity separator in shared chrome.
-- **Registration Rule** (`#777f7b`): The stronger bottom edge of bordered glass controls.
 
 ### Named Rules
 
-**The Paper, Ink, Space Rule.** Establish hierarchy with stock, ink, alignment, and whitespace before introducing an accent. Borders are reserved for controls, not for separating content sections or list items.
+**The Paper, Ink, Space Rule.** Establish hierarchy with stock, ink, alignment, and whitespace before introducing an accent. Borders never separate content sections or list items.
 
-**The Two Glass Accents Rule.** Cobalt and citron belong to meaningful navigation and state, never to scattered decorative confetti.
+**The Quiet Cobalt Rule.** Cobalt appears only as a low-opacity interaction wash; it never becomes a section marker, tab, or decorative confetti.
 
 ## Typography
 
@@ -166,81 +155,83 @@ The palette starts with paper, ink, and restrained registration accents; cobalt 
 **Body Font:** System sans (with platform-native fallbacks)
 **Label Font:** System sans (with platform-native fallbacks)
 
-**Character:** One system-sans voice handles Traditional Chinese, English, titles, and metadata. Hierarchy comes from weight, optical scale, spacing, and tabular numerals rather than downloaded or theatrical type.
+**Character:** One system-sans voice handles Traditional Chinese, English, titles, and metadata. Outside authored article content, hierarchy comes from optical scale, spacing, tone, tracking, and tabular numerals while every role stays at regular weight 400. Article titles, headings, and semantic `strong` text retain their native emphasis. Sustained Chinese and Chinese headlines use solid/default character spacing; short identity and metadata labels may use intentional positive tracking.
 
 ### Hierarchy
 
-- **Display** (weight 710, `1.5rem`, line-height 1): Primary register and section headings.
-- **Headline** (`1.5rem`, line-height 1.16): Balanced article titles with tight negative tracking.
-- **Title** (weight 560, `clamp(1.0625rem, 1.5vw, 1.25rem)`, line-height 1.35): Scan-friendly post and item titles.
+- **Display** (weight 400, `1.5rem`, line-height 1): Primary register and section headings.
+- **Headline** (`1.5rem`, line-height 1.16): Balanced article titles with solid/default character spacing.
+- **Title** (weight 400, `clamp(1.0625rem, 1.5vw, 1.25rem)`, line-height 1.35): Scan-friendly post and item titles.
 - **Body** (`1.0625rem`, line-height 1.9): Unhurried long-form reading within a maximum 70ch measure.
+- **Compact Body** (`0.9375rem`, line-height 1.65): Dense homepage introduction and its plain-text contact line.
+- **Compact Title** (weight 400, `1rem`, line-height 1.2): Regular-weight homepage article links inside the dense register.
+- **Register Label** (weight 400, `0.9375rem`, line-height 1.3, letter-spacing 0.02em): The short `文章` heading.
 - **Subheading** (`1.5rem`, line-height 1.35): Secondary headings inside long-form prose.
 - **Metadata** (`0.875rem`, line-height 1.4): Localized dates and restrained secondary identity text.
-- **Utility** (weight 650, `0.8125rem`, line-height 1.3): Footer copy and compact structural metadata.
-- **Navigation** (weight 610, `0.9375rem`, line-height 1): Familiar top-tab labels with compact authority.
-- **Label** (weight 650, `0.75rem`, letter-spacing 0.12em): Uppercase accession stamps and tabular numeric metadata.
-- **Signature** (weight 630, `1.0625rem`, letter-spacing 0.04em): The author's small identity mark in the shared header.
+- **Utility** (weight 400, `0.8125rem`, line-height 1.3): Compact structural metadata and other small utility copy.
+- **Response** (weight 400, `0.9375rem`, line-height 1): Quiet reader-response copy and its direct mail link.
+- **Label** (weight 400, `0.75rem`, letter-spacing 0.12em): Uppercase accession stamps and tabular numeric metadata.
+- **Signature** (weight 400, `1.0625rem`, letter-spacing 0.08em): The author's small, regular-weight identity mark in the shared header.
 
 ### Named Rules
 
 **The System Voice Rule.** Use the platform system sans stack only; do not introduce webfonts or simulated display personalities.
 
-**The Restrained Signature Rule.** Keep `李至青` at navigation scale and render the shared site-title/author identity once.
+**The Restrained Signature Rule.** Keep `李至青` at utility scale, regular weight, and slightly open tracking; render the shared site-title/author identity once.
 
-**The Compact Type Ceiling Rule.** No type exceeds `1.5rem`; use weight, spacing, and column relationships to establish hierarchy.
+**The Compact Type Ceiling Rule.** No type exceeds `1.5rem`; use scale, spacing, tone, tracking, and column relationships to establish hierarchy outside article content.
+
+**The Unadorned Link Rule.** Links never use underlines, including hover and focus states. Communicate interactivity through context, quiet ink shifts or row washes, and retain the global 3px keyboard-focus outline.
+
+**The Chinese Reading Rhythm Rule.** Keep sustained zh-TW text within a 1.5–2 line-height range, use normal inter-character spacing for prose and headlines, and apply strict language-aware line breaking. Reserve positive tracking for short signatures and metadata—not reading text.
+
+**The Regular Journal Chrome Rule.** Every role outside authored article content uses weight 400. Preserve native bold only for the article title, article subheadings, and semantic `strong` emphasis supplied by the author.
 
 ## Layout
 
-The durable spatial grammar uses one centered shell (`min(100% - clamp(2rem, 5vw, 5rem), 82rem)`), generous fluid main padding (`clamp(3rem, 7vw, 6.75rem)`), and a long-form reading measure capped at 70ch. At the implemented 48rem breakpoint, the shell narrows to a 1rem side gutter, the identity and navigation stack, tabs share the available width, chronological dates move beneath titles, and article metadata becomes one column.
+The durable spatial grammar uses one centered shell (`min(100% - clamp(2rem, 5vw, 5rem), 82rem)`), generous fluid main padding (`clamp(3rem, 7vw, 6.75rem)`), and a long-form reading measure capped at 70ch. Above `64.0625rem`, the zh-TW homepage becomes a two-column stage: a left content column capped at 44rem and a right creative-coding region at least 18rem wide, separated only by a fluid `clamp(3rem, 7vw, 7rem)` gap. The creative region stays full-height, title-free, empty until authored, and has no divider border. At the implemented 48rem breakpoint, the shell narrows to a 1rem side gutter, the compact identity and language utility remain on one line, the creative region is absent, chronological dates move beneath titles, and article metadata becomes one column.
 
-The zh-TW homepage opens with an unbordered, title-free author introduction in the reading measure, separated from the register through generous whitespace. Its short paragraphs carry identity, subject, purpose, and audience without mini-headings. It then yields to a frameless chronological list whose header says only `文章`; dates stay with their individual rows, and no aggregate count competes with the writing. Headers, footers, articles, response endings, and list items use space rather than divider borders. Preserve that author-first sequence through the route surface brief; new surfaces inherit the system's stock, type, and glass logic without automatically inheriting the register topology.
+The zh-TW homepage opens with an unbordered, title-free author introduction aligned to the left edge of the content column. Its short paragraphs use the compact body role, carry identity, subject, purpose, and audience without mini-headings, and identify the author only as `李至青` in zh-TW. It then flows directly into a frameless compact chronological list whose header says only `文章`; dates stay with their individual rows, and no aggregate count competes with the writing. There are no top-level Posts/About links: the two passages belong to one storytelling journal. Headers, articles, response endings, and list items use space rather than divider borders. Preserve that author-first sequence and the reserved creative-coding column through the route surface brief; new surfaces inherit the system's stock, type, and continuous editorial logic without automatically inheriting the homepage topology.
 
-**The Reading Measure Rule.** Keep sustained prose at or below 70ch and preserve the implemented 1.9 body line-height.
+**The Reading Measure Rule.** Keep sustained article prose at or below 70ch with the 1.9 long-form body line-height; the homepage introduction intentionally uses the denser compact-body rhythm.
 
 ## Elevation & Depth
 
-Depth is selective. Paper fields remain flat and gain atmosphere from the bright-stock radial wash and translucent tonal layering; only the fictional glass navigation receives shadows. The result should feel like optical refraction, not generic glossy UI.
+Paper fields remain flat. The bright-stock radial wash provides the only ambient depth; shared chrome, the introduction, register, articles, and response endings use no component shadows or backdrop blur.
 
-### Shadow Vocabulary
-
-- **Glass Rest** (`box-shadow: inset 0 1px 0 rgb(255 255 255 / 64%), inset 0 -1px 0 rgb(32 35 34 / 12%), 0 0.45rem 1.2rem rgb(32 35 34 / 10%)`): Gives navigation tabs their inset glass edges and restrained ambient separation.
-- **Glass Hover** (`box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(32 35 34 / 14%), 0 0.7rem 1.4rem rgb(32 35 34 / 14%)`): Adds a small lift and clearer refraction on pointer hover.
-
-### Named Rules
-
-**The Selective Glass Rule.** Reserve layered shadow and backdrop blur for functional glass navigation; reading surfaces stay flat, tonal, and frameless.
+**The Flat Journal Rule.** Depth belongs to the page atmosphere, never to section containers or navigation controls.
 
 ## Shapes
 
-The form language is open rectilinear paper interrupted by top-edge tab silhouettes. Glass navigation uses softly rounded top corners (`0.75rem 0.75rem 0 0`), while the introduction, register, articles, response endings, and footer remain frameless. Clipped diagonal highlights stay inside glass controls as sparse refraction details; they never become illustration.
+The form language is open rectilinear paper. The identity, language utility, introduction, register, articles, response endings, and reserved creative-coding region remain frameless; whitespace and alignment make their relationships visible.
 
-**The Top-edge Tab Rule.** Round the exposed top of a navigation tab while keeping its bottom edge visually flush with the header.
+**The Uninterrupted Page Rule.** Do not turn passages into rounded containers, tabs, or parallel destinations when they belong to the same reading sequence.
 
 ## Components
 
 ### Homepage Introduction
 
-A title-free, 70ch introduction uses three short paragraphs to answer who the author is, what and why they write, and who they write for; a direct mail action closes the passage without a divider. The navigation's `關於` tab points to this section, and legacy About URLs redirect to the same anchor.
+A title-free, left-aligned introduction uses three short paragraphs to answer who the author is, what and why they write, and who they write for. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. A quiet prompt closes the passage beside `jcli@pm.me`, which remains a working mail link but uses ordinary content weight and no underline. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
 
-### Glass Navigation Tabs
+### Language Utility
 
-The signature control is a conventional link made memorable through translucent cobalt, citron, or clear material. Each tab uses a 1px ink-derived border, top-only rounding, inset highlights, a clipped refraction mark, 14px backdrop blur with 135% saturation, and a 180ms lift. Active tabs deepen their family color; focus uses a 3px near-black outline, reduced-motion collapses transitions, and forced-colors replaces the material with system colors.
+The shared header contains only the regular-weight `李至青` signature, set with `0.08em` tracking, and one plain-text locale switch. The utility link is `0.8125rem`, weight 400 with normal tracking, muted graphite, at least `2.75rem` high, unbordered, unfilled, and unrounded; hover strengthens it to near-black and keyboard focus retains the global 3px outline. There are no Posts/About header links.
 
 ### Register Header
 
-The implemented reading-route header says only `文章`. Update dates remain attached to their individual rows, and no aggregate article count is shown. The header and list remain frameless.
+The implemented reading-route header says only `文章` at `0.9375rem`, weight 400, line-height 1.3, with `0.625rem` below it. Update dates remain attached to their individual rows, and no aggregate article count is shown. The header and list remain frameless.
 
 ### Register Row
 
-Rows are semantic list items, not cards. A tabular accession number, medium-weight linked title, and muted date align without divider rules; hover or focus-within introduces only an 8% cobalt wash. On narrow screens the date stacks under the title while the accession number remains aligned.
+Rows are semantic list items, not cards. A `1rem` regular-weight linked title at 1.2 line-height uses soft near-black `#292c2b`, a barely perceptible lift from primary ink; the `0.8125rem` muted date aligns beside it without divider rules or numeric accession indices in a 2.75rem minimum row with `0.25rem` vertical padding. Hover or focus-within introduces only an 8% cobalt wash, and the full row remains the link target. On narrow screens the row stays dense at a 3rem minimum with the same padding; the date stacks directly under the title.
 
 ### Article Header and Reading Body
 
-Article titles sit with the published date and an uppercase accession stamp, separated from prose by spacing rather than rules. The content column remains flat, centered, and no wider than 70ch. Blockquotes use indentation and muted ink rather than a card, quotation mark graphic, fill, or divider border.
+Article titles sit with the published date and a regular-weight uppercase accession stamp, separated from prose by spacing rather than rules. The title, article subheadings, and semantic `strong` text are the only roles allowed to retain bold emphasis. The content column remains flat, centered, and no wider than 70ch. Blockquotes use indentation and muted ink rather than a card, quotation mark graphic, fill, or divider border.
 
 ### Reader Response
 
-A quiet question and direct mail link close each article after generous whitespace. The response stays inside the 70ch reading flow, derives its address from shared metadata, and never becomes a card, divider, or glass control. The global footer shows the canonical address itself so short pages do not repeat the same call-to-action label.
+A quiet regular-weight question and direct mail link close each article after generous whitespace. The response stays inside the 70ch reading flow, derives its address from shared metadata, and never becomes a card, divider, or special control. There is no global footer contact; homepage contact appears only in the introduction, and article contact appears only in the response ending.
 
 ## Do's and Don'ts
 
@@ -248,9 +239,13 @@ A quiet question and direct mail link close each article after generous whitespa
 
 - **Do** use cool stock, ink, alignment, and whitespace before reaching for accent color.
 - **Do** keep the shared `李至青` site title/author identity at restrained signature scale and render it once.
-- **Do** reserve the translucent cobalt/citron treatment for clear interactive state, with strong focus and forced-colors fallbacks.
+- **Do** let the homepage introduction and chronology read as one continuous story.
+- **Do** keep the locale switch as a quiet plain-text utility with a strong keyboard focus state.
+- **Do** keep links underline-free while preserving clear keyboard focus and contextual affordance.
 - **Do** keep reading text in the system sans stack at a maximum 70ch measure and honor reduced motion.
 - **Do** keep every type role at or below the confirmed `1.5rem` ceiling.
+- **Do** keep every non-article role at regular weight 400 and let scale, tone, tracking, and space carry hierarchy.
+- **Do** leave the desktop creative-coding region empty, full-height, title-free, and frameless until real work is added there.
 
 ### Don't:
 
@@ -259,5 +254,9 @@ A quiet question and direct mail link close each article after generous whitespa
 - **Don't** enlarge `李至青` into a hero or duplicate it as adjacent title and author labels.
 - **Don't** restore oversized display headings; hierarchy must survive within the compact type ceiling.
 - **Don't** flatten the world into depressing or boring minimalism, and don't literalize it as archival bureaucracy.
-- **Don't** scatter cobalt and citron as decorative specks or apply glass depth to reading content.
-- **Don't** use borders to separate content sections, article rows, response endings, or the global footer.
+- **Don't** restore Posts/About tabs, rounded navigation controls, decorative glass, or backdrop blur.
+- **Don't** expand the locale utility into a second navigation system.
+- **Don't** use borders to separate content sections, article rows, response endings, or the creative-coding region.
+- **Don't** restore underlines on links in any interaction state.
+- **Don't** introduce bold interface, metadata, navigation, register, card, CTA, or response text; reserve bold for authored article content.
+- **Don't** restore a global footer email; contact belongs to the homepage introduction and article response endings.
