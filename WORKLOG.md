@@ -697,3 +697,8 @@
 - Intent: import the second Threads post, 「志野瓶」 (https://www.threads.com/@ching56/post/DelEZvPlOQ0), as `src/content/posts/zh-TW/shino-bottle.md` with the user's photo
 - Why: the user sent the title, text, and one photo; the date 2026-10-17 comes from the post's `<time>` in the user's signed-in Chrome and matches the ID-decoded timestamp. The pasted photo had no path in the message; it was found as the only image pasted after the 瓶子 photos and visually confirmed as the vase with flowers
 - Result: done — `/zh-TW/blog/shino-bottle/` builds with its responsive photo and Threads ending and now leads the homepage register; added to likes `KNOWN_POST_PATHS` and `expectedPosts`. Astro check 0 errors, 32/32 tests pass.
+
+## 2026-10-18 · claude-code
+- Intent: fix the four typos flagged in the imported Threads posts: 「碰到到底部」→「碰到底部」, 「變的很困難」→「變得很困難」, 「拉的比較胖」→「拉得比較胖」 (瓶子), 「表現的很好」→「表現得很好」 (志野瓶), and the 志野瓶 test excerpt that quotes the last one
+- Why: the user asked to fix all typos
+- Result: done — all four fixed and the 志野瓶 excerpt updated; Astro check 0 errors, 32/32 tests pass.
