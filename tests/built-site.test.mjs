@@ -660,11 +660,9 @@ test("the zh-TW homepage introduces the writer before the article register", asy
 
   assert.match(html, /<html lang="zh-TW">/);
   assert.match(html, /<section id="about" class="about-intro" aria-label="關於">/);
-  assert.match(html, /我是李至青。/);
+  assert.match(html, /Hi，我是至青，我喜歡做網站、App 跟陶瓷！/);
   assert.doesNotMatch(html, /Jhih Cing, Li/);
-  assert.match(html, /我寫生活裡的變化、迷惘、幸運/);
-  assert.match(html, /沒有通知，沒有廣告，獨立於平台/);
-  assert.match(html, /故事是從這裡開始/);
+  assert.match(html, /現居高雄。/);
   assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>(?:\s*<svg\b[\s\S]*?<\/svg>)?\s*jcli@pm\.me\s*<\/a>/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
 });

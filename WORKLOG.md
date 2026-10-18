@@ -742,3 +742,8 @@
 - Intent: hide the now section when `now.md` has no content: add `hasContent()` (Markdown body is non-empty after removing HTML comments) in `src/lib/posts.ts`, gate `NowSection` on it, and make the now test follow the same rule; commit without the user's in-progress `about.md` edit
 - Why: the user asked for the now section to disappear when it is empty, instead of relying only on `published: false`
 - Result: done — fixture builds: comment-only body → no now section, real content → section renders; with the user's emptied now.md the homepage has no `id="now"`. Check 0 errors; 39/40 tests pass, and the one failure is the bio-text test, which still expects the old about.md wording the user is rewriting (left unstaged, as are their now.md edits)
+
+## 2026-10-18 · claude-code
+- Intent: commit the user's rewritten bio (`about.md`: two short lines, 「Hi，我是至青…」 / 「現居高雄。」) and their emptied `now.md`; replace the old-bio test assertions with the new wording; note the change in DESIGN.md and STATE decisions 12/16
+- Why: the user said the bio is done. Emptying now.md is theirs and hides the now section as requested. The pre-commit hook will set `updated` on about.md, which has no visible effect
+- Result: done — check 0 errors, 40/40 tests pass; the homepage shows the new bio and no now section

@@ -5,5 +5,4 @@ language: zh-TW
 contentType: page
 ---
 
-1. building Kon.
-2. making bottles.
+

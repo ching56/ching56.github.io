@@ -211,7 +211,7 @@ The form language is open rectilinear paper. The identity, language utility, int
 
 ### Homepage Introduction
 
-A title-free, left-aligned introduction uses three short paragraphs to answer who the author is, what and why they write, and who they write for. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with a single mail link: a small stroke envelope icon (same 16-unit stroke grammar as the external-link icon, `aria-hidden`) followed by `jcli@pm.me` at ordinary content weight and with no underline; there is no prompt sentence. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
+A title-free, left-aligned introduction (the bio) uses a few short, author-written lines saying who the author is and what they make; since 2026-10-18 it is two lines, the greeting naming 至青 and where they live. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with a single mail link: a small stroke envelope icon (same 16-unit stroke grammar as the external-link icon, `aria-hidden`) followed by `jcli@pm.me` at ordinary content weight and with no underline; there is no prompt sentence. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
 
 ### Language Utility
 
