@@ -214,8 +214,16 @@ main {
   overflow-wrap: anywhere;
 }
 
-.now-copy p {
+.now-copy p,
+.now-copy ol,
+.now-copy ul {
   margin-block: 0 0.6em;
+}
+
+.now-copy ol,
+.now-copy ul {
+  padding-inline-start: 0;
+  list-style-position: inside;
 }
 
 .now-copy > :last-child {

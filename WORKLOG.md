@@ -732,3 +732,8 @@
 - Intent: add `src/content/posts/zh-TW/now.md` as an empty, unpublished page (`published: false`, a comment as the only body) for the user to fill in, and make the now-slot test key on "published" rather than "file exists"
 - Why: the user asked where now and bio live and to create the file; the content is theirs to write, so the stub must not render until they flip `published`
 - Result: done — the stub stays hidden (no `id="now"` on the homepage, no `/blog/now/` route); Astro check 0 errors, 40/40 tests pass
+
+## 2026-10-18 · claude-code
+- Intent: publish the user's now note (delete the leftover `published: false` that hid it) and left-align its list markers with the rest of the content column; commit
+- Why: the user wrote now.md but the preview didn't show it because the stub's `published: false` was still there; the default `ol` indent broke the left alignment
+- Result: done — the now note renders between bio and cards with its date, and its list markers align with the content column (1280px screenshot); 40/40 tests pass
