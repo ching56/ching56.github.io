@@ -9,6 +9,8 @@ import { ARTICLE_IMAGE_SIZES } from "../src/lib/article-image-sizes.mjs";
 
 const distDirectory = new URL("../dist/", import.meta.url);
 const listPage = new URL("zh-TW/index.html", distDirectory);
+// A post's `updated` frontmatter, when present, is mirrored here as `updated`.
+const lastUpdated = (post) => post.updated ?? post.dateTime;
 const forbiddenFontRule = /@font-face|@import\s+(?:url\s*\()?/i;
 const expectedPosts = [
   {
@@ -205,7 +207,8 @@ test("locale feeds contain every post in that language and no untranslated posts
       published,
       /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/,
     );
-    assert.equal(requiredAtomText(entry, "updated"), published);
+    const updated = requiredAtomText(entry, "updated");
+    assert.ok(updated >= published, "an entry cannot be updated before it was published");
     assert.ok(alternateLink, "expected each Atom entry to have an alternate link");
     assert.equal(atomAttribute(alternateLink, "type"), "text/html");
     assert.equal(atomAttribute(alternateLink, "hreflang"), "zh-TW");
@@ -213,6 +216,7 @@ test("locale feeds contain every post in that language and no untranslated posts
     return {
       title: requiredAtomText(entry, "title"),
       date: published.slice(0, 10),
+      updated: updated.slice(0, 10),
       id: requiredAtomText(entry, "id"),
       url: atomAttribute(alternateLink, "href"),
     };
@@ -225,6 +229,7 @@ test("locale feeds contain every post in that language and no untranslated posts
       return {
         title: post.title,
         date: post.dateTime,
+        updated: lastUpdated(post),
         id: canonicalUrl,
         url: canonicalUrl,
       };
@@ -300,7 +305,7 @@ test("readers can switch languages using locale-aware chrome", async () => {
   assert.match(chineseList, /class="language-link"[^>]*href="\/en\/"[^>]*>English<\/a>/);
   assert.match(
     chineseList,
-    /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
+    /href="mailto:jcli@pm\.me"[^>]*>(?:\s*<svg\b[\s\S]*?<\/svg>)?\s*jcli@pm\.me\s*<\/a>/,
   );
   assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
 
@@ -349,10 +354,10 @@ test("the approved continuous journal structure is semantic across reading surfa
   const chineseHomepageHeader = chineseList.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
   assert.doesNotMatch(chineseHomepageHeader, />\s*文章\s*</);
   assert.doesNotMatch(chineseHomepageHeader, />\s*關於\s*</);
-  assert.match(chineseList, /<ol class="post-list" data-register="chronological">/);
+  assert.match(chineseList, /<ol class="post-list" data-register="last-updated">/);
   assert.match(
     chineseList,
-    /<h1 id="register-heading" class="register-title">文章<\/h1>/,
+    /<h1 id="register-heading" class="visually-hidden">文章<\/h1>/,
   );
   assert.doesNotMatch(
     chineseList,
@@ -369,8 +374,9 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chineseList, /<h[1-6][^>]*>關於(?:這裡)?<\/h[1-6]>/);
   assert.match(
     chineseList,
-    /<footer class="about-cta">[\s\S]*如果有一段文字讓你想起自己，歡迎寫信告訴我。[\s\S]*href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/,
+    /<footer class="about-cta">\s*<a href="mailto:jcli@pm\.me"><svg class="mail-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*jcli@pm\.me\s*<\/a>\s*<\/footer>/,
   );
+  assert.doesNotMatch(chineseList, /如果有一段文字讓你想起自己/);
   assert.match(
     chineseList,
     /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true"><\/div>/,
@@ -659,8 +665,38 @@ test("the zh-TW homepage introduces the writer before the article register", asy
   assert.match(html, /我寫生活裡的變化、迷惘、幸運/);
   assert.match(html, /沒有通知，沒有廣告，獨立於平台/);
   assert.match(html, /故事是從這裡開始/);
-  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>jcli@pm\.me<\/a>/);
+  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>(?:\s*<svg\b[\s\S]*?<\/svg>)?\s*jcli@pm\.me\s*<\/a>/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
+});
+
+test("the zh-TW homepage lists every post as a card ordered by last update", async () => {
+  const html = await readFile(listPage, "utf8");
+  const list = html.match(/<ol class="post-list"[\s\S]*?<\/ol>/)?.[0] ?? "";
+  const actual = [...list.matchAll(/href="\/zh-TW\/blog\/([^/]+)\/"[\s\S]*?datetime="([^"]+)"/g)].map(
+    ([, slug, dateTime]) => ({ slug, dateTime }),
+  );
+  const expected = [...expectedPosts]
+    .sort((a, b) => lastUpdated(b).localeCompare(lastUpdated(a)))
+    .map((post) => ({ slug: post.slug, dateTime: lastUpdated(post) }));
+
+  assert.deepEqual(actual, expected);
+  assert.doesNotMatch(html, /seedling|budding|evergreen/i);
+});
+
+test("the zh-TW homepage shows a now note only after the author writes one", async () => {
+  const html = await readFile(listPage, "utf8");
+  const nowSource = new URL("../src/content/posts/zh-TW/now.md", import.meta.url);
+  const hasNow = await stat(nowSource).then(() => true, () => false);
+
+  if (!hasNow) {
+    assert.doesNotMatch(html, /id="now"/);
+    return;
+  }
+
+  assert.match(html, /<section id="now" class="now-note" aria-label="現在">/);
+  assert.ok(html.indexOf('id="about"') < html.indexOf('id="now"'));
+  assert.ok(html.indexOf('id="now"') < html.indexOf('class="register-panel"'));
+  assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 
 test("content pages request neither webfonts nor Astro runtime JavaScript", async () => {
@@ -731,7 +767,7 @@ test("the compact frameless content contract stays within its confirmed limits",
     ".about-intro",
     ".about-cta",
     ".register-panel",
-    ".register-header",
+    ".now-note",
     ".post-list-item",
     ".empty-register",
     ".post-header",
@@ -780,7 +816,6 @@ test("the compact frameless content contract stays within its confirmed limits",
 
   for (const selector of [
     ".about-copy h2",
-    ".register-title",
     ".article-stamp",
     ".music-link-card__work",
     ".music-link-card__providers a",

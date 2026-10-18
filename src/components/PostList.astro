@@ -1,6 +1,8 @@
 ---
 import { UI, type SiteLanguage } from "../config/i18n";
 import {
+  byLastUpdated,
+  getLastUpdated,
   getPostDate,
   getPostSlug,
   getPostsByLanguage,
@@ -12,21 +14,17 @@ interface Props {
 
 const { language } = Astro.props;
 const ui = UI[language];
-const posts = (await getPostsByLanguage(language)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const posts = (await getPostsByLanguage(language)).sort(byLastUpdated);
 ---
 
 <section class="register-panel" aria-labelledby="register-heading">
-  <header class="register-header">
-    <h1 id="register-heading" class="register-title">{ui.postsLabel}</h1>
-  </header>
+  <h1 id="register-heading" class="visually-hidden">{ui.postsLabel}</h1>
   {posts.length === 0 ? (
     <p class="empty-register">{ui.emptyPostsMessage}</p>
   ) : (
-    <ol class="post-list" data-register="chronological">
+    <ol class="post-list" data-register="last-updated">
       {posts.map((post) => {
-        const date = getPostDate(post.data.date, language);
+        const date = getPostDate(getLastUpdated(post), language);
 
         return (
           <li class="post-list-item">

@@ -24,6 +24,17 @@ export function getPostSlug(post: Pick<CollectionEntry<"posts">, "id">) {
   return post.id.split("/").at(-1) ?? post.id;
 }
 
+export function getLastUpdated(entry: Pick<CollectionEntry<"posts">, "data">) {
+  return entry.data.updated ?? entry.data.date;
+}
+
+export function byLastUpdated(
+  a: Pick<CollectionEntry<"posts">, "data">,
+  b: Pick<CollectionEntry<"posts">, "data">,
+) {
+  return getLastUpdated(b).valueOf() - getLastUpdated(a).valueOf();
+}
+
 export function getPostDate(date: Date, language: PostLanguage) {
   return {
     dateTime: date.toISOString().slice(0, 10),

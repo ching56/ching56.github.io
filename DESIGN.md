@@ -165,7 +165,7 @@ The palette starts with paper, ink, and restrained registration accents. A low-o
 - **Body** (`1.0625rem`, line-height 1.9): Unhurried long-form reading within a maximum 70ch measure.
 - **Compact Body** (`0.9375rem`, line-height 1.65): Dense homepage introduction and its plain-text contact line.
 - **Compact Title** (weight 400, `1rem`, line-height 1.2): Regular-weight homepage article links inside the dense register.
-- **Register Label** (weight 400, `0.9375rem`, line-height 1.3, letter-spacing 0.02em): The short `文章` heading.
+- **Register Label** (weight 400, `0.9375rem`, line-height 1.3, letter-spacing 0.02em): Reserved; the homepage register heading `文章` is now visually hidden (screen readers only).
 - **Subheading** (`1.5rem`, line-height 1.35): Secondary headings inside long-form prose.
 - **Metadata** (`0.875rem`, line-height 1.4): Localized dates and restrained secondary identity text.
 - **Utility** (weight 400, `0.8125rem`, line-height 1.3): Compact structural metadata and other small utility copy.
@@ -191,7 +191,7 @@ The palette starts with paper, ink, and restrained registration accents. A low-o
 
 The durable spatial grammar uses one centered shell (`min(100% - clamp(2rem, 5vw, 5rem), 82rem)`), generous fluid main padding (`clamp(3rem, 7vw, 6.75rem)`), and a long-form reading measure capped at 70ch. Above `64.0625rem`, the zh-TW homepage becomes a two-column stage: a left content column capped at 44rem and a right creative-coding region at least 18rem wide, separated only by a fluid `clamp(3rem, 7vw, 7rem)` gap. The creative region stays full-height, title-free, empty until authored, and has no divider border. At the implemented 48rem breakpoint, the shell narrows to a 1rem side gutter, the compact identity and language utility remain on one line, the creative region is absent, chronological dates move beneath titles, and article metadata becomes one column.
 
-The zh-TW homepage opens with an unbordered, title-free author introduction aligned to the left edge of the content column. Its short paragraphs use the compact body role, carry identity, subject, purpose, and audience without mini-headings, and identify the author only as `李至青` in zh-TW. It then flows directly into a frameless compact chronological list whose header says only `文章`; dates stay with their individual rows, and no aggregate count competes with the writing. There are no top-level Posts/About links: the two passages belong to one storytelling journal. Headers, articles, response endings, and list items use space rather than divider borders. Preserve that author-first sequence and the reserved creative-coding column through the route surface brief; new surfaces inherit the system's stock, type, and continuous editorial logic without automatically inheriting the homepage topology.
+The zh-TW homepage opens with an unbordered, title-free author introduction aligned to the left edge of the content column. Its short paragraphs use the compact body role, carry identity, subject, purpose, and audience without mini-headings, and identify the author only as `李至青` in zh-TW. It is the garden entrance (decision 16): **bio → now → cards**, with no visible section headings. An optional `now` note (author-written `now.md`) follows the bio, and then a frameless compact list where every post is a card, ordered by its last-updated date (`updated` frontmatter, falling back to `date`) and showing that date; no growth-stage labels and no aggregate count compete with the writing. There are no top-level Posts/About links: the two passages belong to one storytelling journal. Headers, articles, response endings, and list items use space rather than divider borders. Preserve that author-first sequence and the reserved creative-coding column through the route surface brief; new surfaces inherit the system's stock, type, and continuous editorial logic without automatically inheriting the homepage topology.
 
 **The Reading Measure Rule.** Keep sustained article prose at or below 70ch with the 1.9 long-form body line-height; the homepage introduction intentionally uses the denser compact-body rhythm.
 
@@ -211,7 +211,7 @@ The form language is open rectilinear paper. The identity, language utility, int
 
 ### Homepage Introduction
 
-A title-free, left-aligned introduction uses three short paragraphs to answer who the author is, what and why they write, and who they write for. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. A quiet prompt closes the passage beside `jcli@pm.me`, which remains a working mail link but uses ordinary content weight and no underline. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
+A title-free, left-aligned introduction uses three short paragraphs to answer who the author is, what and why they write, and who they write for. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with a single mail link: a small stroke envelope icon (same 16-unit stroke grammar as the external-link icon, `aria-hidden`) followed by `jcli@pm.me` at ordinary content weight and with no underline; there is no prompt sentence. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
 
 ### Language Utility
 
@@ -219,7 +219,7 @@ The shared header contains only the regular-weight `李至青` signature, set wi
 
 ### Register Header
 
-The implemented reading-route header says only `文章` at `0.9375rem`, weight 400, line-height 1.3, with `0.625rem` below it. Update dates remain attached to their individual rows, and no aggregate article count is shown. The header and list remain frameless.
+The register keeps a semantic `<h1>文章</h1>` for assistive technology, but it is visually hidden. Each row shows the post's last-updated date, rows are ordered by that date, and no aggregate article count is shown. The list remains frameless.
 
 ### Register Row
 

@@ -1,0 +1,22 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+import { UI } from "../config/i18n";
+import { getLastUpdated, getPostDate } from "../lib/posts";
+
+interface Props {
+  page: CollectionEntry<"posts">;
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+const ui = UI[page.data.language];
+const date = getPostDate(getLastUpdated(page), page.data.language);
+---
+
+<section id="now" class="now-note" aria-label={ui.nowLabel}>
+  <div class="now-copy">
+    <Content />
+  </div>
+  <time datetime={date.dateTime}>{date.label}</time>
+</section>

@@ -19,8 +19,12 @@ const ui = UI[page.data.language];
       <Content />
     </div>
     <footer class="about-cta">
-      <p>{ui.aboutCtaPrompt}</p>
-      <a href={`mailto:${SITE.author.email}`}>{SITE.author.email}</a>
+      <a href={`mailto:${SITE.author.email}`}>
+        <svg class="mail-icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M2.5 4h11v8h-11zM2.5 4 8 8.5 13.5 4" />
+        </svg>
+        {SITE.author.email}
+      </a>
     </footer>
   </div>
 </section>

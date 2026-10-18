@@ -4,6 +4,26 @@ The publishing language for 李至青’s bilingual personal blog.
 
 ## Language
 
+**Garden entrance**:
+The zh-TW homepage, read in order as bio → now → cards. None of these names appears on screen as a heading.
+_Avoid_: Landing page, dashboard
+
+**Bio**:
+The author's three-paragraph self-introduction that opens the entrance, closed by the mail link. Its source is still `about.md` and its anchor is still `#about` for legacy URLs.
+_Avoid_: About page
+
+**Now**:
+A short, author-written note on what the author is doing these days, shown with its last-updated date. It appears only once `now.md` exists.
+_Avoid_: Status, bio
+
+**Card**:
+The concept of one post as a unit on the entrance, not a framed box. Every published post is a card.
+_Avoid_: Tile, topic bed
+
+**Last updated**:
+The last time the author tended a post (`updated`, or `date` if never revised). Cards are ordered by it and show it; it is never earlier than the publish date. It is set by hand, not taken from git.
+_Avoid_: Growth stage, git commit date
+
 **Music link card**:
 A quiet, blog-owned, text-only citation placed between an article’s metadata and body. An article has at most one card, which lets the reader choose an authorized music provider without loading a player or displaying cover artwork.
 _Avoid_: Song embed, music embed, music player, smart link

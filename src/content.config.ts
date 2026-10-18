@@ -67,15 +67,22 @@ const posts = defineCollection({
     base: "./src/content/posts",
     pattern: "**/*.md",
   }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    language: z.enum(["zh-TW", "en"]),
-    contentType: z.enum(["post", "page"]).default("post"),
-    published: z.boolean().default(true),
-    threadsUrl: threadsPostUrl.optional(),
-    musicLinkCard: musicLinkCard.optional(),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      date: z.coerce.date(),
+      // The last time the author tended the entry; omitted means never revised.
+      updated: z.coerce.date().optional(),
+      language: z.enum(["zh-TW", "en"]),
+      contentType: z.enum(["post", "page"]).default("post"),
+      published: z.boolean().default(true),
+      threadsUrl: threadsPostUrl.optional(),
+      musicLinkCard: musicLinkCard.optional(),
+    })
+    .refine(({ date, updated }) => !updated || updated >= date, {
+      message: "updated cannot precede date",
+      path: ["updated"],
+    }),
 });
 
 export const collections = { posts };

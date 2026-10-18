@@ -4,7 +4,11 @@ import {
   type SiteLanguage,
 } from "../config/i18n";
 import { SITE } from "../config/site.js";
-import { getPostSlug, getPostsByLanguage } from "./posts";
+import {
+  getLastUpdated,
+  getPostSlug,
+  getPostsByLanguage,
+} from "./posts";
 
 // Astro's official RSS helper serializes RSS 2.0; this ticket requires Atom 1.0.
 export async function buildAtomFeed(language: SiteLanguage) {
@@ -13,9 +17,11 @@ export async function buildAtomFeed(language: SiteLanguage) {
   const posts = (await getPostsByLanguage(language)).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
-  const updatedAt = posts.at(0)?.data.date.toISOString() ?? SITE.emptyFeedUpdatedAt;
+  const lastUpdated = posts.map(getLastUpdated).sort((a, b) => b.valueOf() - a.valueOf());
+  const updatedAt = lastUpdated.at(0)?.toISOString() ?? SITE.emptyFeedUpdatedAt;
   const entries = posts.map((post) => {
     const publishedAt = post.data.date.toISOString();
+    const updatedAt = getLastUpdated(post).toISOString();
     const postUrl = new URL(
       `${UI[language].homePath}blog/${getPostSlug(post)}/`,
       SITE.url,
@@ -26,7 +32,7 @@ export async function buildAtomFeed(language: SiteLanguage) {
     <id>${postUrl}</id>
     <link rel="alternate" href="${postUrl}" type="text/html" hreflang="${language}" />
     <published>${publishedAt}</published>
-    <updated>${publishedAt}</updated>
+    <updated>${updatedAt}</updated>
   </entry>`;
   });
 
