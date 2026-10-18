@@ -676,3 +676,9 @@
 - Intent: verify and commit the user's own edit to the 2023 ~ 2024 post (five lines removed)
 - Why: the user asked for finished changes to be committed automatically; the three tested excerpts are unchanged, so no test edit is needed
 - Result: done — Astro check 0 errors, 27/27 tests pass, staged tree re-verified in a temporary worktree. The long-running dev server had served stale content after repeated production builds; restarting it (`astro dev stop` then `astro dev`) fixed that.
+
+## 2026-10-18 · claude-code
+- Intent: add an optional `threadsUrl` post field; posts that carry it end with 「同步發佈在 Threads」 + link 「在上面和我互動」 instead of the email prompt
+- Why: the user wants to sync selected Threads posts (some with video) and show that footer on them. The footer is independent of how posts get imported, so it ships first; the import method and video hosting are user decisions still open
+- Result: in progress — schema (https www.threads.com / www.threads.net `/@handle/post/<id>` only), i18n strings, PostArticle footer branch, conditional built-site test; verify with a throwaway post carrying a Threads URL, then commit only these hunks
+- Result: done — throwaway build with a `@ching56` Threads URL on one post rendered 「同步發佈在 Threads」 + 「在上面和我互動」 linking to it, other posts kept the email ending, and a non-Threads URL failed the build with the schema message. Real repo: Astro check 0 errors, 28/28 tests pass. Committed via HEAD-based staging of the four mixed files.

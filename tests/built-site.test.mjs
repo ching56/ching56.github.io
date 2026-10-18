@@ -384,6 +384,32 @@ test("optimized content images ship a srcset sized to the reading column", async
   }
 });
 
+test("posts mirrored from Threads send responses to the Threads original", async () => {
+  const pages = (await walkFiles(distDirectory)).filter((path) =>
+    /^(?:zh-TW|en)\/blog\/[^/]+\/index\.html$/.test(path),
+  );
+
+  for (const page of pages) {
+    const html = await readFile(new URL(page, distDirectory), "utf8");
+    const footer = html.match(
+      /<footer class="reader-response">[\s\S]*?<\/footer>/,
+    )?.[0];
+
+    assert.ok(footer, `expected a response ending in ${page}`);
+
+    if (/同步發佈在 Threads|Also posted on Threads/.test(footer)) {
+      assert.match(
+        footer,
+        /href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?"[^>]*>(?:在上面和我互動|Talk with me there)<\/a>/,
+        `expected a Threads permalink in ${page}`,
+      );
+      assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
+    } else {
+      assert.match(footer, /href="mailto:/, `expected the email prompt in ${page}`);
+    }
+  }
+});
+
 test("drafts and permanent pages never publish as blog posts", async () => {
   for (const slug of ["hello-world", "conservation-of-mass", "about"]) {
     await assert.rejects(

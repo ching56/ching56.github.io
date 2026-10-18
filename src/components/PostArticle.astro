@@ -55,8 +55,19 @@ const ui = UI[post.data.language];
     </div>
     <PostLikes language={post.data.language} />
     <footer class="reader-response">
-      <p>{ui.responsePrompt}</p>
-      <a href={`mailto:${SITE.author.email}`}>{ui.responseLinkLabel}</a>
+      {
+        post.data.threadsUrl ? (
+          <>
+            <p>{ui.threadsPrompt}</p>
+            <a href={post.data.threadsUrl}>{ui.threadsLinkLabel}</a>
+          </>
+        ) : (
+          <>
+            <p>{ui.responsePrompt}</p>
+            <a href={`mailto:${SITE.author.email}`}>{ui.responseLinkLabel}</a>
+          </>
+        )
+      }
     </footer>
   </article>
 </BaseLayout>

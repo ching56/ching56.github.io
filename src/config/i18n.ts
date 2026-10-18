@@ -11,6 +11,8 @@ export const UI = {
     aboutCtaPrompt: "如果有一段文字讓你想起自己，歡迎寫信告訴我。",
     responsePrompt: "讀完有想說的嗎？",
     responseLinkLabel: "寫信給我",
+    threadsPrompt: "同步發佈在 Threads",
+    threadsLinkLabel: "在上面和我互動",
     languageSwitch: {
       href: "/en/",
       label: "English",
@@ -26,6 +28,8 @@ export const UI = {
     aboutCtaPrompt: "If something here reminds you of your own story, write to me.",
     responsePrompt: "Have something to share?",
     responseLinkLabel: "Email me",
+    threadsPrompt: "Also posted on Threads",
+    threadsLinkLabel: "Talk with me there",
     languageSwitch: {
       href: "/zh-TW/",
       label: "Traditional Chinese",
