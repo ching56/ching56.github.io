@@ -12,7 +12,8 @@
     "likes:migrate:local": "wrangler d1 migrations apply LIKES_DB --local",
     "preview": "astro preview",
     "serve": "astro dev",
-    "test": "astro build && node --test tests/*.test.mjs"
+    "test": "astro build && node --test tests/*.test.mjs",
+    "video:encode": "bash scripts/encode-video.sh"
   },
   "keywords": [],
   "author": "",

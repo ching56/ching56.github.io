@@ -417,7 +417,7 @@ time {
   overflow-wrap: anywhere;
 }
 
-.post-body :where(p, ul, ol, blockquote, pre) {
+.post-body :where(p, ul, ol, blockquote, pre, video) {
   margin-block: 0 1.5em;
 }
 
@@ -449,10 +449,17 @@ time {
   color: var(--ink-muted);
 }
 
-.post-body img {
+.post-body :where(img, video) {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* Tall phone clips stay within one screen; width follows the video's
+   own aspect ratio from its width/height attributes and poster. */
+.post-body video {
+  width: auto;
+  max-height: 85svh;
 }
 
 .post-body pre {

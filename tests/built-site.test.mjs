@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readdir, readFile } from "node:fs/promises";
+import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import test from "node:test";
 import sax from "sax";
@@ -406,6 +406,48 @@ test("posts mirrored from Threads send responses to the Threads original", async
       assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
     } else {
       assert.match(footer, /href="mailto:/, `expected the email prompt in ${page}`);
+    }
+  }
+});
+
+test("every built file fits Cloudflare Pages' 25 MiB per-file limit", async () => {
+  const limit = 25 * 1024 * 1024;
+
+  for (const path of await walkFiles(distDirectory)) {
+    const { size } = await stat(new URL(path, distDirectory));
+
+    assert.ok(size < limit, `${path} is ${size} bytes, over the 25 MiB limit`);
+  }
+});
+
+test("article videos wait for the reader and ship their poster and file", async () => {
+  const pages = (await walkFiles(distDirectory)).filter((path) =>
+    /^(?:zh-TW|en)\/blog\/[^/]+\/index\.html$/.test(path),
+  );
+
+  for (const page of pages) {
+    const html = await readFile(new URL(page, distDirectory), "utf8");
+
+    for (const video of html.match(/<video\b[\s\S]*?<\/video>/g) ?? []) {
+      const tag = video.match(/<video\b[^>]*>/)[0];
+
+      for (const attribute of [/\bcontrols\b/, /\bplaysinline\b/, /\bpreload="none"/, /\bwidth="\d+"/, /\bheight="\d+"/, /\baria-label="[^"]+"/]) {
+        assert.match(tag, attribute, `expected ${attribute} on a video in ${page}`);
+      }
+      assert.doesNotMatch(tag, /\bautoplay\b/, `expected no autoplay in ${page}`);
+
+      const poster = tag.match(/\bposter="(\/media\/[^"]+\.jpg)"/)?.[1];
+      const source = video.match(/<source\b[^>]*\bsrc="(\/media\/[^"]+\.mp4)"[^>]*\btype="video\/mp4"/)?.[1];
+
+      assert.ok(poster, `expected a /media/ poster on a video in ${page}`);
+      assert.ok(source, `expected a /media/ MP4 source on a video in ${page}`);
+
+      for (const file of [poster, source]) {
+        await assert.doesNotReject(
+          stat(new URL(file.slice(1), distDirectory)),
+          `expected ${file} in the build for ${page}`,
+        );
+      }
     }
   }
 });
