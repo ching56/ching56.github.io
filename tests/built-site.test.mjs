@@ -47,6 +47,17 @@ const expectedPosts = [
     dateLabel: "2026年1月1日",
     excerpts: ["開始學做茶壺", "Mew 的 farewell", "照顧好自己才能照顧別人"],
   },
+  {
+    slug: "bottles",
+    title: "瓶子",
+    dateTime: "2026-10-11",
+    dateLabel: "2026年10月11日",
+    excerpts: [
+      "最近是瓶子。<br />",
+      "土胚的牆壁像是窗簾一樣捲起😭",
+      "先把水吸乾再收窄瓶口",
+    ],
+  },
 ];
 
 test("old WordPress URLs publish permanent redirects to their new homes", async () => {
