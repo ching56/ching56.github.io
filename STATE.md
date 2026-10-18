@@ -29,7 +29,7 @@ Ticket 07 review fixes are committed in `14c2b8c`; local `master` is 21 commits 
 
 ## In progress
 
-- Digital-garden entrance (decision 16): direction and terms are settled; nothing is implemented yet. Exact next step: settle what still distinguishes `cards` from `recents` now that every post is a card, whether to show growth-stage labels, and the `now` text, which only the author can write. Then add `updated`/`stage`/`topics` to `src/content.config.ts` and restructure `src/pages/zh-TW/index.astro`.
+- Digital-garden entrance (decision 16) is implemented in the working tree and verified (check clean, 34/34 tests), but not committed. Final shape: bio → now → cards, no visible headings; every post is a card ordered by and showing its last-updated date (optional `updated` frontmatter, which cannot precede `date`); no growth-stage labels; `NowSection` renders only once `src/content/posts/zh-TW/now.md` (contentType page) exists; the Atom `<updated>` uses the last-updated date; the bio closes with an envelope icon + `jcli@pm.me` and no prompt sentence. Glossary is in CONTEXT.md. It shares files with the uncommitted Story Journal / music-card WIP. Exact next step: the user decides whether to commit that WIP first (then commit the garden separately) or commit everything together; the user also writes `now.md`.
 
 - The lawful, respectful `Music link card` feature is implemented and documented: strict optional frontmatter schema; semantic zero-JS component; verified Apple Music → Spotify → YouTube ordering; secure/accessibly disclosed new-tab links; quiet responsive styling; and the two approved posts populated with their citation lines removed. Combined verification now passes all 20 built-site tests; independent Impeccable finish review is PASS with no findings. Captures: `music-card-desktop.png` and `music-card-mobile.png`.
 - The follow-up Impeccable Live homepage pass is implemented as Story Journal, including regular weight across every non-article role, native `繁體中文` locale labeling, an underline-free link system, CLREQ-aligned zh-TW reading rhythm, and dense index-free 44px/48px article-register rhythm with barely lifted `#292c2b` titles; authored article titles/headings/semantic emphasis remain bold-capable. It is documented in `DESIGN.md`, the route brief, and the standalone `docs/typography.html` specimen, verified, and remains uncommitted beside the music-card milestone.
@@ -37,6 +37,8 @@ Ticket 07 review fixes are committed in `14c2b8c`; local `master` is 21 commits 
 - Ticket 05 repository preparation and review are complete; cutover is paused at the user's DNS/Cloudflare account actions.
 
 ## Waiting on user
+
+- **Garden entrance**: (1) choose how to commit — Story Journal / music-card WIP first, then the garden, or all together; (2) write the `now` note (`src/content/posts/zh-TW/now.md`); (3) optionally add `updated:` to posts they have revised (for example 2025, which they rewrote on 2026-10-18).
 
 - **DNS move and Pages setup (paused)**: push the prepared commits through `b5ab20e`, then follow `docs/cloudflare-pages-cutover.md` sections 1–4. Agent must only prepare and verify these account actions.
 - (cancelled) push the obsolete migration commit / switch GitHub Pages source to Actions — do not execute either item.
