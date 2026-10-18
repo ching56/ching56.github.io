@@ -29,17 +29,6 @@ const expectedPosts = [
     excerpts: ["第零天", "告訴我晚上可以解隔了", "孤單才是錯覺吧"],
   },
   {
-    slug: "conservation-of-mass",
-    title: "一切不滅定律",
-    dateTime: "2023-01-27",
-    dateLabel: "2023年1月27日",
-    excerpts: [
-      "《一切不滅定律》——昏鴉樂團",
-      "幻滅會讓霧散開",
-      "用覺悟召喚自己的領域",
-    ],
-  },
-  {
     slug: "2023-2024",
     title: "2023 ~ 2024",
     dateTime: "2024-12-22",
@@ -55,7 +44,7 @@ const expectedPosts = [
     title: "2025",
     dateTime: "2026-01-01",
     dateLabel: "2026年1月1日",
-    excerpts: ["開始學做茶壺", "Mew 的 farewell", "但絕對不降低標準"],
+    excerpts: ["開始學做茶壺", "Mew 的 farewell", "照顧好自己才能照顧別人"],
   },
 ];
 
@@ -87,7 +76,12 @@ test("old WordPress URLs publish permanent redirects to their new homes", async 
     { source: "/covid", destination: "/zh-TW/blog/covid/", status: 301 },
     {
       source: "/conservation-of-mass",
-      destination: "/zh-TW/blog/conservation-of-mass/",
+      destination: "/zh-TW/",
+      status: 301,
+    },
+    {
+      source: "/zh-TW/blog/conservation-of-mass/",
+      destination: "/zh-TW/",
       status: 301,
     },
     {
@@ -365,7 +359,7 @@ test("the approved Accession Tabs structure is semantic across reading surfaces"
 });
 
 test("drafts and permanent pages never publish as blog posts", async () => {
-  for (const slug of ["hello-world", "about"]) {
+  for (const slug of ["hello-world", "conservation-of-mass", "about"]) {
     await assert.rejects(
       readFile(
         new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),

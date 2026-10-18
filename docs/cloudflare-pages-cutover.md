@@ -175,7 +175,7 @@ Expected results:
 | `/about` | `301 https://jhihcing.li/zh-TW/about/` |
 | `/2022-2` | `301 https://jhihcing.li/zh-TW/blog/2022/` |
 | `/covid` | `301 https://jhihcing.li/zh-TW/blog/covid/` |
-| `/conservation-of-mass` | `301 https://jhihcing.li/zh-TW/blog/conservation-of-mass/` |
+| `/conservation-of-mass` | `301 https://jhihcing.li/zh-TW/` |
 | `/2023-2024` | `301 https://jhihcing.li/zh-TW/blog/2023-2024/` |
 | `/2025-2` | `301 https://jhihcing.li/zh-TW/blog/2025/` |
 

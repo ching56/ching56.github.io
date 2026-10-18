@@ -47,7 +47,7 @@ A quiet, extremely fast, zero-tracking personal site: no cookies, no consent ban
 
 ## Evidence on Hand
 
-- 5 published posts plus one permanent About content entry rendered into the zh-TW homepage. The standalone About route redirects to `/#about`. The original `Hello world!` tracer remains in source as an unpublished draft and never enters the register, feed, or generated blog routes. No testimonials, metrics, or press — nothing to showcase or fabricate.
+- 4 published posts plus one permanent About content entry rendered into the zh-TW homepage. The standalone About route redirects to `/#about`. The original `Hello world!` tracer and 「一切不滅定律」 (unpublished at the user's request on 2026-10-18) remain in source as unpublished drafts and never enter the register, feed, or generated blog routes. No testimonials, metrics, or press — nothing to showcase or fabricate.
 - Pottery works exist physically but no digitized asset inventory is confirmed yet; future works section must not fabricate portfolio content.
 - WordPress export XML (gitignored — contains private drafts and commenter emails; never commit derived private data).
 

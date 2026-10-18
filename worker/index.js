@@ -6,7 +6,6 @@ const KNOWN_POST_PATHS = new Set([
   "/zh-TW/blog/2022/",
   "/zh-TW/blog/2023-2024/",
   "/zh-TW/blog/2025/",
-  "/zh-TW/blog/conservation-of-mass/",
   "/zh-TW/blog/covid/",
 ]);
 const RATE_LIMIT = 30;
