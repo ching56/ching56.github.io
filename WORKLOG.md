@@ -707,3 +707,8 @@
 - Intent: record the digital-garden entrance decision (option B; terms bio / now / cards / recents) as STATE.md decision 16 plus an In-progress item, and commit STATE.md + WORKLOG.md only
 - Why: the user chose B and renamed the terms; it reopens the chronological register in decisions 10/12, so the change has to be written down before any implementation
 - Result: done — decision 16 and the In-progress item recorded; committed only these two files, leaving the Story Journal / music-card WIP unstaged
+
+## 2026-10-18 · claude-code
+- Intent: refine decision 16 with the user's answers (no visible section headings; every post is a card; "card" is a concept, not a framed box) and commit STATE.md + WORKLOG.md
+- Why: the answers replace the topic-entry reading of `cards`; the cards-vs-recents split and growth-stage labels are still open
+- Result: done — decision 16 and the In-progress next step updated and committed
