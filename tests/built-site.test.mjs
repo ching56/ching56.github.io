@@ -683,11 +683,15 @@ test("the zh-TW homepage lists every post as a card ordered by last update", asy
   assert.doesNotMatch(html, /seedling|budding|evergreen/i);
 });
 
-test("the zh-TW homepage shows a now note only after the author writes one", async () => {
+test("the zh-TW homepage shows a now note only when it is published and has content", async () => {
   const html = await readFile(listPage, "utf8");
   const nowSource = new URL("../src/content/posts/zh-TW/now.md", import.meta.url);
   const nowText = await readFile(nowSource, "utf8").catch(() => null);
-  const hasNow = nowText !== null && !/^published:\s*false\s*$/m.test(nowText);
+  const nowBody = nowText?.replace(/^---\r?\n[\s\S]*?\r?\n---/, "").replace(/<!--[\s\S]*?-->/g, "");
+  const hasNow =
+    nowText !== null &&
+    !/^published:\s*false\s*$/m.test(nowText) &&
+    nowBody.trim() !== "";
 
   if (!hasNow) {
     assert.doesNotMatch(html, /id="now"/);

@@ -24,6 +24,11 @@ export function getPostSlug(post: Pick<CollectionEntry<"posts">, "id">) {
   return post.id.split("/").at(-1) ?? post.id;
 }
 
+// True when the Markdown body says something beyond whitespace and HTML comments.
+export function hasContent(entry: Pick<CollectionEntry<"posts">, "body">) {
+  return (entry.body ?? "").replace(/<!--[\s\S]*?-->/g, "").trim() !== "";
+}
+
 export function getLastUpdated(entry: Pick<CollectionEntry<"posts">, "data">) {
   return entry.data.updated ?? entry.data.date;
 }

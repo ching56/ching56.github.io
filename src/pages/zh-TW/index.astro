@@ -4,7 +4,7 @@ import AboutSection from "../../components/AboutSection.astro";
 import NowSection from "../../components/NowSection.astro";
 import PostList from "../../components/PostList.astro";
 import { EDITION_HOME_ALTERNATES } from "../../config/i18n";
-import { getPageByLanguage } from "../../lib/posts";
+import { getPageByLanguage, hasContent } from "../../lib/posts";
 
 const about = await getPageByLanguage("zh-TW", "about");
 const now = await getPageByLanguage("zh-TW", "now");
@@ -18,7 +18,7 @@ if (!about) {
   <div class="home-stage">
     <div class="home-flow">
       <AboutSection page={about} />
-      {now && <NowSection page={now} />}
+      {now && hasContent(now) && <NowSection page={now} />}
       <PostList language="zh-TW" />
     </div>
     <div class="creative-coding-area" data-creative-coding-area aria-hidden="true"></div>
