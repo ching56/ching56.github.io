@@ -38,7 +38,7 @@ Ticket 07 review fixes are committed in `14c2b8c`; local `master` is 21 commits 
 
 ## Waiting on user
 
-- **Garden entrance**: write the `now` note (`src/content/posts/zh-TW/now.md`, frontmatter like `about.md`).
+- **Garden entrance**: write the `now` note in `src/content/posts/zh-TW/now.md` (an unpublished stub exists), then delete its `published: false` line. The bio stays in `about.md`.
 
 - **DNS move and Pages setup (paused)**: push the prepared commits through `b5ab20e`, then follow `docs/cloudflare-pages-cutover.md` sections 1–4. Agent must only prepare and verify these account actions.
 - (cancelled) push the obsolete migration commit / switch GitHub Pages source to Actions — do not execute either item.
