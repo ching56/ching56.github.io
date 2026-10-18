@@ -82,11 +82,15 @@ components:
     minHeight: "2.75rem"
   homepage-introduction:
     typography: "{typography.compact-body}"
-  homepage-contact:
-    typography: "{typography.compact-body}"
+  response-cta:
+    typography: "{typography.response}"
     textColor: "{colors.ink}"
     fontWeight: 400
     textDecoration: "none"
+    border: "1px solid {colors.rule}"
+    rounded: "0"
+    minHeight: "2.75rem"
+    padding: "0 1rem"
   register-header:
     typography: "{typography.register-label}"
     padding: "0 0 0.625rem"
@@ -102,9 +106,9 @@ components:
     textColor: "{colors.ink-muted}"
     typography: "{typography.body}"
     padding: "1rem 1.25rem"
-  reader-response:
+  response-ending:
     textColor: "{colors.ink-muted}"
-    typography: "{typography.response}"
+    typography: "{typography.compact-body}"
     padding: "1.5rem 0"
 ---
 
@@ -169,7 +173,7 @@ The palette starts with paper, ink, and restrained registration accents. A low-o
 - **Subheading** (`1.5rem`, line-height 1.35): Secondary headings inside long-form prose.
 - **Metadata** (`0.875rem`, line-height 1.4): Localized dates and restrained secondary identity text.
 - **Utility** (weight 400, `0.8125rem`, line-height 1.3): Compact structural metadata and other small utility copy.
-- **Response** (weight 400, `0.9375rem`, line-height 1): Quiet reader-response copy and its direct mail link.
+- **Response** (weight 400, `0.9375rem`, line-height 1): The Response Ending CTA label.
 - **Label** (weight 400, `0.75rem`, letter-spacing 0.12em): Uppercase accession stamps and tabular numeric metadata.
 - **Signature** (weight 400, `1.0625rem`, letter-spacing 0.08em): The author's small, regular-weight identity mark in the shared header.
 
@@ -211,7 +215,7 @@ The form language is open rectilinear paper. The identity, language utility, int
 
 ### Homepage Introduction
 
-A title-free, left-aligned introduction (the bio) uses a few short, author-written lines saying who the author is and what they make; since 2026-10-18 it is two lines, the greeting naming 至青 and where they live. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with a single mail link: a small stroke envelope icon (same 16-unit stroke grammar as the external-link icon, `aria-hidden`) followed by `jcli@pm.me` at ordinary content weight and with no underline; there is no prompt sentence. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
+A title-free, left-aligned introduction (the bio) uses a few short, author-written lines saying who the author is and what they make; since 2026-10-18 it is two lines, the greeting naming 至青 and where they live. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with the shared Response Ending: a prompt-free mail CTA labelled `jcli@pm.me`. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
 
 ### Language Utility
 
@@ -229,9 +233,11 @@ Rows are semantic list items, not cards. A `1rem` regular-weight linked title at
 
 Article titles sit with the published date and a regular-weight uppercase accession stamp, separated from prose by spacing rather than rules. The title, article subheadings, and semantic `strong` text are the only roles allowed to retain bold emphasis. The content column remains flat, centered, and no wider than 70ch. Blockquotes use indentation and muted ink rather than a card, quotation mark graphic, fill, or divider border.
 
-### Reader Response
+### Response Ending
 
-A quiet regular-weight question and direct mail link close each article after generous whitespace. The response stays inside the 70ch reading flow, derives its address from shared metadata, and never becomes a card, divider, or special control. There is no global footer contact; homepage contact appears only in the introduction, and article contact appears only in the response ending.
+One component (`ResponseEnding.astro`) closes the homepage bio and every article. It is left-aligned: an optional muted prompt (`0.9375rem`, 1.65 leading) sits above one CTA. The CTA is a square, thin-outline button: `0.9375rem` regular-weight ink label, `2.75rem` minimum height, `1rem` inline padding, a `1px` pencil-rule border, and a transparent fill. On hover the border turns near-black and the 8% cobalt wash fills it; on press the wash deepens to 14%; keyboard focus keeps the global 3px outline. Mail CTAs lead with the stroke envelope icon. External CTAs (Threads) end with the top-right arrow, which slides 2px up-right on hover, open a new tab, and carry a visually hidden new-tab note. Articles show a prompt (「讀完有想說的嗎？」 with 「寫信給我」, or 「同步發佈在 Threads」 with 「在上面和我互動」); the homepage bio has no prompt and labels its CTA `jcli@pm.me`. The address always comes from shared metadata. The ending wrapper itself stays frameless. There is no global footer contact.
+
+**The External Arrow Rule.** Every link that leaves the site ends with the same top-right arrow icon (`M4.5 11.5 11.5 4.5M5.5 4.5h6v6` on a 16-unit grid, 1.4 stroke) and opens in a new tab with a hidden new-tab note; internal and mail links never use it.
 
 ## Do's and Don'ts
 

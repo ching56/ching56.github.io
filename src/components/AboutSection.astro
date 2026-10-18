@@ -2,6 +2,7 @@
 import { render, type CollectionEntry } from "astro:content";
 
 import { UI } from "../config/i18n";
+import ResponseEnding from "./ResponseEnding.astro";
 import { SITE } from "../config/site.js";
 
 interface Props {
@@ -18,13 +19,11 @@ const ui = UI[page.data.language];
     <div class="about-copy">
       <Content />
     </div>
-    <footer class="about-cta">
-      <a href={`mailto:${SITE.author.email}`}>
-        <svg class="mail-icon" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M2.5 4h11v8h-11zM2.5 4 8 8.5 13.5 4" />
-        </svg>
-        {SITE.author.email}
-      </a>
-    </footer>
+    <ResponseEnding
+      language={page.data.language}
+      kind="mail"
+      href={`mailto:${SITE.author.email}`}
+      label={SITE.author.email}
+    />
   </div>
 </section>

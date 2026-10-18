@@ -305,7 +305,7 @@ test("readers can switch languages using locale-aware chrome", async () => {
   assert.match(chineseList, /class="language-link"[^>]*href="\/en\/"[^>]*>English<\/a>/);
   assert.match(
     chineseList,
-    /href="mailto:jcli@pm\.me"[^>]*>(?:\s*<svg\b[\s\S]*?<\/svg>)?\s*jcli@pm\.me\s*<\/a>/,
+    /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/,
   );
   assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
 
@@ -374,7 +374,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chineseList, /<h[1-6][^>]*>關於(?:這裡)?<\/h[1-6]>/);
   assert.match(
     chineseList,
-    /<footer class="about-cta">\s*<a href="mailto:jcli@pm\.me"><svg class="mail-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*jcli@pm\.me\s*<\/a>\s*<\/footer>/,
+    /<section id="about"[\s\S]*?<footer class="response-ending">\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>\s*<\/footer>\s*<\/div>\s*<\/section>/,
   );
   assert.doesNotMatch(chineseList, /如果有一段文字讓你想起自己/);
   assert.match(
@@ -384,7 +384,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(
     chinesePost,
-    /<footer class="reader-response">[\s\S]*讀完有想說的嗎？[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
+    /<footer class="response-ending"><p>讀完有想說的嗎？<\/p>\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>寫信給我<\/span>\s*<\/a>\s*<\/footer>/,
   );
   assert.match(englishList, /<section class="register-panel"/);
 });
@@ -397,7 +397,7 @@ test("posts mirrored from Threads send responses to the Threads original", async
   for (const page of pages) {
     const html = await readFile(new URL(page, distDirectory), "utf8");
     const footer = html.match(
-      /<footer class="reader-response">[\s\S]*?<\/footer>/,
+      /<article class="reading-article">[\s\S]*?<footer class="response-ending">[\s\S]*?<\/footer>\s*<\/article>/,
     )?.[0];
 
     assert.ok(footer, `expected a response ending in ${page}`);
@@ -405,7 +405,7 @@ test("posts mirrored from Threads send responses to the Threads original", async
     if (/同步發佈在 Threads|Also posted on Threads/.test(footer)) {
       assert.match(
         footer,
-        /href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?"[^>]*>(?:在上面和我互動|Talk with me there)<\/a>/,
+        /<a class="response-cta" href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?" target="_blank" rel="noopener noreferrer">\s*<span>(?:在上面和我互動|Talk with me there)<\/span>\s*<svg class="external-link-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span class="visually-hidden">(?:（另開新分頁）| \(opens in a new tab\))<\/span>\s*<\/a>/,
         `expected a Threads permalink in ${page}`,
       );
       assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
@@ -663,7 +663,7 @@ test("the zh-TW homepage introduces the writer before the article register", asy
   assert.match(html, /Hi，我是至青，我喜歡做網站、App 跟陶瓷！/);
   assert.doesNotMatch(html, /Jhih Cing, Li/);
   assert.match(html, /現居高雄。/);
-  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>(?:\s*<svg\b[\s\S]*?<\/svg>)?\s*jcli@pm\.me\s*<\/a>/);
+  assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
 });
 
@@ -768,14 +768,13 @@ test("the compact frameless content contract stays within its confirmed limits",
   for (const selector of [
     ".site-header",
     ".about-intro",
-    ".about-cta",
+    ".response-ending",
     ".register-panel",
     ".now-note",
     ".post-list-item",
     ".empty-register",
     ".post-header",
     ".post-body blockquote",
-    ".reader-response",
     ".creative-coding-area",
   ]) {
     const rule = css.match(
@@ -822,7 +821,7 @@ test("the compact frameless content contract stays within its confirmed limits",
     ".article-stamp",
     ".music-link-card__work",
     ".music-link-card__providers a",
-    ".reader-response a",
+    ".response-cta",
   ]) {
     const rule = css.match(
       new RegExp(`${escapeForRegex(selector)}\\s*\\{([^}]*)\\}`),

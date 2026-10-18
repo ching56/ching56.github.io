@@ -1,0 +1,39 @@
+---
+import { UI, type SiteLanguage } from "../config/i18n";
+
+interface Props {
+  language: SiteLanguage;
+  href: string;
+  label: string;
+  kind: "mail" | "external";
+  prompt?: string;
+}
+
+const { language, href, label, kind, prompt } = Astro.props;
+const external = kind === "external";
+---
+
+<footer class="response-ending">
+  {prompt && <p>{prompt}</p>}
+  <a
+    class="response-cta"
+    href={href}
+    target={external ? "_blank" : undefined}
+    rel={external ? "noopener noreferrer" : undefined}
+  >
+    {kind === "mail" && (
+      <svg class="mail-icon" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M2.5 4h11v8h-11zM2.5 4 8 8.5 13.5 4" />
+      </svg>
+    )}
+    <span>{label}</span>
+    {external && (
+      <>
+        <svg class="external-link-icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4.5 11.5 11.5 4.5M5.5 4.5h6v6" />
+        </svg>
+        <span class="visually-hidden">{UI[language].newTabLabel}</span>
+      </>
+    )}
+  </a>
+</footer>

@@ -7,6 +7,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPostDate, getPostSlug } from "../lib/posts";
 import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
+import ResponseEnding from "./ResponseEnding.astro";
 
 interface Props {
   post: CollectionEntry<"posts">;
@@ -56,20 +57,24 @@ const ui = UI[post.data.language];
       <Content />
     </div>
     <PostLikes language={post.data.language} />
-    <footer class="reader-response">
-      {
-        post.data.threadsUrl ? (
-          <>
-            <p>{ui.threadsPrompt}</p>
-            <a href={post.data.threadsUrl}>{ui.threadsLinkLabel}</a>
-          </>
-        ) : (
-          <>
-            <p>{ui.responsePrompt}</p>
-            <a href={`mailto:${SITE.author.email}`}>{ui.responseLinkLabel}</a>
-          </>
-        )
-      }
-    </footer>
+    {
+      post.data.threadsUrl ? (
+        <ResponseEnding
+          language={post.data.language}
+          kind="external"
+          prompt={ui.threadsPrompt}
+          href={post.data.threadsUrl}
+          label={ui.threadsLinkLabel}
+        />
+      ) : (
+        <ResponseEnding
+          language={post.data.language}
+          kind="mail"
+          prompt={ui.responsePrompt}
+          href={`mailto:${SITE.author.email}`}
+          label={ui.responseLinkLabel}
+        />
+      )
+    }
   </article>
 </BaseLayout>

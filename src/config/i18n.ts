@@ -13,6 +13,7 @@ export const UI = {
     responseLinkLabel: "寫信給我",
     threadsPrompt: "同步發佈在 Threads",
     threadsLinkLabel: "在上面和我互動",
+    newTabLabel: "（另開新分頁）",
     languageSwitch: {
       href: "/en/",
       label: "English",
@@ -30,6 +31,7 @@ export const UI = {
     responseLinkLabel: "Email me",
     threadsPrompt: "Also posted on Threads",
     threadsLinkLabel: "Talk with me there",
+    newTabLabel: " (opens in a new tab)",
     languageSwitch: {
       href: "/zh-TW/",
       label: "繁體中文",
