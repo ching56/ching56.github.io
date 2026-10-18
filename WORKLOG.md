@@ -671,3 +671,8 @@
 - Intent: commit the responsive-image change on its own (astro.config.mjs, src/lib/article-image-sizes.mjs, only the new import + test in tests/built-site.test.mjs) plus handoff docs
 - Why: the user asked (2026-10-18) to auto-commit after each change from now on; the test file also carries uncommitted music-card hunks, so its staged version is HEAD plus only this change
 - Result: done — see commit; staged tree verified in a temporary worktree before committing
+
+## 2026-10-18 · claude-code
+- Intent: verify and commit the user's own edit to the 2023 ~ 2024 post (five lines removed)
+- Why: the user asked for finished changes to be committed automatically; the three tested excerpts are unchanged, so no test edit is needed
+- Result: done — Astro check 0 errors, 27/27 tests pass, staged tree re-verified in a temporary worktree. The long-running dev server had served stale content after repeated production builds; restarting it (`astro dev stop` then `astro dev`) fixed that.
