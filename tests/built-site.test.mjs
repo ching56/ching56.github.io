@@ -58,6 +58,17 @@ const expectedPosts = [
       "先把水吸乾再收窄瓶口",
     ],
   },
+  {
+    slug: "shino-bottle",
+    title: "志野瓶",
+    dateTime: "2026-10-17",
+    dateLabel: "2026年10月17日",
+    excerpts: [
+      "我本來不太喜歡這支瓶子，<br />",
+      "不抱期待的嘗試最後常常意外表現的很好。",
+      "謝謝自己沒有放棄你。",
+    ],
+  },
 ];
 
 test("old WordPress URLs publish permanent redirects to their new homes", async () => {

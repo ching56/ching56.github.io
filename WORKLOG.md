@@ -692,3 +692,8 @@
 - Intent: import the first Threads post, 「瓶子」 (https://www.threads.com/@ching56/post/DeVoJfdIL2o), as `src/content/posts/zh-TW/bottles.md` with the user's three photos
 - Why: the user sent the title, text (main post plus thread continuation), and photos. The date 2026-10-11 comes from the post's own `<time>` (10:51 Taiwan time), read in the user's signed-in Chrome; it matches the timestamp decoded from the post ID
 - Result: done — `/zh-TW/blog/bottles/` builds with three responsive photos (640–1920w WebP, column `sizes`, descriptive alt), the Threads ending links to the original, and it leads the homepage register. Added to likes `KNOWN_POST_PATHS` and to `expectedPosts`. Astro check 0 errors, 31/31 tests pass.
+
+## 2026-10-18 · claude-code
+- Intent: import the second Threads post, 「志野瓶」 (https://www.threads.com/@ching56/post/DelEZvPlOQ0), as `src/content/posts/zh-TW/shino-bottle.md` with the user's photo
+- Why: the user sent the title, text, and one photo; the date 2026-10-17 comes from the post's `<time>` in the user's signed-in Chrome and matches the ID-decoded timestamp. The pasted photo had no path in the message; it was found as the only image pasted after the 瓶子 photos and visually confirmed as the vase with flowers
+- Result: done — `/zh-TW/blog/shino-bottle/` builds with its responsive photo and Threads ending and now leads the homepage register; added to likes `KNOWN_POST_PATHS` and `expectedPosts`. Astro check 0 errors, 32/32 tests pass.
