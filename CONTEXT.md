@@ -21,7 +21,7 @@ The concept of one post as a unit on the entrance, not a framed box. Every publi
 _Avoid_: Tile, topic bed
 
 **Last updated**:
-The last time the author tended a post (`updated`, or `date` if never revised). Cards are ordered by it and show it; it is never earlier than the publish date. It is set by hand, not taken from git.
+The last time the author tended a post (`updated`, or `date` if never revised). Cards are ordered by it and show it; it is never earlier than the publish date. From 2026-10-18 on, the pre-commit hook writes it into frontmatter whenever a post's body changes; history before that is deliberately not backfilled, and it is never computed from git at build time.
 _Avoid_: Growth stage, git commit date
 
 **Music link card**:

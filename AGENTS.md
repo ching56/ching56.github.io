@@ -19,6 +19,8 @@ Personal blog (working title "The Return", 李至青的部落格, zh-TW) rebuilt
 - `yarn check` — Astro/TypeScript diagnostics
 - `yarn test` — production build followed by assertions against `dist/`
 
+A versioned pre-commit hook (`.githooks/pre-commit` → `scripts/bump-updated.mjs`) sets `updated:` to today's Asia/Taipei date on any staged post or page whose Markdown body changed. `yarn install` activates it through `prepare` (`core.hooksPath`). Don't bypass it with `--no-verify` for content edits.
+
 There is no linter. A clean `yarn check` plus `yarn test` is the verification bar. Dependencies are managed with Yarn 1 (`yarn.lock`; version pinned in `package.json`).
 
 ## Architecture

@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "likes:dev": "wrangler dev --local",
     "likes:migrate:local": "wrangler d1 migrations apply LIKES_DB --local",
+    "prepare": "git config core.hooksPath .githooks || true",
     "preview": "astro preview",
     "serve": "astro dev",
     "test": "astro build && node --test tests/*.test.mjs",

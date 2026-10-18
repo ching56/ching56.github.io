@@ -1,0 +1,3 @@
+#!/bin/sh
+# Bumps `updated` on edited posts; see scripts/bump-updated.mjs.
+exec node scripts/bump-updated.mjs
