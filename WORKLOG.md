@@ -702,3 +702,8 @@
 - Intent: fix the four typos flagged in the imported Threads posts: 「碰到到底部」→「碰到底部」, 「變的很困難」→「變得很困難」, 「拉的比較胖」→「拉得比較胖」 (瓶子), 「表現的很好」→「表現得很好」 (志野瓶), and the 志野瓶 test excerpt that quotes the last one
 - Why: the user asked to fix all typos
 - Result: done — all four fixed and the 志野瓶 excerpt updated; Astro check 0 errors, 32/32 tests pass.
+
+## 2026-10-18 · claude-code
+- Intent: record the digital-garden entrance decision (option B; terms bio / now / cards / recents) as STATE.md decision 16 plus an In-progress item, and commit STATE.md + WORKLOG.md only
+- Why: the user chose B and renamed the terms; it reopens the chronological register in decisions 10/12, so the change has to be written down before any implementation
+- Result: done — decision 16 and the In-progress item recorded; committed only these two files, leaving the Story Journal / music-card WIP unstaged
