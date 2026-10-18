@@ -660,3 +660,14 @@
 - Why: the user said "ok commit" to the proposal of committing these separately; `conservation-of-mass.md` and `tests/built-site.test.mjs` also carry uncommitted music-card changes, so their staged versions are built from HEAD plus only this session's edits
 - Result: in progress — stage HEAD-based blobs for the two mixed files, stage the other touched files whole, verify the staged tree in a temporary worktree with `yarn run check` and `yarn test`, then commit
 - Result: done — staged tree verified in a temporary worktree (Astro check 0 errors, 25/25 tests, no conservation-of-mass route); committed. Story Journal and music-card changes, including the musicLinkCard frontmatter on conservation-of-mass.md, remain uncommitted in the working tree.
+
+## 2026-10-18 · claude-code
+- Intent: make Markdown article images responsive — enable Astro `image.layout: "constrained"` and add a tiny integration that gives article images an accurate `sizes` hint for the reading column
+- Why: the user asked for images to be served at sizes suited to each screen. Astro's default `sizes` for Markdown images uses the source width (e.g. 1440px), but the article column tops out near 44rem and is `100vw - 2rem` on phones, so the hint must describe the column or browsers over-download. Astro 7's satteri processor runs user hast plugins before its image marker, and `sizes ||=` keeps a supplied value. The integration mutates the default processor's `hastPlugins` (a pattern the processor explicitly supports), so no new dependency is added.
+- Result: in progress — add `src/lib/article-image-sizes.mjs`, wire it in `astro.config.mjs`, add a built-site guard for article images, verify in a throwaway worktree with a real image, then run `yarn run check` and `yarn test`
+- Result: done — `astro.config.mjs` sets `image.layout: "constrained"` and registers `articleImageSizes()`; `src/lib/article-image-sizes.mjs` sets `sizes="(min-width: 46rem) 44rem, calc(100vw - 2rem)"` on Markdown images. A throwaway build with a 3000px image produced a 640–3000w srcset (8–75 KB WebP) with the column `sizes`; removing the integration made the new built-site guard fail on `sizes="(min-width: 3000px) 3000px, 100vw"`. Real repo: Astro check 0 errors, 27/27 tests pass. No dependency added. Not committed.
+
+## 2026-10-18 · claude-code
+- Intent: commit the responsive-image change on its own (astro.config.mjs, src/lib/article-image-sizes.mjs, only the new import + test in tests/built-site.test.mjs) plus handoff docs
+- Why: the user asked (2026-10-18) to auto-commit after each change from now on; the test file also carries uncommitted music-card hunks, so its staged version is HEAD plus only this change
+- Result: done — see commit; staged tree verified in a temporary worktree before committing

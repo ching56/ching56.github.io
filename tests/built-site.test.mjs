@@ -5,6 +5,7 @@ import test from "node:test";
 import sax from "sax";
 
 import { SITE } from "../src/config/site.js";
+import { ARTICLE_IMAGE_SIZES } from "../src/lib/article-image-sizes.mjs";
 
 const distDirectory = new URL("../dist/", import.meta.url);
 const listPage = new URL("zh-TW/index.html", distDirectory);
@@ -356,6 +357,31 @@ test("the approved Accession Tabs structure is semantic across reading surfaces"
     /<footer class="reader-response">[\s\S]*讀完有想說的嗎？[\s\S]*href="mailto:jcli@pm\.me"[^>]*>寫信給我<\/a>/,
   );
   assert.match(englishList, /<section class="register-panel"/);
+});
+
+test("optimized content images ship a srcset sized to the reading column", async () => {
+  const pages = (await walkFiles(distDirectory)).filter((path) =>
+    path.endsWith(".html"),
+  );
+
+  for (const page of pages) {
+    const html = await readFile(new URL(page, distDirectory), "utf8");
+    const images = html.match(/<img\b[^>]*\bsrc="\/_astro\/[^"]*"[^>]*>/g) ?? [];
+
+    for (const image of images) {
+      const srcset = image.match(/\bsrcset="([^"]*)"/)?.[1] ?? "";
+
+      assert.ok(
+        srcset.split(",").filter(Boolean).length >= 1,
+        `expected a srcset on ${image} in ${page}`,
+      );
+      assert.ok(
+        image.includes(`sizes="${ARTICLE_IMAGE_SIZES}"`),
+        `expected the reading-column sizes hint on ${image} in ${page}`,
+      );
+      assert.match(image, /\balt="[^"]+"/, `expected alt text on ${image} in ${page}`);
+    }
+  }
 });
 
 test("drafts and permanent pages never publish as blog posts", async () => {
