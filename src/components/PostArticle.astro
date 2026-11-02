@@ -43,14 +43,12 @@ const ui = UI[post.data.language];
   language={post.data.language}
   alternates={alternates}
   languageSwitchPath={translatedPostPath}
+  scene="article"
 >
   <article class="reading-article">
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <time datetime={date.dateTime}>{date.label}</time>
-      <span class="article-stamp" aria-hidden="true">
-        {post.data.language.toUpperCase()} · {date.dateTime}
-      </span>
     </header>
     {post.data.musicLinkCard && <MusicLinkCard card={post.data.musicLinkCard} />}
     <div class="post-body">
@@ -62,7 +60,6 @@ const ui = UI[post.data.language];
         <ResponseEnding
           language={post.data.language}
           kind="external"
-          prompt={ui.threadsPrompt}
           href={post.data.threadsUrl}
           label={ui.threadsLinkLabel}
         />
@@ -70,7 +67,6 @@ const ui = UI[post.data.language];
         <ResponseEnding
           language={post.data.language}
           kind="mail"
-          prompt={ui.responsePrompt}
           href={`mailto:${SITE.author.email}`}
           label={ui.responseLinkLabel}
         />

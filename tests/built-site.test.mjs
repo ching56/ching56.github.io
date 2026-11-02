@@ -332,8 +332,8 @@ test("the approved continuous journal structure is semantic across reading surfa
   ]);
 
   for (const html of [englishList, chineseList, chinesePost]) {
-    assert.match(html, /<body data-surface="story-journal">/);
-    assert.match(html, /direction seed f0bd5f13/);
+    assert.match(html, /<body data-surface="programmed-dream" data-scene="(?:home|article)">/);
+    assert.match(html, /seed: 8b1de78f, overridden by the user-pinned brief/);
     assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
@@ -384,7 +384,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(
     chinesePost,
-    /<footer class="response-ending"><p>讀完有想說的嗎？<\/p>\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>寫信給我<\/span>\s*<\/a>\s*<\/footer>/,
+    /<footer class="response-ending">\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>寫信給我<\/span>\s*<\/a>\s*<\/footer>/,
   );
   assert.match(englishList, /<section class="register-panel"/);
 });
@@ -402,10 +402,13 @@ test("posts mirrored from Threads send responses to the Threads original", async
 
     assert.ok(footer, `expected a response ending in ${page}`);
 
-    if (/同步發佈在 Threads|Also posted on Threads/.test(footer)) {
+    const ending = footer.match(/<footer class="response-ending">[\s\S]*?<\/footer>/)[0];
+    assert.doesNotMatch(ending, /<p\b/, `expected no prompt line in ${page}`);
+
+    if (/href="https:\/\/www\.threads\./.test(footer)) {
       assert.match(
         footer,
-        /<a class="response-cta" href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?" target="_blank" rel="noopener noreferrer">\s*<span>(?:在上面和我互動|Talk with me there)<\/span>\s*<svg class="external-link-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span class="visually-hidden">(?:（另開新分頁）| \(opens in a new tab\))<\/span>\s*<\/a>/,
+        /<a class="response-cta" href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?" target="_blank" rel="noopener noreferrer">\s*<span>(?:在 Threads 和我互動|Talk with me on Threads)<\/span>\s*<svg class="external-link-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span class="visually-hidden">(?:（另開新分頁）| \(opens in a new tab\))<\/span>\s*<\/a>/,
         `expected a Threads permalink in ${page}`,
       );
       assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
@@ -702,7 +705,7 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 
-test("content pages request neither webfonts nor Astro runtime JavaScript", async () => {
+test("content pages request no webfonts and only the scene and likes scripts", async () => {
   const contentPages = [
     listPage,
     new URL("en/index.html", distDirectory),
@@ -718,10 +721,21 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
   for (const [index, html] of contentHtml.entries()) {
     const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map(([tag]) => tag);
     if (index < 2) {
-      assert.deepEqual(scripts, []);
+      assert.deepEqual(scripts, ['<script src="/night.js" defer>']);
     } else {
-      assert.deepEqual(scripts, ['<script src="/likes.js" defer>']);
+      assert.deepEqual(scripts, [
+        '<script src="/night.js" defer>',
+        '<script src="/likes.js" defer>',
+      ]);
     }
+    assert.match(
+      html,
+      /<canvas class="night" data-night aria-hidden="true"><\/canvas>/,
+    );
+    assert.match(
+      html,
+      new RegExp(`<body data-surface="programmed-dream" data-scene="${index < 2 ? "home" : "article"}">`),
+    );
     assert.doesNotMatch(html, forbiddenFontRule);
     assert.doesNotMatch(
       html,
@@ -818,7 +832,6 @@ test("the compact frameless content contract stays within its confirmed limits",
 
   for (const selector of [
     ".about-copy h2",
-    ".article-stamp",
     ".music-link-card__work",
     ".music-link-card__providers a",
     ".response-cta",

@@ -9,10 +9,8 @@ export const UI = {
     emptyPostsMessage: "目前沒有文章。",
     aboutLabel: "關於",
     nowLabel: "現在",
-    responsePrompt: "讀完有想說的嗎？",
     responseLinkLabel: "寫信給我",
-    threadsPrompt: "同步發佈在 Threads",
-    threadsLinkLabel: "在上面和我互動",
+    threadsLinkLabel: "在 Threads 和我互動",
     newTabLabel: "（另開新分頁）",
     languageSwitch: {
       href: "/en/",
@@ -27,10 +25,8 @@ export const UI = {
     emptyPostsMessage: "No English posts yet.",
     aboutLabel: null,
     nowLabel: "Now",
-    responsePrompt: "Have something to share?",
     responseLinkLabel: "Email me",
-    threadsPrompt: "Also posted on Threads",
-    threadsLinkLabel: "Talk with me there",
+    threadsLinkLabel: "Talk with me on Threads",
     newTabLabel: " (opens in a new tab)",
     languageSwitch: {
       href: "/zh-TW/",

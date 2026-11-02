@@ -33,7 +33,7 @@ A quiet, extremely fast, zero-tracking personal site: no cookies, no consent ban
 ## Capabilities and Constraints
 
 - Static Astro site on Cloudflare Pages; likes via a Cloudflare Worker + D1 (anonymous, no accounts); page views via cookieless Cloudflare beacon + a weekly snapshot ledger committed to the repo.
-- Hard constraint: extremely fast on slow connections — system-font stack only (no webfont downloads; Chinese webfonts are MB-scale), no framework JS on content pages, islands load only where embedded.
+- Hard constraint: extremely fast on slow connections — system-font stack only (no webfont downloads; Chinese webfonts are MB-scale), no framework JS on content pages, islands load only where embedded. The one deliberate exception is `public/night.js` (2026-11-03, the user's Programmed Dream request): a small vanilla WebGL script on every page that paints the background photograph in code instead of downloading an image.
 - No comment/discussion system (decided; Bluesky evaluated and rejected — audience isn't there). Footer email link is the conversation channel.
 - **Works section (confirmed 2026-07-30):** the site will have an independent works area showcasing ALL of the author's works — pottery, web projects, and anything else — not just a pottery gallery. Its information architecture is future work; a pottery-map mini app (separate project) will embed as an island in a "how to start pottery" post and in works.
 - Undecided product facts: works-section IA and form.
