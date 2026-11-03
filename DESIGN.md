@@ -120,7 +120,7 @@ Programmed Dream replaced Story Journal on 2026-11-03.
 
 **Creative North Star: "Programmed Dream"**
 
-A personal journal set over an evening photograph that is painted live in code, lit like magic hour. Deep ink and blue are the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.
+A personal journal set over an evening photograph that is painted live in code, lit like magic hour. Deep ink and dusk purple are the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.
 
 The photograph is a fragment shader (`public/night.js`) drawing a defocused, grain-heavy exposure with broad halation, one subject at a time, dissolving between three scenes. The home scene is lit and sits in the right half of the desktop viewport (lower right on phones, under-exposed, developing as the reader nears the end of the page). Article pages hold one dimmed still frame so nothing animates while someone reads. The shared confirmed identity is the author mark `李至青`; the page composition itself belongs to `.impeccable/surfaces/route-zh-tw.md`, not to this system.
 
@@ -133,7 +133,7 @@ The photograph is a fragment shader (`public/night.js`) drawing a defocused, gra
 
 ## Colors
 
-Evening magic hour in the user's seven-colour palette (chosen 2026-11-03), with warm ivory text. Blue holds the sky and the text side, rose and lavender sit lower, amber and vermilion glow behind the subject, and shadows rest on ink and blue. Nothing goes black or flat grey. Palette colour lives only in the scene, never in interface fills.
+Evening magic hour in the user's seven-colour palette (chosen 2026-11-03), at about 5:30 pm, with warm ivory text. The sun sits on the horizon just right of the subject and its light runs flat across the frame: a horizontal beam, faces toward it amber and vermilion with hot rims, faces turned away purple, long shadows thrown left. The text side is the dark side, deep purple falling to ink. Saturation is pushed hard (×3 after tone mapping) and the subjects are defocused until barely recognizable. Nothing goes black or flat grey. Palette colour lives only in the scene, never in interface fills.
 
 ### Neutral
 
@@ -144,7 +144,7 @@ Evening magic hour in the user's seven-colour palette (chosen 2026-11-03), with 
 
 ### Magic-Hour Palette (the scene in `public/night.js`)
 
-- **Blue** (`#2b4a7d`), **Cyan** (`#68adc5`), **Lavender** (`#a5a1b2`), **Rose** (`#ab7496`), **Vermilion** (`#b23f2e`), **Amber** (`#c99046`), and the dachshund's **Cream** (`#fadead`): the scene only, written as exact 0–1 constants in `night.js`. The dusk sky runs blue → lavender (a thin band) → rose → amber → vermilion toward the horizon behind the subject; far from that glow the evening turns blue. A saturation lift after tone mapping keeps it chromatic. They bleed into one another through the `ramp()` colour path. They are never used for UI fills, links, borders, or text.
+- **Blue** (`#2b4a7d`), **Cyan** (`#68adc5`), **Lavender** (`#a5a1b2`), **Rose** (`#ab7496`), **Vermilion** (`#b23f2e`), **Amber** (`#c99046`), and the dachshund's **Cream** (`#fadead`): the scene only, written as exact 0–1 constants in `night.js`. **Purple** (`PURP`, rose and blue mixed then pushed from grey) is the shadow side. The sky runs amber at the horizon → vermilion → rose → purple overhead; away from the sun everything turns purple. A ×3 saturation lift after tone mapping keeps it vivid; dim frames (phones, articles) get a small purple ambient so they never settle on navy. They are never used for UI fills, links, borders, or text.
 
 ### Named Rules
 

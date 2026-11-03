@@ -1,12 +1,13 @@
 /*
  * Programmed Dream — the nocturnal photograph behind every page.
  *
- * One fragment shader paints a defocused night exposure (dense multicolored
- * grain, uneven exposure, broad halation) and dissolves between three
- * subjects: a cream dachshund, a playing radio, and a turning pottery wheel.
- * The lens breathes out of focus at every dissolve. Frames are paced at film
- * rate. Reduced motion receives one still frame; no WebGL leaves the deep navy
- * page untouched.
+ * One fragment shader paints a heavily defocused 5:30 pm exposure (dense
+ * multicolored grain, uneven exposure, broad halation, a low sun throwing
+ * flat light across the frame) and dissolves between three subjects: a
+ * cream dachshund, a playing radio, and a turning pottery wheel, each barely
+ * recognizable. The lens breathes further out of focus at every dissolve.
+ * Frames are paced at film rate. Reduced motion receives one still frame; no
+ * WebGL leaves the ink page untouched.
  */
 (() => {
   const canvas = document.querySelector("[data-night]");
@@ -49,8 +50,10 @@ const vec3 ROSE = vec3(0.671, 0.455, 0.588);    // #AB7496
 const vec3 VERM = vec3(0.698, 0.247, 0.18);     // #B23F2E
 const vec3 AMBER = vec3(0.788, 0.565, 0.275);   // #C99046
 const vec3 CREAM = vec3(0.98, 0.87, 0.68);      // the dachshund's coat
+// Rose and blue mixed, then pushed away from grey: the side turned away from the sun.
+const vec3 PURP = vec3(0.45, 0.33, 0.66);
 
-vec3 L; vec3 H1; vec3 H2; float O;
+vec3 L; vec3 H1; vec3 H2; float O; float SH;
 
 float h21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -116,6 +119,20 @@ void lit(float d, vec3 c, float b) {
   O = max(O, m * min(luma(c) * 6.0, 1.0));
   L += bleed(c, m, P) * (0.7 + 0.6 * vn(P * 4.0 + 3.1));
 }
+// A solid form in flat evening light. The face toward the sun (side 1) is
+// warm, the face turned away is purple, and a hot rim burns along the edge
+// the light grazes (where the sample toward the sun, dSun, is already outside).
+void sunlit(float d, float dSun, vec3 warm, float side, float b, float k) {
+  float m = soft(d, b);
+  float rim = m * (1.0 - soft(dSun, b * 0.7));
+  vec3 c = mix(PURP * 0.4, warm, side) + mix(AMBER, CREAM, 0.3) * rim * 0.9;
+  O = max(O, m * k);
+  L += bleed(c * k, m, P) * (0.75 + 0.5 * vn(P * 4.0 + 3.1));
+}
+// The long shadow a subject throws to the left along the ground.
+void longShadow(vec2 q, float base, float len, float b, float k) {
+  SH = max(SH, soft(ell(q - vec2(0.1 - len * 0.5, base), vec2(len * 0.5 + 0.25, 0.05)), b * 1.5) * k);
+}
 // A window: a defocused pane crossed by darker mullions.
 void pane(vec2 q, vec2 size, vec3 c, float b) {
   float d = box(q, size, 0.03);
@@ -123,9 +140,7 @@ void pane(vec2 q, vec2 size, vec3 c, float b) {
   glow(d, c * (1.0 - 0.55 * soft(bars, b * 0.8)), b);
 }
 
-void dachshund(vec2 p, float b, float k) {
-  float breath = 1.0 + 0.025 * sin(T * 1.4);
-  vec2 q = p - vec2(0.0, -0.06);
+float dogD(vec2 q, float breath) {
   float d = cap(q, vec2(-0.18, 0.0), vec2(0.42, -0.01), 0.12 * breath);
   d = smin(d, length(q - vec2(-0.24, -0.01)) - 0.15 * breath, 0.08);
   d = smin(d, length(q - vec2(-0.42, 0.16)) - 0.105, 0.07);
@@ -134,69 +149,77 @@ void dachshund(vec2 p, float b, float k) {
   d = smin(d, cap(q, vec2(-0.13, -0.1), vec2(-0.15, -0.23), 0.04), 0.03);
   d = smin(d, cap(q, vec2(0.33, -0.1), vec2(0.29, -0.23), 0.042), 0.03);
   d = smin(d, cap(q, vec2(0.44, -0.08), vec2(0.46, -0.22), 0.04), 0.03);
-  d = smin(d, cap(q, vec2(0.52, 0.03), vec2(0.72, 0.14 + 0.035 * sin(T * 3.1)), 0.022), 0.03);
-  vec3 key = ramp(0.85 - 0.85 * smoothstep(-0.6, 0.7, q.x)) * 1.05;
-  float top = 0.6 + 0.5 * smoothstep(-0.22, 0.24, q.y);
-  lit(d, CREAM * key * top * 0.9 * k, b);
-  L -= AMBER * 0.32 * soft(ell(q - vec2(-0.37, 0.1), vec2(0.055, 0.1)), b) * k;
-  lit(ell(q - vec2(0.05, -0.27), vec2(0.95, 0.07)), ROSE * 0.14 * k, b * 2.0);
-  glow(length(p - vec2(-0.86, 0.62)) - 0.2, AMBER * 1.5 * k, b);
-  pane(p - vec2(0.86, 0.52), vec2(0.22, 0.32), CYAN * 0.85 * k, b * 1.6);
+  return smin(d, cap(q, vec2(0.52, 0.03), vec2(0.72, 0.14 + 0.035 * sin(T * 3.1)), 0.022), 0.03);
+}
+
+void dachshund(vec2 p, float b, float k) {
+  float breath = 1.0 + 0.025 * sin(T * 1.4);
+  vec2 q = p - vec2(0.0, -0.06);
+  float side = smoothstep(-0.6, 0.45, q.x) * (0.65 + 0.35 * smoothstep(-0.22, 0.2, q.y));
+  sunlit(dogD(q, breath), dogD(q + vec2(0.07, 0.012), breath), mix(CREAM, AMBER, 0.6) * 0.8, side, b, k);
+  float ear = soft(ell(q - vec2(-0.37, 0.1), vec2(0.055, 0.1)), b) * k;
+  L = mix(L, PURP * 0.22, ear * 0.6);
+  longShadow(q, -0.24, 1.7, b, k);
+  glow(length(p - vec2(-0.86, 0.62)) - 0.2, mix(AMBER, ROSE, 0.3) * 0.8 * k, b);
+  pane(p - vec2(0.86, 0.52), vec2(0.22, 0.32), mix(AMBER, CREAM, 0.35) * 0.9 * k, b * 1.6);
   for (int i = 0; i < 5; i++) {
     float fi = float(i);
     vec2 c = vec2(-1.1 + fi * 0.4, 0.86 + 0.07 * sin(fi * 1.7));
-    glow(length(p - c) - 0.07, mix(LAV, ROSE, fract(fi * 0.37)) * 0.5 * k, b * 0.6);
+    glow(length(p - c) - 0.07, mix(ROSE, AMBER, fi * 0.25) * 0.5 * k, b * 0.6);
   }
 }
 
 void radio(vec2 p, float b, float k) {
   float beat = pow(0.5 + 0.5 * sin(T * 7.85), 6.0) * 0.6 + 0.4 * vn(vec2(T * 3.0, 1.0));
   vec2 q = p;
-  lit(box(q, vec2(0.56, 0.33), 0.12), mix(VERM, ROSE, 0.4) * 0.38 * k, b);
-  lit(length(q - vec2(-0.24, 0.0)) - 0.21, (LAV * 0.3 + ROSE * 0.18 * beat) * k, b);
-  vec3 dial = ramp(smoothstep(0.08, 0.45, q.x) * 0.8);
-  glow(box(q - vec2(0.25, 0.09), vec2(0.2, 0.065), 0.03), dial * (1.5 + 0.4 * beat) * k, b * 0.8);
+  sunlit(box(q, vec2(0.56, 0.33), 0.12), box(q + vec2(0.08, 0.015), vec2(0.56, 0.33), 0.12),
+         mix(VERM, AMBER, 0.4) * 1.05, smoothstep(-0.6, 0.55, q.x), b, k);
+  lit(length(q - vec2(-0.24, 0.0)) - 0.21, (PURP * 0.3 + ROSE * 0.2 * beat) * k, b);
+  vec3 dial = mix(AMBER, CREAM, 0.2 + 0.4 * smoothstep(0.08, 0.45, q.x));
+  glow(box(q - vec2(0.25, 0.09), vec2(0.2, 0.065), 0.03), dial * (1.0 + 0.35 * beat) * k, b * 0.8);
   float nx = 0.1 + 0.25 * (0.5 + 0.5 * sin(T * 0.21));
   glow(cap(q, vec2(nx, 0.04), vec2(nx, 0.14), 0.006), VERM * 1.2 * k, b * 0.7);
   glow(length(q - vec2(0.16, -0.17)) - 0.05, AMBER * 0.35 * k, b);
   glow(length(q - vec2(0.37, -0.17)) - 0.05, AMBER * 0.3 * k, b);
   glow(length(q - vec2(0.46, 0.22)) - 0.018, VERM * (1.0 + 2.0 * beat) * k, b * 0.5);
-  lit(cap(q, vec2(0.38, 0.33), vec2(0.8, 0.95), 0.024), CYAN * 0.3 * k, b * 1.4);
+  lit(cap(q, vec2(0.38, 0.33), vec2(0.74, 0.85), 0.024), mix(AMBER, CREAM, 0.4) * 0.45 * k, b * 1.4);
   for (int i = 0; i < 7; i++) {
     float fi = float(i);
     float ph = fract(T * 0.045 + fi * 0.143);
-    vec2 c = vec2(-0.24 + 0.35 * sin(fi * 2.3 + ph * 3.0), 0.25 + ph * 1.1);
+    vec2 c = vec2(-0.24 + 0.35 * sin(fi * 2.3 + ph * 3.0), 0.25 + ph * 0.8);
     float r = 0.04 + 0.05 * fract(fi * 0.61);
-    glow(length(q - c) - r, mix(ROSE, LAV, fract(fi * 0.5)) * sin(ph * 3.1416) * 0.6 * k, b * 0.7);
+    glow(length(q - c) - r, mix(ROSE, AMBER, fract(fi * 0.5)) * sin(ph * 3.1416) * 0.6 * k, b * 0.7);
   }
-  lit(ell(q - vec2(0.0, -0.42), vec2(1.2, 0.06)), AMBER * 0.12 * k, b * 2.0);
-  pane(p - vec2(-0.98, 0.58), vec2(0.2, 0.28), CYAN * 0.55 * k, b * 1.7);
+  longShadow(q, -0.36, 1.9, b, k);
+  pane(p - vec2(-0.98, 0.58), vec2(0.2, 0.28), PURP * 0.6 * k, b * 1.7);
 }
 
 void wheel(vec2 p, float b, float k) {
   float spin = T * 2.2;
   vec2 q = p - vec2(0.0, -0.05);
-  lit(abs(ell(q - vec2(0.0, -0.26), vec2(0.66, 0.17))) - 0.015, LAV * 0.38 * k, b);
-  lit(ell(q - vec2(0.0, -0.21), vec2(0.44, 0.1)), mix(LAV, BLUE, 0.45) * 0.4 * k, b);
+  float lean = smoothstep(-0.5, 0.5, q.x);
+  lit(abs(ell(q - vec2(0.0, -0.26), vec2(0.66, 0.17))) - 0.015, mix(PURP * 0.45, AMBER * 0.7, lean) * k, b);
+  lit(ell(q - vec2(0.0, -0.21), vec2(0.44, 0.1)), mix(PURP * 0.4, mix(AMBER, CREAM, 0.3) * 0.75, lean) * k, b);
   for (int i = 0; i < 6; i++) {
     float a = spin + float(i) * 1.047;
     vec2 c = vec2(cos(a) * 0.44, -0.21 + sin(a) * 0.1);
     float front = smoothstep(0.2, -0.6, sin(a));
-    glow(length(q - c) - 0.022, mix(CYAN, vec3(1.0), 0.4) * front * 1.1 * k, b * 0.5);
+    glow(length(q - c) - 0.022, mix(AMBER, CREAM, 0.5) * front * 1.1 * k, b * 0.5);
   }
   float y = q.y + 0.2;
   float w = 0.17 + 0.09 * sin(clamp(y, 0.0, 0.62) * 4.6) - 0.1 * smoothstep(0.42, 0.62, y);
   float vessel = max(abs(q.x) - w, max(-y, y - 0.64));
-  float shade = 0.25 + 0.8 * smoothstep(0.25, -0.2, q.x);
-  lit(vessel, mix(VERM, ROSE, 0.35) * shade * 0.95 * k, b);
+  float vesselSun = max(abs(q.x + 0.07) - w, max(-y, y - 0.64));
+  sunlit(vessel, vesselSun, mix(VERM, AMBER, 0.35) * 1.1, smoothstep(-0.2, 0.22, q.x), b, k);
   float turn = spin + 1.3;
   glow(length(q - vec2(w * 0.8 * sin(turn), 0.1)) - 0.03, AMBER * 0.5 * max(cos(turn), 0.0) * k, b * 0.6);
-  glow(length(p - vec2(-0.82, 0.66)) - 0.24, AMBER * 1.6 * k, b);
-  pane(p - vec2(0.96, 0.48), vec2(0.21, 0.32), CYAN * 0.65 * k, b * 1.7);
+  longShadow(q, -0.32, 1.9, b, k);
+  glow(length(p - vec2(-0.82, 0.66)) - 0.24, mix(AMBER, ROSE, 0.3) * 0.85 * k, b);
+  pane(p - vec2(0.96, 0.48), vec2(0.21, 0.32), mix(AMBER, CREAM, 0.35) * 0.8 * k, b * 1.7);
   for (int i = 0; i < 4; i++) {
     float fi = float(i);
     glow(length(p - vec2(0.55 + 0.18 * fi, -0.75 + 0.1 * sin(fi * 2.0))) - 0.06,
-         mix(ROSE, LAV, fi / 3.0) * 0.4 * k, b * 0.6);
+         mix(AMBER, ROSE, fi / 3.0) * 0.45 * k, b * 0.6);
   }
 }
 
@@ -204,44 +227,56 @@ void main() {
   vec2 fc = gl_FragCoord.xy;
   vec2 p = (fc - F) / U + 0.03 * vec2(sin(T * 0.07), cos(T * 0.05));
   P = p;
-  L = vec3(0.0); H1 = vec3(0.0); H2 = vec3(0.0); O = 0.0;
+  L = vec3(0.0); H1 = vec3(0.0); H2 = vec3(0.0); O = 0.0; SH = 0.0;
   if (W.x > 0.001) dachshund(p, B, W.x);
   if (W.y > 0.001) radio(p, B, W.y);
   if (W.z > 0.001) wheel(p, B, W.z);
 
-  // Magic hour: blue overhead, lavender and rose lower down, an amber and
-  // vermilion glow low behind the subject, the ground settling into blue
-  // and ink. The subjects stand against it, backlit.
-  float h = p.y;
-  vec3 sky = mix(VERM, AMBER, smoothstep(-0.4, -0.1, h));
-  sky = mix(sky, ROSE, smoothstep(-0.15, 0.35, h));
-  sky = mix(sky, LAV, 0.35 * smoothstep(0.2, 0.5, h) * smoothstep(0.85, 0.55, h));
-  sky = mix(sky, BLUE, smoothstep(0.45, 1.25, h));
-  sky = mix(sky, mix(BLUE * 0.6, INK, smoothstep(-0.5, -1.3, h)), smoothstep(-0.32, -0.5, h));
-  // Far from the sun the evening goes blue, never grey.
-  float reach = exp(-abs(p.x - 0.1) * 0.5);
-  sky = mix(BLUE * 0.75, sky, reach);
-  vec2 sun = (p - vec2(0.15, -0.3)) * vec2(1.0, 2.2);
-  float dusk = exp(-length(sun) * 1.4);
-  L += (sky * 0.3 * mix(0.55, 1.0, reach) + (AMBER * 0.5 + VERM * 0.35) * dusk) * (1.0 - 0.7 * O);
+  // 5:30 pm. The sun rests on the horizon just past the right of the
+  // subject and its light runs flat across the frame: faces turned toward
+  // it burn amber and vermilion, faces turned away fall into purple, and
+  // each subject throws a long shadow to the left. Away from the sun the
+  // whole evening turns purple, never black or grey.
+  vec2 s = p - vec2(1.5, -0.22);
+  float h = s.y;
+  float toward = exp(-max(-s.x, 0.0) * 0.55);
+  vec3 sky = mix(AMBER * 1.3, VERM * 1.1, smoothstep(0.03, 0.3, abs(h)));
+  sky = mix(sky, ROSE, smoothstep(0.3, 0.8, h));
+  sky = mix(sky, PURP * 0.7, smoothstep(0.7, 1.5, h));
+  sky *= mix(1.0, 0.3, smoothstep(0.6, 1.4, h));
+  vec3 ground = mix(VERM * 0.6, PURP * 0.3, smoothstep(0.0, 0.7, -h));
+  ground = mix(ground, PURP * 0.22, 0.8 * SH);
+  sky = mix(sky, ground, smoothstep(-0.01, -0.08, h));
+  sky = mix(PURP * 0.4, sky * mix(0.4, 1.0, toward), toward);
+  float halo = exp(-length(s * vec2(1.0, 1.7)) * 2.0);
+  float beam = (exp(-abs(h) * 9.0) + 1.5 * exp(-abs(h) * 40.0)) * exp(-abs(s.x) * 0.95) * (1.0 - 0.8 * SH);
+  L += (sky * 0.55 + (AMBER * 1.4 + VERM * 0.5) * halo + mix(VERM, AMBER, toward) * beam * 0.8)
+     * (1.0 - 0.85 * O);
 
   float h1 = dot(H1, vec3(0.333));
   float h2 = dot(H2, vec3(0.333));
   vec3 col = max(L, 0.0)
-    + mix(H1, mix(ROSE, LAV, 0.35) * h1, 0.7) * 0.16
-    + mix(AMBER, VERM, 0.6) * h2 * 0.15;
+    + mix(H1, mix(ROSE, AMBER, 0.5) * h1, 0.5) * 0.18
+    + mix(AMBER, VERM, 0.5) * h2 * 0.16
+    + (AMBER * 0.6 + VERM * 0.4) * exp(-length(s) * 0.9) * 0.22;
 
   // Uneven exposure: a slow, low-frequency field fixed to the frame, plus
   // a faint veil of flare that lifts the shadows around the brightest light.
-  vec2 s = fc / R.y;
-  float field = fbm(s * 1.1 + vec2(T * 0.013, -T * 0.009));
-  col *= 0.35 + 1.25 * field * field;
-  col += mix(LAV, AMBER, field) * h2 * h2 * 0.075;
+  vec2 fs = fc / R.y;
+  float field = fbm(fs * 1.1 + vec2(T * 0.013, -T * 0.009));
+  col *= 0.45 + 1.15 * field * field;
+  col += mix(ROSE, AMBER, field) * h2 * h2 * 0.075;
+  // The lens falls off toward the top of the frame and into the dark side,
+  // where the type sits.
+  col *= mix(1.0, 0.35, smoothstep(0.75, 1.0, fc.y / R.y));
+  col *= mix(0.55, 1.0, smoothstep(-2.0, -0.85, p.x));
   col *= D;
-  col = 1.0 - exp(-col * 1.3);
+  // Dusk ambient: even the dimmest frame (phones, articles) stays purple.
+  col += PURP * 0.06 * (1.0 - D);
+  col = 1.0 - exp(-col * 1.5);
   col = INK + col * (1.0 - INK);
-  // Keep the evening chromatic: lift saturation away from grey.
-  col = max(mix(vec3(luma(col)), col, 1.4), 0.0);
+  // Bold, vivid evening colour: a strong lift away from grey.
+  col = max(mix(vec3(luma(col)), col, 3.0), 0.0);
 
   // Dense multicolored grain, strongest in the midtones.
   vec2 g = floor(fc);
@@ -249,7 +284,7 @@ void main() {
   float m = h21(g * 1.31 + G * 5.0) - 0.5;
   float lum = dot(col, vec3(0.3, 0.59, 0.11));
   float amp = 0.065 + 0.6 * lum * (1.0 - lum);
-  col += (n * 0.8 + m * 0.25) * amp;
+  col += (n * 0.85 + m * 0.15) * amp;
   gl_FragColor = vec4(col, 1.0);
 }`;
 
@@ -291,7 +326,7 @@ void main() {
   const HOLD = 12;
   const FADE = 6;
   const SEGMENT = HOLD + FADE;
-  const FOCUS = 0.13;
+  const FOCUS = 0.3;
   const fps = 24;
   // Articles hold one still frame: no GPU loop while someone reads.
   const toggle = document.querySelector("[data-motion-toggle]");
@@ -343,7 +378,7 @@ void main() {
     // Phones and tablets: text spans the width and scrolls over the fixed
     // frame, so the subject sinks into the bottom quarter, low and right,
     // and develops brighter as the reader reaches the end of the page.
-    return { x: w * 0.78, y: h * 0.96, unit: Math.min(w * 0.44, h * 0.25), exposure: 0.2, develops: true };
+    return { x: w * 0.78, y: h * 1.03, unit: Math.min(w * 0.44, h * 0.23), exposure: 0.15, develops: true };
   }
 
   function resize() {
@@ -377,10 +412,10 @@ void main() {
     gl.uniform2f(u.R, width, height);
     gl.uniform1f(u.T, t);
     gl.uniform3f(u.W, weights[0], weights[1], weights[2]);
-    gl.uniform1f(u.B, FOCUS + 0.17 * Math.sin(Math.PI * mixAmount));
+    gl.uniform1f(u.B, FOCUS + 0.2 * Math.sin(Math.PI * mixAmount));
     gl.uniform2f(u.F, composition.x * ratio, height - composition.y * ratio);
     gl.uniform1f(u.U, composition.unit * ratio);
-    gl.uniform1f(u.D, composition.exposure + (composition.develops ? 0.12 * progress : 0));
+    gl.uniform1f(u.D, composition.exposure + (composition.develops ? 0.07 * progress : 0));
     gl.uniform1f(u.G, frame % 997);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
