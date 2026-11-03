@@ -40,15 +40,17 @@ uniform float U;  // subject unit, render pixels
 uniform float D;  // exposure (dimmed under articles)
 uniform float G;  // grain seed
 
-const vec3 CYAN = vec3(0.24, 0.84, 0.96);
-const vec3 AMBER = vec3(1.0, 0.6, 0.2);
-const vec3 VERM = vec3(0.96, 0.27, 0.15);
-const vec3 ROSE = vec3(0.86, 0.5, 0.58);
-const vec3 LAV = vec3(0.58, 0.5, 0.92);
-const vec3 CREAM = vec3(0.98, 0.87, 0.68);
-const vec3 NAVY = vec3(0.018, 0.03, 0.078);
+// The user's magic-hour palette (2026-11-03), as 0-1 sRGB.
+const vec3 INK = vec3(0.067, 0.094, 0.11);      // #11181C, the deepest tone; never black
+const vec3 BLUE = vec3(0.169, 0.29, 0.49);      // #2B4A7D
+const vec3 CYAN = vec3(0.408, 0.678, 0.773);    // #68ADC5
+const vec3 LAV = vec3(0.647, 0.631, 0.698);     // #A5A1B2
+const vec3 ROSE = vec3(0.671, 0.455, 0.588);    // #AB7496
+const vec3 VERM = vec3(0.698, 0.247, 0.18);     // #B23F2E
+const vec3 AMBER = vec3(0.788, 0.565, 0.275);   // #C99046
+const vec3 CREAM = vec3(0.98, 0.87, 0.68);      // the dachshund's coat
 
-vec3 L; vec3 H1; vec3 H2;
+vec3 L; vec3 H1; vec3 H2; float O;
 
 float h21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -111,6 +113,7 @@ void glow(float d, vec3 c, float b) {
 // A lit surface: defocused, its exposure uneven like fur, cloth, or clay.
 void lit(float d, vec3 c, float b) {
   float m = soft(d, b);
+  O = max(O, m * min(luma(c) * 6.0, 1.0));
   L += bleed(c, m, P) * (0.7 + 0.6 * vn(P * 4.0 + 3.1));
 }
 // A window: a defocused pane crossed by darker mullions.
@@ -139,9 +142,9 @@ void dachshund(vec2 p, float b, float k) {
   lit(ell(q - vec2(0.05, -0.27), vec2(0.95, 0.07)), ROSE * 0.14 * k, b * 2.0);
   glow(length(p - vec2(-0.86, 0.62)) - 0.2, AMBER * 1.5 * k, b);
   pane(p - vec2(0.86, 0.52), vec2(0.22, 0.32), CYAN * 0.85 * k, b * 1.6);
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 5; i++) {
     float fi = float(i);
-    vec2 c = vec2(-1.1 + fi * 0.42, 0.98 + 0.08 * sin(fi * 1.7));
+    vec2 c = vec2(-1.1 + fi * 0.4, 0.86 + 0.07 * sin(fi * 1.7));
     glow(length(p - c) - 0.07, mix(LAV, ROSE, fract(fi * 0.37)) * 0.5 * k, b * 0.6);
   }
 }
@@ -149,7 +152,7 @@ void dachshund(vec2 p, float b, float k) {
 void radio(vec2 p, float b, float k) {
   float beat = pow(0.5 + 0.5 * sin(T * 7.85), 6.0) * 0.6 + 0.4 * vn(vec2(T * 3.0, 1.0));
   vec2 q = p;
-  lit(box(q, vec2(0.56, 0.33), 0.12), vec3(0.44, 0.2, 0.16) * 0.6 * k, b);
+  lit(box(q, vec2(0.56, 0.33), 0.12), mix(VERM, ROSE, 0.4) * 0.38 * k, b);
   lit(length(q - vec2(-0.24, 0.0)) - 0.21, (LAV * 0.3 + ROSE * 0.18 * beat) * k, b);
   vec3 dial = ramp(smoothstep(0.08, 0.45, q.x) * 0.8);
   glow(box(q - vec2(0.25, 0.09), vec2(0.2, 0.065), 0.03), dial * (1.5 + 0.4 * beat) * k, b * 0.8);
@@ -174,7 +177,7 @@ void wheel(vec2 p, float b, float k) {
   float spin = T * 2.2;
   vec2 q = p - vec2(0.0, -0.05);
   lit(abs(ell(q - vec2(0.0, -0.26), vec2(0.66, 0.17))) - 0.015, LAV * 0.38 * k, b);
-  lit(ell(q - vec2(0.0, -0.21), vec2(0.44, 0.1)), vec3(0.5, 0.48, 0.56) * 0.35 * k, b);
+  lit(ell(q - vec2(0.0, -0.21), vec2(0.44, 0.1)), mix(LAV, BLUE, 0.45) * 0.4 * k, b);
   for (int i = 0; i < 6; i++) {
     float a = spin + float(i) * 1.047;
     vec2 c = vec2(cos(a) * 0.44, -0.21 + sin(a) * 0.1);
@@ -201,10 +204,26 @@ void main() {
   vec2 fc = gl_FragCoord.xy;
   vec2 p = (fc - F) / U + 0.03 * vec2(sin(T * 0.07), cos(T * 0.05));
   P = p;
-  L = vec3(0.0); H1 = vec3(0.0); H2 = vec3(0.0);
+  L = vec3(0.0); H1 = vec3(0.0); H2 = vec3(0.0); O = 0.0;
   if (W.x > 0.001) dachshund(p, B, W.x);
   if (W.y > 0.001) radio(p, B, W.y);
   if (W.z > 0.001) wheel(p, B, W.z);
+
+  // Magic hour: blue overhead, lavender and rose lower down, an amber and
+  // vermilion glow low behind the subject, the ground settling into blue
+  // and ink. The subjects stand against it, backlit.
+  float h = p.y;
+  vec3 sky = mix(VERM, AMBER, smoothstep(-0.4, -0.1, h));
+  sky = mix(sky, ROSE, smoothstep(-0.15, 0.35, h));
+  sky = mix(sky, LAV, 0.35 * smoothstep(0.2, 0.5, h) * smoothstep(0.85, 0.55, h));
+  sky = mix(sky, BLUE, smoothstep(0.45, 1.25, h));
+  sky = mix(sky, mix(BLUE * 0.6, INK, smoothstep(-0.5, -1.3, h)), smoothstep(-0.32, -0.5, h));
+  // Far from the sun the evening goes blue, never grey.
+  float reach = exp(-abs(p.x - 0.1) * 0.5);
+  sky = mix(BLUE * 0.75, sky, reach);
+  vec2 sun = (p - vec2(0.15, -0.3)) * vec2(1.0, 2.2);
+  float dusk = exp(-length(sun) * 1.4);
+  L += (sky * 0.3 * mix(0.55, 1.0, reach) + (AMBER * 0.5 + VERM * 0.35) * dusk) * (1.0 - 0.7 * O);
 
   float h1 = dot(H1, vec3(0.333));
   float h2 = dot(H2, vec3(0.333));
@@ -220,7 +239,9 @@ void main() {
   col += mix(LAV, AMBER, field) * h2 * h2 * 0.075;
   col *= D;
   col = 1.0 - exp(-col * 1.3);
-  col = NAVY + col * (1.0 - NAVY);
+  col = INK + col * (1.0 - INK);
+  // Keep the evening chromatic: lift saturation away from grey.
+  col = max(mix(vec3(luma(col)), col, 1.4), 0.0);
 
   // Dense multicolored grain, strongest in the midtones.
   vec2 g = floor(fc);
@@ -228,7 +249,7 @@ void main() {
   float m = h21(g * 1.31 + G * 5.0) - 0.5;
   float lum = dot(col, vec3(0.3, 0.59, 0.11));
   float amp = 0.065 + 0.6 * lum * (1.0 - lum);
-  col += (n * 0.7 + m * 0.5) * amp;
+  col += (n * 0.8 + m * 0.25) * amp;
   gl_FragColor = vec4(col, 1.0);
 }`;
 
@@ -305,7 +326,7 @@ void main() {
         x: wide ? w * 0.92 : w * 0.7,
         y: h * (wide ? 0.55 : 0.78),
         unit: Math.min(w, h) * (wide ? 0.34 : 0.5),
-        exposure: 0.14,
+        exposure: 0.12,
       };
     }
     if (rect) {
@@ -322,7 +343,7 @@ void main() {
     // Phones and tablets: text spans the width and scrolls over the fixed
     // frame, so the subject sinks into the bottom quarter, low and right,
     // and develops brighter as the reader reaches the end of the page.
-    return { x: w * 0.78, y: h * 0.9, unit: Math.min(w * 0.44, h * 0.25), exposure: 0.22, develops: true };
+    return { x: w * 0.78, y: h * 0.96, unit: Math.min(w * 0.44, h * 0.25), exposure: 0.2, develops: true };
   }
 
   function resize() {
@@ -359,7 +380,7 @@ void main() {
     gl.uniform1f(u.B, FOCUS + 0.17 * Math.sin(Math.PI * mixAmount));
     gl.uniform2f(u.F, composition.x * ratio, height - composition.y * ratio);
     gl.uniform1f(u.U, composition.unit * ratio);
-    gl.uniform1f(u.D, composition.exposure + (composition.develops ? 0.18 * progress : 0));
+    gl.uniform1f(u.D, composition.exposure + (composition.develops ? 0.12 * progress : 0));
     gl.uniform1f(u.G, frame % 997);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }

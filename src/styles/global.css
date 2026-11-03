@@ -2,10 +2,10 @@
    code (public/night.js). Deep navy is the negative space; the photograph
    supplies all colour. No cards, borders, fills, or ornaments. */
 :root {
-  --night: #060a17;
+  --night: #11181c;
   --ivory: #f3e9d4;
   --ivory-soft: #d9cdb6;
-  --ivory-muted: #a99f8d;
+  --ivory-muted: #c2b8a5;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
     "Songti TC", "Noto Serif CJK TC", "Source Han Serif TC", "PMingLiU", serif;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
@@ -36,7 +36,7 @@ body {
   margin: 0;
   background: transparent;
   /* Keeps ivory crisp where the exposure blooms behind it. */
-  text-shadow: 0 1px 2px rgb(6 10 23 / 60%);
+  text-shadow: 0 1px 2px rgb(17 24 28 / 65%);
 }
 
 ::selection {
@@ -98,8 +98,7 @@ button:focus-visible {
 }
 
 .site-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  display: flex;
   gap: 0 1.5rem;
   align-items: center;
   min-height: 5.5rem;
@@ -107,6 +106,7 @@ button:focus-visible {
 
 .site-identity {
   display: flex;
+  flex: 1;
   gap: 1rem;
   align-items: center;
   min-width: 0;

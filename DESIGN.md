@@ -2,16 +2,17 @@
 name: Programmed Dream
 description: A minimal editorial journal in warm ivory type over a nocturnal photograph that is painted live in code.
 colors:
-  night: "#060a17"
+  night: "#11181c"
   ivory: "#f3e9d4"
   ivory-soft: "#d9cdb6"
-  ivory-muted: "#a99f8d"
+  ivory-muted: "#c2b8a5"
   # Shader palette (public/night.js), sRGB approximations of the GLSL vec3 constants.
-  shader-cyan: "#3dd6f5"
-  shader-amber: "#ff9933"
-  shader-vermilion: "#f54526"
-  shader-rose: "#db8094"
-  shader-lavender: "#9480eb"
+  blue: "#2b4a7d"
+  cyan: "#68adc5"
+  lavender: "#a5a1b2"
+  rose: "#ab7496"
+  vermilion: "#b23f2e"
+  amber: "#c99046"
   shader-cream: "#fadead"
 typography:
   signature:
@@ -119,31 +120,31 @@ Programmed Dream replaced Story Journal on 2026-11-03.
 
 **Creative North Star: "Programmed Dream"**
 
-A personal journal set over a night photograph that is painted live in code. Deep navy is the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.
+A personal journal set over an evening photograph that is painted live in code, lit like magic hour. Deep ink and blue are the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.
 
 The photograph is a fragment shader (`public/night.js`) drawing a defocused, grain-heavy exposure with broad halation, one subject at a time, dissolving between three scenes. The home scene is lit and sits in the right half of the desktop viewport (lower right on phones, under-exposed, developing as the reader nears the end of the page). Article pages hold one dimmed still frame so nothing animates while someone reads. The shared confirmed identity is the author mark `李至青`; the page composition itself belongs to `.impeccable/surfaces/route-zh-tw.md`, not to this system.
 
 **Key Characteristics:**
 
-- Navy ground, warm ivory text in three tones, and nothing else on the page but the live scene.
+- Ink-blue dusk ground, warm ivory text in three tones, and nothing else on the page but the live scene.
 - Serif for voice (greeting, titles, reading), system sans for quiet controls and dates.
 - Flat and frameless: spacing and tone carry all hierarchy; text-shadow keeps ivory crisp where the exposure blooms.
 - The scene is sparing with motion: 24fps, still under reduced motion, still on articles, pausable by the reader.
 
 ## Colors
 
-A navy night with warm ivory text; saturated colour lives only in the shader, never in the interface.
+Evening magic hour in the user's seven-colour palette (chosen 2026-11-03), with warm ivory text. Blue holds the sky and the text side, rose and lavender sit lower, amber and vermilion glow behind the subject, and shadows rest on ink and blue. Nothing goes black or flat grey. Palette colour lives only in the scene, never in interface fills.
 
 ### Neutral
 
-- **Night Navy** (`#060a17`): The page ground, the theme colour, the selection text colour, and the text-shadow tint. It is also the shader's negative space.
+- **Ink** (`#11181c`): The page ground, the theme colour, the selection text colour, and the text-shadow tint (65%). It is the shader's deepest tone; the scene never goes below it, so nothing is black.
 - **Warm Ivory** (`#f3e9d4`): Primary text, hovered or focused links, the 3px focus outline, and the selection fill.
 - **Soft Ivory** (`#d9cdb6`): Reading body, list titles, the bio, and call-to-action labels at rest; dates on narrow viewports and article headers.
-- **Muted Ivory** (`#a99f8d`): Locale and motion links, dates on wide viewports, performer credits, section labels, quotes, and code.
+- **Muted Ivory** (`#c2b8a5`): Locale and motion links, dates on wide viewports, performer credits, section labels, quotes, and code.
 
-### Shader Palette (approximate sRGB of the GLSL constants in `public/night.js`)
+### Magic-Hour Palette (the scene in `public/night.js`)
 
-- **Cyan** (`#3dd6f5`), **Amber** (`#ff9933`), **Vermilion** (`#f54526`), **Rose** (`#db8094`), **Lavender** (`#9480eb`), **Cream** (`#fadead`): Light sources in the scene only. They bleed into one another through the `ramp()` colour path. They are never used for UI fills, links, borders, or text.
+- **Blue** (`#2b4a7d`), **Cyan** (`#68adc5`), **Lavender** (`#a5a1b2`), **Rose** (`#ab7496`), **Vermilion** (`#b23f2e`), **Amber** (`#c99046`), and the dachshund's **Cream** (`#fadead`): the scene only, written as exact 0–1 constants in `night.js`. The dusk sky runs blue → lavender (a thin band) → rose → amber → vermilion toward the horizon behind the subject; far from that glow the evening turns blue. A saturation lift after tone mapping keeps it chromatic. They bleed into one another through the `ramp()` colour path. They are never used for UI fills, links, borders, or text.
 
 ### Named Rules
 
@@ -194,7 +195,7 @@ One centered shell, `min(100% - clamp(2rem, 6vw, 6rem), 84rem)`, with a 5.5rem h
 
 ## Elevation & Depth
 
-Flat. There are no component shadows, fills, or blur. Depth is the photograph behind the text. The only shadow is a `0 1px 2px` navy text-shadow at 60% on the body, which keeps ivory crisp over bright halation (removed on selection and on the skip link).
+Flat. There are no component shadows, fills, or blur. Depth is the photograph behind the text. The only shadow is a `0 1px 2px` ink text-shadow at 65% on the body, which keeps ivory crisp over bright halation (removed on selection and on the skip link).
 
 **The Flat Page Rule.** Depth belongs to the scene, never to containers or controls.
 
@@ -236,7 +237,7 @@ One component (`ResponseEnding.astro`) closes the bio and every article, with no
 
 ### Do:
 
-- **Do** set text in the three ivories on the navy ground and let the photograph supply all colour.
+- **Do** set text in the three ivories on the ink-blue ground and let the photograph supply all colour.
 - **Do** use system font stacks only: the serif for voice and reading, the sans for quiet controls.
 - **Do** keep every type role at or below `1.5rem`, and every role at weight 400 except authored article title, subheadings, and `strong`.
 - **Do** keep links underline-free with a visible 3px ivory focus outline.

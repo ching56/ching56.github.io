@@ -6,8 +6,8 @@
     "colorMeta": {
       "night": {
         "role": "neutral",
-        "displayName": "Night Navy",
-        "canonical": "#060a17",
+        "displayName": "Ink",
+        "canonical": "#11181c",
         "tonalRamp": [
           "oklch(15% 0.03 265)",
           "oklch(26% 0.03 265)",
@@ -52,7 +52,7 @@
       "ivory-muted": {
         "role": "neutral",
         "displayName": "Muted Ivory",
-        "canonical": "#a99f8d",
+        "canonical": "#c2b8a5",
         "tonalRamp": [
           "oklch(15% 0.02 90)",
           "oklch(26% 0.02 90)",
@@ -282,7 +282,7 @@
       "refersTo": "utility-link",
       "description": "Quiet plain-text locale link or motion toggle.",
       "html": "<a class=\"ds-utility\" href=\"#\">English</a>",
-      "css": ".ds-utility { display: inline-flex; align-items: center; min-height: 2.75rem; color: #a99f8d; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 0.8125rem; font-weight: 400; text-decoration: none; transition: color 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-utility:hover { color: #f3e9d4; } .ds-utility:focus-visible { outline: 3px solid #f3e9d4; outline-offset: 4px; }"
+      "css": ".ds-utility { display: inline-flex; align-items: center; min-height: 2.75rem; color: #c2b8a5; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 0.8125rem; font-weight: 400; text-decoration: none; transition: color 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-utility:hover { color: #f3e9d4; } .ds-utility:focus-visible { outline: 3px solid #f3e9d4; outline-offset: 4px; }"
     },
     {
       "name": "Post List Row",
@@ -290,7 +290,7 @@
       "refersTo": "post-list-item",
       "description": "Frameless row: serif title left, sans date right.",
       "html": "<div class=\"ds-row\"><a href=\"#\">一則文章的標題</a><time>2026-10-18</time></div>",
-      "css": ".ds-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: baseline; min-height: 2.75rem; padding: 0.5rem 0; color: #f3e9d4; } .ds-row a { font-family: \"Iowan Old Style\", Georgia, \"Songti TC\", serif; font-size: 1.125rem; line-height: 1.35; color: #d9cdb6; text-decoration: none; transition: color 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-row time { font-family: -apple-system, system-ui, sans-serif; font-size: 0.8125rem; color: #a99f8d; font-variant-numeric: tabular-nums; } .ds-row:hover a, .ds-row:focus-within a { color: #f3e9d4; } .ds-row a:focus-visible { outline: 3px solid #f3e9d4; outline-offset: 4px; }"
+      "css": ".ds-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: baseline; min-height: 2.75rem; padding: 0.5rem 0; color: #f3e9d4; } .ds-row a { font-family: \"Iowan Old Style\", Georgia, \"Songti TC\", serif; font-size: 1.125rem; line-height: 1.35; color: #d9cdb6; text-decoration: none; transition: color 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-row time { font-family: -apple-system, system-ui, sans-serif; font-size: 0.8125rem; color: #c2b8a5; font-variant-numeric: tabular-nums; } .ds-row:hover a, .ds-row:focus-within a { color: #f3e9d4; } .ds-row a:focus-visible { outline: 3px solid #f3e9d4; outline-offset: 4px; }"
     },
     {
       "name": "Response Ending (mail)",
@@ -314,14 +314,14 @@
       "refersTo": "reading-body",
       "description": "Soft ivory serif prose with ivory subheadings and a muted indented quote.",
       "html": "<article class=\"ds-read\"><h2>小標題</h2><p>內文在暗夜之上，以柔和的象牙色排成一欄。</p><blockquote>一段引文。</blockquote></article>",
-      "css": ".ds-read { max-width: 68ch; font-family: \"Iowan Old Style\", Georgia, \"Songti TC\", serif; font-size: 1.0625rem; line-height: 1.9; color: #d9cdb6; } .ds-read h2 { margin: 2.6em 0 0.8em; font-size: 1.375rem; line-height: 1.4; color: #f3e9d4; } .ds-read p { margin: 0 0 1.5em; } .ds-read blockquote { margin: 0; padding-left: 1.5rem; color: #a99f8d; }"
+      "css": ".ds-read { max-width: 68ch; font-family: \"Iowan Old Style\", Georgia, \"Songti TC\", serif; font-size: 1.0625rem; line-height: 1.9; color: #d9cdb6; } .ds-read h2 { margin: 2.6em 0 0.8em; font-size: 1.375rem; line-height: 1.4; color: #f3e9d4; } .ds-read p { margin: 0 0 1.5em; } .ds-read blockquote { margin: 0; padding-left: 1.5rem; color: #c2b8a5; }"
     }
   ],
   "narrative": {
     "northStar": "Programmed Dream",
-    "overview": "A personal journal set over a night photograph that is painted live in code. Deep navy is the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.\n\nThe photograph is a fragment shader (`public/night.js`) drawing a defocused, grain-heavy exposure with broad halation, one subject at a time, dissolving between three scenes. The home scene is lit and sits in the right half of the desktop viewport (lower right on phones, under-exposed, developing as the reader nears the end of the page). Article pages hold one dimmed still frame so nothing animates while someone reads. The shared confirmed identity is the author mark `李至青`; the page composition itself belongs to `.impeccable/surfaces/route-zh-tw.md`, not to this system.",
+    "overview": "A personal journal set over an evening photograph that is painted live in code, lit like magic hour. Deep ink and blue are the negative space; the photograph supplies every colour, and the type is warm ivory, crisp and quiet. The site refuses the white-paper blog and the photo-hero-plus-cards template: there are no cards, borders, fills, or ornaments, so the only things on the page are text and the exposure behind it.\n\nThe photograph is a fragment shader (`public/night.js`) drawing a defocused, grain-heavy exposure with broad halation, one subject at a time, dissolving between three scenes. The home scene is lit and sits in the right half of the desktop viewport (lower right on phones, under-exposed, developing as the reader nears the end of the page). Article pages hold one dimmed still frame so nothing animates while someone reads. The shared confirmed identity is the author mark `李至青`; the page composition itself belongs to `.impeccable/surfaces/route-zh-tw.md`, not to this system.",
     "keyCharacteristics": [
-      "Navy ground, warm ivory text in three tones, and nothing else on the page but the live scene.",
+      "Ink-blue dusk ground, warm ivory text in three tones, and nothing else on the page but the live scene.",
       "Serif for voice (greeting, titles, reading), system sans for quiet controls and dates.",
       "Flat and frameless: spacing and tone carry all hierarchy; text-shadow keeps ivory crisp where the exposure blooms.",
       "The scene is sparing with motion: 24fps, still under reduced motion, still on articles, pausable by the reader."
@@ -389,7 +389,7 @@
       }
     ],
     "dos": [
-      "**Do** set text in the three ivories on the navy ground and let the photograph supply all colour.",
+      "**Do** set text in the three ivories on the ink-blue ground and let the photograph supply all colour.",
       "**Do** use system font stacks only: the serif for voice and reading, the sans for quiet controls.",
       "**Do** keep every type role at or below `1.5rem`, and every role at weight 400 except authored article title, subheadings, and `strong`.",
       "**Do** keep links underline-free with a visible 3px ivory focus outline.",
