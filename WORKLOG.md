@@ -762,3 +762,4 @@
 - Intent: apply the user's two answers: add a quiet 「暫停」/「播放」 toggle (header, homepages only, localStorage) and brighten the phone/tablet scene (bottom quarter, exposure 0.22 → 0.40 with scroll progress); then have the documenter write DESIGN.md
 - Why: the finish review left WCAG 2.2.2 and the under-exposed phone scene open; the user chose the toggle and a brighter sunk scene, accepting ~4:1 mid-scroll
 - Result: done — check 0 errors, 40/40 tests; live captures show the toggle at 1440 and 500px and the phone scene developed at page end
+- DESIGN.md: rewritten as Programmed Dream by the Impeccable documenter (255 lines) with a refreshed `.impeccable/design.json`; read back: every global.css font-size is documented, the detector returns no findings, and context.mjs no longer reports a stale sidecar
