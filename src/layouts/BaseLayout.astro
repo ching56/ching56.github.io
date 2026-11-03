@@ -81,6 +81,18 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
             </>
           )}
         </div>
+        {scene === "home" && (
+          <button
+            class="motion-toggle"
+            type="button"
+            data-motion-toggle
+            data-pause-label={ui.motionPauseLabel}
+            data-play-label={ui.motionPlayLabel}
+            hidden
+          >
+            {ui.motionPauseLabel}
+          </button>
+        )}
         <nav class="site-nav" aria-label={ui.navigationLabel}>
           <a class="language-link" href={languageSwitchPath}>
             {ui.languageSwitch.label}

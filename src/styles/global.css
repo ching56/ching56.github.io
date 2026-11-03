@@ -99,7 +99,8 @@ button:focus-visible {
 
 .site-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0 1.5rem;
   align-items: center;
   min-height: 5.5rem;
 }
@@ -149,6 +150,33 @@ button:focus-visible {
 }
 
 .language-link:hover {
+  color: var(--ivory);
+}
+
+/* Pauses the photograph where it stands; as quiet as the language link. */
+.motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0;
+  color: var(--ivory-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1;
+  text-shadow: inherit;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 240ms var(--ease-out);
+}
+
+.motion-toggle[hidden] {
+  display: none;
+}
+
+.motion-toggle:hover {
   color: var(--ivory);
 }
 
@@ -584,6 +612,7 @@ time {
 
   .site-header {
     min-height: 4.5rem;
+    gap: 0 1.25rem;
   }
 
   main {

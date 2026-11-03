@@ -12,6 +12,8 @@ export const UI = {
     responseLinkLabel: "寫信給我",
     threadsLinkLabel: "在 Threads 和我互動",
     newTabLabel: "（另開新分頁）",
+    motionPauseLabel: "暫停",
+    motionPlayLabel: "播放",
     languageSwitch: {
       href: "/en/",
       label: "English",
@@ -28,6 +30,8 @@ export const UI = {
     responseLinkLabel: "Email me",
     threadsLinkLabel: "Talk with me on Threads",
     newTabLabel: " (opens in a new tab)",
+    motionPauseLabel: "Pause",
+    motionPlayLabel: "Play",
     languageSwitch: {
       href: "/zh-TW/",
       label: "繁體中文",

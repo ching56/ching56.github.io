@@ -273,7 +273,13 @@ void main() {
   const FOCUS = 0.13;
   const fps = 24;
   // Articles hold one still frame: no GPU loop while someone reads.
-  const still = () => reduce.matches || frozen || scene === "article";
+  const toggle = document.querySelector("[data-motion-toggle]");
+  const PAUSE_KEY = "programmed-dream:paused";
+  let paused = false;
+  try {
+    paused = window.localStorage.getItem(PAUSE_KEY) === "1";
+  } catch {}
+  const still = () => reduce.matches || frozen || scene === "article" || paused;
   const start = Math.random() * SEGMENT * 3;
   // `?frame=<seconds>` freezes one moment, for captures and comparisons.
   const pinned = Number.parseFloat(new URLSearchParams(window.location.search).get("frame"));
@@ -313,10 +319,10 @@ void main() {
     if (wide) {
       return { x: w * 0.74, y: h * 0.52, unit: Math.min(w * 0.22, h * 0.4), exposure: 1 };
     }
-    // Phones and tablets: text spans the width and scrolls over every part
-    // of the fixed frame, so the subject sinks low and right and the whole
-    // exposure stays low enough for the list at any scroll position.
-    return { x: w * 0.78, y: h * 0.86, unit: Math.min(w * 0.44, h * 0.25), exposure: 0.18 };
+    // Phones and tablets: text spans the width and scrolls over the fixed
+    // frame, so the subject sinks into the bottom quarter, low and right,
+    // and develops brighter as the reader reaches the end of the page.
+    return { x: w * 0.78, y: h * 0.9, unit: Math.min(w * 0.44, h * 0.25), exposure: 0.22, develops: true };
   }
 
   function resize() {
@@ -353,13 +359,15 @@ void main() {
     gl.uniform1f(u.B, FOCUS + 0.17 * Math.sin(Math.PI * mixAmount));
     gl.uniform2f(u.F, composition.x * ratio, height - composition.y * ratio);
     gl.uniform1f(u.U, composition.unit * ratio);
-    gl.uniform1f(u.D, composition.exposure);
+    gl.uniform1f(u.D, composition.exposure + (composition.develops ? 0.18 * progress : 0));
     gl.uniform1f(u.G, frame % 997);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
   let frame = 0;
   let last = 0;
+  let lastTime = stillTime;
+  let progress = 0;
   let raf = 0;
   let developed = false;
 
@@ -374,7 +382,8 @@ void main() {
     if (now - last < 1000 / fps - 2) return;
     last = now;
     frame += 1;
-    draw(start + now / 1000, frame);
+    lastTime = start + now / 1000;
+    draw(lastTime, frame);
     develop();
   }
 
@@ -382,7 +391,7 @@ void main() {
     window.cancelAnimationFrame(raf);
     if (lost) return;
     if (still()) {
-      draw(stillTime, 1);
+      draw(paused ? lastTime : stillTime, 1);
       develop();
       return;
     }
@@ -394,7 +403,7 @@ void main() {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       // Resizing clears the buffer; repaint at once instead of waiting a tick.
-      if (!lost && resize()) draw(still() ? stillTime : start + performance.now() / 1000, frame);
+      if (!lost && resize()) draw(still() ? (paused ? lastTime : stillTime) : lastTime, frame);
     }, 120);
   });
   document.addEventListener("visibilitychange", run);
@@ -403,15 +412,55 @@ void main() {
     event.preventDefault();
     lost = true;
     window.cancelAnimationFrame(raf);
+    syncToggle();
   });
   canvas.addEventListener("webglcontextrestored", () => {
     lost = false;
     if (!init()) return;
     cssWidth = 0;
     resize();
+    syncToggle();
     run();
   });
 
+  function measureProgress() {
+    const room = document.documentElement.scrollHeight - window.innerHeight;
+    progress = room > 0 ? Math.min(1, Math.max(0, window.scrollY / room)) : 1;
+  }
+  let scrollQueued = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!composition.develops || scrollQueued) return;
+      scrollQueued = true;
+      window.requestAnimationFrame(() => {
+        scrollQueued = false;
+        measureProgress();
+        if (still() && !lost) draw(paused ? lastTime : stillTime, 1);
+      });
+    },
+    { passive: true },
+  );
+
+  function syncToggle() {
+    if (!toggle) return;
+    toggle.hidden = reduce.matches || frozen || lost;
+    toggle.textContent = paused ? toggle.dataset.playLabel : toggle.dataset.pauseLabel;
+  }
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      paused = !paused;
+      try {
+        window.localStorage.setItem(PAUSE_KEY, paused ? "1" : "0");
+      } catch {}
+      syncToggle();
+      run();
+    });
+    reduce.addEventListener("change", syncToggle);
+  }
+
   resize();
+  measureProgress();
+  syncToggle();
   run();
 })();
