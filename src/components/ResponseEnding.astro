@@ -6,13 +6,15 @@ interface Props {
   href: string;
   label: string;
   kind: "mail" | "external";
+  prompt?: string;
 }
 
-const { language, href, label, kind } = Astro.props;
+const { language, href, label, kind, prompt } = Astro.props;
 const external = kind === "external";
 ---
 
 <footer class="response-ending">
+  {prompt && <p>{prompt}</p>}
   <a
     class="response-cta"
     href={href}

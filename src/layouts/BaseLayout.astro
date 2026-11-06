@@ -15,7 +15,6 @@ interface Props {
     path: string;
   }>;
   languageSwitchPath?: string;
-  scene?: "home" | "article";
 }
 
 const {
@@ -23,7 +22,6 @@ const {
   language,
   alternates = [],
   languageSwitchPath = UI[language].languageSwitch.href,
-  scene = "home",
 } = Astro.props;
 const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
@@ -53,20 +51,17 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
         href={new URL(alternate.path, SITE.url)}
       />
     ))}
-    <meta name="theme-color" content="#11181c" />
     <title>{pageTitle}</title>
-    <script is:inline src="/night.js" defer></script>
   </head>
-  <body data-surface="programmed-dream" data-scene={scene}>
+  <body data-surface="story-journal">
     <!--
-    THESIS: Programmed Dream sets a personal journal over an evening photograph that is painted live in code; it refuses the white-paper blog and the photo-hero-plus-cards template.
-    OWN-WORLD: Evening magic hour in the user's seven colours (#11181C ink, blue, cyan, lavender, rose, vermilion, amber): a heavily defocused, highly saturated 5:30 pm exposure: a low sun throwing flat horizontal light, sun-facing faces amber and vermilion, the side turned away (and the text side) purple, never black or grey; crisp warm ivory serif with quiet sans; no cards, borders, fills, or ornaments.
-    STORY: Readers meet the author in one line, glimpse the dachshund, the radio, and the wheel the life is made of, then choose a piece to read in an unhurried ivory column.
-    FIRST VIEWPORT: Small serif masthead left, sans locale link right; the serif greeting and the title list hold the dark left column while the subject glows in the right half (lower third on phones).
-    FORM: A dark left column of ivory type over a fixed scene in the right half (low and right, under-exposed, on phones); seed: 8b1de78f, overridden by the user-pinned brief.
+    THESIS: Story Journal turns a personal archive into one calm, tactile narrative and refuses both oversized-name minimalism and segmented app navigation.
+    OWN-WORLD: Cool index-card stock, near-black ink, restrained accession marks, and uninterrupted editorial whitespace.
+    STORY: Readers meet the author and the purpose of the writing, can respond directly, then continue naturally into the chronology and an unhurried reading column.
+    FIRST VIEWPORT: A compact signature and quiet language utility lead directly into the author introduction; the chronological register follows as the next passage in the same journal.
+    FORM: Approved Compact Register, first of three composition probes; direction seed f0bd5f13.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
     -->
-    <canvas class="night" data-night aria-hidden="true"></canvas>
     <a class="skip-link" href="#main-content">{ui.skipContentLabel}</a>
     <div class="site-shell">
       <header class="site-header">
@@ -81,18 +76,6 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
             </>
           )}
         </div>
-        {scene === "home" && (
-          <button
-            class="motion-toggle"
-            type="button"
-            data-motion-toggle
-            data-pause-label={ui.motionPauseLabel}
-            data-play-label={ui.motionPlayLabel}
-            hidden
-          >
-            {ui.motionPauseLabel}
-          </button>
-        )}
         <nav class="site-nav" aria-label={ui.navigationLabel}>
           <a class="language-link" href={languageSwitchPath}>
             {ui.languageSwitch.label}

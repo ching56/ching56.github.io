@@ -1,19 +1,14 @@
-/* Programmed Dream: warm ivory type over a night exposure painted live in
-   code (public/night.js). Deep navy is the negative space; the photograph
-   supplies all colour. No cards, borders, fills, or ornaments. */
 :root {
-  --night: #11181c;
-  --ivory: #f3e9d4;
-  --ivory-soft: #d9cdb6;
-  --ivory-muted: #c2b8a5;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
-    "Songti TC", "Noto Serif CJK TC", "Source Han Serif TC", "PMingLiU", serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  color-scheme: dark;
-  font-family: var(--sans);
-  color: var(--ivory);
-  background: var(--night);
+  --stock: #f6f7f5;
+  --stock-bright: #fcfdfb;
+  --ink: #202322;
+  --ink-soft: #292c2b;
+  --ink-muted: #555c59;
+  --rule: #b9bfbb;
+  --cobalt: #4f73d9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--stock);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -24,7 +19,7 @@
 
 html {
   min-width: 20rem;
-  background: var(--night);
+  background: var(--stock);
 }
 
 html:lang(zh-TW) {
@@ -34,33 +29,9 @@ html:lang(zh-TW) {
 body {
   min-height: 100vh;
   margin: 0;
-  background: transparent;
-  /* Keeps ivory crisp where the exposure blooms behind it. */
-  text-shadow: 0 1px 2px rgb(17 24 28 / 65%);
-}
-
-::selection {
-  color: var(--night);
-  background: var(--ivory);
-  text-shadow: none;
-}
-
-/* The photograph develops in once its first frame is drawn. */
-.night {
-  position: fixed;
-  z-index: -1;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100vh;
-  height: 100lvh;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 2800ms var(--ease-out);
-}
-
-.night.is-developed {
-  opacity: 1;
+  background:
+    radial-gradient(circle at 12% -10%, rgb(255 255 255 / 88%), transparent 38rem),
+    linear-gradient(180deg, var(--stock-bright), var(--stock));
 }
 
 a {
@@ -68,9 +39,8 @@ a {
   text-decoration: none;
 }
 
-a:focus-visible,
-button:focus-visible {
-  outline: 3px solid var(--ivory);
+a:focus-visible {
+  outline: 3px solid var(--ink);
   outline-offset: 4px;
 }
 
@@ -79,9 +49,8 @@ button:focus-visible {
   z-index: 20;
   inset: 0 auto auto 1rem;
   padding: 0.75rem 1rem;
-  color: var(--night);
-  text-shadow: none;
-  background: var(--ivory);
+  color: var(--stock-bright);
+  background: var(--ink);
   transform: translateY(-120%);
 }
 
@@ -92,39 +61,44 @@ button:focus-visible {
 .site-shell {
   display: flex;
   flex-direction: column;
-  width: min(100% - clamp(2rem, 6vw, 6rem), 84rem);
+  width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
   min-height: 100vh;
   margin-inline: auto;
 }
 
 .site-header {
-  display: flex;
-  gap: 0 1.5rem;
-  align-items: center;
-  min-height: 5.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  min-height: 5.25rem;
 }
 
 .site-identity {
   display: flex;
-  flex: 1;
   gap: 1rem;
   align-items: center;
+  align-self: center;
   min-width: 0;
   padding-block: 1rem;
 }
 
 .author-signature {
   flex: none;
-  font-family: var(--serif);
   font-size: 1.0625rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-decoration: none;
 }
 
+.identity-rule {
+  width: 1px;
+  height: 1.25rem;
+  background: var(--rule);
+}
+
 .site-title {
   overflow: hidden;
-  color: var(--ivory-muted);
+  color: var(--ink-muted);
   font-size: 0.875rem;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -133,63 +107,36 @@ button:focus-visible {
 .site-nav {
   display: flex;
   align-items: center;
+  align-self: stretch;
 }
 
 .language-link {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
-  color: var(--ivory-muted);
+  color: var(--ink-muted);
   font-size: 0.8125rem;
   font-weight: 400;
   letter-spacing: normal;
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 240ms var(--ease-out);
+  transition: color 160ms ease-out;
 }
 
 .language-link:hover {
-  color: var(--ivory);
-}
-
-/* Pauses the photograph where it stands; as quiet as the language link. */
-.motion-toggle {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0;
-  color: var(--ivory-muted);
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 400;
-  line-height: 1;
-  text-shadow: inherit;
-  white-space: nowrap;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  transition: color 240ms var(--ease-out);
-}
-
-.motion-toggle[hidden] {
-  display: none;
-}
-
-.motion-toggle:hover {
-  color: var(--ivory);
+  color: var(--ink);
 }
 
 main {
   flex: 1;
   min-width: 0;
-  padding-block: clamp(4rem, 12vh, 9rem) clamp(4rem, 10vw, 8rem);
+  padding-block: clamp(3rem, 7vw, 6.75rem);
 }
 
 .home-flow {
   display: grid;
-  gap: clamp(4.5rem, 10vw, 8.5rem);
-  align-content: start;
+  gap: clamp(4.5rem, 9vw, 8rem);
   min-width: 0;
 }
 
@@ -198,7 +145,7 @@ main {
 }
 
 .about-intro {
-  width: min(100%, 34rem);
+  width: min(100%, 70ch);
   margin-inline: 0;
   scroll-margin-block-start: 1rem;
 }
@@ -208,32 +155,30 @@ main {
 }
 
 .about-copy {
-  color: var(--ivory-soft);
-  font-family: var(--serif);
-  font-size: 1rem;
-  line-height: 1.7;
+  max-width: 70ch;
+  font-size: 0.9375rem;
+  line-height: 1.65;
   overflow-wrap: anywhere;
 }
 
 .about-copy > p:first-child {
   margin-top: 0;
-  color: var(--ivory);
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.68;
   text-wrap: balance;
 }
 
 .about-copy h2 {
   margin-block: 2.5rem 0.65rem;
-  color: var(--ivory-muted);
+  color: var(--ink-muted);
   font-size: 0.8125rem;
   font-weight: 400;
   letter-spacing: 0.1em;
 }
 
 .about-copy p {
-  margin-block: 0 0.5em;
+  margin-block: 0 0.6em;
 }
 
 .about-copy > :last-child {
@@ -241,16 +186,15 @@ main {
 }
 
 .about-intro .response-ending {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
 }
 
 .now-note {
   display: grid;
   gap: 0.5rem;
-  max-width: 34rem;
-  color: var(--ivory-soft);
+  max-width: 70ch;
   font-size: 0.9375rem;
-  line-height: 1.75;
+  line-height: 1.65;
   overflow-wrap: anywhere;
 }
 
@@ -275,13 +219,21 @@ main {
 }
 
 .register-panel {
-  max-width: 34rem;
   background: transparent;
+}
+
+.article-stamp {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .post-list {
   display: grid;
-  gap: 0.375rem;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -291,21 +243,25 @@ main {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(1rem, 3vw, 2rem);
-  align-items: baseline;
+  gap: clamp(0.75rem, 2vw, 1rem);
+  align-items: center;
   min-height: 2.75rem;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
+  transition: background-color 160ms ease-out;
+}
+
+.post-list-item:hover,
+.post-list-item:focus-within {
+  background: rgb(79 115 217 / 8%);
 }
 
 .post-list-item a {
   width: fit-content;
   overflow-wrap: anywhere;
-  color: var(--ivory-soft);
-  font-family: var(--serif);
-  font-size: 1.125rem;
+  color: var(--ink-soft);
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.35;
-  transition: color 240ms var(--ease-out);
+  line-height: 1.2;
 }
 
 .post-list-item a::after {
@@ -314,14 +270,8 @@ main {
   content: "";
 }
 
-.post-list-item:hover a,
-.post-list-item:focus-within a {
-  color: var(--ivory);
-}
-
 time {
-  color: var(--ivory-muted);
-  font-family: var(--sans);
+  color: var(--ink-muted);
   font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -329,50 +279,55 @@ time {
 
 .post-list-item time {
   font-size: 0.8125rem;
-  line-height: 1.35;
-  transition: color 240ms var(--ease-out);
-}
-
-.post-list-item:hover time,
-.post-list-item:focus-within time {
-  color: var(--ivory-soft);
+  line-height: 1.2;
 }
 
 .empty-register {
+  min-height: 10rem;
   margin: 0;
-  color: var(--ivory-muted);
-  font-family: var(--serif);
-  font-size: 1.125rem;
+  padding: 2rem clamp(1.5rem, 3vw, 2.25rem);
+  color: var(--ink-muted);
 }
 
 .reading-article {
-  width: min(100%, 68ch);
+  width: min(100%, 70ch);
   margin-inline: auto;
 }
 
 .post-header {
   display: grid;
-  gap: 1rem;
-  margin-bottom: clamp(3rem, 7vw, 5rem);
-  padding: 0;
-}
-
-.post-header time {
-  color: var(--ivory-soft);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem 2rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 6vw, 4.75rem);
+  padding: clamp(1.5rem, 4vw, 2.75rem) 0;
 }
 
 .post-header h1 {
   margin: 0;
-  font-family: var(--serif);
   font-size: 1.5rem;
-  line-height: 1.4;
+  line-height: 1.16;
   letter-spacing: normal;
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
 
+.post-header time {
+  grid-column: 1;
+}
+
+.article-stamp {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  max-width: 12rem;
+  text-align: right;
+}
+
 .music-link-card {
-  margin: 0 0 clamp(3rem, 7vw, 4.5rem);
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+  padding: 1.125rem 1.25rem;
+  background: rgb(255 255 255 / 38%);
 }
 
 .music-link-card__work,
@@ -381,15 +336,14 @@ time {
 }
 
 .music-link-card__work {
-  font-family: var(--serif);
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   font-weight: 400;
   line-height: 1.4;
 }
 
 .music-link-card__performer {
-  margin-top: 0.25rem;
-  color: var(--ivory-muted);
+  margin-top: 0.2rem;
+  color: var(--ink-muted);
   font-size: 0.875rem;
   line-height: 1.4;
 }
@@ -397,25 +351,20 @@ time {
 .music-link-card__providers {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 1.5rem;
-  margin: 0.5rem 0 0;
+  gap: 0.35rem 1.25rem;
+  margin: 0.9rem 0 0;
   padding: 0;
   list-style: none;
 }
 
 .music-link-card__providers a {
   display: inline-flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
   align-items: center;
   min-height: 2.75rem;
-  color: var(--ivory-soft);
+  color: var(--ink);
   font-size: 0.875rem;
   font-weight: 400;
-  transition: color 240ms var(--ease-out);
-}
-
-.music-link-card__providers a:hover {
-  color: var(--ivory);
 }
 
 .external-link-icon,
@@ -441,7 +390,6 @@ time {
 }
 
 .post-body {
-  color: var(--ivory-soft);
   font-size: 1.0625rem;
   line-height: 1.9;
   overflow-wrap: anywhere;
@@ -452,23 +400,17 @@ time {
 }
 
 .post-body :where(h2, h3, h4) {
-  margin-block: 2.6em 0.8em;
-  color: var(--ivory);
-  font-family: var(--serif);
-  line-height: 1.4;
+  margin-block: 2.4em 0.75em;
+  line-height: 1.35;
   text-wrap: balance;
 }
 
 .post-body h2 {
-  font-size: 1.375rem;
+  font-size: 1.5rem;
 }
 
 .post-body h3 {
-  font-size: 1.1875rem;
-}
-
-.post-body :where(strong, a) {
-  color: var(--ivory);
+  font-size: 1.25rem;
 }
 
 .post-body :where(ul, ol) {
@@ -481,8 +423,8 @@ time {
 
 .post-body blockquote {
   margin-inline: 0;
-  padding: 0 0 0 1.5rem;
-  color: var(--ivory-muted);
+  padding: 1rem 1.25rem;
+  color: var(--ink-muted);
 }
 
 .post-body :where(img, video) {
@@ -500,37 +442,31 @@ time {
 
 .post-body pre {
   max-width: 100%;
-  padding: 0 0 0 1.5rem;
+  padding: 1rem;
   overflow-x: auto;
-  color: var(--ivory-muted);
+  background: rgb(32 35 34 / 7%);
 }
 
 .reading-article > .response-ending {
-  margin-top: clamp(3rem, 7vw, 5rem);
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding-block: 1.5rem;
 }
 
 .post-likes {
-  margin-top: clamp(4rem, 9vw, 6.5rem);
+  margin-top: clamp(3rem, 7vw, 5rem);
 }
 
 .post-likes button {
   display: inline-flex;
-  gap: 0.75rem;
+  gap: 0.65rem;
   align-items: center;
   min-height: 2.75rem;
   padding: 0;
-  color: var(--ivory-soft);
+  color: var(--ink);
   font: inherit;
-  font-size: 0.9375rem;
-  text-shadow: inherit;
   background: transparent;
   border: 0;
   cursor: pointer;
-  transition: color 240ms var(--ease-out);
-}
-
-.post-likes button:hover {
-  color: var(--ivory);
 }
 
 .post-likes button:disabled {
@@ -540,68 +476,73 @@ time {
 
 .post-likes output {
   min-width: 1.5rem;
-  color: var(--ivory-muted);
+  color: var(--ink-muted);
   font-variant-numeric: tabular-nums;
 }
 
-/* One closing action for the bio and every article: ivory text and its
-   icon, nothing around it. Mail leads with the envelope; external
-   destinations end with the top-right arrow. */
+/* One closing invitation for the bio and every article: an optional muted
+   prompt above a square, thin-outline CTA. Mail leads with the envelope;
+   external destinations end with the top-right arrow. */
 .response-ending {
   display: grid;
+  gap: 0.75rem;
   justify-items: start;
+}
+
+.response-ending p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
 }
 
 .response-cta {
   display: inline-flex;
-  gap: 0.55rem;
+  gap: 0.5rem;
   align-items: center;
   min-height: 2.75rem;
-  color: var(--ivory-soft);
-  font-family: var(--sans);
+  padding-inline: 1rem;
+  color: var(--ink);
   font-size: 0.9375rem;
   font-weight: 400;
   line-height: 1;
-  transition: color 240ms var(--ease-out);
+  background: transparent;
+  border: 1px solid var(--rule);
+  transition:
+    background-color 160ms ease-out,
+    border-color 160ms ease-out;
 }
 
 .response-cta:hover {
-  color: var(--ivory);
+  background: rgb(79 115 217 / 8%);
+  border-color: var(--ink);
+}
+
+.response-cta:active {
+  background: rgb(79 115 217 / 14%);
 }
 
 .response-cta svg {
   flex: none;
-  transition: transform 320ms var(--ease-out);
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .response-cta:hover .external-link-icon {
   transform: translate(2px, -2px);
 }
 
-.response-cta:hover .mail-icon {
-  transform: translateX(-2px);
-}
-
 @media (min-width: 64.0625rem) {
   .home-stage {
     display: grid;
-    grid-template-columns: minmax(0, 34rem) minmax(18rem, 1fr);
-    gap: clamp(3rem, 8vw, 9rem);
+    grid-template-columns: minmax(0, 44rem) minmax(18rem, 1fr);
+    gap: clamp(3rem, 7vw, 7rem);
     align-items: stretch;
-    min-height: calc(100svh - 14rem);
+    min-height: calc(100svh - 13rem);
   }
 
   .creative-coding-area {
     display: block;
     min-height: 100%;
-  }
-}
-
-/* Below the two-column stage, text lies across the whole scene; dates
-   step up one tone so they hold contrast over its brightest passages. */
-@media (max-width: 64rem) {
-  time {
-    color: var(--ivory-soft);
   }
 }
 
@@ -611,39 +552,44 @@ time {
   }
 
   .site-header {
-    min-height: 4.5rem;
-    gap: 0 1.25rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-top: 0.5rem;
+  }
+
+  .site-identity {
+    min-height: 3.75rem;
+    padding-block: 0.75rem;
   }
 
   main {
-    padding-block: 2.5rem 4rem;
-  }
-
-  .home-flow {
-    gap: 4rem;
-  }
-
-  .about-copy > p:first-child {
-    font-size: 1.375rem;
-  }
-
-  .post-list {
-    gap: 0.25rem;
+    padding-block: 2rem 3.5rem;
   }
 
   .post-list-item {
     grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem;
+    gap: 0.125rem;
     min-height: 3rem;
+    padding-block: 0.25rem;
   }
 
   .post-list-item time {
     grid-column: 1;
   }
 
-  .post-body blockquote,
-  .post-body pre {
-    padding-left: 1rem;
+  .post-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .post-header time,
+  .article-stamp {
+    grid-row: auto;
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .article-stamp {
+    order: 3;
+    margin-top: 0.25rem;
   }
 }
 
