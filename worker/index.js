@@ -9,6 +9,9 @@ const KNOWN_POST_PATHS = new Set([
   "/zh-TW/blog/bottles/",
   "/zh-TW/blog/covid/",
   "/zh-TW/blog/shino-bottle/",
+  "/zh-TW/blog/third-teapot/",
+  "/zh-TW/blog/offering-cups/",
+  "/zh-TW/blog/november-bottles/",
 ]);
 const RATE_LIMIT = 30;
 
