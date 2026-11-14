@@ -778,3 +778,33 @@
 - Intent: dismiss Programmed Dream and return the site to the last checkpoint before it, `8565623` (Story Journal with the unified outline CTA, 2026-10-18). Restore every changed file except the append-only WORKLOG.md and the hand-kept STATE.md, delete `public/night.js`, record the dismissal in STATE decision 17, and commit forward rather than rewrite history, so `42a431f`..`bb2c621` stay recoverable
 - Why: the user said the design doesn't look right and to dismiss it
 - Result: done. Every file except WORKLOG.md and STATE.md matches `8565623` exactly; `public/night.js` is gone from source and build. Check 0 errors, 40/40 tests
+
+## 2026-11-14 · codex
+- Intent: resume the user's Threads-to-blog sync and record the source-access blocker in STATE.md.
+- Why: only bottles and shino-bottle are imported; the public profile requires login, Chrome navigation and subsequent browser inventory timed out, and the web reader could not access the profile.
+- Result: no new posts or media imported. Next step is to restore browser access to the signed-in @ching56 profile or receive a Threads export/post contents, then import per docs/threads-posts.md and verify before committing.
+
+## 2026-11-14 · codex
+- Intent: import new @ching56 Threads posts since the existing October 17 mirror, combining continuation posts with their roots and preserving photos and source links.
+- Why: native Chrome computer use now reads the signed-in profile successfully; new root posts are Dfoua2kIDoY, DfJEnoYGfQD, and De_vpHiGfGl.
+- Result: in progress — collecting source text, exact dates, and media before creating Markdown and updating the likes allow-list.
+
+## 2026-11-14 · codex
+- Intent: verify the three new untitled imports with the concurrently edited untitled-post implementation, preserving the other session's files and commits.
+- Why: all source text and author continuations are imported, the likes allow-list is updated, and 9 original JPEGs are saved and visually checked. Native Chrome access timed out again before the last 3 of the latest root's 5 photos could be saved. The latest root's date is 2026-11-12 from its decoded permalink timestamp (09:23:09 UTC), matching its media date; the other two dates are visible in the UI.
+- Result: check passes with 0 errors/warnings. Production build/test running; remaining media are latest root photos 3–5. New import files omit title to cooperate with the other Claude session; that session owns shared rendering/schema/feed/tests changes.
+
+## 2026-11-14 · codex
+- Intent: finish the three recent Threads imports and commit only their Markdown, 12 original JPEGs, and likes paths after checking the final production output.
+- Why: native Chrome reconnected and photos 3–5 of the November 12 post are now saved and visually verified. All three posts omit titles as requested and retain their original source links, paragraphs, and author continuations. The separate Claude session owns the untitled-post UI and test update; leave those shared implementation files alone.
+- Result: all media collected. Check passed (0 errors/warnings); initial production build succeeded. Initial test run fails in five built-site tests because fixtures still expect the old titled Threads posts and only six posts, while nine now render. Final build and targeted verification pending; tests remain owned by the concurrent Claude session.
+
+## 2026-11-14 · codex
+- Intent: add only the three imported posts to the existing built-site test fixture array, preserving Claude's concurrent label/preview changes and test logic.
+- Why: final production build and targeted verification pass for all three untitled routes, source dates/links/continuations, and all 12 local responsive photos. The remaining full-suite mismatch includes the fixture inventory, so these imported posts must be represented alongside the existing entries.
+- Result: fixture update pending. Claude still owns untitled rendering and shared test behavior; Codex owns only the new three fixture records.
+
+## 2026-11-14 · codex
+- Intent: record the completed import and leave a precise handoff for the concurrent untitled-post session.
+- Why: all three new posts, author continuations, 12 original JPEGs, and likes paths are committed separately as dd03458. Another session's untitled schema/rendering/feed and shared test changes remain uncommitted and must land before pushing these untitled imports.
+- Result: done — final production build succeeds; check has 0 errors/warnings; 43/43 tests pass on the combined working tree. Targeted checks cover each new route/date/original link/continuation, hidden heading, and all 12 responsive local images; native Chrome preview visually checked. Three new fixture records are left in the shared test file for the concurrent session's test commit. Initial sandbox git write failed; approved external execution staged and committed only the 16 import files. Temporary static-preview server could not bind in the sandbox; the existing localhost:4321 preview loaded successfully. No push/deployment performed.
