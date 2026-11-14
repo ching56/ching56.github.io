@@ -264,6 +264,16 @@ main {
   line-height: 1.2;
 }
 
+/* An untitled Threads post previews its own text on one line. */
+.post-list-item a.post-list-preview {
+  width: auto;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .post-list-item a::after {
   position: absolute;
   inset: 0;
@@ -314,6 +324,11 @@ time {
 
 .post-header time {
   grid-column: 1;
+}
+
+/* An untitled Threads post opens straight into its text. */
+.post-header--untitled {
+  margin-bottom: clamp(1rem, 3vw, 1.75rem);
 }
 
 .article-stamp {

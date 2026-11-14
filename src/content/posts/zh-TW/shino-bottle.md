@@ -1,5 +1,4 @@
 ---
-title: "志野瓶"
 date: 2026-10-17
 language: zh-TW
 threadsUrl: "https://www.threads.com/@ching56/post/DelEZvPlOQ0"

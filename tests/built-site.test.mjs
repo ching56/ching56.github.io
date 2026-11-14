@@ -50,8 +50,11 @@ const expectedPosts = [
     excerpts: ["開始學做茶壺", "Mew 的 farewell", "照顧好自己才能照顧別人"],
   },
   {
+    // Threads mirrors are untitled: the list previews their text and the
+    // browser tab and feed use their first 40 characters.
     slug: "bottles",
-    title: "瓶子",
+    label: "有時候會很喜歡重複做一樣的東西，最近是瓶子。嘗試了不同比例，上釉的方式，目前最喜…",
+    preview: "有時候會很喜歡重複做一樣的東西，最近是瓶子。",
     dateTime: "2026-10-11",
     dateLabel: "2026年10月11日",
     excerpts: [
@@ -62,7 +65,8 @@ const expectedPosts = [
   },
   {
     slug: "shino-bottle",
-    title: "志野瓶",
+    label: "在土胚的階段，我本來不太喜歡這支瓶子，在考慮要不要切開研究剖面然後回收，但是出窯…",
+    preview: "在土胚的階段，我本來不太喜歡這支瓶子，",
     dateTime: "2026-10-17",
     dateLabel: "2026年10月17日",
     excerpts: [
@@ -70,6 +74,30 @@ const expectedPosts = [
       "不抱期待的嘗試最後常常意外表現得很好。",
       "謝謝自己沒有放棄你。",
     ],
+  },
+  {
+    slug: "third-teapot",
+    label: "終於把我的第三把茶壺上好釉了。土胚其實在七月底就已經完成，花了很多心血製作這把茶…",
+    preview: "終於把我的第三把茶壺上好釉了。",
+    dateTime: "2026-10-27",
+    dateLabel: "2026年10月27日",
+    excerpts: ["瓷漿加上白釉", "要成為讓人印象深刻的茶壺唷！", "附上釉的近照"],
+  },
+  {
+    slug: "offering-cups",
+    label: "之前做的東西都是給人類用　第一次做給神明跟祖先用　兩個搶先出窯，燒得極美　一定是…",
+    preview: "之前做的東西都是給人類用　第一次做給神明跟祖先用",
+    dateTime: "2026-10-31",
+    dateLabel: "2026年10月31日",
+    excerpts: ["第一次做給神明跟祖先用", "一定是先跟窯神打過招呼了吧！", "謝謝老師😆"],
+  },
+  {
+    slug: "november-bottles",
+    label: "這週出窯的瓶子們。最喜歡的是第二張照片的瓶子，形狀很棒，肩膀飽滿，口緣微微向外敞…",
+    preview: "這週出窯的瓶子們。",
+    dateTime: "2026-11-12",
+    dateLabel: "2026年11月12日",
+    excerpts: ["上半部密集的結晶像是開滿小花", "三個中心", "是不是拉胚前要做個暖身操比較好🤣"],
   },
 ];
 const expectedMusicLinkCards = [
@@ -227,7 +255,7 @@ test("locale feeds contain every post in that language and no untranslated posts
       const canonicalUrl = `https://jhihcing.li/zh-TW/blog/${post.slug}/`;
 
       return {
-        title: post.title,
+        title: post.title ?? post.label,
         date: post.dateTime,
         updated: lastUpdated(post),
         id: canonicalUrl,
@@ -617,7 +645,7 @@ test("the root route redirects readers by their preferred supported language", a
 });
 
 for (const post of expectedPosts) {
-  test(`a reader can read the complete ${post.title} post`, async () => {
+  test(`a reader can read the complete ${post.title ?? post.slug} post`, async () => {
     const route = `/zh-TW/blog/${post.slug}/`;
     const page = new URL(`${route.slice(1)}index.html`, distDirectory);
     const [listHtml, html] = await Promise.all([
@@ -625,17 +653,35 @@ for (const post of expectedPosts) {
       readFile(page, "utf8"),
     ]);
 
-    assert.match(
-      listHtml,
-      new RegExp(
-        `href="${escapeForRegex(route)}"[^>]*>${escapeForRegex(post.title)}</a>`,
-      ),
-    );
+    if (post.title) {
+      assert.match(
+        listHtml,
+        new RegExp(
+          `href="${escapeForRegex(route)}"[^>]*>${escapeForRegex(post.title)}</a>`,
+        ),
+      );
+      assert.match(
+        html,
+        new RegExp(`<h1[^>]*>${escapeForRegex(post.title)}</h1>`),
+      );
+    } else {
+      // The list previews the post's own text; the article has no visible title.
+      assert.match(
+        listHtml,
+        new RegExp(
+          `class="post-list-preview" href="${escapeForRegex(route)}"[^>]*>${escapeForRegex(post.preview)}`,
+        ),
+      );
+      assert.match(
+        html,
+        new RegExp(`<h1 class="visually-hidden">${escapeForRegex(post.label)}</h1>`),
+      );
+      assert.match(
+        html,
+        new RegExp(`<title>${escapeForRegex(post.label)} · `),
+      );
+    }
     assert.match(html, /<html lang="zh-TW">/);
-    assert.match(
-      html,
-      new RegExp(`<h1[^>]*>${escapeForRegex(post.title)}</h1>`),
-    );
     assert.match(
       html,
       new RegExp(`datetime="${post.dateTime}"[^>]*>${post.dateLabel}</time>`),
@@ -806,6 +852,11 @@ test("the compact frameless content contract stays within its confirmed limits",
   const chineseDocumentRule = css.match(/html:lang\(zh-TW\)\s*\{([^}]*)\}/);
   assert.ok(chineseDocumentRule, "expected zh-TW line-breaking guidance");
   assert.match(chineseDocumentRule[1], /line-break:\s*strict;/);
+
+  const previewRule = css.match(/\.post-list-item a\.post-list-preview\s*\{([^}]*)\}/);
+  assert.ok(previewRule, "expected a CSS rule for untitled post previews");
+  assert.match(previewRule[1], /white-space:\s*nowrap;/);
+  assert.match(previewRule[1], /text-overflow:\s*ellipsis;/);
 
   const articleTitleRule = css.match(/\.post-header h1\s*\{([^}]*)\}/);
   assert.ok(articleTitleRule, "expected a CSS rule for article titles");

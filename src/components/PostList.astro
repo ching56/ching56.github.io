@@ -4,6 +4,7 @@ import {
   byLastUpdated,
   getLastUpdated,
   getPostDate,
+  getPostPreview,
   getPostSlug,
   getPostsByLanguage,
 } from "../lib/posts";
@@ -28,9 +29,18 @@ const posts = (await getPostsByLanguage(language)).sort(byLastUpdated);
 
         return (
           <li class="post-list-item">
-            <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
-              {post.data.title}
-            </a>
+            {post.data.title ? (
+              <a href={`${ui.homePath}blog/${getPostSlug(post)}/`}>
+                {post.data.title}
+              </a>
+            ) : (
+              <a
+                class="post-list-preview"
+                href={`${ui.homePath}blog/${getPostSlug(post)}/`}
+              >
+                {[...getPostPreview(post)].slice(0, 160).join("")}
+              </a>
+            )}
             <time datetime={date.dateTime}>{date.label}</time>
           </li>
         );

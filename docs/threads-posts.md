@@ -1,6 +1,6 @@
 # Posts mirrored from Threads
 
-Some posts are copied from https://www.threads.com/@ching56. They are imported by hand: the author supplies each post's text, date, Threads link, title, and any video files.
+Some posts are copied from https://www.threads.com/@ching56. They are imported by hand: the author supplies each post's text, date, Threads link, and any video files. Threads posts have no title: the homepage list previews the post's own text (one line, cut off with 「…」), the article opens straight into the text, and the browser tab and feed use its first 40 characters.
 
 ## Add a post
 
@@ -8,7 +8,6 @@ Some posts are copied from https://www.threads.com/@ching56. They are imported b
 
    ```markdown
    ---
-   title: "作者寫的標題"
    date: 2026-03-14
    language: zh-TW
    threadsUrl: "https://www.threads.com/@ching56/post/<id>"

@@ -4,7 +4,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPostDate, getPostSlug } from "../lib/posts";
+import { getPostDate, getPostLabel, getPostSlug } from "../lib/posts";
 import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
 import ResponseEnding from "./ResponseEnding.astro";
@@ -36,17 +36,24 @@ const translatedPostPath = translatedPost
   ? `/${translatedPost.data.language}/blog/${slug}/`
   : undefined;
 const ui = UI[post.data.language];
+const label = getPostLabel(post);
 ---
 
 <BaseLayout
-  title={post.data.title}
+  title={label}
   language={post.data.language}
   alternates={alternates}
   languageSwitchPath={translatedPostPath}
 >
   <article class="reading-article">
-    <header class="post-header">
-      <h1>{post.data.title}</h1>
+    <header class:list={["post-header", { "post-header--untitled": !post.data.title }]}>
+      {
+        post.data.title ? (
+          <h1>{post.data.title}</h1>
+        ) : (
+          <h1 class="visually-hidden">{label}</h1>
+        )
+      }
       <time datetime={date.dateTime}>{date.label}</time>
       <span class="article-stamp" aria-hidden="true">
         {post.data.language.toUpperCase()} · {date.dateTime}

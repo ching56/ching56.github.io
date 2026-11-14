@@ -6,6 +6,7 @@ import {
 import { SITE } from "../config/site.js";
 import {
   getLastUpdated,
+  getPostLabel,
   getPostSlug,
   getPostsByLanguage,
 } from "./posts";
@@ -28,7 +29,7 @@ export async function buildAtomFeed(language: SiteLanguage) {
     ).href;
 
     return `  <entry>
-    <title>${escapeXml(post.data.title)}</title>
+    <title>${escapeXml(getPostLabel(post))}</title>
     <id>${postUrl}</id>
     <link rel="alternate" href="${postUrl}" type="text/html" hreflang="${language}" />
     <published>${publishedAt}</published>

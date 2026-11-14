@@ -69,7 +69,8 @@ const posts = defineCollection({
   }),
   schema: z
     .object({
-      title: z.string(),
+      // Threads mirrors go untitled; their opening words stand in for a title.
+      title: z.string().min(1).optional(),
       date: z.coerce.date(),
       // The last time the author tended the entry; omitted means never revised.
       updated: z.coerce.date().optional(),
@@ -78,6 +79,10 @@ const posts = defineCollection({
       published: z.boolean().default(true),
       threadsUrl: threadsPostUrl.optional(),
       musicLinkCard: musicLinkCard.optional(),
+    })
+    .refine(({ title, threadsUrl }) => title || threadsUrl, {
+      message: "title is required unless the post is mirrored from Threads",
+      path: ["title"],
     })
     .refine(({ date, updated }) => !updated || updated >= date, {
       message: "updated cannot precede date",

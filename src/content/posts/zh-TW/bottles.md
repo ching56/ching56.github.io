@@ -1,5 +1,4 @@
 ---
-title: "瓶子"
 date: 2026-10-11
 language: zh-TW
 threadsUrl: "https://www.threads.com/@ching56/post/DeVoJfdIL2o"

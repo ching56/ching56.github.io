@@ -779,6 +779,7 @@
 - Why: the user said the design doesn't look right and to dismiss it
 - Result: done. Every file except WORKLOG.md and STATE.md matches `8565623` exactly; `public/night.js` is gone from source and build. Check 0 errors, 40/40 tests
 
+
 ## 2026-11-14 · codex
 - Intent: resume the user's Threads-to-blog sync and record the source-access blocker in STATE.md.
 - Why: only bottles and shino-bottle are imported; the public profile requires login, Chrome navigation and subsequent browser inventory timed out, and the web reader could not access the profile.
@@ -788,6 +789,10 @@
 - Intent: import new @ching56 Threads posts since the existing October 17 mirror, combining continuation posts with their roots and preserving photos and source links.
 - Why: native Chrome computer use now reads the signed-in profile successfully; new root posts are Dfoua2kIDoY, DfJEnoYGfQD, and De_vpHiGfGl.
 - Result: in progress — collecting source text, exact dates, and media before creating Markdown and updating the likes allow-list.
+
+## 2026-11-14 · claude-code
+- Intent: let Threads-mirrored posts go untitled. Schema: `title` optional, required unless `threadsUrl` is set. New `getPostPreview()` / `getPostLabel()` in `src/lib/posts.ts` turn the body into plain text (no images, video, tags, CJK-safe spacing). Homepage list shows the preview for untitled posts on one line with a CSS ellipsis; the article drops the visible h1 (a visually hidden h1 keeps the document outline); `<title>` and Atom use the first 40 characters + 「…」. Remove `title` from `bottles.md` and `shino-bottle.md`; update tests and `docs/threads-posts.md`. Codex is importing new Threads posts in parallel — do not touch its new post files, media, `worker/index.js`, or its uncommitted STATE.md/WORKLOG.md lines
+- Why: user asked that Threads articles need no title, existing Threads titles be removed, and the list preview the post directly, ellipsized when too long
 
 ## 2026-11-14 · codex
 - Intent: verify the three new untitled imports with the concurrently edited untitled-post implementation, preserving the other session's files and commits.
@@ -808,3 +813,6 @@
 - Intent: record the completed import and leave a precise handoff for the concurrent untitled-post session.
 - Why: all three new posts, author continuations, 12 original JPEGs, and likes paths are committed separately as dd03458. Another session's untitled schema/rendering/feed and shared test changes remain uncommitted and must land before pushing these untitled imports.
 - Result: done — final production build succeeds; check has 0 errors/warnings; 43/43 tests pass on the combined working tree. Targeted checks cover each new route/date/original link/continuation, hidden heading, and all 12 responsive local images; native Chrome preview visually checked. Three new fixture records are left in the shared test file for the concurrent session's test commit. Initial sandbox git write failed; approved external execution staged and committed only the 16 import files. Temporary static-preview server could not bind in the sandbox; the existing localhost:4321 preview loaded successfully. No push/deployment performed.
+
+## 2026-11-14 · claude-code
+- Result (untitled Threads posts): done. Titles removed from `bottles` and `shino-bottle`; Codex's three imports were already untitled. Previews join a line or paragraph break that ends in punctuation and turn any other break into one ideographic space, so lines like 「給人類用　第一次做給神明」 don't run together; untitled article headers are tightened. Updated Codex's three fixture labels to match. Verified in an isolated copy of the tree (Codex was building into the shared `dist/` at the same time): check 0 errors/warnings, 43/43 tests; list checked at 1440px and 500px, article at 1440px
