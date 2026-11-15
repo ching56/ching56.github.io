@@ -23,7 +23,7 @@ const {
   alternates = [],
   languageSwitchPath = UI[language].languageSwitch.href,
 } = Astro.props;
-const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
+const pageTitle = title ? `${title}　${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
 const atomFeedUrl = getAtomFeedUrl(language);
 const ui = UI[language];

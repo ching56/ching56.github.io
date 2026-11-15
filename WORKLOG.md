@@ -816,3 +816,8 @@
 
 ## 2026-11-14 · claude-code
 - Result (untitled Threads posts): done. Titles removed from `bottles` and `shino-bottle`; Codex's three imports were already untitled. Previews join a line or paragraph break that ends in punctuation and turn any other break into one ideographic space, so lines like 「給人類用　第一次做給神明」 don't run together; untitled article headers are tightened. Updated Codex's three fixture labels to match. Verified in an isolated copy of the tree (Codex was building into the shared `dist/` at the same time): check 0 errors/warnings, 43/43 tests; list checked at 1440px and 500px, article at 1440px
+
+## 2026-11-15 · claude-code
+- Intent: remove the " · " separator from the blog: the page title ("Title · 李至青的部落格") and the article stamp ("ZH-TW · date"); separate with an ideographic space instead, and update the two test assertions that encode the old format.
+- Why: the user said "Never use this separator" (applies across their projects; dream-room prototypes already converted). The blog already uses U+3000 to join untitled previews, so it is the house separator.
+- Result: done — astro check 0 errors/warnings, production build 11 pages, 43/43 tests pass. No other separator remains in src/ or tests/ text files. Not pushed.

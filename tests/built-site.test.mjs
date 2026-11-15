@@ -389,7 +389,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   );
   assert.doesNotMatch(
     chineseList,
-    /最近更新|5 篇文章|class="register-(?:update|stamp|year)"|ZH-TW ·/,
+    /最近更新|5 篇文章|class="register-(?:update|stamp|year)"|ZH-TW　/,
   );
   assert.equal(
     [...chineseList.matchAll(/<li class="post-list-item">/g)].length,
@@ -678,7 +678,7 @@ for (const post of expectedPosts) {
       );
       assert.match(
         html,
-        new RegExp(`<title>${escapeForRegex(post.label)} · `),
+        new RegExp(`<title>${escapeForRegex(post.label)}　`),
       );
     }
     assert.match(html, /<html lang="zh-TW">/);
