@@ -335,10 +335,8 @@ test("the approved continuous journal structure is semantic across reading surfa
         /<nav class="site-identity" aria-label="(?:目前位置|You are here)">\s*<ol class="site-crumbs">\s*<li>\s*<a class="site-mark" href="\/(?:zh-TW|en)\/" aria-label="(?:首頁|Home)">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<\/a>\s*<\/li>/,
       );
       assert.doesNotMatch(html, /class="author-signature"/);
-      if (html === chinesePost) {
-        // On an article, the crumb after the bottle is the post's date.
-        assert.match(html, /<li class="site-crumb" aria-current="page">\s*<span class="crumb-title">2026\/10\/11<\/span>/);
-      }
+      // The header holds only the bottle for now.
+      assert.doesNotMatch(html, /class="site-crumb"/);
     }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);

@@ -1127,3 +1127,6 @@
 - Intent: remove the header's language switch (`[ English ]` / `[ 繁體中文 ]`): the site-nav, the languageSwitchPath prop and its plumbing in PostArticle, the .language-link styles, and the i18n languageSwitch strings; hreflang alternates in <head> stay. Tests that expected the switch now assert its absence
 - Why: user: "Remove English button"
 - Result: done; also dropped the unused navigationLabel strings and the Language Link component from the docs; renamed the language test to what it now checks. yarn run check clean, 41/41 tests
+
+## 2026-11-20 04:05 · claude-code
+- Intent/Result: the article header's breadcrumb drops the date; only the bottle (home link) remains. The layout keeps the optional `crumb` step. User: "拿掉 breadcrumb 裡的日期好了"
