@@ -1042,3 +1042,8 @@
 - Intent: (1) ship the blinking block cursor at the end of the homepage greeting ("…歡迎來到我的做陶日記 :)"), as a CSS ::after on the greeting paragraph: one cell wide, ink, blinking at 1.06s in two steps, steady under reduced motion; (2) remove the 紙片延伸 group (grid, tui, cursor, window) from the dev panel, keeping bbs as the base of the 反白延伸 group
 - Why: user: "我喜歡游標的概念，幫我加在 歡迎來到我的做陶日記 🙂 最後方" and "移除其他的延伸"
 - Result: done. The greeting ends in a 1ch × 1.15em ink block blinking (caret-blink, two steps over 1.06s), steady under reduced motion; it follows whatever the about.md greeting says. Panel: 紙片延伸 removed; 反白延伸 now lists 反白 (bbs) plus kiln, negative, seal, giveway, wetink, each checked after docking (kiln translucent ink with a 6px backdrop blur and the text hazy behind; negative a backdrop invert; seal a red chop with the bottle cut out; wetink lands blurred and sets sharp). yarn run check clean, 40/40 tests
+
+## 2026-11-20 00:30 · claude-code
+- Intent: add a box-shadow docked-header candidate, concept first: 壓印 (impressed), the potter's stamp pressed into soft clay, so the paper patch reads as a recess in the page (inset shadows: dark at the top inner edge, a light lip at the bottom) with the mark in it. Dev only; it breaks DESIGN.md's Flat Paper Rule, so it stays a candidate until chosen
+- Why: user: "也用一個 box shadow 的 variant"
+- Result: done (dev only). First pass was too faint to read; deepened to a #eee patch with a 3px/6px top inset shadow, a softer left inset and a light bottom lip. Verified after docking (another dev-server restart was needed for the panel stylesheet). yarn run check clean

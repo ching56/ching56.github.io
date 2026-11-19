@@ -134,6 +134,7 @@
       <label><input type="radio" name="header-variant" value="signed" />3 署名列</label>
       <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
       <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
+      <label><input type="radio" name="header-variant" value="impressed" />6 壓印</label>
     </div>
     <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
@@ -655,6 +656,7 @@
     :global(html[data-header="chip"] .home-stage::before),
     :global(html[data-header="margin"] .home-stage::before),
     :global(html[data-header="bbs"] .home-stage::before),
+    :global(html[data-header="impressed"] .home-stage::before),
     :global(html[data-header="kiln"] .home-stage::before),
     :global(html[data-header="negative"] .home-stage::before),
     :global(html[data-header="seal"] .home-stage::before),
@@ -665,6 +667,18 @@
       left: calc(var(--edge) + var(--logo-left) - 8px);
       width: calc(var(--logo-width) + 16px);
       height: calc(var(--logo-height) + 16px);
+    }
+
+    /* 6: impressed, like a potter's stamp pressed into soft clay: the patch
+       is a recess in the page, shadowed along its top inner edge with a
+       light lip below, and the mark sits in it. (Breaks the Flat Paper
+       Rule on purpose; a candidate only.) */
+    :global(html[data-header="impressed"] .home-stage::before) {
+      background: rgb(238 238 238);
+      box-shadow:
+        inset 0 3px 6px rgb(20 20 20 / 38%),
+        inset 2px 0 4px rgb(20 20 20 / 14%),
+        inset 0 -1px 0 rgb(255 255 255 / 95%);
     }
 
     /* Reverse video (BBS): the mark as a highlighted cell. */
