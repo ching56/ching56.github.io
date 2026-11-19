@@ -826,3 +826,7 @@
 - Intent: drop the site header (signature + locale switch) from the zh-TW homepage only, and replace the two-line bio with the single greeting 「嗨，我是至青。我喜歡捏陶跟做網站，歡迎來到我的做陶日記 :)」 set as the homepage hero (1.5rem, the type ceiling). Article pages keep the header so readers can still get home.
 - Why: user asked to remove the header and use one greeting + self-intro as the main hero.
 - Result: done — `yarn run check` 0 errors/warnings; 43/43 tests pass (homepage tests now assert no `<header>` and the new greeting). Viewed at 375px, 800px and 1440px; `word-break: keep-all` added so the hero breaks only at 。and ，. Not pushed.
+
+## 2026-11-19 · claude-code
+- Intent: set the homepage greeting hero to `font-size: 1rem` as the user specified.
+- Result: done — 43/43 tests pass; greeting now fits on one line at 800px. Not pushed.
