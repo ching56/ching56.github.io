@@ -13,8 +13,6 @@
   --diary-date-system-font: "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive;
   --diary-date-font: var(--diary-date-system-font);
   --type-size: 0.9375rem;
-  /* The width of the margin that holds step numbers, in character cells. */
-  --gutter: 5ch;
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
@@ -391,14 +389,8 @@ main {
 
 /* ---------- Introduction and now note ---------- */
 
-/* Typed text starts one gutter in, past the step-number margin. */
-.about-intro,
-.now-note {
-  margin-inline-start: var(--gutter);
-}
-
 .about-intro {
-  width: min(100% - var(--gutter), 70ch);
+  width: min(100%, 70ch);
   scroll-margin-block-start: 1rem;
 }
 
@@ -490,36 +482,14 @@ time {
   gap: 4rem;
 }
 
-/* Step numbers hang in the left margin like a typed manuscript's line
-   numbers; everything else starts one gutter in. */
 .diary-entry {
   display: grid;
-  grid-template-columns: var(--gutter) minmax(0, 1fr);
-  gap: 0.75rem 0;
-  align-items: baseline;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
   min-width: 0;
 }
 
-.diary-entry > * {
-  grid-column: 2;
-}
-
-.diary-step {
-  grid-row: 1;
-  grid-column: 1;
-  margin: 0;
-  color: var(--ribbon);
-  font-size: var(--type-size);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.diary-step::after {
-  content: ".";
-}
-
 .diary-date {
-  grid-row: 1;
   margin: 0;
   font-family: var(--diary-date-font);
   font-size: 1.5rem;
@@ -833,11 +803,7 @@ time {
 /* ---------- Reading an entry ---------- */
 
 .reading-article {
-  width: min(100%, calc(64ch + var(--gutter)));
-}
-
-.reading-article > * {
-  margin-inline-start: var(--gutter);
+  width: min(100%, 64ch);
 }
 
 .post-header {
@@ -847,18 +813,9 @@ time {
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
-/* The step number hangs in the margin on the date's line. */
-.post-header .diary-step {
-  grid-row: 1;
-  grid-column: 1;
-  align-self: baseline;
-  margin-inline-start: calc(var(--gutter) * -1);
-}
-
+/* The date heads the entry, above its title. */
 .post-header .diary-date {
   grid-row: 1;
-  grid-column: 1;
-  align-self: baseline;
 }
 
 .post-header h1 {
@@ -1019,7 +976,7 @@ time {
 
 /* Brackets hang one cell into the margin so the label sits on cell zero. */
 .reading-article > .post-likes {
-  margin-inline-start: calc(var(--gutter) - 1ch);
+  margin-inline-start: -1ch;
 }
 
 .post-likes button {
@@ -1099,10 +1056,6 @@ time {
 }
 
 @media (max-width: 48rem) {
-  :root {
-    --gutter: 4ch;
-  }
-
   .site-shell {
     width: min(100% - 2rem, 42rem);
   }

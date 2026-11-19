@@ -40,10 +40,9 @@ const posts = (await getPostsByLanguage(language)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 const entries = await Promise.all(
-  posts.map(async (post, index) => ({
+  posts.map(async (post) => ({
     post,
     // Entries are numbered as steps of one making process, oldest first.
-    step: String(posts.length - index).padStart(2, "0"),
     slug: getPostSlug(post),
     date: getPostDate(post.data.date, language),
     photos: await getPhotos(post),
@@ -57,9 +56,8 @@ const entries = await Promise.all(
   {entries.length === 0 ? (
     <p class="empty-register">{ui.emptyPostsMessage}</p>
   ) : (
-    entries.map(({ post, step, slug, date, photos, Content }) => (
+    entries.map(({ post, slug, date, photos, Content }) => (
       <article class="diary-entry">
-        <p class="diary-step"><span class="visually-hidden">步驟 </span>{step}</p>
         <h2 class="diary-date">
           <a href={`${ui.homePath}blog/${slug}/`}>
             <time datetime={date.dateTime}>{date.dateTime.replaceAll("-", "/")}</time>

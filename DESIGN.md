@@ -46,8 +46,6 @@ typography:
     letterSpacing: "0.08em"
 rounded: {}
 spacing:
-  gutter: "5ch"
-  gutter-narrow: "4ch"
   control-height: "2.75rem"
   diary-gap: "4rem"
 components:
@@ -62,10 +60,6 @@ components:
     textColor: "{colors.ink-muted}"
     typography: "{typography.label}"
     height: "2.75rem"
-  diary-step:
-    textColor: "{colors.ribbon}"
-    typography: "{typography.type-cell}"
-    width: "5ch"
   diary-date:
     textColor: "{colors.ink}"
     typography: "{typography.date}"
@@ -98,13 +92,13 @@ components:
 
 The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.
 
-Hierarchy comes from the cell grid, not from size. Step numbers hang in a margin gutter like manuscript line numbers, and controls are struck as `[ label ]` brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio (direction contract).
+Hierarchy comes from the cell grid, not from size. Controls are struck as `[ label ]` brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio (direction contract).
 
 **Key Characteristics:**
 
 - Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
 - One monospace stack for every typed cell; no webfonts, no `@font-face`.
-- A fixed margin gutter (5ch, 4ch on narrow screens) holds red step numbers; all other text starts on cell zero.
+- All text starts flush on the column's left edge; only control brackets hang one cell into the margin.
 - Pictures exist twice: as glyph art struck from the photo, and as the photo itself, cross-developed on scroll.
 - Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil.
 
@@ -113,7 +107,7 @@ Hierarchy comes from the cell grid, not from size. Step numbers hang in a margin
 Five inks on white paper. The ribbon red is rare by design and always appears as a mark, never as a surface.
 
 ### Primary
-- **Ribbon Red** (`#c4161c`): Control brackets, step numbers, hover state of controls and titles, text selection background, the underline of body links, the focus outline of photo thumbnails, pressed-like-state likes count.
+- **Ribbon Red** (`#c4161c`): Control brackets, hover state of controls and titles, text selection background, the underline of body links, the focus outline of photo thumbnails, pressed-like-state likes count.
 
 ### Neutral
 - **Struck White Paper** (`#ffffff`): Page, platen band, glyph-art backing, buttons-as-paper, lightbox (veiled at 97%).
@@ -121,7 +115,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
 
 ### Named Rules
-**The Single Ribbon Rule.** Red is struck only as a mark: brackets, step numbers, hover, selection, link underline. It never fills a block or sets paragraph text.
+**The Single Ribbon Rule.** Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.
 
 **The White Paper Rule.** The paper is pure white; do not tint it. Every veil, backing, and band uses the same paper value.
 
@@ -135,14 +129,14 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 ### Hierarchy
 - **Display** (400, `1.5rem`, 1.3): Article title (`h1`). This is also the type ceiling.
 - **Date** (handwriting, 400, `1.5rem`, 1.2, 0.02em): The diary entry date, in the feed and in the article header. The only handwriting.
-- **Body** (400, `1rem`, 1.9): Long-form article prose in a 64ch column (plus gutter).
-- **Type Cell** (400, `0.9375rem` as `--type-size`, 1.75): Feed text, intro and now note, controls, step numbers, response prompts.
+- **Body** (400, `1rem`, 1.9): Long-form article prose in a 64ch column.
+- **Type Cell** (400, `0.9375rem` as `--type-size`, 1.75): Feed text, intro and now note, controls, response prompts.
 - **Metadata** (`0.875rem`): Generic `time`, performer line, music provider links.
 - **Label** (`0.8125rem`): Language link, intro sub-headings (0.1em tracking, muted), English list dates.
 - **Signature** (`0.9375rem`, 0.08em tracking): The author name beside the docked bottle.
 
 ### Named Rules
-**The One Cell Rule.** Everything typed uses the single monospace stack; text widths are measured in `ch` (gutter 5ch, measures 64ch and 70ch).
+**The One Cell Rule.** Everything typed uses the single monospace stack; text widths are measured in `ch` (measures 64ch and 70ch).
 
 **The Handwritten Date Rule.** Only dates take `--diary-date-font`. No other element may borrow it.
 
@@ -156,9 +150,9 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 
 ## Layout
 
-One centered shell, `min(100% - clamp(2rem, 5vw, 5rem), 82rem)`, with main padding `clamp(3rem, 7vw, 6.75rem)`. The gutter (`--gutter`, 5ch; 4ch at 48rem and below, where the shell narrows to `min(100% - 2rem, 42rem)` and main padding to `2rem 3.5rem`) is the margin that holds step numbers; everything else, including all typed text, starts at cell zero one gutter in.
+One centered shell, `min(100% - clamp(2rem, 5vw, 5rem), 82rem)`, with main padding `clamp(3rem, 7vw, 6.75rem)`. At 48rem and below the shell narrows to `min(100% - 2rem, 42rem)` and main padding to `2rem 3.5rem`. All typed text starts flush on the column edge; there is no index gutter.
 
-The zh-TW home is a column of the bottle hero (40dvh slot), introduction (max 70ch), now note, and the numbered diary feed (entries 4rem apart). Above `64.0625rem` it becomes two columns, a 44rem content column and a reserved empty creative-coding region at least 18rem wide. Articles are 64ch plus gutter, with the step number hanging in the margin on the date line. Photos for a feed entry sit in a row below the text, `12rem` tall, wrapping by default, swiping with scroll-snap on touch, and a no-wrap row with typed `[<]` `[>]` scroll buttons where `::scroll-button` is supported with a fine pointer.
+The zh-TW home is a column of the bottle hero (40dvh slot), introduction (max 70ch), now note, and the diary feed (entries 4rem apart). Above `64.0625rem` it becomes two columns, a 44rem content column and a reserved empty creative-coding region at least 18rem wide. Articles are 64ch, with the date above the title. Photos for a feed entry sit in a row below the text, `12rem` tall, wrapping by default, swiping with scroll-snap on touch, and a no-wrap row with typed `[<]` `[>]` scroll buttons where `::scroll-button` is supported with a fine pointer.
 
 Minimum control height is `2.75rem`. English register is a plain list (see Components).
 
@@ -177,8 +171,8 @@ Rectilinear and unframed. Brackets are the only container device: `[` and `]` ch
 ### Bracket Controls
 Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, regular-weight ink label at the type-cell size, with the brackets in ribbon red. Hover turns the label ribbon red over 120ms ease-out. Press sinks the control by 1px (`translate: 0 1px`). Applies to the response CTA (mail and Threads), the language link (muted ink, 0.8125rem), the likes button, and music provider links. Controls hang one cell into the margin (`-1ch`) so the label lands on cell zero.
 
-### Numbered Diary Entry
-A two-column grid: a 5ch gutter holding the ribbon-red step number with a trailing `.`, then the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
+### Diary Entry
+A single column: the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
 ### Glyph Bottle
 A turntable of 21 character-art frames. On the home page it sits pinned over a 40dvh slot; across the first 40dvh of scrolling it steps through frames, leans to -45deg, shrinks into the top-left corner, and crossfades from the ramp-shaded art to a solid silhouette struck in `█`. That docked form is the logo on every other page. It turns ribbon red on hover. Header height is `6rem` (5rem narrow).
@@ -205,7 +199,7 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 
 ### Do:
 - **Do** set everything in the one monospace stack at weight 400, with hierarchy from scale, ink tone, and grid position.
-- **Do** keep step numbers in the 5ch gutter (4ch at 48rem and below) and start all other text at cell zero.
+- **Do** start all text flush on the column edge; entries carry no index.
 - **Do** strike controls as `[ label ]` with ribbon-red brackets and a 1px press sink.
 - **Do** write scroll-driven animations as longhands and gate them on `@supports` and `prefers-reduced-motion: no-preference`.
 - **Do** render every article photo with a glyph twin and let the photo develop from it on scroll.

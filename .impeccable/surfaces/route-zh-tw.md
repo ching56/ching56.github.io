@@ -8,8 +8,8 @@ related_targets: ["route:/en","route:/zh-TW/blog/[slug]","route:/en/blog/[slug]"
 # Character Proof reading surfaces
 
 - Scope: `/zh-TW/`, `/en/`, and locale articles. Visitor mode is Experience on the zh-TW homepage (the diary itself leads) and Read on articles.
-- Audience/job: zh-TW friends and pottery-curious readers, mostly on phones. They meet the potter in one greeting, follow the numbered making steps, look at the work, and respond on Threads or by mail.
-- Direction: typewriter character art on white paper, fused with the user-pinned "grid alignment, numbered steps, the diary as the process of making the pot". Contract seed `9062ef67`.
+- Audience/job: zh-TW friends and pottery-curious readers, mostly on phones. They meet the potter in one greeting, follow the making of each piece, look at the work, and respond on Threads or by mail.
+- Direction: typewriter character art on white paper, fused with the user-pinned "grid alignment, numbered steps, the diary as the process of making the pot". Contract seed `9062ef67`. Later trimmed by the user: no carriage scale, no step numbers.
 - Memorable moment: the glyph bottle turns, leans and is struck solid into the home mark as you scroll. Each photo row arrives as typed glyphs and develops into the photograph.
 - Must survive any later refinement: the bottle hero→logo, and the diary-feed form (handwritten dates, 10-line clamp, swipe/arrow/wrap photo row, popover lightbox).
 - Constraints:

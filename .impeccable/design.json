@@ -33,7 +33,7 @@
       "display": { "displayName": "Entry Title", "purpose": "Article h1; also the 1.5rem type ceiling." },
       "date": { "displayName": "Handwritten Date", "purpose": "Diary entry dates only. The face is an open user decision; the stack is a placeholder." },
       "body": { "displayName": "Reading Body", "purpose": "Article prose in a 64ch column." },
-      "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, step numbers (--type-size)." },
+      "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, (--type-size)." },
       "metadata": { "displayName": "Metadata", "purpose": "Generic time, performer line, provider links." },
       "label": { "displayName": "Label", "purpose": "Language link, intro sub-headings, English list dates." },
       "signature": { "displayName": "Author Signature", "purpose": "The author name beside the docked bottle." }
@@ -70,12 +70,12 @@
       "css": ".ds-lang { display: inline-flex; gap: 0.5ch; align-items: center; min-height: 2.75rem; color: var(--ink-muted, #5f5f5f); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; font-size: 0.8125rem; font-weight: 400; line-height: 1; text-decoration: none; transition: color 120ms ease-out; } .ds-lang::before { color: var(--ribbon, #c4161c); content: \"[\"; } .ds-lang::after { color: var(--ribbon, #c4161c); content: \"]\"; } .ds-lang:hover { color: var(--ribbon, #c4161c); } .ds-lang:active { translate: 0 1px; } .ds-lang:focus-visible { outline: 1px dashed var(--ink, #141414); outline-offset: 4px; }"
     },
     {
-      "name": "Numbered Diary Entry",
+      "name": "Diary Entry",
       "kind": "card",
-      "refersTo": "diary-step",
-      "description": "Red step number hangs in the 5ch gutter beside a handwritten date and clamped typed text.",
-      "html": "<article class=\"ds-entry\"><p class=\"ds-step\">12</p><p class=\"ds-date\">11月 8日</p><div class=\"ds-text\"><p>今天把瓶子上了第一層釉。</p></div></article>",
-      "css": ".ds-entry { display: grid; grid-template-columns: 5ch minmax(0, 1fr); gap: 0.75rem 0; align-items: baseline; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-entry > * { grid-column: 2; } .ds-step { grid-row: 1; grid-column: 1; margin: 0; color: var(--ribbon, #c4161c); font-size: 0.9375rem; line-height: 1; font-variant-numeric: tabular-nums; } .ds-step::after { content: \".\"; } .ds-date { grid-row: 1; margin: 0; font-family: \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
+      "refersTo": "diary-entry",
+      "description": "A handwritten date heads clamped typed text in a single column.",
+      "html": "<article class=\"ds-entry\"><p class=\"ds-date\">11月 8日</p><div class=\"ds-text\"><p>今天把瓶子上了第一層釉。</p></div></article>",
+      "css": ".ds-entry { display: grid; gap: 0.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-date { margin: 0; font-family: \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
     },
     {
       "name": "Glyph Photo",
@@ -96,18 +96,18 @@
   ],
   "narrative": {
     "northStar": "Character Proof",
-    "overview": "The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Step numbers hang in a margin gutter like manuscript line numbers, and controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
+    "overview": "The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
       "Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
       "One monospace stack for every typed cell; no webfonts, no @font-face.",
-      "A fixed margin gutter (5ch, 4ch on narrow screens) holds red step numbers; all other text starts on cell zero.",
+      "All text starts flush on the column edge; only control brackets hang one cell into the margin.",
       "Pictures exist twice: as glyph art struck from the photo, and as the photo itself, cross-developed on scroll.",
       "Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil."
     ],
     "rules": [
-      { "name": "The Single Ribbon Rule", "body": "Red is struck only as a mark: brackets, step numbers, hover, selection, link underline. It never fills a block or sets paragraph text.", "section": "colors" },
+      { "name": "The Single Ribbon Rule", "body": "Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.", "section": "colors" },
       { "name": "The White Paper Rule", "body": "The paper is pure white; do not tint it. Every veil, backing, and band uses the same paper value.", "section": "colors" },
-      { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (gutter 5ch, measures 64ch and 70ch).", "section": "typography" },
+      { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (measures 64ch and 70ch).", "section": "typography" },
       { "name": "The Handwritten Date Rule", "body": "Only dates take --diary-date-font. No other element may borrow it.", "section": "typography" },
       { "name": "The Type Ceiling Rule", "body": "Nothing exceeds 1.5rem.", "section": "typography" },
       { "name": "The No Webfont Rule", "body": "System faces only; no @font-face. A test enforces this.", "section": "typography" },
@@ -115,7 +115,7 @@
     ],
     "dos": [
       "Do set everything in the one monospace stack at weight 400, with hierarchy from scale, ink tone, and grid position.",
-      "Do keep step numbers in the 5ch gutter (4ch at 48rem and below) and start all other text at cell zero.",
+      "Do start all text flush on the column edge; entries carry no index.",
       "Do strike controls as [ label ] with ribbon-red brackets and a 1px press sink.",
       "Do write scroll-driven animations as longhands and gate them on @supports and prefers-reduced-motion: no-preference.",
       "Do render every article photo with a glyph twin and let the photo develop from it on scroll.",

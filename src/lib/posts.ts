@@ -98,10 +98,3 @@ export function getPostDate(date: Date, language: PostLanguage) {
   };
 }
 
-// A post's place in the making process: 1 for the oldest published post.
-export async function getPostStep(post: CollectionEntry<"posts">) {
-  const posts = (await getPostsByLanguage(post.data.language)).sort(
-    (a, b) => a.data.date.getTime() - b.data.date.getTime(),
-  );
-  return String(posts.findIndex((candidate) => candidate.id === post.id) + 1).padStart(2, "0");
-}

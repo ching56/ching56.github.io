@@ -886,3 +886,8 @@
 - Intent: remove the carriage scale (CarriageScale.astro, its CSS, its uses in DiaryFeed and PostArticle) and its mentions in the contract comment, DESIGN.md, design.json and STATE
 - Why: the user judged it "redundant and meaningless" on the homepage; it also clipped its last number ("5" of 50). The typed mail bracket was explicitly approved and stays
 - Result: done; the --ink-faint token went with it (no other use). yarn run check clean, 40/40 tests
+
+## 2026-11-19 16:35 · claude-code
+- Intent: remove the step numbers from feed entries and article headers (DiaryFeed, PostArticle, getPostStep, .diary-step CSS, the test), and the --gutter margin that existed only to hold them, so typed text starts flush with the bottle's column edge
+- Why: user: "we don't need the index"
+- Result: done; --gutter removed, text now starts flush on the column edge, brackets still hang 1ch. DESIGN.md, design.json, route brief and contract comment updated. yarn run check clean, 40/40 tests

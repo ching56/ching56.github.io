@@ -730,12 +730,11 @@ test("the zh-TW homepage is a diary feed, newest entry first, with lightbox phot
 
   assert.deepEqual(actual, expected);
 
-  for (const [index, entry] of entries.entries()) {
+  for (const entry of entries) {
     assert.match(entry, /<h2 class="diary-date">/);
     assert.match(entry, /<div class="diary-text">/);
-    // Entries are numbered as making steps, oldest first.
-    const step = String(entries.length - index).padStart(2, "0");
-    assert.match(entry, new RegExp(`<p class="diary-step"><span class="visually-hidden">步驟 </span>${step}</p>`));
+    // Entries carry no index; the date alone heads each one.
+    assert.doesNotMatch(entry, /diary-step/);
 
     // Every thumbnail carries its typed glyph rendering for the develop effect.
     assert.equal(

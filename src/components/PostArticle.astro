@@ -4,7 +4,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPostDate, getPostLabel, getPostSlug, getPostStep } from "../lib/posts";
+import { getPostDate, getPostLabel, getPostSlug } from "../lib/posts";
 import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
 import ResponseEnding from "./ResponseEnding.astro";
@@ -37,7 +37,6 @@ const translatedPostPath = translatedPost
   : undefined;
 const ui = UI[post.data.language];
 const label = getPostLabel(post);
-const step = await getPostStep(post);
 ---
 
 <BaseLayout
@@ -48,7 +47,6 @@ const step = await getPostStep(post);
 >
   <article class="reading-article">
     <header class:list={["post-header", { "post-header--untitled": !post.data.title }]}>
-      <p class="diary-step"><span class="visually-hidden">{post.data.language === "zh-TW" ? "步驟 " : "Step "}</span>{step}</p>
       {
         post.data.title ? (
           <h1>{post.data.title}</h1>
