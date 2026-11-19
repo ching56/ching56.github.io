@@ -89,14 +89,14 @@ function createEnvironment() {
 
 test("a reader can get the zero count for a known post", async () => {
   const request = new Request(
-    "https://jhihcing.li/api/likes?path=%2Fzh-TW%2Fblog%2F2022%2F",
+    "https://jhihcing.li/api/likes?path=%2Fzh-TW%2Fblog%2Fbottles%2F",
   );
 
   const response = await worker.fetch(request, createEnvironment());
 
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), {
-    path: "/zh-TW/blog/2022/",
+    path: "/zh-TW/blog/bottles/",
     count: 0,
     liked: false,
   });
@@ -110,14 +110,14 @@ test("repeat increments in the dedupe window count once", async () => {
     new Request("https://jhihcing.li/api/likes", {
       method: "POST",
       headers: { "cf-connecting-ip": "203.0.113.8", "content-type": "application/json" },
-      body: JSON.stringify({ path: "/zh-TW/blog/covid/" }),
+      body: JSON.stringify({ path: "/zh-TW/blog/shino-bottle/" }),
     });
 
   await worker.fetch(makeRequest(), environment);
   const response = await worker.fetch(makeRequest(), environment);
 
   assert.deepEqual(await response.json(), {
-    path: "/zh-TW/blog/covid/",
+    path: "/zh-TW/blog/shino-bottle/",
     count: 1,
     liked: true,
   });
@@ -129,7 +129,7 @@ test("the same reader can like again in a later dedupe window", async () => {
     new Request("https://jhihcing.li/api/likes", {
       method: "POST",
       headers: { "cf-connecting-ip": "203.0.113.8", "content-type": "application/json" },
-      body: JSON.stringify({ path: "/zh-TW/blog/covid/" }),
+      body: JSON.stringify({ path: "/zh-TW/blog/shino-bottle/" }),
     });
 
   await worker.fetch(makeRequest(), environment);
@@ -182,14 +182,14 @@ test("a reader can increment a post count", async () => {
       "cf-connecting-ip": "203.0.113.4",
       "content-type": "application/json",
     },
-    body: JSON.stringify({ path: "/zh-TW/blog/2022/" }),
+    body: JSON.stringify({ path: "/zh-TW/blog/bottles/" }),
   });
 
   const response = await worker.fetch(request, environment);
 
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), {
-    path: "/zh-TW/blog/2022/",
+    path: "/zh-TW/blog/bottles/",
     count: 1,
     liked: true,
   });

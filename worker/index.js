@@ -3,11 +3,7 @@ const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
 };
 const KNOWN_POST_PATHS = new Set([
-  "/zh-TW/blog/2022/",
-  "/zh-TW/blog/2023-2024/",
-  "/zh-TW/blog/2025/",
   "/zh-TW/blog/bottles/",
-  "/zh-TW/blog/covid/",
   "/zh-TW/blog/shino-bottle/",
   "/zh-TW/blog/third-teapot/",
   "/zh-TW/blog/offering-cups/",

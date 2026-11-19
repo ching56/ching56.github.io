@@ -14,42 +14,6 @@ const lastUpdated = (post) => post.updated ?? post.dateTime;
 const forbiddenFontRule = /@font-face|@import\s+(?:url\s*\()?/i;
 const expectedPosts = [
   {
-    slug: "2022",
-    title: "2022",
-    dateTime: "2023-01-02",
-    dateLabel: "2023年1月2日",
-    excerpts: [
-      "進入下一層新的夢之前",
-      "每一個平靜踏實的當下，才能好好地抵達未來",
-      "才能不負幸運",
-    ],
-  },
-  {
-    slug: "covid",
-    title: "確診",
-    dateTime: "2023-01-13",
-    dateLabel: "2023年1月13日",
-    excerpts: ["第零天", "告訴我晚上可以解隔了", "孤單才是錯覺吧"],
-  },
-  {
-    slug: "2023-2024",
-    title: "2023 ~ 2024",
-    dateTime: "2024-12-22",
-    dateLabel: "2024年12月22日",
-    excerpts: [
-      "我追求完美同時接受自己有限",
-      "不可能的事情一直發生",
-      "我滿意現在的生活",
-    ],
-  },
-  {
-    slug: "2025",
-    title: "2025",
-    dateTime: "2026-01-01",
-    dateLabel: "2026年1月1日",
-    excerpts: ["開始學做茶壺", "Mew 的 farewell", "照顧好自己才能照顧別人"],
-  },
-  {
     // Threads mirrors are untitled: the list previews their text and the
     // browser tab and feed use their first 40 characters.
     slug: "bottles",
@@ -100,18 +64,9 @@ const expectedPosts = [
     excerpts: ["上半部密集的結晶像是開滿小花", "三個中心", "是不是拉胚前要做個暖身操比較好🤣"],
   },
 ];
-const expectedMusicLinkCards = [
-  {
-    slug: "2022",
-    name: "進入下一層新的夢之前",
-    performer: "椅子樂團",
-    providers: [
-      ["Apple Music", "https://music.apple.com/tw/song/1632142521"],
-      ["Spotify", "https://open.spotify.com/track/2LmNW7kMeYp2wUqMpIAge6"],
-      ["YouTube", "https://www.youtube.com/watch?v=Duq3FI0Ay5I"],
-    ],
-  },
-];
+// No published post carries a music link card right now (2022 was hidden on
+// 2026-11-19); add one here when a card is published again.
+const expectedMusicLinkCards = [];
 
 test("old WordPress URLs publish permanent redirects to their new homes", async () => {
   const redirects = await readRedirects();
@@ -137,24 +92,36 @@ test("old WordPress URLs publish permanent redirects to their new homes", async 
       destination: "/zh-TW/#about",
       status: 301,
     },
-    { source: "/2022-2", destination: "/zh-TW/blog/2022/", status: 301 },
-    { source: "/covid", destination: "/zh-TW/blog/covid/", status: 301 },
+    { source: "/2022-2", destination: "/zh-TW/", status: 301 },
     {
-      source: "/conservation-of-mass",
+      source: "/zh-TW/blog/2022/",
       destination: "/zh-TW/",
       status: 301,
     },
+    { source: "/covid", destination: "/zh-TW/", status: 301 },
+    {
+      source: "/zh-TW/blog/covid/",
+      destination: "/zh-TW/",
+      status: 301,
+    },
+    { source: "/conservation-of-mass", destination: "/zh-TW/", status: 301 },
     {
       source: "/zh-TW/blog/conservation-of-mass/",
       destination: "/zh-TW/",
       status: 301,
     },
+    { source: "/2023-2024", destination: "/zh-TW/", status: 301 },
     {
-      source: "/2023-2024",
-      destination: "/zh-TW/blog/2023-2024/",
+      source: "/zh-TW/blog/2023-2024/",
+      destination: "/zh-TW/",
       status: 301,
     },
-    { source: "/2025-2", destination: "/zh-TW/blog/2025/", status: 301 },
+    { source: "/2025-2", destination: "/zh-TW/", status: 301 },
+    {
+      source: "/zh-TW/blog/2025/",
+      destination: "/zh-TW/",
+      status: 301,
+    },
   ];
 
   for (const expected of expectedRedirects) {
@@ -319,7 +286,7 @@ test("readers can switch languages using locale-aware chrome", async () => {
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
-    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+    readFile(new URL("zh-TW/blog/bottles/index.html", distDirectory), "utf8"),
   ]);
 
   assert.match(englishList, /<nav[^>]*aria-label="Primary navigation"/);
@@ -355,7 +322,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   const [englishList, chineseList, chinesePost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
-    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+    readFile(new URL("zh-TW/blog/bottles/index.html", distDirectory), "utf8"),
   ]);
 
   assert.doesNotMatch(chineseList, /class="author-signature"/);
@@ -416,10 +383,6 @@ test("the approved continuous journal structure is semantic across reading surfa
     );
   }
   assert.match(chinesePost, /<article class="reading-article">/);
-  assert.match(
-    chinesePost,
-    /<footer class="response-ending"><p>讀完有想說的嗎？<\/p>\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>寫信給我<\/span>\s*<\/a>\s*<\/footer>/,
-  );
   assert.match(englishList, /<section class="register-panel"/);
 });
 
@@ -444,7 +407,11 @@ test("posts mirrored from Threads send responses to the Threads original", async
       );
       assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
     } else {
-      assert.match(footer, /href="mailto:/, `expected the email prompt in ${page}`);
+      assert.match(
+        footer,
+        /<footer class="response-ending"><p>[^<]+<\/p>\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>[^<]+<\/span>\s*<\/a>\s*<\/footer>/,
+        `expected the email prompt in ${page}`,
+      );
     }
   }
 });
@@ -492,7 +459,15 @@ test("article videos wait for the reader and ship their poster and file", async 
 });
 
 test("drafts and permanent pages never publish as blog posts", async () => {
-  for (const slug of ["hello-world", "conservation-of-mass", "about"]) {
+  for (const slug of [
+    "hello-world",
+    "conservation-of-mass",
+    "about",
+    "2022",
+    "covid",
+    "2023-2024",
+    "2025",
+  ]) {
     await assert.rejects(
       readFile(
         new URL(`zh-TW/blog/${slug}/index.html`, distDirectory),
@@ -568,7 +543,7 @@ test("music link cards expose only verified outbound provider choices", async ()
   }
 
   const unrelatedPost = await readFile(
-    new URL("zh-TW/blog/covid/index.html", distDirectory),
+    new URL("zh-TW/blog/bottles/index.html", distDirectory),
     "utf8",
   );
   assert.doesNotMatch(unrelatedPost, /class="music-link-card"/);
@@ -593,7 +568,7 @@ test("hreflang alternates appear only for pages with a translated counterpart", 
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
-    readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
+    readFile(new URL("zh-TW/blog/bottles/index.html", distDirectory), "utf8"),
   ]);
   const listAlternates = [
     '<link rel="alternate" hreflang="zh-TW" href="https://jhihcing.li/zh-TW/">',
