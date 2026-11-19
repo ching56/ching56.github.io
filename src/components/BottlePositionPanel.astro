@@ -13,6 +13,7 @@
     <button type="button" role="tab" data-tab="logo">Logo</button>
     <button type="button" role="tab" data-tab="motion">動畫</button>
     <button type="button" role="tab" data-tab="header">頁首</button>
+    <button type="button" role="tab" data-tab="arrows">照片</button>
   </div>
   <section class="bottle-panel-section" role="tabpanel" data-panel="bottle">
     <label>
@@ -111,6 +112,17 @@
     </label>
     <div class="bottle-panel-actions">
       <button type="button" data-emil>套用 Emil 建議</button>
+    </div>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="arrows">
+    <p class="bottle-panel-hint">照片列的左右按鈕（只在滑鼠裝置出現；手機用滑的）</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="arrows-variant" value="" />原本 [&gt;]</label>
+      <label><input type="radio" name="arrows-variant" value="thin" />1 細箭頭</label>
+      <label><input type="radio" name="arrows-variant" value="circle" />2 圓鈕</label>
+      <label><input type="radio" name="arrows-variant" value="dots" />3 圓點</label>
+      <label><input type="radio" name="arrows-variant" value="text" />4 文字</label>
+      <label><input type="radio" name="arrows-variant" value="wrap" />5 不捲動</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="header">
@@ -428,6 +440,29 @@
       });
     }
 
+    // Which photo-row button candidate to preview.
+    const ARROWS = "arrows-variant";
+    const setArrows = (value) => {
+      if (value) root.dataset.arrows = value;
+      else delete root.dataset.arrows;
+      for (const radio of panel.querySelectorAll('input[name="arrows-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let arrows = "";
+    try {
+      arrows = localStorage.getItem(ARROWS) || "";
+    } catch {}
+    setArrows(arrows);
+    for (const radio of panel.querySelectorAll('input[name="arrows-variant"]')) {
+      radio.addEventListener("change", () => {
+        setArrows(radio.value);
+        try {
+          localStorage.setItem(ARROWS, radio.value);
+        } catch {}
+      });
+    }
+
     // Tabs keep the panel short; the last one opened is remembered.
     const TAB = "bottle-panel-tab";
     const showTab = (name) => {
@@ -663,6 +698,107 @@
       transition-property: translate, scale, top, rotate, color, --dock-t, opacity;
       transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
         var(--dock-duration), 120ms, var(--dock-duration), 200ms;
+    }
+  }
+
+  /* ---------- Photo-row button candidates (dev only) ---------- */
+  @supports selector(::scroll-button(*)) {
+    @media (pointer: fine) {
+      /* 1: bare arrows in the margins beside the row. */
+      :global(html[data-arrows="thin"] .diary-photos::scroll-button(*)) {
+        min-width: 2rem;
+        background: transparent;
+        color: var(--ink-muted);
+        font-size: 1rem;
+      }
+
+      :global(html[data-arrows="thin"] .diary-photos::scroll-button(left)) {
+        content: "←" / "上一張";
+        left: calc(anchor(left) - 2.5rem);
+      }
+
+      :global(html[data-arrows="thin"] .diary-photos::scroll-button(right)) {
+        content: "→" / "下一張";
+        right: calc(anchor(right) - 2.5rem);
+      }
+
+      /* 2: paper discs over the photo edges. */
+      :global(html[data-arrows="circle"] .diary-photos::scroll-button(*)) {
+        width: 2.5rem;
+        min-width: 0;
+        height: 2.5rem;
+        padding: 0;
+        border: 1px solid var(--ink-muted);
+        border-radius: 50%;
+        font-size: 1.25rem;
+        line-height: 1;
+      }
+
+      :global(html[data-arrows="circle"] .diary-photos::scroll-button(left)) {
+        content: "‹" / "上一張";
+        left: calc(anchor(left) + 0.75rem);
+      }
+
+      :global(html[data-arrows="circle"] .diary-photos::scroll-button(right)) {
+        content: "›" / "下一張";
+        right: calc(anchor(right) + 0.75rem);
+      }
+
+      /* 3: no arrows; one dot per photo under the row, the current one red. */
+      :global(html[data-arrows="dots"] .diary-photos::scroll-button(*)),
+      :global(html[data-arrows="wrap"] .diary-photos::scroll-button(*)) {
+        content: none;
+      }
+
+      :global(html[data-arrows="dots"] .diary-photos) {
+        scroll-marker-group: after;
+      }
+
+      :global(html[data-arrows="dots"] .diary-photos::scroll-marker-group) {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        padding-top: 0.75rem;
+      }
+
+      :global(html[data-arrows="dots"] .diary-photo::scroll-marker) {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--ink-muted);
+        opacity: 0.35;
+        content: "";
+      }
+
+      :global(html[data-arrows="dots"] .diary-photo::scroll-marker:target-current) {
+        background: var(--ribbon);
+        opacity: 1;
+      }
+
+      /* 4: words under the row, at its two ends. */
+      :global(html[data-arrows="text"] .diary-photos::scroll-button(*)) {
+        top: anchor(bottom);
+        translate: none;
+        height: 2.25rem;
+        background: transparent;
+        color: var(--ribbon);
+      }
+
+      :global(html[data-arrows="text"] .diary-photos::scroll-button(left)) {
+        content: "← 上一張";
+        left: anchor(left);
+      }
+
+      :global(html[data-arrows="text"] .diary-photos::scroll-button(right)) {
+        content: "下一張 →";
+        right: anchor(right);
+      }
+
+      /* 5: no scrolling row on desktop; every photo shows, wrapped. */
+      :global(html[data-arrows="wrap"] .diary-photos) {
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
     }
   }
 
