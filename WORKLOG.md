@@ -965,3 +965,8 @@
 - Intent: add a per-breakpoint 右距 slider (0–160px) to the dev panel for `--hero-gap`, the space to the right of the bottle before the greeting; defaults moved to px (32px wide, 20px narrow) so the panel can read them
 - Why: user: "我想再瓶子右邊加上 padding，幫我加上這個控制項"
 - Result: done; in dev, moving it to 60px shifted the greeting 40px right and saved `gap` with the narrow values. yarn run check clean
+
+## 2026-11-19 21:05 · claude-code
+- Intent: (1) write the user's narrow 右距 (76px) into global.css; (2) fix the ghost bottle the user still saw, especially when crossing the threshold back and forth: the sprite frame ran on its own linear steps transition and the silhouette showed the last frame, so near the end (and far more after mid-move reversals, since each transition shortens differently) the silhouette's frame-20 outline sat over a photo still on another frame. Now the frame is derived from --dock-t (`round(down, t * 20, 1)`) for both the photo and the silhouette mask, with no separate transition
+- Why: user: "記住右距", "殘影還是會出現", "尤其是來回頻繁切換於 threshold 的時候"
+- Result: done; in dev, 24 rapid threshold crossings at uneven intervals sampled over 393 animation frames: whenever the silhouette showed it matched the photo's frame and the photo was black, and the still only showed at frame 0. Built CSS keeps `round()`. yarn run check clean, 40/40 tests

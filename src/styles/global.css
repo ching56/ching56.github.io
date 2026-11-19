@@ -436,15 +436,25 @@ main {
 
   /* The turntable turns once on the way: the full-resolution still steps
      aside for the sprite (its first frame is the same picture) the moment
-     the move begins, and returns only once the bottle is back at rest. */
+     the move begins, and returns only once the bottle is back at rest.
+     Frame, darkness and silhouette all derive from the one --dock-t, so
+     even when the threshold is crossed back and forth mid-move, the photo
+     and the silhouette always show the same frame: one bottle, never two. */
+  .home-bottle {
+    --dock-frame: round(down, var(--dock-t) * 20, 1);
+  }
+
   .home-bottle .bottle-still {
     opacity: clamp(0, 1 - var(--dock-t) * 1000, 1);
   }
 
   .home-bottle .bottle-photo {
     opacity: 1;
-    background-position-x: calc(100% * var(--docked));
-    transition: background-position-x var(--dock-duration) steps(21, jump-none);
+    background-position-x: calc(var(--dock-frame) * 5%);
+  }
+
+  .home-bottle .bottle-silhouette {
+    mask-position: calc(var(--dock-frame) * 5%) 0;
   }
 
   /* The ink silhouette (which takes the hover colour) replaces the black
@@ -1053,7 +1063,7 @@ time {
     --bottle-x: 0.05;
     --bottle-height: 16dvh;
     --bottle-rotate: -21deg;
-    --hero-gap: 20px;
+    --hero-gap: 76px;
   }
 
   .site-header {
