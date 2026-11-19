@@ -842,11 +842,16 @@ test("content pages load no external webfonts or Astro runtime JavaScript beyond
       assert.deepEqual(scripts, ["<script>"]);
       const [script] = html.match(/<script>[\s\S]*?<\/script>/);
       assert.match(script, /dataset\.spin = "ready"/);
-      assert.ok(script.length < 2048, `expected the inline script under 2 KB, got ${script.length}`);
+      assert.match(script, /pagereveal/);
+      assert.ok(script.length < 3072, `expected the inline script under 3 KB, got ${script.length}`);
     } else if (index === 1) {
       assert.deepEqual(scripts, []);
     } else {
-      assert.deepEqual(scripts, ['<script src="/likes.js" defer>']);
+      // Posts: the header mark's go-back script, then the likes script.
+      assert.deepEqual(scripts, ["<script>", '<script src="/likes.js" defer>']);
+      const [inline] = html.match(/<script>[\s\S]*?<\/script>/);
+      assert.match(inline, /history\.back\(\)/);
+      assert.ok(inline.length < 1024, `expected the mark script under 1 KB, got ${inline.length}`);
     }
     assert.doesNotMatch(html, forbiddenFontRule);
     assert.doesNotMatch(

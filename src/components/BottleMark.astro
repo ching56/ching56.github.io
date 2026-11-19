@@ -72,6 +72,22 @@ const { variant, href, label } = Astro.props;
         else still.addEventListener("load", load, { once: true });
         narrow.addEventListener("change", load);
       })();
+
+      // The bottle morphs across pages only while it is on screen. Leaving
+      // or landing on home scrolled past it, the page simply changes, with
+      // no transition at all.
+      (() => {
+        const bottle = document.querySelector(".home-bottle");
+        if (!bottle) return;
+        const guard = (event) => {
+          if (!event.viewTransition) return;
+          const box = bottle.getBoundingClientRect();
+          if (box.bottom > 0 && box.top < innerHeight) return;
+          event.viewTransition.skipTransition();
+        };
+        addEventListener("pageswap", guard);
+        addEventListener("pagereveal", guard);
+      })();
     </script>
   ) : (
     <span class="bottle-logo" style={`--mark:url(${mark.src})`} aria-hidden="true"></span>

@@ -172,7 +172,7 @@ The real bottle photo, because the hero shows the potter's work: 21-frame turnta
 `--logo-width` (22px; height follows the 396:980 frame) and `--logo-rotate` (-3deg) on `:root` size and lean the article-header logo. `--logo-top`/`--logo-left` are left from the removed home dock.
 
 ### Bottle Across Pages
-Cross-document view transitions (`@view-transition { navigation: auto }`, CSS only): the article header's silhouette and the home hero share `view-transition-name: bottle`, so following the mark home grows it back into the photo and opening a post shrinks the photo into the mark, 550ms on `cubic-bezier(0.32, 0.72, 0, 1)`; off under reduced motion; unsupported browsers just navigate.
+Cross-document view transitions (`@view-transition { navigation: auto }`, CSS only): the article header's silhouette and the home hero share `view-transition-name: bottle`, so following the mark home grows it back into the photo and opening a post shrinks the photo into the mark, 550ms on `cubic-bezier(0.32, 0.72, 0, 1)`; off under reduced motion; unsupported browsers just navigate. Two small inline scripts refine it: on posts, the header mark goes `history.back()` when the reader came from that home page (so home keeps its scroll; any other way in, it is a plain link); on home, a `pageswap`/`pagereveal` guard skips the transition entirely whenever the hero bottle is off screen.
 
 ### Back to Top
 A typed `[ ↑ ]` (bracket control, localised `aria-label`, `href="#top"`) fixed bottom-right on a sliver of paper, aligned to the shell's right edge. A scroll-driven animation fades it in over 80–100dvh of scroll, so it appears only a screen down and never on short pages; the page glides up unless the reader prefers reduced motion.
@@ -197,7 +197,7 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 - **Do** start all text flush on the column edge; entries carry no index.
 - **Do** strike controls as `[ label ]` with ribbon-red brackets and a 1px press sink.
 - **Do** write scroll-driven animations as longhands and gate them on `@supports` and `prefers-reduced-motion: no-preference`.
-- **Do** keep runtime JS off content pages, with two exceptions: posts load the likes script, and the zh-TW home has a sub-2 KB inline loader that fetches the bottle's turntable sprite after the still and enables the turn (`html[data-spin="ready"]`) only once it has loaded; on Save-Data, 2G, after 8s or without JS the bottle stays still.
+- **Do** keep runtime JS off content pages, with these exceptions: posts load the likes script and a sub-1 KB inline script that sends the header mark back to home's place, and the zh-TW home has a sub-2 KB inline loader that fetches the bottle's turntable sprite after the still and enables the turn (`html[data-spin="ready"]`) only once it has loaded; on Save-Data, 2G, after 8s or without JS the bottle stays still.
 - **Do** keep type at or below `1.5rem`.
 
 ### Don't:

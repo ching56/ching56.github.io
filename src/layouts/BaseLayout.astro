@@ -18,6 +18,8 @@ interface Props {
   showHeader?: boolean;
   /** The current page's name in the header breadcrumb, after the bottle. */
   crumb?: string;
+  /** Article pages: the mark goes back to home's place when home sent you. */
+  markReturns?: boolean;
 }
 
 const {
@@ -26,6 +28,7 @@ const {
   alternates = [],
   showHeader = true,
   crumb,
+  markReturns = false,
 } = Astro.props;
 const pageTitle = title ? `${title}　${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
@@ -83,6 +86,29 @@ const ui = UI[language];
             )}
           </ol>
         </nav>
+        {markReturns && (
+          <script is:inline>
+            // Came here from home? Then the mark goes back rather than
+            // reloading home, so home keeps your place (the bottle still
+            // morphs across). Any other way in, it stays a plain link.
+            (() => {
+              const mark = document.querySelector(".site-mark");
+              if (!mark) return;
+              mark.addEventListener("click", (event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                let from;
+                try {
+                  from = new URL(document.referrer);
+                } catch {
+                  return;
+                }
+                if (from.origin !== location.origin || from.pathname !== mark.pathname || history.length < 2) return;
+                event.preventDefault();
+                history.back();
+              });
+            })();
+          </script>
+        )}
       </header>
       )}
       <main id="main-content">
