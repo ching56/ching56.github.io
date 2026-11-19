@@ -41,7 +41,7 @@ const label = getPostLabel(post);
 
 <BaseLayout
   title={label}
-  crumb={label}
+  crumb={date.dateTime.replaceAll("-", "/")}
   language={post.data.language}
   alternates={alternates}
   languageSwitchPath={translatedPostPath}

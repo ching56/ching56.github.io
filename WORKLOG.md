@@ -1119,3 +1119,6 @@
 - Intent: turn the page header into a breadcrumb: the bottle mark alone links home (the author name goes), followed by "/ page title" on article pages (the post's label, so untitled Threads posts show their opening words), one line with an ellipsis; a `crumb` prop on BaseLayout fed by PostArticle; localised nav and home labels
 - Why: user: "文章頁頂端那個「瓶子＋名字」的 logo … 保留瓶子就好。變成 breadcrumb: 瓶子 / page title"
 - Result: done. Verified at 1024px and 375px: the mark sits on the text's left edge (27px), `/ 有時候會很喜歡重複做一樣的東西…` follows and ellipsises on the phone, no horizontal overflow; nav labelled 目前位置, home link 首頁. Tests: the header assertion now expects the breadcrumb, and the contract test checks the crumb rule instead of the removed signature. yarn run check clean, 41/41 tests
+
+## 2026-11-20 03:55 · claude-code
+- Intent/Result: the breadcrumb's page title is now the post's date (`2026/10/11`, as in the article) instead of its label, per the user ("The title would be date string"); test asserts it on the bottles post

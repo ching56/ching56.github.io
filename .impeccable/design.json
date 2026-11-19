@@ -36,7 +36,7 @@
       "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, (--type-size)." },
       "metadata": { "displayName": "Metadata", "purpose": "Generic time, performer line, provider links." },
       "label": { "displayName": "Label", "purpose": "Language link, intro sub-headings, English list dates." },
-      "signature": { "displayName": "Breadcrumb", "purpose": "The header's \"/ page title\" after the bottle mark, one line with an ellipsis; the author name is no longer shown." }
+      "signature": { "displayName": "Breadcrumb", "purpose": "The header's \"/ 2026/10/11\" (the post's date) after the bottle mark; the author name is no longer shown." }
     },
     "shadows": [],
     "motion": [
