@@ -31,6 +31,10 @@
   --logo-rotate: -3deg;
   --logo-top: 16px;
   --logo-left: -4px;
+  /* The home bottle docks once the page scrolls past this, in one move. */
+  --dock-threshold: 2rem;
+  --dock-duration: 550ms;
+  --dock-ease: cubic-bezier(0.77, 0, 0.175, 1);
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
@@ -232,16 +236,11 @@ main {
   display: none;
 }
 
-/* The hero: the greeting at the top right (top left on narrow screens), the
-   bottle on the left, set larger than the screen and cut off by its bottom
-   edge, so the clay is seen up close first. Positions are in viewport units
-   so the pinned bottle (below) and this static fallback land in the same
-   place.
-
-   The hero is exactly as tall as the bottle, and the dock runs over that
-   height less 6rem. Top and height shrink linearly, so the bottle's bottom
-   edge always stays above the diary scrolling up beneath it: they never
-   overlap, wherever the bottle starts. */
+/* The hero fills the first screen: the greeting at the top right (top left
+   on narrow screens), the bottle on the left, set larger than the screen and
+   cut off by its bottom edge, so the clay is seen up close first. Positions
+   are in viewport units so the pinned bottle (below) and this static
+   fallback land in the same place. */
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
   --bottle-top: 14dvh;
@@ -251,15 +250,13 @@ main {
   --bottle-align: 0;
   --bottle-height: 170dvh;
   --bottle-width: calc(var(--bottle-height) * 396 / 980);
-  --bottle-end: calc(var(--bottle-top) + var(--bottle-height));
-  --dock-range: max(40dvh, var(--bottle-end) - 6rem);
   position: relative;
 }
 
 .home-hero {
   display: grid;
   align-content: start;
-  min-height: calc(var(--bottle-end) - var(--main-top));
+  min-height: calc(100dvh - var(--main-top));
 }
 
 .home-hero .about-intro {
@@ -277,12 +274,14 @@ main {
   }
 }
 
+/* Static fallback: the bottle in place, cut off at the bottom of the first
+   screen. */
 .home-bottle-slot {
   position: absolute;
   top: calc(var(--bottle-top) - var(--main-top));
   right: 0;
   left: calc(var(--bottle-x) * 100% - var(--bottle-width) * var(--bottle-align));
-  height: var(--bottle-height);
+  height: calc(100dvh - var(--bottle-top));
   overflow: clip;
 }
 
@@ -305,7 +304,7 @@ main {
 }
 
 /* At rest: the first frame at full resolution, since the hero is larger than
-   the screen. It gives way to the sprite the moment the bottle starts turning. */
+   the screen. */
 .bottle-still {
   position: absolute;
   inset: 0;
@@ -314,15 +313,16 @@ main {
   height: 100%;
 }
 
-/* The real photo: a horizontal sprite of turntable frames, showing one. */
+/* The turntable sprite, showing one frame (used by the dev candidates). */
 .bottle-photo {
   position: absolute;
   inset: 0;
   display: block;
   background: var(--sprite) 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
+  opacity: 0;
 }
 
-/* The silhouette: the same frame's outline, filled with ink. */
+/* The silhouette: the first frame's outline, filled with ink. */
 .bottle-silhouette {
   position: absolute;
   inset: 0;
@@ -341,140 +341,124 @@ main {
   rotate: var(--logo-rotate);
 }
 
-/* Where scroll-driven animation is supported, the bottle is pinned over its
-   slot and, across the dock range of scrolling, turns, leans, shrinks into
-   the top-left corner and darkens into a solid silhouette: the home mark. */
+/* The dock is triggered, not scrubbed: once the page has scrolled past the
+   threshold, a step-end scroll animation flips --docked from 0 to 1 on the
+   root, and the bottle transitions from the hero to the home mark in one
+   move, its photo giving way to the silhouette. Scrolling back to the top
+   reverses it. Reduced motion gets the same swap instantly (see the global
+   reduced-motion rule). */
+@property --docked {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .home-bottle-slot {
-      overflow: visible;
-    }
+  html:has(.home-bottle) {
+    /* Longhands only: a minifier folding the timeline into the shorthand
+       produces a declaration browsers reject. */
+    animation-name: dock-flag;
+    animation-timing-function: step-end;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root);
+    animation-range: 0 var(--dock-threshold);
+  }
 
+  .home-bottle-slot {
+    overflow: visible;
+  }
+
+  .home-bottle {
+    --shell-width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
+    --shell-left: calc((100% - var(--shell-width)) / 2);
+    --shell-width-vw: min(100vw - clamp(2rem, 5vw, 5rem), 82rem);
+    --start-left: calc(
+      var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
+        var(--bottle-align)
+    );
+    --end-left: calc(var(--shell-left) + var(--logo-left));
+    position: fixed;
+    z-index: 10;
+    /* Moves by its box where transforms cannot express the ratio of sizes. */
+    top: calc(var(--bottle-top) + (var(--logo-top) - var(--bottle-top)) * var(--docked));
+    left: calc(var(--start-left) + (var(--end-left) - var(--start-left)) * var(--docked));
+    height: calc(var(--bottle-height) + (var(--logo-height) - var(--bottle-height)) * var(--docked));
+    rotate: calc(var(--logo-rotate) * var(--docked));
+    transition-property: top, left, height, rotate, color;
+    transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
+      var(--dock-duration), 120ms;
+    transition-timing-function: var(--dock-ease), var(--dock-ease), var(--dock-ease),
+      var(--dock-ease), ease-out;
+  }
+
+  /* Transform-only where CSS can divide lengths: the box keeps the hero's
+     size and position, and moves and scales on the compositor. */
+  @supports (scale: calc(1px / 1px)) {
     .home-bottle {
-      --shell-width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
-      --shell-left: calc((100% - var(--shell-width)) / 2);
-      position: fixed;
-      z-index: 10;
       top: var(--bottle-top);
-      left: calc(
-        var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
-          var(--bottle-align)
-      );
-      /* Longhands only: a minifier folding the timeline into the shorthand
-         produces a declaration browsers reject. */
-      animation-name: bottle-dock;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: scroll(root);
-      animation-range: 0 var(--dock-range);
+      left: var(--start-left);
+      height: var(--bottle-height);
+      /* In translate, 100% is the box itself, so the shell width is
+         measured from the viewport here; the shell's left edge cancels. */
+      translate:
+        calc(
+            (
+                var(--logo-left) - var(--shell-width-vw) * var(--bottle-x) + var(--bottle-width) *
+                  var(--bottle-align) + (var(--logo-width) - var(--bottle-width)) / 2
+              ) *
+              var(--docked)
+          )
+        calc(
+          (var(--logo-top) + var(--logo-height) / 2 - var(--bottle-top) - var(--bottle-height) / 2) *
+            var(--docked)
+        );
+      scale: calc(1 + (var(--logo-height) / var(--bottle-height) - 1) * var(--docked));
+      transition-property: translate, scale, rotate, color;
+      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration), 120ms;
+      transition-timing-function: var(--dock-ease), var(--dock-ease), var(--dock-ease), ease-out;
     }
+  }
 
-    /* Gone exactly when the first frame turns: 1/21 of the range. */
-    .home-bottle .bottle-still {
-      animation-name: bottle-still-out;
-      animation-timing-function: steps(1, jump-end);
-      animation-fill-mode: both;
-      animation-timeline: scroll(root);
-      animation-range: 0 calc(var(--dock-range) / 21);
-    }
+  .home-bottle .bottle-still {
+    opacity: calc(1 - var(--docked));
+    transition: opacity calc(var(--dock-duration) * 0.6) ease-out;
+  }
 
-    .home-bottle .bottle-photo {
-      animation-name: bottle-photo-turn, bottle-lift;
-      animation-timing-function: steps(var(--frames), jump-none), linear;
-      animation-fill-mode: both, both;
-      animation-timeline: scroll(root);
-      animation-range: 0 var(--dock-range);
-    }
+  .home-bottle .bottle-silhouette {
+    opacity: var(--docked);
+    transition: opacity calc(var(--dock-duration) * 0.6) ease-out;
+  }
 
-    .home-bottle .bottle-silhouette {
-      animation-name: bottle-mask-turn, bottle-strike;
-      animation-timing-function: steps(var(--frames), jump-none), linear;
-      animation-fill-mode: both, both;
-      animation-timeline: scroll(root);
-      animation-range: 0 var(--dock-range);
+  /* Mirror the narrow-screen shell width. */
+  @media (max-width: 48rem) {
+    .home-bottle {
+      --shell-width: min(100% - 2rem, 42rem);
+      --shell-width-vw: min(100vw - 2rem, 42rem);
     }
+  }
 
-    /* Mirror the narrow-screen shell width. */
-    @media (max-width: 48rem) {
-      .home-bottle {
-        --shell-width: min(100% - 2rem, 42rem);
-      }
-    }
-
-    /* Once docked, the mark sits on a strip of paper, like the platen's
-       top edge: text scrolls under paper, never under the mark. */
-    .home-stage:has(.home-bottle)::before {
-      position: fixed;
-      z-index: 9;
-      inset: 0 0 auto;
-      height: max(5.5rem, var(--logo-top) + var(--logo-height));
-      background: var(--paper);
-      content: "";
-      animation-name: platen-rise;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: scroll(root);
-      animation-range: calc(var(--dock-range) - 15dvh) var(--dock-range);
-    }
+  /* Once docked, the mark sits on a strip of paper, like the platen's top
+     edge: text scrolls under paper, never under the mark. */
+  .home-stage:has(.home-bottle)::before {
+    position: fixed;
+    z-index: 9;
+    inset: 0 0 auto;
+    height: max(5.5rem, var(--logo-top) + var(--logo-height));
+    background: var(--paper);
+    content: "";
+    opacity: var(--docked);
+    pointer-events: none;
+    transition: opacity var(--dock-duration) ease-out;
   }
 }
 
-@keyframes bottle-mask-turn {
-  to {
-    mask-position: 100% 0;
-  }
-}
-
-@keyframes bottle-still-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes bottle-photo-turn {
-  to {
-    background-position-x: 100%;
-  }
-}
-
-@keyframes bottle-lift {
-  0%,
-  45% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes bottle-strike {
-  0%,
-  45% {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes platen-rise {
+@keyframes dock-flag {
   from {
-    opacity: 0;
+    --docked: 0;
   }
 
   to {
-    opacity: 1;
-  }
-}
-
-@keyframes bottle-dock {
-  to {
-    top: var(--logo-top);
-    left: calc(var(--shell-left) + var(--logo-left));
-    height: var(--logo-height);
-    rotate: var(--logo-rotate);
+    --docked: 1;
   }
 }
 
