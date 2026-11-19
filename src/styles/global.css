@@ -23,6 +23,15 @@
   --diary-date-font: "Diary Date", "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual,
     cursive;
   --type-size: 0.9375rem;
+  /* The bottle logo, docked on the home page and in every page header. Its
+     frames are 396 by 980. Top and left place the docked mark (left from the
+     shell's edge); a 45deg lean widens the box, so the default left keeps the
+     tilted neck inside the column. */
+  --logo-width: 30px;
+  --logo-height: calc(var(--logo-width) * 980 / 396);
+  --logo-rotate: -45deg;
+  --logo-top: 1rem;
+  --logo-left: calc(var(--logo-width) * 0.73);
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
@@ -278,11 +287,8 @@ main {
   overflow: clip;
 }
 
-/* Every bottle frame is 396 by 980; the logo is 30px wide. */
 .home-bottle,
 .bottle-logo {
-  --logo-width: 30px;
-  --logo-height: calc(var(--logo-width) * 980 / 396);
   position: relative;
   display: block;
   overflow: hidden;
@@ -333,7 +339,7 @@ main {
   height: var(--logo-height);
   background: currentColor;
   mask: var(--mark) center / contain no-repeat;
-  rotate: -45deg;
+  rotate: var(--logo-rotate);
 }
 
 /* Where scroll-driven animation is supported, the bottle is pinned over its
@@ -402,7 +408,7 @@ main {
       position: fixed;
       z-index: 9;
       inset: 0 0 auto;
-      height: 5.5rem;
+      height: max(5.5rem, var(--logo-top) + var(--logo-height));
       background: var(--paper);
       content: "";
       animation-name: platen-rise;
@@ -466,11 +472,10 @@ main {
 
 @keyframes bottle-dock {
   to {
-    top: 1rem;
-    /* A 45deg lean widens the box; shift right so the tilted neck stays inside the column. */
-    left: calc(var(--shell-left) + var(--logo-width) * 0.73);
+    top: var(--logo-top);
+    left: calc(var(--shell-left) + var(--logo-left));
     height: var(--logo-height);
-    rotate: -45deg;
+    rotate: var(--logo-rotate);
   }
 }
 

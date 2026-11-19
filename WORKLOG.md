@@ -930,3 +930,8 @@
 - Intent: write the user's narrow-screen bottle placement into global.css (top 26dvh, height 90dvh) and centre it horizontally there via a new `--bottle-align` (0 = left edge at x, 0.5 = centre at x; narrow uses x 0.5, align 0.5); wide stays untouched. Clear the panel's stored narrow values afterwards so the CSS defaults show
 - Why: user sent "窄螢幕　上 26dvh　左 17%　高 90dvh" and asked to centre it on small screens
 - Result: done; at 375×812 the bottle sits at 39–335 (centred to the pixel), top 211, below the greeting (bottom 148); no overlap until docked at 840px of scroll; no horizontal overflow. Wide unchanged. Panel's stored narrow values cleared. yarn run check clean, 40/40 tests
+
+## 2026-11-19 19:05 · claude-code
+- Intent: expose the logo's end state as :root variables (`--logo-top`, `--logo-left` from the shell's left edge, `--logo-rotate`, `--logo-width`; height derived) used by the dock keyframe, the article-header logo and the platen band height, and add a "Logo" section to the dev BottlePositionPanel to tune them live (stored globally under `logo` in localStorage `bottle-position`)
+- Why: user wants to adjust the logo's end position, rotation and size
+- Result: done; verified in dev at 1440×900: setting width 48 / rotate -20 / top 24 / left 10 moved the docked mark live (29×74 → 48×119 box) and saved under `logo`; the article header reads the same variables. Restored the panel's logo values to what it showed before the test. yarn run check clean, 40/40 tests

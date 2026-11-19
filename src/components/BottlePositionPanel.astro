@@ -1,8 +1,9 @@
 ---
-// Dev-only tool for placing the homepage bottle at rest. Drag the bottle at
-// the top of the page, or use the sliders; values are kept per breakpoint in
-// localStorage ("bottle-position") so they survive reloads and can be read
-// back and written into global.css. Never rendered in production.
+// Dev-only tool for placing the homepage bottle at rest and the logo it docks
+// into. Drag the bottle at the top of the page, or use the sliders. Bottle
+// values are kept per breakpoint, logo values once, in localStorage
+// ("bottle-position") so they survive reloads and can be read back and
+// written into global.css. Never rendered in production.
 ---
 
 <details class="bottle-panel" open>
@@ -23,6 +24,27 @@
     <output data-out="height"></output>
   </label>
   <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
+  <p class="bottle-panel-heading">Logo（捲到底看停靠的樣子）</p>
+  <label>
+    <span>上</span>
+    <input type="range" data-logo="top" min="0" max="80" step="1" />
+    <output data-logo-out="top"></output>
+  </label>
+  <label>
+    <span>左</span>
+    <input type="range" data-logo="left" min="-20" max="120" step="1" />
+    <output data-logo-out="left"></output>
+  </label>
+  <label>
+    <span>角度</span>
+    <input type="range" data-logo="rotate" min="-180" max="180" step="1" />
+    <output data-logo-out="rotate"></output>
+  </label>
+  <label>
+    <span>寬</span>
+    <input type="range" data-logo="width" min="12" max="80" step="1" />
+    <output data-logo-out="width"></output>
+  </label>
   <div class="bottle-panel-actions">
     <button type="button" data-reset>重設</button>
     <button type="button" data-copy>複製數值</button>
@@ -99,15 +121,20 @@
     panel.querySelector("[data-reset]").addEventListener("click", () => {
       const all = read();
       delete all[mode()];
+      delete all.logo;
       write(all);
       load();
+      loadLogo();
     });
 
     panel.querySelector("[data-copy]").addEventListener("click", async (event) => {
       const all = read();
       const line = (name, value) =>
         value ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh` : `${name}　未調整`;
-      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow)].join("\n");
+      const logoLine = all.logo
+        ? `Logo　上 ${all.logo.top}px　左 ${all.logo.left}px　角度 ${all.logo.rotate}deg　寬 ${all.logo.width}px`
+        : "Logo　未調整";
+      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         event.target.textContent = "已複製";
@@ -155,8 +182,51 @@
     );
     bottle.addEventListener("dragstart", (event) => event.preventDefault());
 
+    // The logo's docked state: one set of values for every breakpoint.
+    const root = document.documentElement;
+    const logoProps = { top: "--logo-top", left: "--logo-left", rotate: "--logo-rotate", width: "--logo-width" };
+    const logoUnits = { top: "px", left: "px", rotate: "deg", width: "px" };
+    const logoDefaults = () => {
+      for (const prop of Object.values(logoProps)) root.style.removeProperty(prop);
+      const probe = document.createElement("div");
+      probe.style.cssText =
+        "position:absolute;visibility:hidden;top:var(--logo-top);left:var(--logo-left);width:var(--logo-width);rotate:var(--logo-rotate)";
+      document.body.append(probe);
+      const style = getComputedStyle(probe);
+      const values = {
+        top: Math.round(parseFloat(style.top)),
+        left: Math.round(parseFloat(style.left)),
+        rotate: Math.round(parseFloat(style.rotate)),
+        width: Math.round(parseFloat(style.width)),
+      };
+      probe.remove();
+      return values;
+    };
+    let logo = {};
+    const applyLogo = () => {
+      for (const key of Object.keys(logoProps)) {
+        root.style.setProperty(logoProps[key], `${logo[key]}${logoUnits[key]}`);
+        panel.querySelector(`[data-logo="${key}"]`).value = logo[key];
+        panel.querySelector(`[data-logo-out="${key}"]`).textContent = `${logo[key]}${logoUnits[key]}`;
+      }
+    };
+    const loadLogo = () => {
+      logo = { ...logoDefaults(), ...(read().logo || {}) };
+      applyLogo();
+    };
+    for (const input of panel.querySelectorAll("input[data-logo]")) {
+      input.addEventListener("input", () => {
+        logo[input.dataset.logo] = Number(input.value);
+        applyLogo();
+        const all = read();
+        all.logo = { ...logo };
+        write(all);
+      });
+    }
+
     narrow.addEventListener("change", load);
     load();
+    loadLogo();
   })();
 </script>
 
@@ -181,7 +251,7 @@
 
   .bottle-panel label {
     display: grid;
-    grid-template-columns: 1.5rem 1fr 4rem;
+    grid-template-columns: 2rem 1fr 4rem;
     gap: 0.5rem;
     align-items: center;
     min-height: 2.25rem;
@@ -199,6 +269,11 @@
 
   .bottle-panel-hint {
     margin: 0.25rem 0 0.5rem;
+    color: var(--ink-muted);
+  }
+
+  .bottle-panel-heading {
+    margin: 0.75rem 0 0;
     color: var(--ink-muted);
   }
 

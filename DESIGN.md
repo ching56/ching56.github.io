@@ -174,8 +174,11 @@ A single column: the handwritten date at `1.5rem`, then typed text clamped to 10
 ### Bottle Mark
 The real bottle photo, because the hero shows the potter's work: a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, 396×980 frames) and a full-resolution still of the first frame (`bottle-still.webp`, 666×1649, srcset 333/500/666w, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it bleeds: set larger than the screen (170dvh tall at 14dvh from the top and 6% across the shell; at 48rem and below 90dvh at 26dvh, centred (`--bottle-x: 0.5`, `--bottle-align: 0.5`); tuned with the dev-only `BottlePositionPanel`) and cut off by the viewport's bottom edge, so the clay is seen up close first. Over the dock range (the bottle's top plus height less 6rem, at least 40dvh) it steps through frames (the still gives way to the sprite exactly when the first frame turns), leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid ink silhouette: the same sprite frame's outline used as a CSS mask over `currentColor`, so it is crisp at any size. That docked form is the logo on every other page, masked by a 2 KB last-frame outline (`bottle-mark.webp`). The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
 
+### Logo Variables
+The docked logo's end state lives on `:root`: `--logo-top` (1rem), `--logo-left` (from the shell's left edge, `--logo-width × 0.73` so a 45deg lean keeps the neck in the column), `--logo-rotate` (-45deg) and `--logo-width` (30px; height follows the 396:980 frame). The home dock and the article-header logo both read them; the dev-only `BottlePositionPanel` tunes them live.
+
 ### Paper Platen Band
-A fixed paper-white strip, 5.5rem tall, fading in over the last 15dvh of the dock range.
+A fixed paper-white strip, at least 5.5rem tall and always tall enough to cover the docked logo, fading in over the last 15dvh of the dock range.
 
 ### Lightbox
 A native popover, full viewport, on a 97% white veil. A tap, Escape, or outside click closes it; the photo is contained to the viewport minus 1rem each side. The cursor is zoom-out.
