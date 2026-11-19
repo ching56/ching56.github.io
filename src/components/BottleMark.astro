@@ -24,7 +24,9 @@ const { variant, href, label } = Astro.props;
 
 {
   variant === "turntable" ? (
-    <a class="home-bottle" href={href} aria-label={label} style={`--frames:${FRAMES};--sprite-large:url(${spin.src});--sprite-small:url(${spinSmall.src})`}>
+    <a class="home-bottle" href={href} aria-label={label} data-sprite-large={spin.src}
+      data-sprite-small={spinSmall.src}
+      style={`--frames:${FRAMES};--sprite-large:url(${spin.src});--sprite-small:url(${spinSmall.src})`}>
       <span class="bottle-photo" aria-hidden="true"></span>
       <Image
         class="bottle-still"
@@ -37,6 +39,42 @@ const { variant, href, label } = Astro.props;
       />
       <span class="bottle-silhouette" aria-hidden="true"></span>
     </a>
+    <script is:inline>
+      // The turntable only turns once its sprite is in hand. The still loads
+      // first; the sprite for this screen follows, and only once it has
+      // loaded does data-spin="ready" let CSS use it. Data saver, 2G, or no
+      // sprite within 8s: the bottle docks without turning.
+      (() => {
+        const root = document.documentElement;
+        const bottle = document.querySelector(".home-bottle");
+        const still = bottle && bottle.querySelector(".bottle-still");
+        const connection = navigator.connection;
+        if (!still || (connection && (connection.saveData || /2g$/.test(connection.effectiveType)))) return;
+        const narrow = matchMedia("(max-width: 48rem)");
+        const loaded = new Set();
+        const sync = () => {
+          if (loaded.has(narrow.matches)) root.dataset.spin = "ready";
+          else delete root.dataset.spin;
+        };
+        const load = () => {
+          sync();
+          if (loaded.has(narrow.matches)) return;
+          const small = narrow.matches;
+          const sprite = new Image();
+          const timeout = setTimeout(() => sprite.removeAttribute("src"), 8000);
+          sprite.onload = () => {
+            clearTimeout(timeout);
+            loaded.add(small);
+            sync();
+          };
+          sprite.onerror = () => clearTimeout(timeout);
+          sprite.src = small ? bottle.dataset.spriteSmall : bottle.dataset.spriteLarge;
+        };
+        if (still.complete && still.naturalWidth) load();
+        else still.addEventListener("load", load, { once: true });
+        narrow.addEventListener("change", load);
+      })();
+    </script>
   ) : (
     <span class="bottle-logo" style={`--mark:url(${mark.src})`} aria-hidden="true"></span>
   )

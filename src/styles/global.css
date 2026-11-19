@@ -311,15 +311,20 @@ main {
 }
 
 .home-bottle {
-  /* Each screen fetches only its own turntable sprite. */
-  --sprite: var(--sprite-large);
   height: var(--bottle-height);
   aspect-ratio: 396 / 980;
   rotate: var(--bottle-rotate);
 }
 
+/* The turntable sprite is used only once the page has loaded it (see
+   BottleMark's script): until then nothing references it, so the still is
+   never competing with it, and each screen fetches only its own size. */
+html[data-spin="ready"] .home-bottle {
+  --sprite: var(--sprite-large);
+}
+
 @media (max-width: 48rem) {
-  .home-bottle {
+  html[data-spin="ready"] .home-bottle {
     --sprite: var(--sprite-small);
   }
 }
@@ -473,11 +478,13 @@ main {
     --dock-frame: round(down, var(--dock-t) * 20 * var(--dock-spin), 1);
   }
 
-  .home-bottle .bottle-still {
+  /* Without the sprite (a slow network, no script), the still stays, docks
+     and darkens to black without turning. */
+  html[data-spin="ready"] .home-bottle .bottle-still {
     opacity: clamp(0, 1 - var(--dock-t) * 1000, 1);
   }
 
-  .home-bottle .bottle-photo {
+  html[data-spin="ready"] .home-bottle .bottle-photo {
     opacity: 1;
     background-position-x: calc(var(--dock-frame) * 5%);
   }
@@ -488,7 +495,7 @@ main {
 
   /* The ink silhouette (which takes the hover colour) replaces the black
      photo only once fully docked, where the two are identical. */
-  .home-bottle .bottle-silhouette {
+  html[data-spin="ready"] .home-bottle .bottle-silhouette {
     opacity: clamp(0, (var(--dock-t) - 0.99) * 100, 1);
   }
 
@@ -1168,6 +1175,7 @@ time {
     --bottle-height: 16dvh;
     --bottle-rotate: -21deg;
     --hero-gap: 76px;
+    --greeting-align: end;
   }
 
   .site-header {

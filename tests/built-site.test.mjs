@@ -382,7 +382,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   );
   assert.match(
     chineseList,
-    /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<section id="about"/,
+    /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<script>[\s\S]*?<\/script>\s*<\/div>\s*<section id="about"/,
   );
   // The hero shows the real bottle photo (the fingerprinted turntable sprite),
   // which darkens into a solid silhouette masked by the same sprite as it docks.
@@ -802,7 +802,7 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 
-test("content pages load no external webfonts or Astro runtime JavaScript", async () => {
+test("content pages load no external webfonts or Astro runtime JavaScript beyond the bottle loader", async () => {
   const contentPages = [
     listPage,
     new URL("en/index.html", distDirectory),
@@ -817,7 +817,15 @@ test("content pages load no external webfonts or Astro runtime JavaScript", asyn
 
   for (const [index, html] of contentHtml.entries()) {
     const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map(([tag]) => tag);
-    if (index < 2) {
+    if (index === 0) {
+      // The zh-TW home has one small inline script: it loads the bottle's
+      // turntable sprite after the still, and turns the spin on only once
+      // the sprite is in hand (never on Save-Data, 2G or after 8s).
+      assert.deepEqual(scripts, ["<script>"]);
+      const [script] = html.match(/<script>[\s\S]*?<\/script>/);
+      assert.match(script, /dataset\.spin = "ready"/);
+      assert.ok(script.length < 2048, `expected the inline script under 2 KB, got ${script.length}`);
+    } else if (index === 1) {
       assert.deepEqual(scripts, []);
     } else {
       assert.deepEqual(scripts, ['<script src="/likes.js" defer>']);

@@ -999,7 +999,10 @@
 ## 2026-11-19 22:25 · claude-code
 - Intent: guard the turntable on slow networks: the still stays first (fetchpriority high); the sprite is no longer referenced by CSS until a small inline script (homepage only) has loaded and decoded it, started only after the still has loaded and skipped on Save-Data / 2G or abandoned after 8s; then `html[data-spin="ready"]` turns the spin on. Without it (or without JS) the bottle still docks and darkens, just without turning. Relaxes the homepage zero-JS rule for this one inline script; the test is updated to allow exactly that
 - Why: user: "確保在比較慢的網路上，第一張圖片會優先載入，如果網路無法載入所有圖片，就取消轉動的動畫"
-- Result: (pending)
+- Result: done. In dev and the production preview: the still finishes before the sprite request starts, `data-spin` becomes ready and the turn runs; with the flag removed, the still docks and darkens to black without turning and no sprite is referenced. Gotcha: `img.decode()` never settles in a background tab, so the loader uses `onload`. Test allows exactly this inline script on the zh-TW home (under 2 KB). yarn run check clean, 40/40 tests
 
 ## 2026-11-19 22:30 · claude-code
 - Intent/Result: replaced the 文字 pixel slider with grid alignment, at the user's request ("can we use flexbox or grid alignment?"): `--greeting-align` (start, center, end) drives the hero's `align-content`, chosen per breakpoint from a select in the dev panel. Verified in dev: start puts the greeting at the bottle's top, end makes their bottoms meet (184px). The user's earlier 22px offset in the panel is superseded. yarn run check clean
+
+## 2026-11-19 22:40 · claude-code
+- Intent/Result: wrote the user's narrow-screen greeting alignment (end: the greeting's bottom meets the bottle's) into global.css and cleared the panel's stored narrow values. User: "save alignment"
