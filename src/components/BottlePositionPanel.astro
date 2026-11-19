@@ -14,6 +14,7 @@
     <button type="button" role="tab" data-tab="motion">動畫</button>
     <button type="button" role="tab" data-tab="header">頁首</button>
     <button type="button" role="tab" data-tab="arrows">照片</button>
+    <button type="button" role="tab" data-tab="layout">版面</button>
   </div>
   <section class="bottle-panel-section" role="tabpanel" data-panel="bottle">
     <label>
@@ -112,6 +113,17 @@
     </label>
     <div class="bottle-panel-actions">
       <button type="button" data-emil>套用 Emil 建議</button>
+    </div>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="layout">
+    <p class="bottle-panel-hint">每篇日記的群組與階層</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="layout-variant" value="" />原本</label>
+      <label><input type="radio" name="layout-variant" value="invert" />1 反白日期列</label>
+      <label><input type="radio" name="layout-variant" value="sheet" />2 貼紙</label>
+      <label><input type="radio" name="layout-variant" value="vertical" />3 直書日期</label>
+      <label><input type="radio" name="layout-variant" value="checker" />4 黑白格</label>
+      <label><input type="radio" name="layout-variant" value="box" />5 TUI 框</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="arrows">
@@ -476,6 +488,29 @@
         setArrows(radio.value);
         try {
           localStorage.setItem(ARROWS, radio.value);
+        } catch {}
+      });
+    }
+
+    // Which layout candidate to preview.
+    const LAYOUT = "layout-variant";
+    const setLayout = (value) => {
+      if (value) root.dataset.layout = value;
+      else delete root.dataset.layout;
+      for (const radio of panel.querySelectorAll('input[name="layout-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let layout = "";
+    try {
+      layout = localStorage.getItem(LAYOUT) || "";
+    } catch {}
+    setLayout(layout);
+    for (const radio of panel.querySelectorAll('input[name="layout-variant"]')) {
+      radio.addEventListener("change", () => {
+        setLayout(radio.value);
+        try {
+          localStorage.setItem(LAYOUT, radio.value);
         } catch {}
       });
     }
@@ -925,6 +960,117 @@
         overflow-x: visible;
       }
     }
+  }
+
+  /* ---------- Layout candidates (dev only) ----------
+     Each makes one diary entry read as one object on the grid paper. */
+
+  /* 1: each entry opens on a full-width ink bar, the date reversed out. */
+  :global(html[data-layout="invert"] .diary-feed) {
+    gap: calc(var(--grid) * 4);
+  }
+
+  :global(html[data-layout="invert"] .diary-entry) {
+    gap: var(--grid);
+  }
+
+  :global(html[data-layout="invert"] .diary-date) {
+    margin-inline: calc(var(--grid) * -1);
+    padding-inline: var(--grid);
+    background: var(--ink);
+    color: var(--paper);
+    line-height: calc(var(--grid) * 2);
+  }
+
+  /* 2: entries as paper slips taped into the notebook, each a little askew. */
+  :global(html[data-layout="sheet"] .diary-feed) {
+    gap: calc(var(--grid) * 3);
+  }
+
+  :global(html[data-layout="sheet"] .diary-entry) {
+    position: relative;
+    margin-inline: calc(var(--grid) * -1);
+    padding: calc(var(--grid) * 1.5) var(--grid) var(--grid);
+    border: 1px solid rgb(20 20 20 / 22%);
+    background: var(--paper);
+    rotate: -0.6deg;
+  }
+
+  :global(html[data-layout="sheet"] .diary-entry:nth-child(even)) {
+    rotate: 0.5deg;
+  }
+
+  :global(html[data-layout="sheet"] .diary-entry::before) {
+    position: absolute;
+    top: calc(var(--grid) * -0.5);
+    left: 50%;
+    width: calc(var(--grid) * 5);
+    height: var(--grid);
+    background: rgb(196 22 28 / 16%);
+    translate: -50% 0;
+    rotate: 1.5deg;
+    content: "";
+  }
+
+  /* 3: dates stand vertically in their own column, behind an ink rule. */
+  @media (min-width: 48.0625rem) {
+    :global(html[data-layout="vertical"] .diary-feed) {
+      gap: calc(var(--grid) * 4);
+    }
+
+    :global(html[data-layout="vertical"] .diary-entry) {
+      grid-template-columns: calc(var(--grid) * 3) minmax(0, 1fr);
+      column-gap: var(--grid);
+    }
+
+    :global(html[data-layout="vertical"] .diary-entry > *) {
+      grid-column: 2;
+    }
+
+    :global(html[data-layout="vertical"] .diary-date) {
+      grid-column: 1;
+      grid-row: 1 / span 4;
+      align-self: start;
+      padding-inline-end: calc(var(--grid) * 0.5);
+      border-inline-end: 1px solid var(--ink);
+      writing-mode: vertical-rl;
+      line-height: calc(var(--grid) * 2);
+    }
+  }
+
+  /* 4: a row of alternately inked cells heads each entry. */
+  :global(html[data-layout="checker"] .diary-feed) {
+    gap: calc(var(--grid) * 4);
+  }
+
+  :global(html[data-layout="checker"] .diary-entry::before) {
+    height: var(--grid);
+    background: repeating-linear-gradient(
+      90deg,
+      var(--ink) 0 var(--grid),
+      transparent var(--grid) calc(var(--grid) * 2)
+    );
+    content: "";
+  }
+
+  /* 5: a TUI window: a double-rule frame with the date set into its top. */
+  :global(html[data-layout="box"] .diary-feed) {
+    gap: calc(var(--grid) * 3);
+  }
+
+  :global(html[data-layout="box"] .diary-entry) {
+    position: relative;
+    margin-inline: calc(var(--grid) * -1);
+    padding: calc(var(--grid) * 2) var(--grid) var(--grid);
+    border: 3px double var(--ink);
+  }
+
+  :global(html[data-layout="box"] .diary-date) {
+    position: absolute;
+    top: -0.7em;
+    left: var(--grid);
+    padding-inline: 0.5ch;
+    background: var(--paper);
   }
 
 </style>

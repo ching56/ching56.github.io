@@ -1055,3 +1055,8 @@
 
 ## 2026-11-20 01:00 · claude-code
 - Intent/Result: corrected the margin rhythm to the reference, per the user ("兩格一個線段，十格一個點"): rule ends now mark every second rule (tile 2 cells tall), the dot every tenth, which falls on a rule end
+
+## 2026-11-20 01:10 · claude-code
+- Intent: five grid-based layout candidates that make each diary entry read as one group and sharpen the hierarchy between blocks, dev-only in a new 版面 tab of the panel via `html[data-layout]`; pushed bolder at the user's "be bold": invert (each entry opens on a full-width ink bar with the date reversed out), sheet (entries as paper slips, alternately tilted, a strip of red tape on top), vertical (desktop: dates set vertically in their own column behind an ink rule), checker (a row of alternating inked cells heads each entry), box (a double-rule TUI frame with the date set into its top edge)
+- Why: user: "基於格子的基本樣式，變化去讓每個排版區塊的視覺階層更加明顯，強化群組關係，製作 5 個 variant"
+- Result: done (dev only). Checked computed styles for each: invert puts the date in paper on an ink bar; sheet frames and tilts entries (±0.5deg) with a 20px tape strip; vertical sets the date vertical in a 3-cell column on screens over 48rem (the user's pane is narrower, so it falls back there); checker heads each entry with a 20px row of alternating ink cells; box draws a double frame with the date absolutely set into its top edge. yarn run check clean
