@@ -1130,3 +1130,8 @@
 
 ## 2026-11-20 04:05 · claude-code
 - Intent/Result: the article header's breadcrumb drops the date; only the bottle (home link) remains. The layout keeps the optional `crumb` step. User: "拿掉 breadcrumb 裡的日期好了"
+
+## 2026-11-20 04:15 · claude-code
+- Intent: a cross-page bottle morph with CSS cross-document view transitions (`@view-transition { navigation: auto }`): the article header's silhouette and the home hero bottle share `view-transition-name: bottle`, so clicking the mark morphs it into the hero (and opening a post shrinks the hero into the mark), 550ms on the user's iOS drawer curve; no JS; off under reduced motion; browsers without support just navigate
+- Why: user: "點 logo back to home 時，可以加上原本的 animation 嗎？有可能實現跨頁動畫嗎"
+- Result: done. Built CSS carries @view-transition and view-transition-name:bottle; the article mark computes view-transition-name: bottle and clicking it reaches home (the morph itself is too quick for the pane's screenshots to catch). Also checked native back: home scrolled to 1500px → post → back returns to 1500px. New test for the transition rules. yarn run check clean, 42/42 tests

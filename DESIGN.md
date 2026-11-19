@@ -171,6 +171,9 @@ The real bottle photo, because the hero shows the potter's work: 21-frame turnta
 ### Logo Variables
 `--logo-width` (22px; height follows the 396:980 frame) and `--logo-rotate` (-3deg) on `:root` size and lean the article-header logo. `--logo-top`/`--logo-left` are left from the removed home dock.
 
+### Bottle Across Pages
+Cross-document view transitions (`@view-transition { navigation: auto }`, CSS only): the article header's silhouette and the home hero share `view-transition-name: bottle`, so following the mark home grows it back into the photo and opening a post shrinks the photo into the mark, 550ms on `cubic-bezier(0.32, 0.72, 0, 1)`; off under reduced motion; unsupported browsers just navigate.
+
 ### Back to Top
 A typed `[ ↑ ]` (bracket control, localised `aria-label`, `href="#top"`) fixed bottom-right on a sliver of paper, aligned to the shell's right edge. A scroll-driven animation fades it in over 80–100dvh of scroll, so it appears only a screen down and never on short pages; the page glides up unless the reader prefers reduced motion.
 

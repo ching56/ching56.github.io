@@ -798,6 +798,15 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 
+test("the bottle carries across pages as a view transition", async () => {
+  const stylesheets = (await walkFiles(distDirectory)).filter((file) => file.endsWith(".css"));
+  const css = (
+    await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
+  ).join("\n");
+  assert.match(css, /@view-transition\s*\{\s*navigation:\s*auto/);
+  assert.match(css, /view-transition-name:\s*bottle/);
+});
+
 test("every page offers a back-to-top link that appears a screen down", async () => {
   const pages = [listPage, new URL("en/index.html", distDirectory), new URL("zh-TW/blog/bottles/index.html", distDirectory)];
   for (const page of pages) {
