@@ -900,7 +900,7 @@
 ## 2026-11-19 17:30 · claude-code
 - Intent: switch the homepage hero to the "bleed" layout the user picked from the five mocks (`.impeccable/mocks/hero-variants/`, variant 4): the bottle photo set larger than the screen (170dvh desktop, 150dvh narrow) and cut by the viewport's bottom edge, greeting top-left; scroll still turns it and docks it as the glyph-silhouette logo (range widened to 0–60dvh). New `scripts/build-bottle-assets.mjs` rebuilds the turntable sprite from the untracked `photo/cutout/` PNGs at the original geometry (bottle 900px tall in a 396×980 frame, was 297×735) plus a sharp 1514px-tall still of frame 0 for the resting hero, swapped out exactly when the first frame turns
 - Why: user: "I like 出血, lets change to it." The old sprite is far too small to show at bleed size
-- Result: (pending)
+- Result: done. Both tables in place (likes.js; BottleMark.astro, with a shared sync() deriving data-spin). check 0/0, test 42/42, home inline script 2,994 B (< 3,072). Verified in dev: home `data-spin=ready`; a broken sprite URL leaves the bottle still after one request. Likes on november-bottles with no API in dev → `unavailable`, hidden; with a mocked API: loading → ready(3) → press → sending (a second click is ignored, one POST) → failed with the message → press clears it → sending → liked(4), aria-pressed=true. DESIGN.md and design.json describe the machines
 
 ## 2026-11-19 17:45 · claude-code
 - Result of the 17:30 entry: done in `6108404`; sprite 882 KB (8316×980), still 38/65/93 KB at 333/500/666w via astro:assets with fetchpriority high. Verified in dev at 1440×900 (bottle 623×1530 at 615,126, cut by the bottom edge; turning at 25%; docked 73px at 64,16) and 375×812 (496×1218 at 78,276; docked at 16,16; no horizontal overflow). Built CSS keeps longhands. The content-image srcset test now skips the decorative still. yarn run check clean, 40/40 tests
@@ -1148,3 +1148,8 @@
 
 ## 2026-11-20 04:55 · claude-code
 - Correction to the 04:45 result: BottlePositionPanel.astro was 983 lines, not ~1,400 (commit `6aaf819`: 1,085 deletions in all). Verified in dev after the server restarted: no panel, the bottle turns on scroll (40% at 150px), the shell is no longer rounded (972.8px at 1024), no horizontal overflow
+
+## 2026-11-20 05:05 · claude-code
+- Intent: make the two pieces of implicit client state explicit finite-state machines. (1) likes.js: the state lived across root.hidden, button.disabled, aria-pressed and the status text; now `loading → ready | unavailable`, `ready|liked|failed —press→ sending`, `sending → liked | failed`, a transition table that ignores events a state doesn't accept, one render() from (state, count, liked), and the state mirrored to `data-state`. Fixes on the way: a failed send's message is cleared on the next press; `aria-busy` while sending. (2) The home sprite loader: per-size states `idle → loading → ready | failed` in a table, `data-spin` derived from the current size's state; a size that failed or timed out stays failed instead of silently retrying when the breakpoint flips back
+- Why: user: "Find implicit state and make it explicit fsm"
+- Result: (pending)
