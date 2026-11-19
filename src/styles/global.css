@@ -593,8 +593,7 @@ time {
 
 /* Photos move to the row below, so the text keeps only words. */
 .diary-text p:has(img),
-.diary-text img,
-.diary-text .glyph-photo {
+.diary-text img {
   display: none;
 }
 
@@ -611,8 +610,6 @@ time {
   position: relative;
   flex: none;
   padding: 0;
-  /* Buttons don't inherit the page face; the glyph art needs the mono cell. */
-  font-family: inherit;
   overflow: hidden;
   border: 0;
   background: var(--paper);
@@ -629,70 +626,6 @@ time {
   display: block;
   width: auto;
   height: var(--thumb-height);
-}
-
-/* The photo typed out as glyphs. Hidden unless the row can develop it. */
-.diary-photo-ascii {
-  position: absolute;
-  inset: 0;
-  display: block;
-  overflow: hidden;
-  color: var(--ink);
-  font-size: calc(var(--thumb-height) / var(--rows));
-  line-height: 1;
-  letter-spacing: 0;
-  text-align: start;
-  white-space: pre;
-  background: var(--paper);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* As a row scrolls up into view, its glyphs develop into the photographs. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .diary-photos {
-      view-timeline: --photo-row block;
-    }
-
-    .diary-photo-ascii {
-      animation-name: type-develop;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --photo-row;
-      animation-range: entry 0% cover 55%;
-    }
-
-    .diary-photo-image {
-      animation-name: photo-develop;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --photo-row;
-      animation-range: entry 0% cover 55%;
-    }
-  }
-}
-
-@keyframes type-develop {
-  0%,
-  50% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes photo-develop {
-  0%,
-  50% {
-    filter: grayscale(1) contrast(1.3);
-  }
-
-  to {
-    filter: none;
-  }
 }
 
 /* Touch screens swipe through the row, like Threads. */
@@ -975,52 +908,6 @@ time {
 .post-body video {
   width: auto;
   max-height: 85svh;
-}
-
-/* Article photos carry their typed rendering, sized from the column width. */
-.glyph-photo {
-  container-type: inline-size;
-  position: relative;
-  display: block;
-}
-
-.glyph-photo-ascii {
-  position: absolute;
-  inset: 0;
-  display: block;
-  overflow: hidden;
-  color: var(--ink);
-  font-size: calc(100cqw / (var(--cols) * 0.6));
-  line-height: 1;
-  letter-spacing: 0;
-  white-space: pre;
-  background: var(--paper);
-  opacity: 0;
-  pointer-events: none;
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .glyph-photo {
-      view-timeline: --glyph-photo block;
-    }
-
-    .glyph-photo-ascii {
-      animation-name: type-develop;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --glyph-photo;
-      animation-range: entry 0% cover 55%;
-    }
-
-    .glyph-photo img {
-      animation-name: photo-develop;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --glyph-photo;
-      animation-range: entry 0% cover 55%;
-    }
-  }
 }
 
 .post-body pre {

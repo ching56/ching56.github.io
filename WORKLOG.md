@@ -905,3 +905,13 @@
 ## 2026-11-19 17:45 · claude-code
 - Result of the 17:30 entry: done in `6108404`; sprite 882 KB (8316×980), still 38/65/93 KB at 333/500/666w via astro:assets with fetchpriority high. Verified in dev at 1440×900 (bottle 623×1530 at 615,126, cut by the bottom edge; turning at 25%; docked 73px at 64,16) and 375×812 (496×1218 at 78,276; docked at 16,16; no horizontal overflow). Built CSS keeps longhands. The content-image srcset test now skips the decorative still. yarn run check clean, 40/40 tests
 - Correction: a doc-update script failed partway and the commit ran anyway, so the contract comment, route brief, STATE and the platen range in design.json land in a follow-up commit
+
+## 2026-11-19 18:00 · claude-code
+- Intent: (1) on screens wider than 48rem put the greeting at the top right of the shell and default the bleeding bottle to the left (x 0.08); (2) derive the hero's height and the dock's scroll range from the bottle's own top and height, so the diary never scrolls under the shrinking bottle (hero ends where the bottle ends; dock range = top + height - 6rem); (3) add a dev-only `BottlePositionPanel.astro` (like DiaryFontPanel): drag the bottle at scroll 0 and use sliders for top/x/height, stored per breakpoint in localStorage `bottle-position` so the agent can read the chosen values from the browser pane
+- Why: user wants to place the bottle themselves and wants text right, bottle left, no overlap while it shrinks
+- Result: (pending)
+
+## 2026-11-19 18:10 · claude-code
+- Intent: remove the character-art treatment from photos: feed thumbnails lose `diary-photo-ascii` and the scroll develop; article photos lose the `glyphPhotos()` Satteri plugin (file deleted, unregistered) and its CSS; tests now assert no glyph markup and the minification test keeps only `scroll(root)`
+- Why: user: "移除圖片的 ascii 風格"
+- Result: done; photoToAscii removed from src/lib/ascii.ts too. Docs (DESIGN.md, contract) are updated together with the logo change that follows. yarn run check clean, 40/40 tests

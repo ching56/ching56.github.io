@@ -750,11 +750,8 @@ test("the zh-TW homepage is a diary feed, newest entry first, with lightbox phot
     // Entries carry no index; the date alone heads each one.
     assert.doesNotMatch(entry, /diary-step/);
 
-    // Every thumbnail carries its typed glyph rendering for the develop effect.
-    assert.equal(
-      entry.match(/class="diary-photo-ascii" aria-hidden="true"/g)?.length ?? 0,
-      entry.match(/class="diary-photo"/g)?.length ?? 0,
-    );
+    // Thumbnails are plain photographs, with no character-art overlay.
+    assert.doesNotMatch(entry, /diary-photo-ascii|glyph-photo/);
 
     // Each thumbnail opens its own native popover lightbox; no script needed.
     const triggers = [...entry.matchAll(/<button type="button" class="diary-photo" popovertarget="([^"]+)"/g)].map(([, id]) => id);
@@ -842,14 +839,14 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
 
 test("scroll-driven animations survive minification as longhands", async () => {
   // Minifiers can fold animation-timeline into the animation shorthand, which
-  // browsers reject, silently freezing the bottle and the glyph develop.
+  // browsers reject, silently freezing the bottle.
   const stylesheets = (await walkFiles(distDirectory)).filter((file) => file.endsWith(".css"));
   const css = (
     await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
   ).join("\n");
 
-  assert.doesNotMatch(css, /animation:[^;}]*(?:scroll\(|--photo-row|--glyph-photo)/);
-  for (const timeline of ["scroll(root)", "--photo-row", "--glyph-photo"]) {
+  assert.doesNotMatch(css, /animation:[^;}]*scroll\(/);
+  for (const timeline of ["scroll(root)"]) {
     assert.ok(css.includes(`animation-timeline:${timeline}`), `expected animation-timeline:${timeline}`);
   }
 });

@@ -2,7 +2,6 @@ import { defineConfig } from "astro/config";
 
 import { SITE } from "./src/config/site.js";
 import { articleImageSizes } from "./src/lib/article-image-sizes.mjs";
-import { glyphPhotos } from "./src/lib/glyph-photos.mjs";
 
 export default defineConfig({
   site: SITE.url,
@@ -16,6 +15,5 @@ export default defineConfig({
   image: {
     layout: "constrained",
   },
-  // Article photos also carry their character-art rendering.
-  integrations: [articleImageSizes(), glyphPhotos()],
+  integrations: [articleImageSizes()],
 });

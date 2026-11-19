@@ -3,7 +3,6 @@ import { Image } from "astro:assets";
 import { render, type CollectionEntry } from "astro:content";
 
 import { UI, type SiteLanguage } from "../config/i18n";
-import { photoToAscii } from "../lib/ascii";
 import { getPostDate, getPostSlug, getPostsByLanguage } from "../lib/posts";
 
 interface Props {
@@ -17,21 +16,12 @@ const postImages = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 const MARKDOWN_IMAGE = /!\[([^\]]*)\]\((\.\/[^)\s]+)\)/g;
-// Thumbnail art is typed at this many lines: about 8px glyphs at 12rem,
-// large enough to read as typed characters rather than grey texture.
-const ASCII_ROWS = 24;
-
-async function getPhotos(post: CollectionEntry<"posts">) {
+function getPhotos(post: CollectionEntry<"posts">) {
   const directory = `/${post.filePath ?? ""}`.replace(/\/[^/]*$/, "");
-  const found = [...(post.body ?? "").matchAll(MARKDOWN_IMAGE)].flatMap(([, alt, path]) => {
-    const file = `${directory}/${path.slice(2)}`;
-    const image = postImages[file]?.default;
-    return image ? [{ alt, image, file }] : [];
+  return [...(post.body ?? "").matchAll(MARKDOWN_IMAGE)].flatMap(([, alt, path]) => {
+    const image = postImages[`${directory}/${path.slice(2)}`]?.default;
+    return image ? [{ alt, image }] : [];
   });
-
-  return Promise.all(
-    found.map(async (photo) => ({ ...photo, ascii: await photoToAscii(photo.file, ASCII_ROWS) })),
-  );
 }
 
 const { language } = Astro.props;
@@ -69,7 +59,7 @@ const entries = await Promise.all(
         </div>
         {photos.length > 0 && (
           <div class="diary-photos">
-            {photos.map(({ alt, image, ascii }, index) => {
+            {photos.map(({ alt, image }, index) => {
               const id = `photo-${slug}-${index + 1}`;
 
               return (
@@ -87,11 +77,6 @@ const entries = await Promise.all(
                       widths={[240, 480]}
                       sizes="240px"
                     />
-                    <span
-                      class="diary-photo-ascii"
-                      aria-hidden="true"
-                      style={`--cols:${ascii.cols};--rows:${ascii.rows}`}
-                    >{ascii.text}</span>
                   </button>
                   <div id={id} class="lightbox" popover>
                     <button
