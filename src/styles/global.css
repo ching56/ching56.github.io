@@ -12,7 +12,20 @@
 }
 
 :root {
-  --paper: #ffffff;
+  /* Notebook paper: a cream stock ruled in faint squares (see html). */
+  --paper: #f5f3e6;
+  --grid: 20px;
+  /* The printed area's right margin: ticks and dots live here. */
+  --grid-margin: 12px;
+  /* One 20px cell of the ruling, after a Japanese notebook's square grid:
+     the horizontal rule runs through, the vertical one stops short of each
+     crossing, so it reads as dashed. */
+  --grid-cell: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M0 .5H20' stroke='%23141414' stroke-opacity='.11'/%3E%3Cpath d='M.5 3V18' stroke='%23141414' stroke-opacity='.11'/%3E%3C/svg%3E");
+  --grid-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M19.5 3V18' stroke='%23141414' stroke-opacity='.11'/%3E%3C/svg%3E");
+  --grid-line: rgb(20 20 20 / 11%);
+  /* The shell is a whole number of grid cells wide, so its edges sit on
+     the ruling. */
+  --shell-width-vw: round(down, min(100vw - clamp(2rem, 5vw, 5rem), 82rem), var(--grid));
   --ink: #141414;
   --ink-muted: #5f5f5f;
   --ribbon: #c4161c;
@@ -49,7 +62,6 @@
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
-  background: var(--paper);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -70,7 +82,6 @@ html:lang(zh-TW) {
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--paper);
 }
 
 a {
@@ -114,11 +125,34 @@ a {
 }
 
 .site-shell {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
+  width: round(down, min(100% - clamp(2rem, 5vw, 5rem), 82rem), var(--grid));
   min-height: 100vh;
   margin-inline: auto;
+}
+
+/* The notebook's printed area is the shell: a whole number of cells, so the
+   text column starts and ends on a rule. Outside it is plain paper, except
+   for the right margin, where each rule runs out a few pixels and a dot
+   marks every tenth row, as on the printed page. */
+.site-shell::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(-1 * var(--grid-margin)) 0 0;
+  padding-right: var(--grid-margin);
+  background:
+    radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
+      calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
+    linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
+      4px var(--grid) repeat-y border-box,
+    var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
+    var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
+  background-clip: border-box, border-box, border-box, content-box;
+  pointer-events: none;
+  content: "";
 }
 
 /* Typed brackets: every control is a struck "[ label ]". The brackets carry
@@ -257,7 +291,6 @@ main {
    the greeting is padded to start just past the bottle wherever it stands. */
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
-  --shell-width-vw: min(100vw - clamp(2rem, 5vw, 5rem), 82rem);
   --bottle-top: 12dvh;
   /* Where the bottle stands, as a fraction of the shell width, and which part
      of the bottle stands there: 0 its left edge, 0.5 its centre. */
@@ -433,7 +466,7 @@ html[data-spin="ready"] .home-bottle {
   }
 
   .home-bottle {
-    --shell-width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
+    --shell-width: round(down, min(100% - clamp(2rem, 5vw, 5rem), 82rem), var(--grid));
     --shell-left: calc((100% - var(--shell-width)) / 2);
     --start-left: calc(
       var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
@@ -540,7 +573,7 @@ html[data-spin="ready"] .home-bottle {
   /* Mirror the narrow-screen shell width. */
   @media (max-width: 48rem) {
     .home-bottle {
-      --shell-width: min(100% - 2rem, 42rem);
+      --shell-width: round(down, min(100% - 2rem, 42rem), var(--grid));
     }
   }
 
@@ -891,7 +924,7 @@ time {
 }
 
 .lightbox::backdrop {
-  background: rgb(255 255 255 / 97%);
+  background: color-mix(in srgb, var(--paper) 97%, transparent);
 }
 
 .lightbox-close {
@@ -1187,13 +1220,16 @@ time {
 }
 
 @media (max-width: 48rem) {
+  :root {
+    --shell-width-vw: round(down, min(100vw - 2rem, 42rem), var(--grid));
+  }
+
   .site-shell {
-    width: min(100% - 2rem, 42rem);
+    width: round(down, min(100% - 2rem, 42rem), var(--grid));
   }
 
   .home-stage {
     --main-top: 2rem;
-    --shell-width-vw: min(100vw - 2rem, 42rem);
     /* Placed by the user with the dev panel. */
     --bottle-top: 3dvh;
     --bottle-x: 0.05;

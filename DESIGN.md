@@ -2,7 +2,7 @@
 name: Character Proof
 description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, plain photographs, and the real bottle photo as the hero that docks into a solid silhouette logo.
 colors:
-  paper: "#ffffff"
+  paper: "#f5f3e6"
   ink: "#141414"
   ink-muted: "#5f5f5f"
   ribbon: "#c4161c"
@@ -87,13 +87,13 @@ components:
 
 **Creative North Star: "Character Proof"**
 
-The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.
+The pottery diary is typed out like a proof pulled on a typewriter onto a page of grid notebook paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.
 
 Hierarchy comes from the cell grid, not from size. Controls are struck as `[ label ]` brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio (direction contract).
 
 **Key Characteristics:**
 
-- Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
+- Cream notebook paper (#f5f3e6) ruled in 20px squares, with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
 - One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.
 - All text starts flush on the column's left edge; only control brackets hang one cell into the margin.
 - Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.
@@ -107,14 +107,15 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Ribbon Red** (`#c4161c`): Control brackets, hover state of controls and titles, text selection background, the underline of body links, the focus outline of photo thumbnails, pressed-like-state likes count.
 
 ### Neutral
-- **Struck White Paper** (`#ffffff`): Page, platen band, buttons-as-paper, lightbox (veiled at 97%).
+- **Notebook Paper** (`#f5f3e6`): Page, platen band, buttons-as-paper, lightbox (veiled at 97%).
+- **Grid Rule** (`#141414` at 11%): The 20px ruling printed over the shell: horizontal rules run through, vertical ones stop 3px short of each crossing (dashed, after a Japanese square-grid notebook); in the 12px right margin each rule runs out 4px and a dot marks every tenth row.
 - **Typewriter Black** (`#141414`): Body text, the bottle silhouette, dashed focus outline.
 - **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
 
 ### Named Rules
 **The Single Ribbon Rule.** Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.
 
-**The White Paper Rule.** The paper is pure white; do not tint it. Every veil, backing, and band uses the same paper value.
+**The Notebook Rule.** The page is cream grid paper. The shell is the printed area: a whole number of 20px cells wide (`round(down, …, var(--grid))`), so the text column starts and ends on a rule; outside it is plain paper. Every veil, backing and band uses the same paper value.
 
 ## Typography
 
@@ -211,6 +212,6 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 - **Don't** add any other `@font-face` or webfont; Chinese webfonts are megabytes.
 - **Don't** add shadows, border radii, glass, blur, fills, or card frames.
 - **Don't** fill with ribbon red or set paragraph text in it.
-- **Don't** tint the paper away from pure white.
+- **Don't** draw the ruling outside the shell or change its cell without rounding the shell to match.
 - **Don't** write `animation:` shorthand with a timeline.
 - **Don't** treat the handwriting face as chosen, or Chinese as grid-aligned; both are open (see Typography).

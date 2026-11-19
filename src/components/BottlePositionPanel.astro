@@ -317,6 +317,9 @@
     const logoProps = { top: "--logo-top", left: "--logo-left", rotate: "--logo-rotate", width: "--logo-width" };
     const logoUnits = { top: "px", left: "px", rotate: "deg", width: "px" };
     const logoDefaults = () => {
+      // Read the stylesheet's own values, not a header candidate's.
+      const header = root.dataset.header;
+      delete root.dataset.header;
       for (const prop of Object.values(logoProps)) root.style.removeProperty(prop);
       const probe = document.createElement("div");
       probe.style.cssText =
@@ -330,6 +333,7 @@
         width: Math.round(parseFloat(style.width)),
       };
       probe.remove();
+      if (header) root.dataset.header = header;
       return values;
     };
     let logo = {};
@@ -341,8 +345,11 @@
       }
     };
     const loadLogo = () => {
-      logo = { ...logoDefaults(), ...(read().logo || {}) };
+      const stored = read().logo;
+      logo = { ...logoDefaults(), ...(stored || {}) };
       applyLogo();
+      // Untouched sliders leave the stylesheet in charge.
+      if (!stored) for (const prop of Object.values(logoProps)) root.style.removeProperty(prop);
     };
     for (const input of panel.querySelectorAll("input[data-logo]")) {
       input.addEventListener("input", () => {
