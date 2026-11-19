@@ -92,7 +92,7 @@
     "northStar": "Character Proof",
     "overview": "The pottery diary is typed out like a proof pulled on a typewriter onto a page of grid notebook paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
-      "Cream notebook paper (#f5f3e6) ruled in 20px squares (dashed verticals, margin ticks and a dot every tenth row), with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
+      "Cream notebook paper (#f5f3e6) ruled in 20px squares (dashed verticals; in the right margin every second rule runs out and a dot marks every tenth), with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
       "One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.",
       "All text starts flush on the column edge; only control brackets hang one cell into the margin.",
       "Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.",
