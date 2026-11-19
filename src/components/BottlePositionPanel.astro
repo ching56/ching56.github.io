@@ -8,13 +8,6 @@
 
 <details class="bottle-panel" open>
   <summary>瓶子位置　<span data-mode></span></summary>
-  <p class="bottle-panel-heading">動畫（捲過門檻比較）</p>
-  <div class="bottle-panel-dock">
-    <label><input type="radio" name="dock-variant" value="" />原本</label>
-    <label><input type="radio" name="dock-variant" value="turn" />1 轉盤收合</label>
-    <label><input type="radio" name="dock-variant" value="ink" />2 先墨後飛</label>
-    <label><input type="radio" name="dock-variant" value="stamp" />3 落款</label>
-  </div>
   <p class="bottle-panel-heading">瓶子</p>
   <label>
     <span>上</span>
@@ -28,8 +21,13 @@
   </label>
   <label>
     <span>高</span>
-    <input type="range" data-key="height" min="40" max="240" step="1" />
+    <input type="range" data-key="height" min="10" max="240" step="1" />
     <output data-out="height"></output>
+  </label>
+  <label>
+    <span>角度</span>
+    <input type="range" data-key="rotate" min="-90" max="90" step="1" />
+    <output data-out="rotate"></output>
   </label>
   <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
   <p class="bottle-panel-heading">Logo（捲到底看停靠的樣子）</p>
@@ -70,7 +68,12 @@
     const narrow = matchMedia("(max-width: 48rem)");
     const mode = () => (narrow.matches ? "narrow" : "wide");
     const label = () => (narrow.matches ? "窄螢幕" : "寬螢幕");
-    const props = { top: "--bottle-top", x: "--bottle-x", height: "--bottle-height" };
+    const props = {
+      top: "--bottle-top",
+      x: "--bottle-x",
+      height: "--bottle-height",
+      rotate: "--bottle-rotate",
+    };
 
     const read = () => {
       try {
@@ -93,6 +96,7 @@
         top: parseFloat(style.getPropertyValue("--bottle-top")),
         x: Math.round(parseFloat(style.getPropertyValue("--bottle-x")) * 100),
         height: parseFloat(style.getPropertyValue("--bottle-height")),
+        rotate: parseFloat(style.getPropertyValue("--bottle-rotate")) || 0,
       };
     };
 
@@ -101,10 +105,11 @@
       stage.style.setProperty("--bottle-top", `${current.top}dvh`);
       stage.style.setProperty("--bottle-x", `${current.x / 100}`);
       stage.style.setProperty("--bottle-height", `${current.height}dvh`);
+      stage.style.setProperty("--bottle-rotate", `${current.rotate}deg`);
       for (const key of Object.keys(props)) {
         panel.querySelector(`[data-key="${key}"]`).value = current[key];
         panel.querySelector(`[data-out="${key}"]`).textContent =
-          key === "x" ? `${current[key]}%` : `${current[key]}dvh`;
+          key === "x" ? `${current[key]}%` : key === "rotate" ? `${current[key]}deg` : `${current[key]}dvh`;
       }
       panel.querySelector("[data-mode]").textContent = label();
     };
@@ -138,7 +143,9 @@
     panel.querySelector("[data-copy]").addEventListener("click", async (event) => {
       const all = read();
       const line = (name, value) =>
-        value ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh` : `${name}　未調整`;
+        value
+          ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh　角度 ${value.rotate ?? 0}deg`
+          : `${name}　未調整`;
       const logoLine = all.logo
         ? `Logo　上 ${all.logo.top}px　左 ${all.logo.left}px　角度 ${all.logo.rotate}deg　寬 ${all.logo.width}px`
         : "Logo　未調整";
@@ -232,29 +239,6 @@
       });
     }
 
-    // Which dock animation to preview.
-    const DOCK = "dock-variant";
-    const setDock = (value) => {
-      if (value) root.dataset.dock = value;
-      else delete root.dataset.dock;
-      for (const radio of panel.querySelectorAll('input[name="dock-variant"]')) {
-        radio.checked = radio.value === value;
-      }
-    };
-    let dock = "";
-    try {
-      dock = localStorage.getItem(DOCK) || "";
-    } catch {}
-    setDock(dock);
-    for (const radio of panel.querySelectorAll('input[name="dock-variant"]')) {
-      radio.addEventListener("change", () => {
-        setDock(radio.value);
-        try {
-          localStorage.setItem(DOCK, radio.value);
-        } catch {}
-      });
-    }
-
     narrow.addEventListener("change", load);
     load();
     loadLogo();
@@ -308,22 +292,6 @@
     color: var(--ink-muted);
   }
 
-  .bottle-panel-dock {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 0.5rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .bottle-panel-dock label {
-    display: flex;
-    gap: 0.4rem;
-    min-height: 1.75rem;
-  }
-
-  .bottle-panel-dock input {
-    width: auto;
-  }
 
   .bottle-panel-actions {
     display: flex;
@@ -344,87 +312,5 @@
   :global(.home-bottle) {
     cursor: grab;
     touch-action: none;
-  }
-
-  /* ---------- Dock animation candidates (dev only) ----------
-     Each reacts to the same --docked flip as the shipped dock. */
-  @supports (animation-timeline: scroll()) {
-    /* 1: the turntable turns once while the bottle travels, then inks. */
-    :global(html[data-dock="turn"]) {
-      --dock-duration: 900ms;
-    }
-
-    :global(html[data-dock="turn"] .home-bottle .bottle-still) {
-      transition-duration: 0s;
-    }
-
-    :global(html[data-dock="turn"] .home-bottle .bottle-photo) {
-      opacity: 1;
-      background-position-x: calc(100% * var(--docked));
-      transition: background-position-x var(--dock-duration) steps(21, jump-none);
-    }
-
-    :global(html[data-dock="turn"] .home-bottle .bottle-silhouette) {
-      mask-position: calc(100% * var(--docked)) 0;
-      transition:
-        mask-position var(--dock-duration) steps(21, jump-none),
-        opacity 220ms ease-out calc(var(--dock-duration) * 0.7);
-    }
-
-    /* 2: inks in place first, then flies to the corner as a silhouette. */
-    :global(html[data-dock="ink"] .home-bottle) {
-      transition-delay: 180ms, 180ms, 180ms, 180ms, 0s;
-    }
-
-    :global(html[data-dock="ink"] .home-bottle .bottle-still),
-    :global(html[data-dock="ink"] .home-bottle .bottle-silhouette) {
-      transition-duration: 180ms;
-    }
-
-    /* 3: no travel. The photo recedes where it stands and the mark is pressed
-       into the corner like a potter's seal. */
-    :global(html[data-dock="stamp"] .home-bottle) {
-      top: var(--bottle-top);
-      left: var(--start-left);
-      height: var(--bottle-height);
-      translate: none;
-      scale: none;
-      rotate: none;
-    }
-
-    :global(html[data-dock="stamp"] .home-bottle .bottle-still) {
-      scale: calc(1 - 0.04 * var(--docked));
-      transition:
-        opacity 200ms ease-out,
-        scale 200ms ease-out;
-    }
-
-    :global(html[data-dock="stamp"] .home-bottle .bottle-silhouette) {
-      opacity: 0;
-    }
-
-    :global(html[data-dock="stamp"] .home-bottle::after) {
-      position: fixed;
-      top: var(--logo-top);
-      left: var(--end-left);
-      width: var(--logo-width);
-      height: var(--logo-height);
-      background: currentColor;
-      mask: var(--mark) center / contain no-repeat;
-      rotate: var(--logo-rotate);
-      opacity: var(--docked);
-      scale: calc(1.35 - 0.35 * var(--docked));
-      pointer-events: auto;
-      content: "";
-      transition:
-        opacity 160ms ease-out,
-        scale 260ms cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    @container style(--docked: 1) {
-      :global(html[data-dock="stamp"] .home-bottle) {
-        pointer-events: none;
-      }
-    }
   }
 </style>

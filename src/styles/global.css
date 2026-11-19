@@ -31,9 +31,10 @@
   --logo-rotate: -3deg;
   --logo-top: 16px;
   --logo-left: -4px;
-  /* The home bottle docks once the page scrolls past this, in one move. */
+  /* The home bottle docks once the page scrolls past this, in one move,
+     turning once on its turntable. */
   --dock-threshold: 2rem;
-  --dock-duration: 550ms;
+  --dock-duration: 900ms;
   --dock-ease: cubic-bezier(0.77, 0, 0.175, 1);
   font-family: var(--font-type);
   font-size: 100%;
@@ -236,27 +237,34 @@ main {
   display: none;
 }
 
-/* The hero fills the first screen: the greeting at the top right (top left
-   on narrow screens), the bottle on the left, set larger than the screen and
-   cut off by its bottom edge, so the clay is seen up close first. Positions
-   are in viewport units so the pinned bottle (below) and this static
-   fallback land in the same place. */
+/* The hero is one row: the bottle on the left and the greeting beside it,
+   centred on the bottle's height. Positions are in viewport units so the
+   pinned bottle (below) and this static fallback land in the same place, and
+   the greeting is padded to start just past the bottle wherever it stands. */
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
-  --bottle-top: 14dvh;
+  --shell-width-vw: min(100vw - clamp(2rem, 5vw, 5rem), 82rem);
+  --bottle-top: 12dvh;
   /* Where the bottle stands, as a fraction of the shell width, and which part
      of the bottle stands there: 0 its left edge, 0.5 its centre. */
-  --bottle-x: 0.06;
+  --bottle-x: 0;
   --bottle-align: 0;
-  --bottle-height: 170dvh;
+  --bottle-height: 36dvh;
+  --bottle-rotate: 0deg;
   --bottle-width: calc(var(--bottle-height) * 396 / 980);
+  --hero-gap: 2rem;
   position: relative;
 }
 
 .home-hero {
   display: grid;
-  align-content: start;
-  min-height: calc(100dvh - var(--main-top));
+  align-content: center;
+  min-height: calc(var(--bottle-top) - var(--main-top) + var(--bottle-height));
+  padding-top: calc(var(--bottle-top) - var(--main-top));
+  padding-inline-start: calc(
+    var(--shell-width-vw) * var(--bottle-x) + var(--bottle-width) * (1 - var(--bottle-align)) +
+      var(--hero-gap)
+  );
 }
 
 .home-hero .about-intro {
@@ -265,23 +273,13 @@ main {
   max-width: 30ch;
 }
 
-@media (min-width: 48.0625rem) {
-  .home-hero .about-intro {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: min(30ch, 40%);
-  }
-}
-
-/* Static fallback: the bottle in place, cut off at the bottom of the first
-   screen. */
+/* Static fallback: the bottle in place. */
 .home-bottle-slot {
   position: absolute;
   top: calc(var(--bottle-top) - var(--main-top));
   right: 0;
   left: calc(var(--bottle-x) * 100% - var(--bottle-width) * var(--bottle-align));
-  height: calc(100dvh - var(--bottle-top));
+  height: var(--bottle-height);
   overflow: clip;
 }
 
@@ -297,6 +295,7 @@ main {
 .home-bottle {
   height: var(--bottle-height);
   aspect-ratio: 396 / 980;
+  rotate: var(--bottle-rotate);
 }
 
 .home-bottle:hover {
@@ -313,7 +312,7 @@ main {
   height: 100%;
 }
 
-/* The turntable sprite, showing one frame (used by the dev candidates). */
+/* The turntable sprite, showing one frame. */
 .bottle-photo {
   position: absolute;
   inset: 0;
@@ -322,13 +321,13 @@ main {
   opacity: 0;
 }
 
-/* The silhouette: the first frame's outline, filled with ink. */
+/* The silhouette: the last turntable frame's outline, filled with ink. */
 .bottle-silhouette {
   position: absolute;
   inset: 0;
   display: block;
   background: currentColor;
-  mask: var(--sprite) 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
+  mask: var(--sprite) 100% 0 / calc(var(--frames) * 100%) 100% no-repeat;
   opacity: 0;
 }
 
@@ -344,10 +343,17 @@ main {
 /* The dock is triggered, not scrubbed: once the page has scrolled past the
    threshold, a step-end scroll animation flips --docked from 0 to 1 on the
    root, and the bottle transitions from the hero to the home mark in one
-   move, its photo giving way to the silhouette. Scrolling back to the top
+   move, turning once on its turntable as its photo darkens into the
+   silhouette. Scrolling back to the top
    reverses it. Reduced motion gets the same swap instantly (see the global
    reduced-motion rule). */
 @property --docked {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --dock-t {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
@@ -371,7 +377,6 @@ main {
   .home-bottle {
     --shell-width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
     --shell-left: calc((100% - var(--shell-width)) / 2);
-    --shell-width-vw: min(100vw - clamp(2rem, 5vw, 5rem), 82rem);
     --start-left: calc(
       var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
         var(--bottle-align)
@@ -383,12 +388,17 @@ main {
     top: calc(var(--bottle-top) + (var(--logo-top) - var(--bottle-top)) * var(--docked));
     left: calc(var(--start-left) + (var(--end-left) - var(--start-left)) * var(--docked));
     height: calc(var(--bottle-height) + (var(--logo-height) - var(--bottle-height)) * var(--docked));
-    rotate: calc(var(--logo-rotate) * var(--docked));
-    transition-property: top, left, height, rotate, color;
+    rotate: calc(var(--bottle-rotate) + (var(--logo-rotate) - var(--bottle-rotate)) * var(--docked));
+    /* --dock-t is --docked eased over the same move; the photo darkens
+       with it, so there is only ever one bottle on screen. */
+    --dock-t: var(--docked);
+    /* Both paths list six transitions in the same order (three for the
+       move, rotate, color, --dock-t) so candidates can retime them alike. */
+    transition-property: top, left, height, rotate, color, --dock-t;
     transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
-      var(--dock-duration), 120ms;
+      var(--dock-duration), 120ms, var(--dock-duration);
     transition-timing-function: var(--dock-ease), var(--dock-ease), var(--dock-ease),
-      var(--dock-ease), ease-out;
+      var(--dock-ease), ease-out, var(--dock-ease);
   }
 
   /* Transform-only where CSS can divide lengths: the box keeps the hero's
@@ -413,27 +423,39 @@ main {
             var(--docked)
         );
       scale: calc(1 + (var(--logo-height) / var(--bottle-height) - 1) * var(--docked));
-      transition-property: translate, scale, rotate, color;
-      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration), 120ms;
-      transition-timing-function: var(--dock-ease), var(--dock-ease), var(--dock-ease), ease-out;
+      transition-property: translate, scale, top, rotate, color, --dock-t;
     }
   }
 
-  .home-bottle .bottle-still {
-    opacity: calc(1 - var(--docked));
-    transition: opacity calc(var(--dock-duration) * 0.6) ease-out;
+  /* The photo darkens into the silhouette as it moves. */
+  .home-bottle .bottle-still,
+  .home-bottle .bottle-photo {
+    filter: brightness(calc(1 - var(--dock-t)));
   }
 
+  /* The turntable turns once on the way: the full-resolution still steps
+     aside for the sprite (its first frame is the same picture) the moment
+     the move begins, and returns only once the bottle is back at rest. */
+  .home-bottle .bottle-still {
+    opacity: clamp(0, 1 - var(--dock-t) * 1000, 1);
+  }
+
+  .home-bottle .bottle-photo {
+    opacity: 1;
+    background-position-x: calc(100% * var(--docked));
+    transition: background-position-x var(--dock-duration) steps(21, jump-none);
+  }
+
+  /* The ink silhouette (which takes the hover colour) replaces the black
+     photo only once fully docked, where the two are identical. */
   .home-bottle .bottle-silhouette {
-    opacity: var(--docked);
-    transition: opacity calc(var(--dock-duration) * 0.6) ease-out;
+    opacity: clamp(0, (var(--dock-t) - 0.99) * 100, 1);
   }
 
   /* Mirror the narrow-screen shell width. */
   @media (max-width: 48rem) {
     .home-bottle {
       --shell-width: min(100% - 2rem, 42rem);
-      --shell-width-vw: min(100vw - 2rem, 42rem);
     }
   }
 
@@ -1024,11 +1046,10 @@ time {
 
   .home-stage {
     --main-top: 2rem;
-    /* Centred, placed by the user with the dev panel. */
-    --bottle-top: 26dvh;
-    --bottle-x: 0.5;
-    --bottle-align: 0.5;
-    --bottle-height: 90dvh;
+    --shell-width-vw: min(100vw - 2rem, 42rem);
+    --bottle-top: 4dvh;
+    --bottle-height: 22dvh;
+    --hero-gap: 1.25rem;
   }
 
   .site-header {
