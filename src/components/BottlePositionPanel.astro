@@ -215,6 +215,7 @@
       <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
       <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
       <label><input type="radio" name="header-variant" value="impressed" />6 壓印</label>
+      <label><input type="radio" name="header-variant" value="disc" />7 圓紙片</label>
     </div>
     <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
@@ -913,6 +914,18 @@
       left: calc(var(--edge) + var(--logo-left) - 8px);
       width: calc(var(--logo-width) + 16px);
       height: calc(var(--logo-height) + 16px);
+    }
+
+    /* 7: the paper patch as a disc, centred on the mark (nudged in from the
+       screen edge on narrow screens, where the mark sits close to it). */
+    :global(html[data-header="disc"] .home-stage::before) {
+      --disc: calc(var(--logo-height) + var(--grid));
+      inset: auto;
+      top: calc(var(--logo-top) + var(--logo-height) / 2 - var(--disc) / 2);
+      left: max(4px, var(--edge) + var(--logo-left) + var(--logo-width) / 2 - var(--disc) / 2);
+      width: var(--disc);
+      height: var(--disc);
+      border-radius: 50%;
     }
 
     /* 6: impressed, like a potter's stamp pressed into soft clay: the patch
