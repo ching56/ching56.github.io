@@ -329,10 +329,14 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chinesePost, /article-stamp|ZH-TW　/);
 
   for (const html of [englishList, chineseList, chinesePost]) {
-    assert.match(html, /<body data-surface="story-journal">/);
-    assert.match(html, /direction seed f0bd5f13/);
+    assert.match(html, /<body data-surface="character-proof">/);
+    assert.match(html, /direction seed 9062ef67/);
     if (html !== chineseList) {
-      assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
+      // The docked glyph bottle and the name share one home link.
+      assert.match(
+        html,
+        /<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo"[^>]*aria-hidden="true">[\s\S]*?<\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>/,
+      );
     }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
@@ -378,14 +382,15 @@ test("the approved continuous journal structure is semantic across reading surfa
   );
   assert.match(
     chineseList,
-    /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"><\/a>\s*<\/div>\s*<section id="about"/,
+    /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<section id="about"/,
   );
-  for (const sprite of ["bottle-spin.webp"]) {
-    assert.ok(
-      (await stat(new URL(`media/home/${sprite}`, distDirectory))).size > 0,
-      `homepage bottle sprite ${sprite} is published`,
-    );
-  }
+  // The bottle is typed out in glyphs: 21 shaded frames and their 21 solid
+  // silhouettes, with no raster sprite shipped.
+  const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
+  assert.equal([...hero.matchAll(/class="bottle-frame"/g)].length, 42);
+  assert.match(hero, /█/);
+  assert.doesNotMatch(hero, /<img\b/);
+  await assert.rejects(stat(new URL("media/home/bottle-spin.webp", distDirectory)));
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(englishList, /<section class="register-panel"/);
 });
@@ -678,7 +683,7 @@ for (const post of expectedPosts) {
     assert.match(html, /<html lang="zh-TW">/);
     assert.match(
       html,
-      new RegExp(`datetime="${post.dateTime}"[^>]*>${post.dateLabel}</time>`),
+      new RegExp(`datetime="${post.dateTime}"[^>]*>${post.dateTime.replaceAll("-", "/")}</time>`),
     );
 
     for (const excerpt of post.excerpts) {
@@ -725,9 +730,18 @@ test("the zh-TW homepage is a diary feed, newest entry first, with lightbox phot
 
   assert.deepEqual(actual, expected);
 
-  for (const entry of entries) {
+  for (const [index, entry] of entries.entries()) {
     assert.match(entry, /<h2 class="diary-date">/);
     assert.match(entry, /<div class="diary-text">/);
+    // Entries are numbered as making steps, oldest first.
+    const step = String(entries.length - index).padStart(2, "0");
+    assert.match(entry, new RegExp(`<p class="diary-step"><span class="visually-hidden">步驟 </span>${step}</p>`));
+
+    // Every thumbnail carries its typed glyph rendering for the develop effect.
+    assert.equal(
+      entry.match(/class="diary-photo-ascii" aria-hidden="true"/g)?.length ?? 0,
+      entry.match(/class="diary-photo"/g)?.length ?? 0,
+    );
 
     // Each thumbnail opens its own native popover lightbox; no script needed.
     const triggers = [...entry.matchAll(/<button type="button" class="diary-photo" popovertarget="([^"]+)"/g)].map(([, id]) => id);

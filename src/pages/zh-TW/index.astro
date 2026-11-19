@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AboutSection from "../../components/AboutSection.astro";
+import BottleMark from "../../components/BottleMark.astro";
 import NowSection from "../../components/NowSection.astro";
 import DiaryFeed from "../../components/DiaryFeed.astro";
 import DiaryFontPanel from "../../components/DiaryFontPanel.astro";
@@ -20,7 +21,7 @@ if (!about) {
     <div class="home-flow">
       <div class="home-hero">
         <div class="home-bottle-slot">
-          <a class="home-bottle" href={UI["zh-TW"].homePath} aria-label="首頁"></a>
+          <BottleMark variant="turntable" href={UI["zh-TW"].homePath} label="首頁" />
         </div>
         <AboutSection page={about} />
       </div>

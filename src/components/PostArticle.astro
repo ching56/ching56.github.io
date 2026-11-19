@@ -4,7 +4,8 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPostDate, getPostLabel, getPostSlug } from "../lib/posts";
+import { getPostDate, getPostLabel, getPostSlug, getPostStep } from "../lib/posts";
+import CarriageScale from "./CarriageScale.astro";
 import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
 import ResponseEnding from "./ResponseEnding.astro";
@@ -37,6 +38,7 @@ const translatedPostPath = translatedPost
   : undefined;
 const ui = UI[post.data.language];
 const label = getPostLabel(post);
+const step = await getPostStep(post);
 ---
 
 <BaseLayout
@@ -46,7 +48,9 @@ const label = getPostLabel(post);
   languageSwitchPath={translatedPostPath}
 >
   <article class="reading-article">
+    <CarriageScale />
     <header class:list={["post-header", { "post-header--untitled": !post.data.title }]}>
+      <p class="diary-step"><span class="visually-hidden">{post.data.language === "zh-TW" ? "步驟 " : "Step "}</span>{step}</p>
       {
         post.data.title ? (
           <h1>{post.data.title}</h1>
@@ -54,7 +58,9 @@ const label = getPostLabel(post);
           <h1 class="visually-hidden">{label}</h1>
         )
       }
-      <time datetime={date.dateTime}>{date.label}</time>
+      <p class="diary-date">
+        <time datetime={date.dateTime}>{date.dateTime.replaceAll("-", "/")}</time>
+      </p>
     </header>
     {post.data.musicLinkCard && <MusicLinkCard card={post.data.musicLinkCard} />}
     <div class="post-body">

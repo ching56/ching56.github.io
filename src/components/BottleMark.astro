@@ -1,0 +1,35 @@
+---
+// The bottle, typed out in glyphs from the 21-frame turntable cutout.
+// "turntable" is the homepage hero that turns and docks as the home logo;
+// "logo" is that docked state on every other page: the last frame, struck solid.
+import { turntableToAscii } from "../lib/ascii";
+
+interface Props {
+  variant: "turntable" | "logo";
+  href?: string;
+  label?: string;
+}
+
+const FRAMES = 21;
+const ROWS = 56;
+const { variant, href, label } = Astro.props;
+const art = await turntableToAscii("src/assets/home/bottle-spin.webp", FRAMES, ROWS);
+const size = `--cols:${art.cols};--rows:${art.rows};--frames:${FRAMES}`;
+---
+
+{
+  variant === "turntable" ? (
+    <a class="home-bottle" href={href} aria-label={label} style={size}>
+      <span class="bottle-reel" aria-hidden="true">
+        {art.frames.map((frame) => <span class="bottle-frame">{frame}</span>)}
+      </span>
+      <span class="bottle-reel bottle-reel--solid" aria-hidden="true">
+        {art.silhouettes.map((frame) => <span class="bottle-frame">{frame}</span>)}
+      </span>
+    </a>
+  ) : (
+    <span class="bottle-logo" style={size} aria-hidden="true">
+      <span class="bottle-frame">{art.silhouettes.at(-1)}</span>
+    </span>
+  )
+}

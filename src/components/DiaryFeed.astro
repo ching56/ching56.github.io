@@ -3,7 +3,9 @@ import { Image } from "astro:assets";
 import { render, type CollectionEntry } from "astro:content";
 
 import { UI, type SiteLanguage } from "../config/i18n";
+import { photoToAscii } from "../lib/ascii";
 import { getPostDate, getPostSlug, getPostsByLanguage } from "../lib/posts";
+import CarriageScale from "./CarriageScale.astro";
 
 interface Props {
   language: SiteLanguage;
@@ -16,14 +18,20 @@ const postImages = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 const MARKDOWN_IMAGE = /!\[([^\]]*)\]\((\.\/[^)\s]+)\)/g;
+// Thumbnail art is typed at this many lines, one per 12rem / 32 of height.
+const ASCII_ROWS = 32;
 
-function getPhotos(post: CollectionEntry<"posts">) {
+async function getPhotos(post: CollectionEntry<"posts">) {
   const directory = `/${post.filePath ?? ""}`.replace(/\/[^/]*$/, "");
-
-  return [...(post.body ?? "").matchAll(MARKDOWN_IMAGE)].flatMap(([, alt, path]) => {
-    const image = postImages[`${directory}/${path.slice(2)}`]?.default;
-    return image ? [{ alt, image }] : [];
+  const found = [...(post.body ?? "").matchAll(MARKDOWN_IMAGE)].flatMap(([, alt, path]) => {
+    const file = `${directory}/${path.slice(2)}`;
+    const image = postImages[file]?.default;
+    return image ? [{ alt, image, file }] : [];
   });
+
+  return Promise.all(
+    found.map(async (photo) => ({ ...photo, ascii: await photoToAscii(photo.file, ASCII_ROWS) })),
+  );
 }
 
 const { language } = Astro.props;
@@ -32,11 +40,13 @@ const posts = (await getPostsByLanguage(language)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 const entries = await Promise.all(
-  posts.map(async (post) => ({
+  posts.map(async (post, index) => ({
     post,
+    // Entries are numbered as steps of one making process, oldest first.
+    step: String(posts.length - index).padStart(2, "0"),
     slug: getPostSlug(post),
     date: getPostDate(post.data.date, language),
-    photos: getPhotos(post),
+    photos: await getPhotos(post),
     Content: (await render(post)).Content,
   })),
 );
@@ -44,11 +54,13 @@ const entries = await Promise.all(
 
 <section class="register-panel diary-feed" aria-labelledby="register-heading">
   <h1 id="register-heading" class="visually-hidden">{ui.postsLabel}</h1>
+  <CarriageScale />
   {entries.length === 0 ? (
     <p class="empty-register">{ui.emptyPostsMessage}</p>
   ) : (
-    entries.map(({ post, slug, date, photos, Content }) => (
+    entries.map(({ post, step, slug, date, photos, Content }) => (
       <article class="diary-entry">
+        <p class="diary-step"><span class="visually-hidden">步驟 </span>{step}</p>
         <h2 class="diary-date">
           <a href={`${ui.homePath}blog/${slug}/`}>
             <time datetime={date.dateTime}>{date.dateTime.replaceAll("-", "/")}</time>
@@ -60,7 +72,7 @@ const entries = await Promise.all(
         </div>
         {photos.length > 0 && (
           <div class="diary-photos">
-            {photos.map(({ alt, image }, index) => {
+            {photos.map(({ alt, image, ascii }, index) => {
               const id = `photo-${slug}-${index + 1}`;
 
               return (
@@ -78,6 +90,11 @@ const entries = await Promise.all(
                       widths={[240, 480]}
                       sizes="240px"
                     />
+                    <span
+                      class="diary-photo-ascii"
+                      aria-hidden="true"
+                      style={`--cols:${ascii.cols};--rows:${ascii.rows}`}
+                    >{ascii.text}</span>
                   </button>
                   <div id={id} class="lightbox" popover>
                     <button
