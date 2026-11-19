@@ -1080,3 +1080,6 @@
 - Intent: a 日期 tab in the dev panel with a post-date candidate in the email's style: the date set like `[ ✉ jcli@pm.me ]` (the monospace face at the type size, ribbon-red typed brackets, 0.5ch gap, hanging one cell left), against the current handwriting; applies to the feed dates and the article date
 - Why: user: "add a control for post date. add a variant in the same style of email. use []" + "and the same font"
 - Result: done (dev only). Verified: with 日期 set to [ 方括號 ] the date uses the same face and 15px size as the email control, ribbon brackets, hanging 9px left of the text edge; reads `[ 2026/10/31 ]`. yarn run check clean, 40/40 tests
+
+## 2026-11-20 02:15 · claude-code
+- Intent/Result: the bracketed post date no longer hangs one cell left; its "[" now sits on the content's left edge, per the user ("date's left [ should align with content"). The email control keeps its hang

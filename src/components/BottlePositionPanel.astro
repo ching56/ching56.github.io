@@ -1309,14 +1309,14 @@
 
   /* ---------- Post-date candidate (dev only) ----------
      The date struck like the email control: the typewriter face at the
-     type size, between ribbon-red brackets that hang one cell left. */
+     type size, between ribbon-red brackets; its "[" sits on the text's
+     left edge. */
   :global(html[data-date="bracket"] .diary-date) {
     display: flex;
     gap: 0.5ch;
     align-items: center;
     justify-self: start;
     min-height: 2.75rem;
-    margin-inline-start: -1ch;
     font-family: var(--font-type);
     font-size: var(--type-size);
     line-height: 1;
