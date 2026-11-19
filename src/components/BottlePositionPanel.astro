@@ -216,6 +216,15 @@
       <label><input type="radio" name="header-variant" value="impressed" />6 壓印</label>
       <label><input type="radio" name="header-variant" value="disc" />7 圓紙片</label>
     </div>
+    <p class="bottle-panel-heading">logo 強調（套在圓紙片上）</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="mark-variant" value="" />原本</label>
+      <label><input type="radio" name="mark-variant" value="ring" />1 圓框</label>
+      <label><input type="radio" name="mark-variant" value="lifted" />2 浮起</label>
+      <label><input type="radio" name="mark-variant" value="reverse" />3 反白</label>
+      <label><input type="radio" name="mark-variant" value="seal" />4 紅印</label>
+      <label><input type="radio" name="mark-variant" value="double" />5 雙圈</label>
+    </div>
     <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
       <label><input type="radio" name="header-variant" value="bbs" />反白</label>
@@ -715,6 +724,29 @@
         setDate(radio.value);
         try {
           localStorage.setItem(DATE, radio.value);
+        } catch {}
+      });
+    }
+
+    // Which emphasis for the docked mark to preview.
+    const MARK = "mark-variant";
+    const setMark = (value) => {
+      if (value) root.dataset.mark = value;
+      else delete root.dataset.mark;
+      for (const radio of panel.querySelectorAll('input[name="mark-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let markStyle = "";
+    try {
+      markStyle = localStorage.getItem(MARK) || "";
+    } catch {}
+    setMark(markStyle);
+    for (const radio of panel.querySelectorAll('input[name="mark-variant"]')) {
+      radio.addEventListener("change", () => {
+        setMark(radio.value);
+        try {
+          localStorage.setItem(MARK, radio.value);
         } catch {}
       });
     }
@@ -1349,6 +1381,46 @@
   :global(html[data-date="bracket"] .diary-date::after) {
     color: var(--ribbon);
     content: "]";
+  }
+
+  /* ---------- Docked-mark emphasis candidates (dev only) ----------
+     All dress the shipped paper disc behind the docked home mark. */
+  @supports (animation-timeline: scroll()) {
+    /* 1: a fine ink ring. */
+    :global(html[data-mark="ring"] .home-stage::before) {
+      box-sizing: border-box;
+      border: 1.5px solid var(--ink);
+    }
+
+    /* 2: lifted: the disc as a sticker, standing off the page. */
+    :global(html[data-mark="lifted"] .home-stage::before) {
+      box-shadow:
+        0 1px 2px rgb(20 20 20 / 18%),
+        0 4px 12px rgb(20 20 20 / 14%);
+    }
+
+    /* 3 and 4: the disc inked, the mark in paper: reverse in ink, a seal in
+       ribbon red. */
+    :global(html[data-mark="reverse"] .home-stage::before) {
+      background: var(--ink);
+    }
+
+    :global(html[data-mark="seal"] .home-stage::before) {
+      background: var(--ribbon);
+    }
+
+    @container style(--docked: 1) {
+      :global(html[data-mark="reverse"] .home-bottle),
+      :global(html[data-mark="seal"] .home-bottle) {
+        color: var(--paper);
+      }
+    }
+
+    /* 5: a double rule, like the border of a carved chop. */
+    :global(html[data-mark="double"] .home-stage::before) {
+      box-sizing: border-box;
+      border: 4px double var(--ink);
+    }
   }
 
 </style>
