@@ -15,7 +15,6 @@ interface Props {
     language: SiteLanguage;
     path: string;
   }>;
-  languageSwitchPath?: string;
   showHeader?: boolean;
   /** The current page's name in the header breadcrumb, after the bottle. */
   crumb?: string;
@@ -25,7 +24,6 @@ const {
   title,
   language,
   alternates = [],
-  languageSwitchPath = UI[language].languageSwitch.href,
   showHeader = true,
   crumb,
 } = Astro.props;
@@ -84,11 +82,6 @@ const ui = UI[language];
               </li>
             )}
           </ol>
-        </nav>
-        <nav class="site-nav" aria-label={ui.navigationLabel}>
-          <a class="language-link" href={languageSwitchPath}>
-            {ui.languageSwitch.label}
-          </a>
         </nav>
       </header>
       )}

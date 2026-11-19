@@ -56,10 +56,6 @@ components:
     padding: "0"
   bracket-control-hover:
     textColor: "{colors.ribbon}"
-  language-link:
-    textColor: "{colors.ink-muted}"
-    typography: "{typography.label}"
-    height: "2.75rem"
   diary-date:
     textColor: "{colors.ink}"
     typography: "{typography.date}"
@@ -110,7 +106,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Paper** (`#ffffff`): Page, buttons-as-paper, the back-to-top backing, lightbox (veiled at 97%).
 - **Grid Rule** (off): the notebook ruling (`.site-shell::before`: horizontal rules through, verticals stopping short of each crossing, right-margin marks every second rule and a dot every tenth) is switched off by the user (`--grid-cell` and `--grid-edge` none, `--grid-line` transparent); `--grid` stays 10px and still rounds the shell. The dev panel's 格線 tab brings it back.
 - **Typewriter Black** (`#141414`): Body text, the bottle silhouette, dashed focus outline.
-- **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
+- **Carbon Grey** (`#5f5f5f`): Breadcrumb separator, muted prompts, performer lines, blockquotes, disabled control.
 
 ### Named Rules
 **The Single Ribbon Rule.** Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.
@@ -130,7 +126,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Body** (400, `1rem`, 1.9): Long-form article prose in a 64ch column.
 - **Type Cell** (400, `0.9375rem` as `--type-size`, 1.75): Feed text, intro and now note, controls, response prompts.
 - **Metadata** (`0.875rem`): Generic `time`, performer line, music provider links.
-- **Label** (`0.8125rem`): Language link, intro sub-headings (0.1em tracking, muted), English list dates.
+- **Label** (`0.8125rem`): Intro sub-headings (0.1em tracking, muted), English list dates.
 - **Breadcrumb** (`0.9375rem`): The header's "/ 2026/10/11" (the post's date) after the bottle mark, one line.
 
 ### Named Rules
@@ -164,7 +160,7 @@ Rectilinear and unframed. Brackets are the only container device: `[` and `]` ch
 ## Components
 
 ### Bracket Controls
-Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, regular-weight ink label at the type-cell size, with the brackets in ribbon red. Hover turns the label ribbon red over 120ms ease-out. Press sinks the control by 1px (`translate: 0 1px`). Applies to the response CTA (mail and Threads), the language link (muted ink, 0.8125rem), the likes button, and music provider links. Controls hang one cell into the margin (`-1ch`) so the label lands on cell zero.
+Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, regular-weight ink label at the type-cell size, with the brackets in ribbon red. Hover turns the label ribbon red over 120ms ease-out. Press sinks the control by 1px (`translate: 0 1px`). Applies to the response CTA (mail and Threads), the likes button, music provider links, the dates and the back-to-top control. There is no language switch in the chrome; the editions link only through hreflang. Controls hang one cell into the margin (`-1ch`) so the label lands on cell zero.
 
 ### Diary Entry
 A single column: the bracketed date, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.

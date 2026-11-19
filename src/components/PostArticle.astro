@@ -32,9 +32,6 @@ const alternates = translatedPost
       path: `/${candidate.data.language}/blog/${slug}/`,
     }))
   : [];
-const translatedPostPath = translatedPost
-  ? `/${translatedPost.data.language}/blog/${slug}/`
-  : undefined;
 const ui = UI[post.data.language];
 const label = getPostLabel(post);
 ---
@@ -44,7 +41,6 @@ const label = getPostLabel(post);
   crumb={date.dateTime.replaceAll("-", "/")}
   language={post.data.language}
   alternates={alternates}
-  languageSwitchPath={translatedPostPath}
 >
   <article class="reading-article">
     <header class:list={["post-header", { "post-header--untitled": !post.data.title }]}>

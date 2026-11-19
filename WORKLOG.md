@@ -1122,3 +1122,8 @@
 
 ## 2026-11-20 03:55 · claude-code
 - Intent/Result: the breadcrumb's page title is now the post's date (`2026/10/11`, as in the article) instead of its label, per the user ("The title would be date string"); test asserts it on the bottles post
+
+## 2026-11-20 04:00 · claude-code
+- Intent: remove the header's language switch (`[ English ]` / `[ 繁體中文 ]`): the site-nav, the languageSwitchPath prop and its plumbing in PostArticle, the .language-link styles, and the i18n languageSwitch strings; hreflang alternates in <head> stay. Tests that expected the switch now assert its absence
+- Why: user: "Remove English button"
+- Result: done; also dropped the unused navigationLabel strings and the Language Link component from the docs; renamed the language test to what it now checks. yarn run check clean, 41/41 tests

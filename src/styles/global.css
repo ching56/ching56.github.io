@@ -132,7 +132,6 @@ a {
 /* Typed brackets: every control is a struck "[ label ]". The brackets carry
    the red ribbon; a press sinks one pixel, like a key. */
 .response-cta,
-.language-link,
 .post-likes button,
 .music-link-card__providers a,
 .to-top {
@@ -150,7 +149,6 @@ a {
 }
 
 .response-cta::before,
-.language-link::before,
 .post-likes button::before,
 .music-link-card__providers a::before,
 .to-top::before {
@@ -159,7 +157,6 @@ a {
 }
 
 .response-cta::after,
-.language-link::after,
 .post-likes button::after,
 .music-link-card__providers a::after,
 .to-top::after {
@@ -169,7 +166,6 @@ a {
 
 @media (hover: hover) and (pointer: fine) {
   .response-cta:hover,
-  .language-link:hover,
   .post-likes button:hover,
   .music-link-card__providers a:hover,
   .to-top:hover {
@@ -178,7 +174,6 @@ a {
 }
 
 .response-cta:active,
-.language-link:active,
 .post-likes button:active:not(:disabled),
 .music-link-card__providers a:active,
 .to-top:active {
@@ -248,18 +243,6 @@ a {
   .site-mark:hover .bottle-logo {
     color: var(--ribbon);
   }
-}
-
-.site-nav {
-  display: flex;
-  align-items: center;
-}
-
-.language-link {
-  color: var(--ink-muted);
-  font-size: 0.8125rem;
-  font-weight: 400;
-  letter-spacing: normal;
 }
 
 main {

@@ -3,7 +3,6 @@ import { SITE } from "./site.js";
 export const UI = {
   "zh-TW": {
     homePath: "/zh-TW/",
-    navigationLabel: "主要導覽",
     skipContentLabel: "跳到主要內容",
     backToTopLabel: "回到頂端",
     breadcrumbLabel: "目前位置",
@@ -17,14 +16,9 @@ export const UI = {
     threadsPrompt: "同步發佈在 Threads",
     threadsLinkLabel: "在上面和我互動",
     newTabLabel: "（另開新分頁）",
-    languageSwitch: {
-      href: "/en/",
-      label: "English",
-    },
   },
   en: {
     homePath: "/en/",
-    navigationLabel: "Primary navigation",
     skipContentLabel: "Skip to content",
     backToTopLabel: "Back to top",
     breadcrumbLabel: "You are here",
@@ -38,10 +32,6 @@ export const UI = {
     threadsPrompt: "Also posted on Threads",
     threadsLinkLabel: "Talk with me there",
     newTabLabel: " (opens in a new tab)",
-    languageSwitch: {
-      href: "/zh-TW/",
-      label: "繁體中文",
-    },
   },
 } as const;
 

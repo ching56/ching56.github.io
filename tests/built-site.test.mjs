@@ -282,18 +282,15 @@ test("an English reader can open the empty English edition", async () => {
   assert.doesNotMatch(html, /<ol class="post-list">/);
 });
 
-test("readers can switch languages using locale-aware chrome", async () => {
+test("the chrome carries no language switch; editions link only through hreflang", async () => {
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
     readFile(new URL("zh-TW/blog/bottles/index.html", distDirectory), "utf8"),
   ]);
 
-  assert.match(englishList, /<nav[^>]*aria-label="Primary navigation"/);
-  assert.match(
-    englishList,
-    /class="language-link"[^>]*href="\/zh-TW\/"[^>]*>繁體中文<\/a>/,
-  );
+  // There is no visible language switch; the editions link through hreflang.
+  assert.doesNotMatch(englishList, /class="language-link"/);
   assert.doesNotMatch(englishList, /class="site-footer"|href="mailto:/);
 
   assert.doesNotMatch(chineseList, /<header\b|class="language-link"/);
@@ -301,7 +298,7 @@ test("readers can switch languages using locale-aware chrome", async () => {
     chineseList,
     /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/,
   );
-  assert.match(chineseOnlyPost, /href="\/en\/"[^>]*>English<\/a>/);
+  assert.doesNotMatch(chineseOnlyPost, /class="language-link"|>English<\/a>/);
 
   for (const html of [englishList, chineseList, chineseOnlyPost]) {
     const header = html.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
@@ -351,10 +348,7 @@ test("the approved continuous journal structure is semantic across reading surfa
 
   assert.equal(SITE.title, SITE.author.displayName);
 
-  assert.match(
-    englishList,
-    /<a\b[^>]*class="language-link"[^>]*href="\/zh-TW\/"[^>]*>\s*繁體中文\s*<\/a>/,
-  );
+  assert.doesNotMatch(englishList, /class="language-link"/);
   const chineseHomepageHeader = chineseList.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
   assert.doesNotMatch(chineseHomepageHeader, />\s*文章\s*</);
   assert.doesNotMatch(chineseHomepageHeader, />\s*關於\s*</);
@@ -939,10 +933,6 @@ test("the compact frameless content contract stays within its confirmed limits",
   assert.ok(linkRule, "expected a global link rule");
   assert.match(linkRule[1], /text-decoration:\s*none;/);
 
-  const languageRule = css.match(/\.language-link\s*\{([^}]*)\}/);
-  assert.ok(languageRule, "expected a CSS rule for the language utility");
-  assert.match(languageRule[1], /font-weight:\s*400;/);
-  assert.match(languageRule[1], /letter-spacing:\s*normal;/);
 
   const chineseDocumentRule = css.match(/html:lang\(zh-TW\)\s*\{([^}]*)\}/);
   assert.ok(chineseDocumentRule, "expected zh-TW line-breaking guidance");
