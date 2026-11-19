@@ -539,6 +539,31 @@ time {
     display: block;
     min-height: 100%;
   }
+
+  /* 21-frame turntable sprite; plays only while hovered, holds its angle otherwise. */
+  .spinning-bottle {
+    --frames: 21;
+    width: 148.5px;
+    aspect-ratio: 297 / 735;
+    background: url("/media/home/bottle-spin.webp") 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
+    animation: bottle-spin 2.4s steps(var(--frames)) infinite paused;
+  }
+
+  .spinning-bottle:hover {
+    animation-play-state: running;
+  }
+
+  @keyframes bottle-spin {
+    to {
+      background-position: calc(var(--frames) / (var(--frames) - 1) * 100%) 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spinning-bottle {
+      animation: none;
+    }
+  }
 }
 
 @media (max-width: 48rem) {

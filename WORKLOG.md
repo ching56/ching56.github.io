@@ -835,3 +835,8 @@
 - Intent: remove the article-header stamp ("ZH-TW　2026-10-11") so only the localized date remains; collapse the post header to one column and drop the now-unused stamp CSS and its test selector.
 - Why: user asked to remove it; it duplicates the date.
 - Result: done — check 0 errors/warnings; 43/43 tests pass (new assertion: no stamp on articles). Viewed covid at desktop and bottles at 375px: header shows only 「2026年10月11日」. Not pushed.
+
+## 2026-11-19 · claude-code
+- Intent: put the hover-to-rotate bottle (21-frame turntable cut out from `photo/`, CSS `steps()` sprite, zero JS) in the homepage's reserved right-hand creative column, top-aligned with the greeting. Sprite goes to `public/media/home/bottle-spin.webp` (650 KB; the column is `display:none` below 64.0625rem so mobile never fetches it). Reduced-motion users get a still frame. Update the homepage test that asserted the creative area is empty.
+- Why: user asked to add the rotating bottle to the right side of the homepage greeting.
+- Result: done — check 0 errors; 43/43 tests pass (homepage test now asserts the bottle element and the published sprite). At 1440px the bottle's top aligns with the greeting (both y=101), hover runs the turntable, leaving holds the angle; at 375px the column is hidden and the sprite is not requested. Cutouts, lossless sprite and the standalone demo stay in the untracked `photo/cutout/`. Not pushed.

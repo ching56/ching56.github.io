@@ -407,7 +407,11 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chineseList, /如果有一段文字讓你想起自己/);
   assert.match(
     chineseList,
-    /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true"><\/div>/,
+    /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true">\s*<div class="spinning-bottle"><\/div>\s*<\/div>/,
+  );
+  assert.ok(
+    (await stat(new URL("media/home/bottle-spin.webp", distDirectory))).size > 0,
+    "homepage bottle sprite is published",
   );
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(
