@@ -1021,3 +1021,6 @@
 - Intent: turn the chip header variant into a bookmark: a narrow paper strip hanging from the top edge of the page, V-notched at the foot, outlined in a 1px muted line (an ink ::before under a paper ::after, both clip-path'd), with the docked mark on it; phones under the margin variant get the same bookmark
 - Why: user: "能夠把紙片做成像書籤的感覺嗎？"
 - Result: done (dev only; needed another dev-server restart for the panel stylesheet). Verified after docking: a 40×95px strip from the top edge, V-notched at the foot with a muted 1px edge, the mark on it, text scrolling past beside it. yarn run check clean
+
+## 2026-11-19 23:30 · claude-code
+- Intent/Result: the thin photo-arrow variant was invisible in the user's ~670px pane: the arrows sat 2.5rem outside the row, which on narrow windows is off-screen, and were small and muted. They now sit in the margin when it fits and clamp to the viewport edge otherwise (`max(0px, …)`), on a paper backing, in ink at 1.5rem. User: "照片的細箭頭選項看不到"

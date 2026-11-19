@@ -739,22 +739,25 @@
   /* ---------- Photo-row button candidates (dev only) ---------- */
   @supports selector(::scroll-button(*)) {
     @media (pointer: fine) {
-      /* 1: bare arrows in the margins beside the row. */
+      /* 1: bare arrows beside the row: in the page margin when there is
+         room, otherwise just inside the row's ends on a sliver of paper. */
       :global(html[data-arrows="thin"] .diary-photos::scroll-button(*)) {
         min-width: 2rem;
-        background: transparent;
-        color: var(--ink-muted);
-        font-size: 1rem;
+        padding-inline: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-size: 1.5rem;
+        line-height: 1;
       }
 
       :global(html[data-arrows="thin"] .diary-photos::scroll-button(left)) {
         content: "←" / "上一張";
-        left: calc(anchor(left) - 2.5rem);
+        left: max(0px, calc(anchor(left) - 2.5rem));
       }
 
       :global(html[data-arrows="thin"] .diary-photos::scroll-button(right)) {
         content: "→" / "下一張";
-        right: calc(anchor(right) - 2.5rem);
+        right: max(0px, calc(anchor(right) - 2.5rem));
       }
 
       /* 2: paper discs over the photo edges. */
