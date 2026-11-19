@@ -1016,3 +1016,8 @@
 - Intent: prototype five variants of the photo-row scroll buttons (today `[<]`/`[>]`, mouse-only: shown under `pointer: fine` where `::scroll-button` is supported; touch swipes) as dev-only CSS in BottlePositionPanel under a new 照片 tab, switched by `html[data-arrows]`: thin (bare ←/→ in the margins), circle (paper discs with ‹ ›), dots (::scroll-marker dots under the row, current one red), text (← 上一張 / 下一張 → under the row), wrap (no row scrolling on desktop; photos wrap)
 - Why: user dislikes the [>] button and asked whether it is mouse-only, and for five variants
 - Result: done (dev only). Verified at 1280×800 after restarting the dev server (it again served a stale panel stylesheet): thin shows a muted → just past the row's right end; circle a paper disc with › over the last photo; dots a row of markers under the photos with the current one red; text puts 下一張 → under the row; wrap shows every photo wrapped with no buttons. Touch devices are unchanged (swipe). yarn run check clean, 40/40 tests
+
+## 2026-11-19 23:20 · claude-code
+- Intent: turn the chip header variant into a bookmark: a narrow paper strip hanging from the top edge of the page, V-notched at the foot, outlined in a 1px muted line (an ink ::before under a paper ::after, both clip-path'd), with the docked mark on it; phones under the margin variant get the same bookmark
+- Why: user: "能夠把紙片做成像書籤的感覺嗎？"
+- Result: done (dev only; needed another dev-server restart for the panel stylesheet). Verified after docking: a 40×95px strip from the top edge, V-notched at the foot with a muted 1px edge, the mark on it, text scrolling past beside it. yarn run check clean

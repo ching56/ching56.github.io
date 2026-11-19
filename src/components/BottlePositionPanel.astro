@@ -130,7 +130,7 @@
     <div class="bottle-panel-choices">
       <label><input type="radio" name="header-variant" value="" />原本</label>
       <label><input type="radio" name="header-variant" value="lying" />1 橫躺</label>
-      <label><input type="radio" name="header-variant" value="chip" />2 紙片</label>
+      <label><input type="radio" name="header-variant" value="chip" />2 書籤</label>
       <label><input type="radio" name="header-variant" value="signed" />3 署名列</label>
       <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
       <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
@@ -641,14 +641,48 @@
       height: calc(var(--logo-width) + 24px);
     }
 
-    /* 2: no band; a small patch of paper behind the mark only. */
+    /* 2: no band; a paper bookmark hangs from the top edge of the page,
+       notched at its foot, with the mark printed on it. A 1px muted edge
+       (the ink layer peeking out from under the paper) gives the white
+       strip its shape on white paper. */
+    :global(html[data-header="chip"] .home-stage),
+    :global(html[data-header="margin"] .home-stage) {
+      --mark-pad: 10px;
+      --notch: 10px;
+      --bookmark-left: calc(var(--edge) + var(--logo-left) - var(--mark-pad));
+      --bookmark-width: calc(var(--logo-width) + 2 * var(--mark-pad));
+      --bookmark-height: calc(var(--logo-top) + var(--logo-height) + var(--mark-pad) + var(--notch) + 6px);
+    }
+
+    :global(html[data-header="chip"] .home-stage::before),
+    :global(html[data-header="margin"] .home-stage::before),
+    :global(html[data-header="chip"] .home-stage::after),
+    :global(html[data-header="margin"] .home-stage::after) {
+      position: fixed;
+      z-index: 9;
+      inset: auto;
+      top: 0;
+      left: var(--bookmark-left);
+      width: var(--bookmark-width);
+      height: var(--bookmark-height);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - var(--notch)), 0 100%);
+      opacity: var(--docked);
+      pointer-events: none;
+      transition: opacity var(--dock-duration) ease-out;
+    }
+
     :global(html[data-header="chip"] .home-stage::before),
     :global(html[data-header="margin"] .home-stage::before) {
-      inset: auto;
-      top: calc(var(--logo-top) - 8px);
-      left: calc(var(--edge) + var(--logo-left) - 8px);
-      width: calc(var(--logo-width) + 16px);
-      height: calc(var(--logo-height) + 16px);
+      background: var(--ink-muted);
+    }
+
+    :global(html[data-header="chip"] .home-stage::after),
+    :global(html[data-header="margin"] .home-stage::after) {
+      left: calc(var(--bookmark-left) + 1px);
+      width: calc(var(--bookmark-width) - 2px);
+      height: calc(var(--bookmark-height) - 1.5px);
+      background: var(--paper);
+      content: "";
     }
 
     /* 3: the band carries the name, like the article header. */
@@ -669,7 +703,8 @@
         --logo-left: calc(-1 * var(--logo-width) - 1.25rem) !important;
       }
 
-      :global(html[data-header="margin"] .home-stage::before) {
+      :global(html[data-header="margin"] .home-stage::before),
+      :global(html[data-header="margin"] .home-stage::after) {
         display: none;
       }
     }
