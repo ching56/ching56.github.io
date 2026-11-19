@@ -1006,3 +1006,8 @@
 
 ## 2026-11-19 22:40 · claude-code
 - Intent/Result: wrote the user's narrow-screen greeting alignment (end: the greeting's bottom meets the bottle's) into global.css and cleared the panel's stored narrow values. User: "save alignment"
+
+## 2026-11-19 22:50 · claude-code
+- Intent: prototype five variants of the home page's docked header (today an 88px paper band holding only a 22px mark) as dev-only CSS in BottlePositionPanel, switched by `html[data-header]` from a new 頁首 control: lying (mark turned on its side, a ~46px band), chip (no band; a small paper patch behind the mark), signed (the band carries the name like the article header), margin (desktop: the mark sits in the left page margin with no band; phones fall back to chip), reveal (band and mark hide while scrolling down and return on scrolling up, via scroll-state container queries)
+- Why: user: "/impeccable generate some variant of header. now it occupies many space but mainly is blank" — at the home page
+- Result: done (dev only). Verified at 1440×900 after docking: lying 54×22 mark under a 46px band; chip a 38×70 paper patch, no band; signed an 86px band reading 李至青; margin the mark at x 21 in the margin left of the 64px shell, no band; reveal hides band and mark on a real wheel scroll down and brings them back on scrolling up (programmatic scrolls don't set the scroll direction). The panel's own inline logo values needed `!important` in the lying/margin previews. Also, at the user's request, the panel is now tabbed (瓶子, Logo, 動畫, 頁首; 213–377px tall instead of ~800px; last tab remembered). yarn run check clean, 40/40 tests

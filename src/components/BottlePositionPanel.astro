@@ -7,101 +7,123 @@
 ---
 
 <details class="bottle-panel" open>
-  <summary>瓶子位置　<span data-mode></span></summary>
-  <p class="bottle-panel-heading">瓶子</p>
-  <label>
-    <span>上</span>
-    <input type="range" data-key="top" min="-20" max="80" step="1" />
-    <output data-out="top"></output>
-  </label>
-  <label>
-    <span>左</span>
-    <input type="range" data-key="x" min="-20" max="90" step="1" />
-    <output data-out="x"></output>
-  </label>
-  <label>
-    <span>高</span>
-    <input type="range" data-key="height" min="10" max="240" step="1" />
-    <output data-out="height"></output>
-  </label>
-  <label>
-    <span>角度</span>
-    <input type="range" data-key="rotate" min="-90" max="90" step="1" />
-    <output data-out="rotate"></output>
-  </label>
-  <label>
-    <span>右距</span>
-    <input type="range" data-key="gap" min="0" max="160" step="1" />
-    <output data-out="gap"></output>
-  </label>
-  <label class="bottle-panel-wide">
-    <span>文字</span>
-    <select data-align>
-      <option value="start">對齊瓶子上緣</option>
-      <option value="center">對齊瓶子中間</option>
-      <option value="end">對齊瓶子下緣</option>
-    </select>
-  </label>
-  <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
-  <p class="bottle-panel-heading">動畫（捲過門檻看效果）</p>
-  <label>
-    <span>停靠</span>
-    <input type="range" data-motion="out" min="100" max="1500" step="10" />
-    <output data-motion-out="out"></output>
-  </label>
-  <label>
-    <span>返回</span>
-    <input type="range" data-motion="in" min="100" max="1500" step="10" />
-    <output data-motion-out="in"></output>
-  </label>
-  <label>
-    <span>門檻</span>
-    <input type="range" data-motion="threshold" min="0" max="300" step="2" />
-    <output data-motion-out="threshold"></output>
-  </label>
-  <label>
-    <span>變暗</span>
-    <input type="range" data-motion="darken" min="0" max="90" step="5" />
-    <output data-motion-out="darken"></output>
-  </label>
-  <label class="bottle-panel-wide">
-    <span>曲線</span>
-    <select data-motion="ease">
-      <option value="cubic-bezier(0.77, 0, 0.175, 1)">Emil ease-in-out</option>
-      <option value="cubic-bezier(0.32, 0.72, 0, 1)">iOS drawer</option>
-      <option value="cubic-bezier(0.23, 1, 0.32, 1)">Emil ease-out</option>
-      <option value="cubic-bezier(0.65, 0, 0.35, 1)">柔和 in-out</option>
-      <option value="linear">linear（對照）</option>
-    </select>
-  </label>
-  <label class="bottle-panel-check">
-    <input type="checkbox" data-motion="spin" />
-    <span>停靠時轉台轉一圈</span>
-  </label>
-  <div class="bottle-panel-actions">
-    <button type="button" data-emil>套用 Emil 建議</button>
+  <summary>調整面板　<span data-mode></span></summary>
+  <div class="bottle-panel-tabs" role="tablist">
+    <button type="button" role="tab" data-tab="bottle">瓶子</button>
+    <button type="button" role="tab" data-tab="logo">Logo</button>
+    <button type="button" role="tab" data-tab="motion">動畫</button>
+    <button type="button" role="tab" data-tab="header">頁首</button>
   </div>
-  <p class="bottle-panel-heading">Logo（捲到底看停靠的樣子）</p>
-  <label>
-    <span>上</span>
-    <input type="range" data-logo="top" min="0" max="80" step="1" />
-    <output data-logo-out="top"></output>
-  </label>
-  <label>
-    <span>左</span>
-    <input type="range" data-logo="left" min="-20" max="120" step="1" />
-    <output data-logo-out="left"></output>
-  </label>
-  <label>
-    <span>角度</span>
-    <input type="range" data-logo="rotate" min="-180" max="180" step="1" />
-    <output data-logo-out="rotate"></output>
-  </label>
-  <label>
-    <span>寬</span>
-    <input type="range" data-logo="width" min="12" max="80" step="1" />
-    <output data-logo-out="width"></output>
-  </label>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="bottle">
+    <label>
+      <span>上</span>
+      <input type="range" data-key="top" min="-20" max="80" step="1" />
+      <output data-out="top"></output>
+    </label>
+    <label>
+      <span>左</span>
+      <input type="range" data-key="x" min="-20" max="90" step="1" />
+      <output data-out="x"></output>
+    </label>
+    <label>
+      <span>高</span>
+      <input type="range" data-key="height" min="10" max="240" step="1" />
+      <output data-out="height"></output>
+    </label>
+    <label>
+      <span>角度</span>
+      <input type="range" data-key="rotate" min="-90" max="90" step="1" />
+      <output data-out="rotate"></output>
+    </label>
+    <label>
+      <span>右距</span>
+      <input type="range" data-key="gap" min="0" max="160" step="1" />
+      <output data-out="gap"></output>
+    </label>
+    <label class="bottle-panel-wide">
+      <span>文字</span>
+      <select data-align>
+        <option value="start">對齊瓶子上緣</option>
+        <option value="center">對齊瓶子中間</option>
+        <option value="end">對齊瓶子下緣</option>
+      </select>
+    </label>
+    <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="logo">
+    <p class="bottle-panel-hint">捲到 logo 停靠後再調</p>
+    <label>
+      <span>上</span>
+      <input type="range" data-logo="top" min="0" max="80" step="1" />
+      <output data-logo-out="top"></output>
+    </label>
+    <label>
+      <span>左</span>
+      <input type="range" data-logo="left" min="-20" max="120" step="1" />
+      <output data-logo-out="left"></output>
+    </label>
+    <label>
+      <span>角度</span>
+      <input type="range" data-logo="rotate" min="-180" max="180" step="1" />
+      <output data-logo-out="rotate"></output>
+    </label>
+    <label>
+      <span>寬</span>
+      <input type="range" data-logo="width" min="12" max="80" step="1" />
+      <output data-logo-out="width"></output>
+    </label>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="motion">
+    <p class="bottle-panel-hint">捲過門檻看效果</p>
+    <label>
+      <span>停靠</span>
+      <input type="range" data-motion="out" min="100" max="1500" step="10" />
+      <output data-motion-out="out"></output>
+    </label>
+    <label>
+      <span>返回</span>
+      <input type="range" data-motion="in" min="100" max="1500" step="10" />
+      <output data-motion-out="in"></output>
+    </label>
+    <label>
+      <span>門檻</span>
+      <input type="range" data-motion="threshold" min="0" max="300" step="2" />
+      <output data-motion-out="threshold"></output>
+    </label>
+    <label>
+      <span>變暗</span>
+      <input type="range" data-motion="darken" min="0" max="90" step="5" />
+      <output data-motion-out="darken"></output>
+    </label>
+    <label class="bottle-panel-wide">
+      <span>曲線</span>
+      <select data-motion="ease">
+        <option value="cubic-bezier(0.77, 0, 0.175, 1)">Emil ease-in-out</option>
+        <option value="cubic-bezier(0.32, 0.72, 0, 1)">iOS drawer</option>
+        <option value="cubic-bezier(0.23, 1, 0.32, 1)">Emil ease-out</option>
+        <option value="cubic-bezier(0.65, 0, 0.35, 1)">柔和 in-out</option>
+        <option value="linear">linear（對照）</option>
+      </select>
+    </label>
+    <label class="bottle-panel-check">
+      <input type="checkbox" data-motion="spin" />
+      <span>停靠時轉台轉一圈</span>
+    </label>
+    <div class="bottle-panel-actions">
+      <button type="button" data-emil>套用 Emil 建議</button>
+    </div>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="header">
+    <p class="bottle-panel-hint">捲下去比較停靠後的頁首</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="header-variant" value="" />原本</label>
+      <label><input type="radio" name="header-variant" value="lying" />1 橫躺</label>
+      <label><input type="radio" name="header-variant" value="chip" />2 紙片</label>
+      <label><input type="radio" name="header-variant" value="signed" />3 署名列</label>
+      <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
+      <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
+    </div>
+  </section>
   <div class="bottle-panel-actions">
     <button type="button" data-reset>重設</button>
     <button type="button" data-copy>複製數值</button>
@@ -383,6 +405,51 @@
       saveMotion();
     });
 
+    // Which docked-header candidate to preview.
+    const HEADER = "header-variant";
+    const setHeader = (value) => {
+      if (value) root.dataset.header = value;
+      else delete root.dataset.header;
+      for (const radio of panel.querySelectorAll('input[name="header-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let header = "";
+    try {
+      header = localStorage.getItem(HEADER) || "";
+    } catch {}
+    setHeader(header);
+    for (const radio of panel.querySelectorAll('input[name="header-variant"]')) {
+      radio.addEventListener("change", () => {
+        setHeader(radio.value);
+        try {
+          localStorage.setItem(HEADER, radio.value);
+        } catch {}
+      });
+    }
+
+    // Tabs keep the panel short; the last one opened is remembered.
+    const TAB = "bottle-panel-tab";
+    const showTab = (name) => {
+      for (const tab of panel.querySelectorAll("[data-tab]")) {
+        tab.setAttribute("aria-selected", String(tab.dataset.tab === name));
+      }
+      for (const section of panel.querySelectorAll("[data-panel]")) {
+        section.hidden = section.dataset.panel !== name;
+      }
+      try {
+        localStorage.setItem(TAB, name);
+      } catch {}
+    };
+    let tab = "bottle";
+    try {
+      tab = localStorage.getItem(TAB) || "bottle";
+    } catch {}
+    showTab(tab);
+    for (const button of panel.querySelectorAll("[data-tab]")) {
+      button.addEventListener("click", () => showTab(button.dataset.tab));
+    }
+
     narrow.addEventListener("change", load);
     load();
     loadLogo();
@@ -458,6 +525,45 @@
     width: auto;
   }
 
+  .bottle-panel-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0.5rem 0 0.25rem;
+  }
+
+  .bottle-panel .bottle-panel-tabs button {
+    flex: 1;
+    min-height: 2rem;
+    padding: 0;
+    border-color: transparent;
+    color: var(--ink-muted);
+  }
+
+  .bottle-panel .bottle-panel-tabs button[aria-selected="true"] {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .bottle-panel-section {
+    padding-block: 0.25rem;
+  }
+
+  .bottle-panel-choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 0.5rem;
+  }
+
+  .bottle-panel-choices label {
+    display: flex;
+    gap: 0.4rem;
+    min-height: 1.75rem;
+  }
+
+  .bottle-panel-choices input {
+    width: auto;
+  }
+
   .bottle-panel-actions {
     display: flex;
     gap: 1ch;
@@ -478,4 +584,86 @@
     cursor: grab;
     touch-action: none;
   }
+
+  /* ---------- Docked header candidates (dev only) ---------- */
+  @supports (animation-timeline: scroll()) {
+    /* The shell's left edge, for the paper behind the mark. */
+    :global(html[data-header] .home-stage) {
+      --edge: calc((100vw - var(--shell-width-vw)) / 2);
+    }
+
+    /* 1: the mark lies on its side, so the band is only as tall as the
+       bottle is wide. */
+    /* !important only to win over the panel's own logo sliders, which
+       write inline styles on the root. */
+    :global(html[data-header="lying"]) {
+      --logo-rotate: -90deg !important;
+      --logo-top: calc(12px - (var(--logo-height) - var(--logo-width)) / 2) !important;
+      --logo-left: calc((var(--logo-height) - var(--logo-width)) / 2) !important;
+    }
+
+    :global(html[data-header="lying"] .home-stage::before) {
+      height: calc(var(--logo-width) + 24px);
+    }
+
+    /* 2: no band; a small patch of paper behind the mark only. */
+    :global(html[data-header="chip"] .home-stage::before),
+    :global(html[data-header="margin"] .home-stage::before) {
+      inset: auto;
+      top: calc(var(--logo-top) - 8px);
+      left: calc(var(--edge) + var(--logo-left) - 8px);
+      width: calc(var(--logo-width) + 16px);
+      height: calc(var(--logo-height) + 16px);
+    }
+
+    /* 3: the band carries the name, like the article header. */
+    :global(html[data-header="signed"] .home-stage::before) {
+      height: calc(var(--logo-height) + 2 * var(--logo-top));
+      padding-inline-start: calc(var(--edge) + var(--logo-left) + var(--logo-width) + 1.75rem);
+      color: var(--ink);
+      font-size: var(--type-size);
+      letter-spacing: 0.08em;
+      line-height: calc(var(--logo-height) + 2 * var(--logo-top));
+      content: "李至青";
+    }
+
+    /* 4: on wide screens the mark sits in the empty left margin, so nothing
+       covers the text; phones have no margin and keep the patch. */
+    @media (min-width: 48.0625rem) {
+      :global(html[data-header="margin"]) {
+        --logo-left: calc(-1 * var(--logo-width) - 1.25rem) !important;
+      }
+
+      :global(html[data-header="margin"] .home-stage::before) {
+        display: none;
+      }
+    }
+
+    /* 5: band and mark step aside while reading down, and return the
+       moment the reader scrolls back up. */
+    :global(html[data-header="reveal"]) {
+      container-type: scroll-state;
+    }
+
+    @container scroll-state(scrolled: bottom) {
+      :global(html[data-header="reveal"] .home-stage::before) {
+        opacity: 0;
+      }
+
+      /* Only the docked mark steps aside, never the hero bottle. */
+      @container style(--docked: 1) {
+        :global(html[data-header="reveal"] .home-bottle) {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+    }
+
+    :global(html[data-header="reveal"] .home-bottle) {
+      transition-property: translate, scale, top, rotate, color, --dock-t, opacity;
+      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
+        var(--dock-duration), 120ms, var(--dock-duration), 200ms;
+    }
+  }
+
 </style>
