@@ -1088,3 +1088,6 @@
 - Intent: a 頁首 candidate built on 紙片 with a circular patch: a paper disc centred on the docked mark, its diameter the mark's height plus a cell
 - Why: user: "add a variant that tweak based on 紙片, that the background is a circle"
 - Result: done (dev only). A 64px paper disc centred on the 25×56 mark; on narrow screens the disc would run off the left edge (mark at x 15), so its left is clamped to 4px there. yarn run check clean
+
+## 2026-11-20 02:30 · claude-code
+- Intent/Result: the disc candidate now keeps the mark at its exact centre; instead of clamping the disc in from the screen edge (which put it off-centre on narrow screens), the mark's --logo-left is raised just enough for the whole disc to fit. User: "in circle variant, logo should be centered vertically and horizontally"
