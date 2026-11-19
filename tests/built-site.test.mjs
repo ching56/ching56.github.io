@@ -349,7 +349,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   const chineseHomepageHeader = chineseList.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
   assert.doesNotMatch(chineseHomepageHeader, />\s*文章\s*</);
   assert.doesNotMatch(chineseHomepageHeader, />\s*關於\s*</);
-  assert.match(chineseList, /<ol class="post-list" data-register="last-updated">/);
+  assert.match(chineseList, /<section class="register-panel diary-feed" aria-labelledby="register-heading">/);
   assert.match(
     chineseList,
     /<h1 id="register-heading" class="visually-hidden">文章<\/h1>/,
@@ -359,7 +359,7 @@ test("the approved continuous journal structure is semantic across reading surfa
     /最近更新|5 篇文章|class="register-(?:update|stamp|year)"|ZH-TW　/,
   );
   assert.equal(
-    [...chineseList.matchAll(/<li class="post-list-item">/g)].length,
+    [...chineseList.matchAll(/<article class="diary-entry">/g)].length,
     expectedPosts.length,
   );
   assert.match(
@@ -503,9 +503,16 @@ test("optimized content images ship a srcset sized to the reading column", async
         srcset.split(",").filter(Boolean).length >= 1,
         `expected a srcset on ${image} in ${page}`,
       );
+      // Feed thumbnails are fixed-height and lightbox photos fill the screen;
+      // every other content image sits in the reading column.
+      const expectedSizes = /class="diary-photo-image"/.test(image)
+        ? "240px"
+        : /class="lightbox-image"/.test(image)
+          ? "100vw"
+          : ARTICLE_IMAGE_SIZES;
       assert.ok(
-        image.includes(`sizes="${ARTICLE_IMAGE_SIZES}"`),
-        `expected the reading-column sizes hint on ${image} in ${page}`,
+        image.includes(`sizes="${expectedSizes}"`),
+        `expected sizes="${expectedSizes}" on ${image} in ${page}`,
       );
       assert.match(image, /\balt="[^"]+"/, `expected alt text on ${image} in ${page}`);
     }
@@ -638,24 +645,26 @@ for (const post of expectedPosts) {
       readFile(page, "utf8"),
     ]);
 
+    // The homepage feed dates each entry as YYYY/MM/DD and links it.
+    assert.match(
+      listHtml,
+      new RegExp(
+        `<a href="${escapeForRegex(route)}"><time datetime="${post.dateTime}">${post.dateTime.replaceAll("-", "/")}</time></a>`,
+      ),
+    );
+
     if (post.title) {
-      assert.match(
-        listHtml,
-        new RegExp(
-          `href="${escapeForRegex(route)}"[^>]*>${escapeForRegex(post.title)}</a>`,
-        ),
-      );
+      assert.ok(listHtml.includes(`<p class="diary-title">${post.title}</p>`));
       assert.match(
         html,
         new RegExp(`<h1[^>]*>${escapeForRegex(post.title)}</h1>`),
       );
     } else {
-      // The list previews the post's own text; the article has no visible title.
-      assert.match(
-        listHtml,
-        new RegExp(
-          `class="post-list-preview" href="${escapeForRegex(route)}"[^>]*>${escapeForRegex(post.preview)}`,
-        ),
+      // The feed shows the post's own text; the article has no visible title.
+      const feedText = listHtml.replace(/<[^>]+>/g, "").replace(/\s+/g, "");
+      assert.ok(
+        feedText.includes(post.preview.replace(/\s+/g, "")),
+        `expected ${post.slug} text in the feed`,
       );
       assert.match(
         html,
@@ -698,21 +707,44 @@ test("the zh-TW homepage introduces the writer before the article register", asy
   assert.doesNotMatch(html, /Jhih Cing, Li|現居高雄/);
   assert.doesNotMatch(html, /<header\b/);
   assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/);
-  assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
+  assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel'));
 });
 
-test("the zh-TW homepage lists every post as a card ordered by last update", async () => {
+test("the zh-TW homepage is a diary feed, newest entry first, with lightbox photos", async () => {
   const html = await readFile(listPage, "utf8");
-  const list = html.match(/<ol class="post-list"[\s\S]*?<\/ol>/)?.[0] ?? "";
-  const actual = [...list.matchAll(/href="\/zh-TW\/blog\/([^/]+)\/"[\s\S]*?datetime="([^"]+)"/g)].map(
-    ([, slug, dateTime]) => ({ slug, dateTime }),
+  const entries = [...html.matchAll(/<article class="diary-entry">[\s\S]*?<\/article>/g)].map(
+    ([entry]) => entry,
   );
+  const actual = entries.map((entry) => ({
+    slug: entry.match(/href="\/zh-TW\/blog\/([^/]+)\/"/)?.[1],
+    dateTime: entry.match(/datetime="([^"]+)"/)?.[1],
+  }));
   const expected = [...expectedPosts]
-    .sort((a, b) => lastUpdated(b).localeCompare(lastUpdated(a)))
-    .map((post) => ({ slug: post.slug, dateTime: lastUpdated(post) }));
+    .sort((a, b) => b.dateTime.localeCompare(a.dateTime))
+    .map((post) => ({ slug: post.slug, dateTime: post.dateTime }));
 
   assert.deepEqual(actual, expected);
-  assert.doesNotMatch(html, /seedling|budding|evergreen/i);
+
+  for (const entry of entries) {
+    assert.match(entry, /<h2 class="diary-date">/);
+    assert.match(entry, /<div class="diary-text">/);
+
+    // Each thumbnail opens its own native popover lightbox; no script needed.
+    const triggers = [...entry.matchAll(/<button type="button" class="diary-photo" popovertarget="([^"]+)"/g)].map(([, id]) => id);
+    for (const id of triggers) {
+      assert.match(entry, new RegExp(`<div id="${id}" class="lightbox" popover>`));
+      assert.match(entry, new RegExp(`popovertarget="${id}" popovertargetaction="hide"`));
+    }
+  }
+
+  const photoCount = (slug) =>
+    entries.find((entry) => entry.includes(`/zh-TW/blog/${slug}/`))
+      ?.match(/class="diary-photo"/g)?.length ?? 0;
+  assert.equal(photoCount("november-bottles"), 5);
+  assert.equal(photoCount("offering-cups"), 2);
+
+  // The dev-only date-font panel and its web fonts never ship.
+  assert.doesNotMatch(html, /font-panel|fonts\.googleapis/);
 });
 
 test("the zh-TW homepage shows a now note only when it is published and has content", async () => {
@@ -732,7 +764,7 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
 
   assert.match(html, /<section id="now" class="now-note" aria-label="現在">/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('id="now"'));
-  assert.ok(html.indexOf('id="now"') < html.indexOf('class="register-panel"'));
+  assert.ok(html.indexOf('id="now"') < html.indexOf('class="register-panel'));
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 

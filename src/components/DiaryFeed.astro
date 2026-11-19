@@ -1,0 +1,107 @@
+---
+import { Image } from "astro:assets";
+import { render, type CollectionEntry } from "astro:content";
+
+import { UI, type SiteLanguage } from "../config/i18n";
+import { getPostDate, getPostSlug, getPostsByLanguage } from "../lib/posts";
+
+interface Props {
+  language: SiteLanguage;
+}
+
+// Every image that lives beside a post, keyed by its absolute project path.
+const postImages = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/content/posts/**/*.{jpg,jpeg,png,webp}",
+  { eager: true },
+);
+
+const MARKDOWN_IMAGE = /!\[([^\]]*)\]\((\.\/[^)\s]+)\)/g;
+
+function getPhotos(post: CollectionEntry<"posts">) {
+  const directory = `/${post.filePath ?? ""}`.replace(/\/[^/]*$/, "");
+
+  return [...(post.body ?? "").matchAll(MARKDOWN_IMAGE)].flatMap(([, alt, path]) => {
+    const image = postImages[`${directory}/${path.slice(2)}`]?.default;
+    return image ? [{ alt, image }] : [];
+  });
+}
+
+const { language } = Astro.props;
+const ui = UI[language];
+const posts = (await getPostsByLanguage(language)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const entries = await Promise.all(
+  posts.map(async (post) => ({
+    post,
+    slug: getPostSlug(post),
+    date: getPostDate(post.data.date, language),
+    photos: getPhotos(post),
+    Content: (await render(post)).Content,
+  })),
+);
+---
+
+<section class="register-panel diary-feed" aria-labelledby="register-heading">
+  <h1 id="register-heading" class="visually-hidden">{ui.postsLabel}</h1>
+  {entries.length === 0 ? (
+    <p class="empty-register">{ui.emptyPostsMessage}</p>
+  ) : (
+    entries.map(({ post, slug, date, photos, Content }) => (
+      <article class="diary-entry">
+        <h2 class="diary-date">
+          <a href={`${ui.homePath}blog/${slug}/`}>
+            <time datetime={date.dateTime}>{date.dateTime.replaceAll("-", "/")}</time>
+          </a>
+        </h2>
+        {post.data.title && <p class="diary-title">{post.data.title}</p>}
+        <div class="diary-text">
+          <Content />
+        </div>
+        {photos.length > 0 && (
+          <div class="diary-photos">
+            {photos.map(({ alt, image }, index) => {
+              const id = `photo-${slug}-${index + 1}`;
+
+              return (
+                <>
+                  <button
+                    type="button"
+                    class="diary-photo"
+                    popovertarget={id}
+                    aria-label={`放大照片：${alt}`}
+                  >
+                    <Image
+                      class="diary-photo-image"
+                      src={image}
+                      alt={alt}
+                      widths={[240, 480]}
+                      sizes="240px"
+                    />
+                  </button>
+                  <div id={id} class="lightbox" popover>
+                    <button
+                      type="button"
+                      class="lightbox-close"
+                      popovertarget={id}
+                      popovertargetaction="hide"
+                      aria-label="關閉照片"
+                    >
+                      <Image
+                        class="lightbox-image"
+                        src={image}
+                        alt={alt}
+                        widths={[800, 1600]}
+                        sizes="100vw"
+                      />
+                    </button>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        )}
+      </article>
+    ))
+  )}
+</section>

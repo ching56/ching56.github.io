@@ -6,6 +6,9 @@
   --ink-muted: #555c59;
   --rule: #b9bfbb;
   --cobalt: #4f73d9;
+  /* Handwriting faces for diary dates: Apple, Windows, then Android's aliases. */
+  --diary-date-system-font: "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive;
+  --diary-date-font: var(--diary-date-system-font);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--stock);
@@ -657,4 +660,184 @@ time {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Diary feed: dated entries, clamped text, then a photo row. */
+.diary-feed {
+  display: grid;
+  gap: 3.5rem;
+}
+
+.diary-entry {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.diary-date {
+  margin: 0;
+  font-family: var(--diary-date-font);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.diary-date time {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+.diary-title {
+  margin: 0;
+}
+
+.diary-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 10;
+  line-clamp: 10;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  line-break: strict;
+}
+
+.diary-text p {
+  margin: 0 0 0.75em;
+}
+
+/* Photos move to the row below, so the text keeps only words. */
+.diary-text p:has(> img),
+.diary-text img {
+  display: none;
+}
+
+/* Default: photos wrap, which works for any pointer. */
+.diary-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.diary-photo {
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: none;
+  cursor: zoom-in;
+}
+
+.diary-photo-image {
+  display: block;
+  width: auto;
+  height: 12rem;
+}
+
+/* Touch screens swipe through the row, like Threads. */
+@media (any-pointer: coarse) {
+  .diary-photos {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .diary-photo {
+    scroll-snap-align: start;
+  }
+}
+
+/* Mice may not scroll sideways; where the browser can draw scroll buttons,
+   keep the row and give it arrows. Elsewhere the row stays wrapped. */
+@supports selector(::scroll-button(*)) {
+  @media (pointer: fine) {
+    .diary-entry {
+      anchor-scope: --diary-photos;
+    }
+
+    .diary-photos {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      anchor-name: --diary-photos;
+    }
+
+    .diary-photo {
+      scroll-snap-align: start;
+    }
+
+    .diary-photos::scroll-button(*) {
+      position: fixed;
+      position-anchor: --diary-photos;
+      top: anchor(center);
+      translate: 0 -50%;
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border: 0;
+      border-radius: 50%;
+      background: rgb(252 253 251 / 92%);
+      box-shadow: 0 1px 6px rgb(0 0 0 / 18%);
+      color: var(--ink);
+      font-size: 1.125rem;
+      cursor: pointer;
+    }
+
+    .diary-photos::scroll-button(*):disabled {
+      opacity: 0;
+    }
+
+    .diary-photos::scroll-button(left) {
+      content: "‹" / "上一張";
+      left: calc(anchor(left) + 0.5rem);
+    }
+
+    .diary-photos::scroll-button(right) {
+      content: "›" / "下一張";
+      right: calc(anchor(right) + 0.5rem);
+    }
+  }
+}
+
+/* Lightbox: a native popover, opened by the photo and closed by a tap,
+   Escape or a click outside. */
+.lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.lightbox::backdrop {
+  background: rgb(20 22 21 / 92%);
+}
+
+.lightbox-close {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border: 0;
+  background: none;
+  cursor: zoom-out;
+}
+
+.lightbox-image {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100dvh - 2rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }

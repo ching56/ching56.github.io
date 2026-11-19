@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AboutSection from "../../components/AboutSection.astro";
 import NowSection from "../../components/NowSection.astro";
-import PostList from "../../components/PostList.astro";
+import DiaryFeed from "../../components/DiaryFeed.astro";
+import DiaryFontPanel from "../../components/DiaryFontPanel.astro";
 import { EDITION_HOME_ALTERNATES, UI } from "../../config/i18n";
 import { getPageByLanguage, hasContent } from "../../lib/posts";
 
@@ -24,8 +25,9 @@ if (!about) {
         <AboutSection page={about} />
       </div>
       {now && hasContent(now) && <NowSection page={now} />}
-      <PostList language="zh-TW" />
+      <DiaryFeed language="zh-TW" />
     </div>
     <div class="creative-coding-area" data-creative-coding-area aria-hidden="true"></div>
   </div>
+  {import.meta.env.DEV && <DiaryFontPanel />}
 </BaseLayout>
