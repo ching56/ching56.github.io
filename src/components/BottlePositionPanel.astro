@@ -29,6 +29,11 @@
     <input type="range" data-key="rotate" min="-90" max="90" step="1" />
     <output data-out="rotate"></output>
   </label>
+  <label>
+    <span>右距</span>
+    <input type="range" data-key="gap" min="0" max="160" step="1" />
+    <output data-out="gap"></output>
+  </label>
   <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
   <p class="bottle-panel-heading">Logo（捲到底看停靠的樣子）</p>
   <label>
@@ -73,6 +78,7 @@
       x: "--bottle-x",
       height: "--bottle-height",
       rotate: "--bottle-rotate",
+      gap: "--hero-gap",
     };
 
     const read = () => {
@@ -97,6 +103,7 @@
         x: Math.round(parseFloat(style.getPropertyValue("--bottle-x")) * 100),
         height: parseFloat(style.getPropertyValue("--bottle-height")),
         rotate: parseFloat(style.getPropertyValue("--bottle-rotate")) || 0,
+        gap: parseFloat(style.getPropertyValue("--hero-gap")) || 0,
       };
     };
 
@@ -106,10 +113,13 @@
       stage.style.setProperty("--bottle-x", `${current.x / 100}`);
       stage.style.setProperty("--bottle-height", `${current.height}dvh`);
       stage.style.setProperty("--bottle-rotate", `${current.rotate}deg`);
+      stage.style.setProperty("--hero-gap", `${current.gap}px`);
       for (const key of Object.keys(props)) {
         panel.querySelector(`[data-key="${key}"]`).value = current[key];
         panel.querySelector(`[data-out="${key}"]`).textContent =
-          key === "x" ? `${current[key]}%` : key === "rotate" ? `${current[key]}deg` : `${current[key]}dvh`;
+          ({ x: "%", rotate: "deg", gap: "px" })[key]
+            ? `${current[key]}${({ x: "%", rotate: "deg", gap: "px" })[key]}`
+            : `${current[key]}dvh`;
       }
       panel.querySelector("[data-mode]").textContent = label();
     };
@@ -144,7 +154,7 @@
       const all = read();
       const line = (name, value) =>
         value
-          ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh　角度 ${value.rotate ?? 0}deg`
+          ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh　角度 ${value.rotate ?? 0}deg　右距 ${value.gap ?? "預設"}px`
           : `${name}　未調整`;
       const logoLine = all.logo
         ? `Logo　上 ${all.logo.top}px　左 ${all.logo.left}px　角度 ${all.logo.rotate}deg　寬 ${all.logo.width}px`

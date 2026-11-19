@@ -960,3 +960,8 @@
 - Intent: write the user's narrow-screen bottle placement from the dev panel into global.css (top 3dvh, x 0.05, height 16dvh, rotate -21deg) and clear the panel's stored values; wide stays at the defaults (the user has not tuned it)
 - Why: user: "記住現在瓶子的參數"
 - Result: done; yarn run check clean, 40/40 tests
+
+## 2026-11-19 20:55 · claude-code
+- Intent: add a per-breakpoint 右距 slider (0–160px) to the dev panel for `--hero-gap`, the space to the right of the bottle before the greeting; defaults moved to px (32px wide, 20px narrow) so the panel can read them
+- Why: user: "我想再瓶子右邊加上 padding，幫我加上這個控制項"
+- Result: done; in dev, moving it to 60px shifted the greeting 40px right and saved `gap` with the narrow values. yarn run check clean

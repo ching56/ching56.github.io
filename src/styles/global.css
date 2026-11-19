@@ -252,7 +252,8 @@ main {
   --bottle-height: 36dvh;
   --bottle-rotate: 0deg;
   --bottle-width: calc(var(--bottle-height) * 396 / 980);
-  --hero-gap: 2rem;
+  /* Space between the bottle and the greeting. */
+  --hero-gap: 32px;
   position: relative;
 }
 
@@ -1052,7 +1053,7 @@ time {
     --bottle-x: 0.05;
     --bottle-height: 16dvh;
     --bottle-rotate: -21deg;
-    --hero-gap: 1.25rem;
+    --hero-gap: 20px;
   }
 
   .site-header {
