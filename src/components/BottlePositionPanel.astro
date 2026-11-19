@@ -224,6 +224,8 @@
       <label><input type="radio" name="mark-variant" value="reverse" />3 反白</label>
       <label><input type="radio" name="mark-variant" value="seal" />4 紅印</label>
       <label><input type="radio" name="mark-variant" value="double" />5 雙圈</label>
+      <label><input type="radio" name="mark-variant" value="faint" />6 淡影</label>
+      <label><input type="radio" name="mark-variant" value="inset" />7 內陰影</label>
     </div>
     <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
@@ -1414,6 +1416,18 @@
       :global(html[data-mark="seal"] .home-bottle) {
         color: var(--paper);
       }
+    }
+
+    /* 6: a barely-there shadow, just enough to part disc from page. */
+    :global(html[data-mark="faint"] .home-stage::before) {
+      box-shadow: 0 1px 4px rgb(20 20 20 / 10%);
+    }
+
+    /* 7: inner shadow only: the disc reads as a shallow recess. */
+    :global(html[data-mark="inset"] .home-stage::before) {
+      box-shadow:
+        inset 0 1px 3px rgb(20 20 20 / 22%),
+        inset 0 -1px 1px rgb(255 255 255 / 80%);
     }
 
     /* 5: a double rule, like the border of a carved chop. */

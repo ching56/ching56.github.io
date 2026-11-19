@@ -1101,3 +1101,6 @@
 - Intent: five candidates that make the docked home mark more explicit, on the shipped paper disc, in a new "logo 強調" group of the panel's 頁首 tab via `html[data-mark]`: ring (1.5px ink circle), lifted (a soft shadow, the disc as a sticker), reverse (ink disc, paper mark), seal (ribbon disc, paper mark), double (a double-rule ring like a chop's border)
 - Why: user: "I would like to make the header logo more explicit, give me several variants. border, shadow or anything"
 - Result: done (dev only). Checked each on the docked disc: ring a 1.5px ink circle, lifted a two-layer soft shadow, reverse an ink disc with the mark in paper, seal a ribbon disc with the mark in paper, double a 4px double rule; borders use border-box so the disc stays centred on the mark. yarn run check clean
+
+## 2026-11-20 03:05 · claude-code
+- Intent/Result: two more docked-mark emphasis candidates in the panel, per the user ("more subtle shadow, and inner shadow only"): faint (0 1px 4px at 10%) and inset (an inner shadow at the top with a light lower lip, no outer shadow)
