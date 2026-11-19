@@ -1024,3 +1024,6 @@
 
 ## 2026-11-19 23:30 · claude-code
 - Intent/Result: the thin photo-arrow variant was invisible in the user's ~670px pane: the arrows sat 2.5rem outside the row, which on narrow windows is off-screen, and were small and muted. They now sit in the margin when it fits and clamp to the viewport edge otherwise (`max(0px, …)`), on a paper backing, in ink at 1.5rem. User: "照片的細箭頭選項看不到"
+
+## 2026-11-19 23:40 · claude-code
+- Intent/Result: reverted the header variant 2 from the bookmark back to the paper patch (紙片), restoring the 5ffe17e^ CSS by hand (the worklog stays append-only). User: "revert 回紙片"
