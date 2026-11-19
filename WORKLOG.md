@@ -1027,3 +1027,8 @@
 
 ## 2026-11-19 23:40 · claude-code
 - Intent/Result: reverted the header variant 2 from the bookmark back to the paper patch (紙片), restoring the 5ffe17e^ CSS by hand (the worklog stays append-only). User: "revert 回紙片"
+
+## 2026-11-19 23:50 · claude-code
+- Intent: five more docked-header candidates built on the left-hand paper patch, in a grid-notebook / BBS / TUI vein, added to the panel's 頁首 tab: grid (8px graph-paper squares behind the mark), tui (a double-rule frame), bbs (reverse video: ink patch, paper mark), cursor (a blinking block cursor beside the patch), window (a framed patch with an ink title bar)
+- Why: user: "能夠基於紙片（靠左的方格），給我一個方格筆記本、或是 BBS, TUI 的5 個 variant 嗎"
+- Result: done (dev only; dev server restarted first, as the panel stylesheet goes stale on edits). Checked each after docking at the user's pane width: grid shows 8px squares under a faint frame; tui a double rule; bbs an ink patch with the mark turned paper-white (style query on --docked); cursor an 8×14 block blinking beside the patch (stopped under reduced motion); window a framed patch with a 6px ink title bar. yarn run check clean

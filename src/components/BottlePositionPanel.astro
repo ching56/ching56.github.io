@@ -135,6 +135,14 @@
       <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
       <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
     </div>
+    <p class="bottle-panel-heading">紙片延伸</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="header-variant" value="grid" />a 方格紙</label>
+      <label><input type="radio" name="header-variant" value="tui" />b 雙線框</label>
+      <label><input type="radio" name="header-variant" value="bbs" />c BBS 反白</label>
+      <label><input type="radio" name="header-variant" value="cursor" />d 游標</label>
+      <label><input type="radio" name="header-variant" value="window" />e 視窗</label>
+    </div>
   </section>
   <div class="bottle-panel-actions">
     <button type="button" data-reset>重設</button>
@@ -641,14 +649,81 @@
       height: calc(var(--logo-width) + 24px);
     }
 
-    /* 2: no band; a small patch of paper behind the mark only. */
+    /* 2: no band; a small patch of paper behind the mark only. The a–e
+       candidates below dress the same patch. */
     :global(html[data-header="chip"] .home-stage::before),
-    :global(html[data-header="margin"] .home-stage::before) {
+    :global(html[data-header="margin"] .home-stage::before),
+    :global(html[data-header="grid"] .home-stage::before),
+    :global(html[data-header="tui"] .home-stage::before),
+    :global(html[data-header="bbs"] .home-stage::before),
+    :global(html[data-header="cursor"] .home-stage::before),
+    :global(html[data-header="window"] .home-stage::before) {
       inset: auto;
       top: calc(var(--logo-top) - 8px);
       left: calc(var(--edge) + var(--logo-left) - 8px);
       width: calc(var(--logo-width) + 16px);
       height: calc(var(--logo-height) + 16px);
+    }
+
+    /* a: graph paper, the mark drawn on a notebook's squares. */
+    :global(html[data-header="grid"] .home-stage::before) {
+      border: 1px solid rgb(20 20 20 / 22%);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgb(20 20 20 / 10%) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(20 20 20 / 10%) 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+
+    /* b: a TUI frame, double-ruled like ╔═╗. */
+    :global(html[data-header="tui"] .home-stage::before) {
+      border: 3px double var(--ink);
+    }
+
+    /* c: BBS reverse video, the mark as a highlighted cell. */
+    :global(html[data-header="bbs"] .home-stage::before) {
+      background: var(--ink);
+    }
+
+    @container style(--docked: 1) {
+      :global(html[data-header="bbs"] .home-bottle) {
+        color: var(--paper);
+      }
+    }
+
+    /* d: a terminal prompt, the block cursor blinking beside the mark. */
+    :global(html[data-header="cursor"] .home-stage::after) {
+      position: fixed;
+      z-index: 9;
+      top: calc(var(--logo-top) + var(--logo-height) - 14px);
+      left: calc(var(--edge) + var(--logo-left) + var(--logo-width) + 12px);
+      width: 8px;
+      height: 14px;
+      background: var(--ink);
+      opacity: var(--docked);
+      pointer-events: none;
+      content: "";
+      animation: cursor-blink 1.06s steps(2, jump-none) infinite;
+    }
+
+    @keyframes cursor-blink {
+      to {
+        background: transparent;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :global(html[data-header="cursor"] .home-stage::after) {
+        animation: none;
+      }
+    }
+
+    /* e: a small TUI window: a framed patch under an ink title bar. */
+    :global(html[data-header="window"] .home-stage::before) {
+      top: calc(var(--logo-top) - 14px);
+      height: calc(var(--logo-height) + 22px);
+      border: 1px solid var(--ink);
+      border-top-width: 6px;
     }
 
     /* 3: the band carries the name, like the article header. */
