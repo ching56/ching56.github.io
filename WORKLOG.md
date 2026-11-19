@@ -990,3 +990,8 @@
 - Intent: resize the bottle assets for the now-small bottle: two turntable sprites from build-bottle-assets.mjs (large: bottle 600px in 264×653 frames for wide screens; small: bottle 360px in 158×392 frames for ≤48rem), chosen in CSS through `--sprite` so each screen fetches only one; the still's srcset becomes 160/264/400w with sizes matching the bottle's rendered width (16dvh and 36dvh tall × 396/980)
 - Why: user: the bottle is now much smaller than when the assets were made, and phones should load smaller images than desktops
 - Result: done. Production preview: at 375×812 (2x) the page fetches only the 160w still (11 KB) and the phone sprite (181 KB), down from 93 KB + 882 KB; at 1440×900 (2x) the 264w still (26 KB) and the wide sprite (457 KB). Test now asserts both sprites, their size caps and the new srcset. yarn run check clean, 40/40 tests
+
+## 2026-11-19 22:15 · claude-code
+- Intent: add a per-breakpoint 文字高低 slider to the dev panel: `--greeting-offset` (px, default 0) nudges the greeting up or down from centred on the bottle (relative `top`, so nothing reflows)
+- Why: user: "I want to adjust the vertical alignment of greeting and logo bottle, add controls."
+- Result: done; in dev, -40px moved the greeting from 50 to 10px. yarn run check clean
