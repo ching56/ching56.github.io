@@ -940,3 +940,8 @@
 - Intent: write the user's logo values from the dev panel into :root (top 16px, left -4px, rotate -3deg, width 22px) and clear the panel's stored logo values
 - Why: user sent "Logo　上 16px　左 -4px　角度 -3deg　寬 22px"
 - Result: done; verified at 1440×900: the docked home mark is 22px wide at -3deg, 16px from the top and -4px from the shell edge, and the article header logo matches; panel's stored logo cleared so its sliders show the CSS values. yarn run check clean, 40/40 tests
+
+## 2026-11-19 19:35 · claude-code
+- Intent: prototype five bolder dock animations as dev-only CSS in BottlePositionPanel, switched by `html[data-dock]` from a new "動畫" control (stored in localStorage `dock-variant`): spin (three turntable revolutions on an overshooting arc), toss (lifted, tumbled a full turn, dropped into the corner), ink (the silhouette rises from the foot in ribbon red, then sets to ink), bounce (stretch in flight, squash and settle on landing), flash (a zoom punch with saturated colour, burned to black through a red flash). Each keeps the bottle's bottom edge at or above the linear path so the diary still never slides under it
+- Why: user: "the animation is a bit boring, can you give me 5 variant of animation that be more bold and vivid?"
+- Result: done (dev only; none of it reaches dist). Sampled every 5–10px of scroll at 1440×900 and 375×812: no variant touches the greeting or the diary before docking. Two needed fixes: spin's full turn now rides the shrink (it swept a huge sideways bottle into the greeting), toss rises more gently and flash's zoom punch is earlier and smaller (both reached the greeting on a phone). yarn run check clean, 40/40 tests

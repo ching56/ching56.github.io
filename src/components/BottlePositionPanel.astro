@@ -8,6 +8,16 @@
 
 <details class="bottle-panel" open>
   <summary>瓶子位置　<span data-mode></span></summary>
+  <p class="bottle-panel-heading">動畫（往下捲動比較）</p>
+  <div class="bottle-panel-dock">
+    <label><input type="radio" name="dock-variant" value="" />原本</label>
+    <label><input type="radio" name="dock-variant" value="spin" />A 連轉三圈</label>
+    <label><input type="radio" name="dock-variant" value="toss" />B 拋起翻滾</label>
+    <label><input type="radio" name="dock-variant" value="ink" />C 紅墨上升</label>
+    <label><input type="radio" name="dock-variant" value="bounce" />D Q 彈落地</label>
+    <label><input type="radio" name="dock-variant" value="flash" />E 顯影閃光</label>
+  </div>
+  <p class="bottle-panel-heading">瓶子</p>
   <label>
     <span>上</span>
     <input type="range" data-key="top" min="-20" max="80" step="1" />
@@ -224,6 +234,29 @@
       });
     }
 
+    // Which dock animation to preview.
+    const DOCK = "dock-variant";
+    const setDock = (value) => {
+      if (value) root.dataset.dock = value;
+      else delete root.dataset.dock;
+      for (const radio of panel.querySelectorAll('input[name="dock-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let dock = "";
+    try {
+      dock = localStorage.getItem(DOCK) || "";
+    } catch {}
+    setDock(dock);
+    for (const radio of panel.querySelectorAll('input[name="dock-variant"]')) {
+      radio.addEventListener("change", () => {
+        setDock(radio.value);
+        try {
+          localStorage.setItem(DOCK, radio.value);
+        } catch {}
+      });
+    }
+
     narrow.addEventListener("change", load);
     load();
     loadLogo();
@@ -277,6 +310,23 @@
     color: var(--ink-muted);
   }
 
+  .bottle-panel-dock {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .bottle-panel-dock label {
+    display: flex;
+    gap: 0.4rem;
+    min-height: 1.75rem;
+  }
+
+  .bottle-panel-dock input {
+    width: auto;
+  }
+
   .bottle-panel-actions {
     display: flex;
     gap: 1ch;
@@ -296,5 +346,236 @@
   :global(.home-bottle) {
     cursor: grab;
     touch-action: none;
+  }
+
+  /* ---------- Dock animation candidates (dev only) ----------
+     Each keeps the bottle's bottom edge at or above the plain linear path,
+     so the diary still never slides under it. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      :global(html[data-dock] .home-bottle) {
+        --start-left: calc(
+          var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
+            var(--bottle-align)
+        );
+        --end-left: calc(var(--shell-left) + var(--logo-left));
+      }
+
+      /* A: three turntable revolutions on an arc that overshoots the corner. */
+      :global(html[data-dock="spin"] .home-bottle) {
+        animation-name: dock-fall, dock-sweep;
+        animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1), cubic-bezier(0.25, 1.45, 0.45, 1);
+        animation-fill-mode: both, both;
+        animation-timeline: scroll(root), scroll(root);
+        animation-range: 0 var(--dock-range), 0 var(--dock-range);
+      }
+
+      :global(html[data-dock="spin"] .home-bottle .bottle-photo),
+      :global(html[data-dock="spin"] .home-bottle .bottle-silhouette) {
+        animation-iteration-count: 3, 1;
+      }
+
+      :global(html[data-dock="spin"] .home-bottle .bottle-still) {
+        animation-range: 0 calc(var(--dock-range) / 63);
+      }
+
+      /* B: tossed up, tumbled a full turn, dropped into the corner. */
+      :global(html[data-dock="toss"] .home-bottle) {
+        animation-name: dock-toss;
+      }
+
+      /* C: the silhouette rises from the foot in ribbon red, then sets to ink. */
+      :global(html[data-dock="ink"] .home-bottle .bottle-silhouette) {
+        animation-name: bottle-mask-turn, ink-rise;
+      }
+
+      /* D: stretches in flight, squashes and settles on landing. */
+      :global(html[data-dock="bounce"] .home-bottle) {
+        transform-origin: 50% 100%;
+        animation-name: dock-quick, squash;
+        animation-timing-function: linear, linear;
+        animation-fill-mode: both, both;
+        animation-timeline: scroll(root), scroll(root);
+        animation-range: 0 var(--dock-range), 0 var(--dock-range);
+      }
+
+      /* E: a zoom punch in saturated colour, burned to black through a red flash. */
+      /* The punch is early and modest: on a phone there is little room
+         between the greeting above and the diary below. */
+      :global(html[data-dock="flash"] .home-bottle) {
+        animation-name: bottle-dock, punch;
+        animation-timing-function: linear, linear;
+        animation-fill-mode: both, both;
+        animation-timeline: scroll(root), scroll(root);
+        animation-range: 0 var(--dock-range), 0 var(--dock-range);
+      }
+
+      :global(html[data-dock="flash"] .home-bottle .bottle-photo) {
+        animation-name: bottle-photo-turn, bottle-lift, darkroom;
+        animation-timing-function: steps(var(--frames), jump-none), linear, linear;
+        animation-fill-mode: both, both, both;
+        animation-timeline: scroll(root), scroll(root), scroll(root);
+        animation-range: 0 var(--dock-range), 0 var(--dock-range), 0 var(--dock-range);
+      }
+
+      :global(html[data-dock="flash"] .home-bottle .bottle-silhouette) {
+        animation-name: bottle-mask-turn, bottle-strike, flash-colour;
+        animation-timing-function: steps(var(--frames), jump-none), linear, linear;
+        animation-fill-mode: both, both, both;
+        animation-timeline: scroll(root), scroll(root), scroll(root);
+        animation-range: 0 var(--dock-range), 0 var(--dock-range), 0 var(--dock-range);
+      }
+    }
+  }
+
+  /* The spin rides the shrink, so the bottle is small by the time it is
+     sideways and never sweeps across the greeting. */
+  @keyframes dock-fall {
+    to {
+      top: var(--logo-top);
+      height: var(--logo-height);
+      rotate: calc(var(--logo-rotate) - 360deg);
+    }
+  }
+
+  @keyframes dock-sweep {
+    to {
+      left: var(--end-left);
+    }
+  }
+
+  @keyframes dock-toss {
+    /* A gentle start: rising faster would lift it into the greeting. */
+    0% {
+      animation-timing-function: cubic-bezier(0.3, 0.4, 0.45, 1);
+    }
+
+    40% {
+      top: calc(var(--logo-top) - 6dvh);
+      left: calc(var(--start-left) * 0.4 + var(--end-left) * 0.6 + 12vw);
+      height: calc(var(--bottle-height) * 0.32);
+      rotate: -200deg;
+      animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.4);
+    }
+
+    100% {
+      top: var(--logo-top);
+      left: var(--end-left);
+      height: var(--logo-height);
+      rotate: calc(var(--logo-rotate) - 360deg);
+    }
+  }
+
+  @keyframes ink-rise {
+    0% {
+      opacity: 1;
+      clip-path: inset(100% 0 0 0);
+      background-color: var(--ribbon);
+    }
+
+    50% {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+      background-color: var(--ribbon);
+    }
+
+    80%,
+    100% {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+      background-color: var(--ink);
+    }
+  }
+
+  @keyframes dock-quick {
+    0% {
+      animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1);
+    }
+
+    80%,
+    100% {
+      top: var(--logo-top);
+      left: var(--end-left);
+      height: var(--logo-height);
+      rotate: var(--logo-rotate);
+    }
+  }
+
+  @keyframes squash {
+    0% {
+      scale: 1 1;
+    }
+
+    40% {
+      scale: 0.8 1.2;
+    }
+
+    78% {
+      scale: 0.88 1.14;
+    }
+
+    84% {
+      scale: 1.45 0.6;
+    }
+
+    90% {
+      scale: 0.85 1.16;
+    }
+
+    95% {
+      scale: 1.08 0.94;
+    }
+
+    100% {
+      scale: 1 1;
+    }
+  }
+
+  @keyframes punch {
+    0% {
+      scale: 1;
+      animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+    }
+
+    10% {
+      scale: 1.12;
+      animation-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+    }
+
+    30%,
+    100% {
+      scale: 1;
+    }
+  }
+
+  @keyframes darkroom {
+    0% {
+      filter: none;
+    }
+
+    10% {
+      filter: saturate(2.4) contrast(1.35);
+    }
+
+    38% {
+      filter: saturate(0) contrast(3) brightness(0.7);
+    }
+
+    55%,
+    100% {
+      filter: brightness(0);
+    }
+  }
+
+  @keyframes flash-colour {
+    0%,
+    48% {
+      background-color: var(--ribbon);
+    }
+
+    72%,
+    100% {
+      background-color: var(--ink);
+    }
   }
 </style>
