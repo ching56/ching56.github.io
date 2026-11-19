@@ -117,14 +117,14 @@
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="layout">
-    <p class="bottle-panel-hint">只變化格線，表現群組與階層</p>
+    <p class="bottle-panel-hint">格線替排版服務：群組、對齊、節奏</p>
     <div class="bottle-panel-choices">
       <label><input type="radio" name="layout-variant" value="" />原本</label>
       <label><input type="radio" name="layout-variant" value="broken" />1 斷格</label>
-      <label><input type="radio" name="layout-variant" value="major" />2 主次格線</label>
-      <label><input type="radio" name="layout-variant" value="pages" />3 四種內頁</label>
-      <label><input type="radio" name="layout-variant" value="density" />4 濃淡</label>
-      <label><input type="radio" name="layout-variant" value="scale" />5 疏密</label>
+      <label><input type="radio" name="layout-variant" value="manuscript" />2 稿紙</label>
+      <label><input type="radio" name="layout-variant" value="baseline" />3 基線格</label>
+      <label><input type="radio" name="layout-variant" value="columns" />4 欄格</label>
+      <label><input type="radio" name="layout-variant" value="cutout" />5 挖空</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="paper">
@@ -1042,8 +1042,7 @@
   /* Outlines paint over later content, so every gap is at least two
      outlines wide. */
   :global(html[data-layout="broken"] .diary-feed),
-  :global(html[data-layout="broken"] .home-flow),
-  :global(html[data-layout="density"] .home-flow) {
+  :global(html[data-layout="broken"] .home-flow) {
     gap: calc(var(--grid) * 4);
   }
 
@@ -1052,77 +1051,93 @@
     outline: calc(var(--grid) * 2) solid var(--paper);
   }
 
-  /* 2: engineering paper: every fifth rule darker. */
-  :global(html[data-layout="major"] .site-shell::before) {
+  /* 2: manuscript paper (原稿紙): the diary text sits one CJK character
+     per cell, one line per row. Half-width characters take half a cell. */
+  :global(html[data-layout="manuscript"] .diary-text) {
+    --cell: 26px;
+    width: round(down, 100%, var(--cell));
+    padding-inline-start: calc((var(--cell) - 1em) / 2);
     background:
-      radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
-        calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
-      linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
-        4px calc(var(--grid) * 2) repeat-y border-box,
-      var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
-      linear-gradient(rgb(20 20 20 / 16%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 5)
-        calc(var(--grid) * 5) repeat content-box,
-      linear-gradient(90deg, rgb(20 20 20 / 16%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 5)
-        calc(var(--grid) * 5) repeat content-box,
-      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
+      linear-gradient(rgb(20 20 20 / 14%) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+      linear-gradient(90deg, rgb(20 20 20 / 14%) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+      var(--paper);
+    line-height: var(--cell);
+    letter-spacing: calc(var(--cell) - 1em);
   }
 
-  /* 3: the four rulings of the reference notebook, one per role: dots
-     under the greeting, lines under the words (at their own line pitch),
-     squares under the date, blank under the photographs. */
-  :global(html[data-layout="pages"] .site-shell::before),
-  :global(html[data-layout="scale"] .site-shell::before) {
-    background: none;
+  /* 3: a baseline grid: each entry is its own sheet ruled at the pitch of
+     its text, and every part of it is a whole number of rows. */
+  :global(html[data-layout="baseline"] .diary-feed) {
+    gap: 52px;
   }
 
-  :global(html[data-layout="pages"] .home-hero) {
-    background: radial-gradient(circle, rgb(20 20 20 / 22%) 1px, transparent 1.4px) 0 0 / var(--grid)
-      var(--grid);
-  }
-
-  :global(html[data-layout="pages"] .diary-text) {
-    background: linear-gradient(transparent calc(1lh - 1px), rgb(20 20 20 / 14%) calc(1lh - 1px)) 0 0 /
-      100% 1lh;
-  }
-
-  :global(html[data-layout="pages"] .diary-date) {
-    background: var(--grid-cell) 0 0 / var(--grid) var(--grid);
-  }
-
-  /* 4: dark ruling inside each block, faint between: a translucent paper
-     outline over a doubled grid. */
-  :global(html[data-layout="density"] .site-shell::before) {
+  :global(html[data-layout="baseline"] .diary-entry) {
+    --row: 26px;
+    gap: var(--row);
+    margin-inline: calc(var(--row) * -1);
+    padding: var(--row);
     background:
-      radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
-        calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
-      linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
-        4px calc(var(--grid) * 2) repeat-y border-box,
-      var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
-      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box,
-      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
+      linear-gradient(rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / var(--row) var(--row),
+      linear-gradient(90deg, rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / var(--row) var(--row),
+      var(--paper);
   }
 
-  :global(html[data-layout="density"] .diary-feed) {
+  :global(html[data-layout="baseline"] .diary-date) {
+    line-height: calc(var(--row) * 2);
+  }
+
+  :global(html[data-layout="baseline"] .diary-text) {
+    line-height: var(--row);
+  }
+
+  :global(html[data-layout="baseline"] .diary-text p) {
+    margin-bottom: var(--row);
+  }
+
+  :global(html[data-layout="baseline"] .diary-photos) {
+    --thumb-height: calc(var(--row) * 7);
+    margin-top: 0;
+    gap: var(--row);
+  }
+
+  /* 4: the ruling as a column system: photographs cropped to 7 by 9
+     cells with one-cell gutters, text and greeting a whole number of
+     cells wide, so every edge meets a rule. */
+  :global(html[data-layout="columns"] .diary-photos) {
+    --thumb-height: calc(var(--grid) * 9);
+    gap: var(--grid);
+  }
+
+  :global(html[data-layout="columns"] .diary-photo-image) {
+    width: calc(var(--grid) * 7);
+    object-fit: cover;
+  }
+
+  :global(html[data-layout="columns"] .diary-text),
+  :global(html[data-layout="columns"] .about-intro) {
+    width: round(down, 100%, var(--grid));
+  }
+
+  :global(html[data-layout="columns"] .home-hero) {
+    padding-inline-start: round(
+      up,
+      var(--shell-width-vw) * var(--bottle-x) + var(--bottle-width) * (1 - var(--bottle-align)) +
+        var(--hero-gap),
+      var(--grid)
+    );
+  }
+
+  /* 5: the inverse of broken: each block lies on plain paper and the
+     ruling shows only around and between them, framing each group. */
+  :global(html[data-layout="cutout"] .diary-feed),
+  :global(html[data-layout="cutout"] .home-flow) {
     gap: calc(var(--grid) * 4);
   }
 
-  :global(html[data-layout="density"] .home-hero),
-  :global(html[data-layout="density"] .diary-entry) {
-    outline: calc(var(--grid) * 2) solid color-mix(in srgb, var(--paper) 72%, transparent);
-  }
-
-  /* 5: scale for rank: large 40px squares under the greeting, the fine
-     20px ruling under each entry. */
-  :global(html[data-layout="scale"] .home-hero) {
-    background:
-      linear-gradient(rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 2)
-        calc(var(--grid) * 2),
-      linear-gradient(90deg, rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 2)
-        calc(var(--grid) * 2);
-  }
-
-  :global(html[data-layout="scale"] .diary-entry) {
-    background: var(--grid-cell) 0 0 / var(--grid) var(--grid);
+  :global(html[data-layout="cutout"] .home-hero),
+  :global(html[data-layout="cutout"] .diary-entry) {
+    background: var(--paper);
+    outline: var(--grid) solid var(--paper);
   }
 
   /* ---------- Paper light candidates (dev only) ----------
