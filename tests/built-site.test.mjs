@@ -332,10 +332,10 @@ test("the approved continuous journal structure is semantic across reading surfa
     assert.match(html, /<body data-surface="character-proof">/);
     assert.match(html, /direction seed 9062ef67/);
     if (html !== chineseList) {
-      // The docked glyph bottle and the name share one home link.
+      // The docked bottle silhouette and the name share one home link.
       assert.match(
         html,
-        /<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo"[^>]*aria-hidden="true">[\s\S]*?<\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>/,
+        /<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>/,
       );
     }
     assert.doesNotMatch(html, /class="site-title"/);
@@ -385,10 +385,10 @@ test("the approved continuous journal structure is semantic across reading surfa
     /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<section id="about"/,
   );
   // The hero shows the real bottle photo (the fingerprinted turntable sprite),
-  // which is struck into 21 glyph silhouettes as it docks.
+  // which darkens into a solid silhouette masked by the same sprite as it docks.
   const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
-  assert.equal([...hero.matchAll(/class="bottle-frame"/g)].length, 21);
-  assert.match(hero, /█/);
+  assert.match(hero, /<span class="bottle-silhouette" aria-hidden="true"><\/span>/);
+  assert.doesNotMatch(hero, /█|bottle-frame/);
   const sprite = hero.match(/--sprite:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
   assert.ok(sprite, "expected the hero to reference the fingerprinted bottle sprite");
   assert.match(hero, /<span class="bottle-photo" aria-hidden="true"><\/span>/);

@@ -1,15 +1,15 @@
 ---
 // The bottle from its 21-frame turntable cutout (assets rebuilt by
 // scripts/build-bottle-assets.mjs). "turntable" is the homepage hero: the real
-// photo, set larger than the screen, which turns on scroll and is struck into a
-// solid glyph silhouette as it docks as the home logo. At rest it shows a
-// full-resolution still of the first frame. "logo" is that docked state on
-// every other page: the last frame's silhouette.
+// photo, set larger than the screen, which turns on scroll and darkens into a
+// solid silhouette (the photo's own outline, filled with ink) as it docks as
+// the home logo. At rest it shows a full-resolution still of the first frame.
+// "logo" is that docked state on every other page: the last frame's outline.
 import { Image } from "astro:assets";
 
+import mark from "../assets/home/bottle-mark.webp";
 import spin from "../assets/home/bottle-spin.webp";
 import still from "../assets/home/bottle-still.webp";
-import { turntableToAscii } from "../lib/ascii";
 
 interface Props {
   variant: "turntable" | "logo";
@@ -18,15 +18,12 @@ interface Props {
 }
 
 const FRAMES = 21;
-const ROWS = 56;
 const { variant, href, label } = Astro.props;
-const art = await turntableToAscii("src/assets/home/bottle-spin.webp", FRAMES, ROWS);
-const size = `--cols:${art.cols};--rows:${art.rows};--frames:${FRAMES}`;
 ---
 
 {
   variant === "turntable" ? (
-    <a class="home-bottle" href={href} aria-label={label} style={`${size};--sprite:url(${spin.src})`}>
+    <a class="home-bottle" href={href} aria-label={label} style={`--frames:${FRAMES};--sprite:url(${spin.src})`}>
       <span class="bottle-photo" aria-hidden="true"></span>
       <Image
         class="bottle-still"
@@ -37,13 +34,9 @@ const size = `--cols:${art.cols};--rows:${art.rows};--frames:${FRAMES}`;
         loading="eager"
         fetchpriority="high"
       />
-      <span class="bottle-reel bottle-reel--solid" aria-hidden="true">
-        {art.silhouettes.map((frame) => <span class="bottle-frame">{frame}</span>)}
-      </span>
+      <span class="bottle-silhouette" aria-hidden="true"></span>
     </a>
   ) : (
-    <span class="bottle-logo" style={size} aria-hidden="true">
-      <span class="bottle-frame">{art.silhouettes.at(-1)}</span>
-    </span>
+    <span class="bottle-logo" style={`--mark:url(${mark.src})`} aria-hidden="true"></span>
   )
 }

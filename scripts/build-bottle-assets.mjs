@@ -4,6 +4,8 @@
 //   src/assets/home/bottle-spin.webp   21 frames side by side, for the turn
 //   src/assets/home/bottle-still.webp  frame 0 at full resolution, for the
 //                                      resting hero shown larger than the screen
+//   src/assets/home/bottle-mark.webp   the last frame, small, whose outline
+//                                      masks the solid logo on other pages
 // Every frame puts the bottle at the same height, centred in a frame padded
 // to 396:980 (bottle 900 of 980), so the frames turn without wobbling.
 // Run: node scripts/build-bottle-assets.mjs
@@ -13,6 +15,7 @@ const FIRST = 263;
 const COUNT = 21;
 const SPRITE_BOTTLE = 900;
 const STILL_BOTTLE = 1514; // the shortest cutout, so no frame is upscaled
+const MARK_BOTTLE = 220; // about 3x the docked logo's height
 const files = Array.from({ length: COUNT }, (_, i) => `photo/cutout/IMG_0${FIRST + i}.png`);
 
 async function frame(file, bottle) {
@@ -44,5 +47,13 @@ const still = await frame(files[0], STILL_BOTTLE);
 await sharp(still.buffer)
   .webp({ quality: 80, alphaQuality: 80, effort: 6 })
   .toFile("src/assets/home/bottle-still.webp");
+
+// Only the outline matters for a mask: black, keeping just the alpha.
+const mark = await frame(files[COUNT - 1], MARK_BOTTLE);
+const alpha = await sharp(mark.buffer).extractChannel(3).toBuffer();
+await sharp({ create: { width: mark.width, height: mark.height, channels: 3, background: "#000" } })
+  .joinChannel(alpha)
+  .webp({ lossless: true })
+  .toFile("src/assets/home/bottle-mark.webp");
 
 console.log(`sprite ${width * COUNT}×${height}, still ${still.width}×${still.height}`);

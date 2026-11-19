@@ -1,6 +1,6 @@
 ---
 name: Character Proof
-description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, where diary pictures are first struck as glyphs and develop into the photograph, and the bottle hero is the real photo.
+description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, plain photographs, and the real bottle photo as the hero that docks into a solid silhouette logo.
 colors:
   paper: "#ffffff"
   ink: "#141414"
@@ -69,9 +69,6 @@ components:
   post-body:
     textColor: "{colors.ink}"
     typography: "{typography.body}"
-  glyph-photo:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.ink}"
   lightbox:
     backgroundColor: "{colors.paper}"
   bottle:
@@ -90,7 +87,7 @@ components:
 
 **Creative North Star: "Character Proof"**
 
-The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.
+The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.
 
 Hierarchy comes from the cell grid, not from size. Controls are struck as `[ label ]` brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio (direction contract).
 
@@ -99,7 +96,7 @@ Hierarchy comes from the cell grid, not from size. Controls are struck as `[ lab
 - Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
 - One monospace stack for every typed cell; no webfonts, no `@font-face`.
 - All text starts flush on the column's left edge; only control brackets hang one cell into the margin.
-- Pictures exist twice: as glyph art struck from the photo, and as the photo itself, cross-developed on scroll.
+- Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.
 - Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil.
 
 ## Colors
@@ -110,8 +107,8 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Ribbon Red** (`#c4161c`): Control brackets, hover state of controls and titles, text selection background, the underline of body links, the focus outline of photo thumbnails, pressed-like-state likes count.
 
 ### Neutral
-- **Struck White Paper** (`#ffffff`): Page, platen band, glyph-art backing, buttons-as-paper, lightbox (veiled at 97%).
-- **Typewriter Black** (`#141414`): Body text, glyph art, bottle at rest, dashed focus outline.
+- **Struck White Paper** (`#ffffff`): Page, platen band, buttons-as-paper, lightbox (veiled at 97%).
+- **Typewriter Black** (`#141414`): Body text, the bottle silhouette, dashed focus outline.
 - **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
 
 ### Named Rules
@@ -175,13 +172,10 @@ Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, r
 A single column: the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
 ### Bottle Mark
-The real bottle photo, because the hero shows the potter's work: a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, 396×980 frames) and a full-resolution still of the first frame (`bottle-still.webp`, 666×1649, srcset 333/500/666w, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it bleeds: set larger than the screen (170dvh tall at 14dvh from the top and 42% across the shell; 150dvh at 34dvh and 18% at 48rem and below) and cut off by the viewport's bottom edge, so the clay is seen up close first. Across the first 60dvh of scrolling it steps through frames (the still gives way to the sprite exactly when the first frame turns), leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid glyph silhouette struck in `█`. That docked form is the logo on every other page. The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
+The real bottle photo, because the hero shows the potter's work: a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, 396×980 frames) and a full-resolution still of the first frame (`bottle-still.webp`, 666×1649, srcset 333/500/666w, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it bleeds: set larger than the screen (170dvh tall at 14dvh from the top and 42% across the shell; 150dvh at 34dvh and 18% at 48rem and below) and cut off by the viewport's bottom edge, so the clay is seen up close first. Across the first 60dvh of scrolling it steps through frames (the still gives way to the sprite exactly when the first frame turns), leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid ink silhouette: the same sprite frame's outline used as a CSS mask over `currentColor`, so it is crisp at any size. That docked form is the logo on every other page, masked by a 2 KB last-frame outline (`bottle-mark.webp`). The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
 
 ### Paper Platen Band
 A fixed paper-white strip, 5.5rem tall, fading in over the last 10dvh of the dock (45dvh to 60dvh).
-
-### Glyph Photo Develop
-Every photo carries a build-time glyph rendering (ramp ` .:-=+*#%@`, cell aspect 0.6, 40 rows for article photos, scaled to the column by container units). As a photo row scrolls into view (view-timeline, `entry 0% cover 55%`), the glyphs fade out while the photo changes from `grayscale(1) contrast(1.3)` to its true colors.
 
 ### Lightbox
 A native popover, full viewport, on a 97% white veil. A tap, Escape, or outside click closes it; the photo is contained to the viewport minus 1rem each side. The cursor is zoom-out.
@@ -202,7 +196,6 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 - **Do** start all text flush on the column edge; entries carry no index.
 - **Do** strike controls as `[ label ]` with ribbon-red brackets and a 1px press sink.
 - **Do** write scroll-driven animations as longhands and gate them on `@supports` and `prefers-reduced-motion: no-preference`.
-- **Do** render every article photo with a glyph twin and let the photo develop from it on scroll.
 - **Do** keep zero runtime JS on content pages; only posts load the likes script.
 - **Do** keep type at or below `1.5rem`.
 

@@ -915,3 +915,8 @@
 - Intent: remove the character-art treatment from photos: feed thumbnails lose `diary-photo-ascii` and the scroll develop; article photos lose the `glyphPhotos()` Satteri plugin (file deleted, unregistered) and its CSS; tests now assert no glyph markup and the minification test keeps only `scroll(root)`
 - Why: user: "移除圖片的 ascii 風格"
 - Result: done; photoToAscii removed from src/lib/ascii.ts too. Docs (DESIGN.md, contract) are updated together with the logo change that follows. yarn run check clean, 40/40 tests
+
+## 2026-11-19 18:20 · claude-code
+- Intent: make the docked logo a crisp solid silhouette instead of `█` glyph rows: the home dock masks the turntable sprite's alpha (`mask-image`, stepped like the photo) filled with currentColor; other pages' logo masks a small last-frame asset `bottle-mark.webp` from build-bottle-assets.mjs. Delete `src/lib/ascii.ts` (no users left) and the glyph frame CSS; update docs for both this and the photo change
+- Why: user: logo should be "minimal 清晰的剪影，沒有橫線，不是 ascii 風格"
+- Result: done; bottle-mark.webp is 2 KB (black + alpha). Verified in dev (restarted the 4321 server through launch.json because the old one could not see the new asset): home docks a crisp 74px silhouette at 16,16; the article header shows the same outline. ascii.ts deleted. yarn run check clean, 40/40 tests

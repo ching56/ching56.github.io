@@ -1,6 +1,6 @@
 /* Character Proof: a pottery diary typed on white paper. Black and red ribbon
-   ink, one monospace cell, pictures struck first as glyphs. Dates are the only
-   handwriting on the page. */
+   ink, one monospace cell, plain photographs. Dates are the only handwriting
+   on the page. */
 :root {
   --paper: #ffffff;
   --ink: #141414;
@@ -248,11 +248,11 @@ main {
   overflow: clip;
 }
 
-/* Each frame is one container-height tall, so the reel steps by whole frames
-   and the glyphs scale with whatever height the bottle has. */
+/* Every bottle frame is 396 by 980; the logo is 30px wide. */
 .home-bottle,
 .bottle-logo {
-  container-type: size;
+  --logo-width: 30px;
+  --logo-height: calc(var(--logo-width) * 980 / 396);
   position: relative;
   display: block;
   overflow: hidden;
@@ -261,9 +261,8 @@ main {
 }
 
 .home-bottle {
-  --logo-width: 30px;
   height: var(--bottle-height);
-  aspect-ratio: calc(var(--cols) * 0.6) / var(--rows);
+  aspect-ratio: 396 / 980;
 }
 
 .home-bottle:hover {
@@ -288,37 +287,28 @@ main {
   background: var(--sprite) 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
 }
 
-.bottle-reel {
+/* The silhouette: the same frame's outline, filled with ink. */
+.bottle-silhouette {
   position: absolute;
-  inset: 0 0 auto;
+  inset: 0;
   display: block;
-}
-
-.home-bottle .bottle-reel--solid {
+  background: currentColor;
+  mask: var(--sprite) 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
   opacity: 0;
 }
 
-.bottle-frame {
-  display: block;
-  height: 100cqh;
-  overflow: hidden;
-  font-size: calc(100cqh / var(--rows));
-  line-height: 1;
-  letter-spacing: 0;
-  white-space: pre;
-}
-
 .bottle-logo {
-  --logo-width: 30px;
   flex: none;
   width: var(--logo-width);
-  height: calc(var(--logo-width) * var(--rows) / (var(--cols) * 0.6));
+  height: var(--logo-height);
+  background: currentColor;
+  mask: var(--mark) center / contain no-repeat;
   rotate: -45deg;
 }
 
 /* Where scroll-driven animation is supported, the bottle is pinned over its
    slot and, across the first 60dvh of scrolling, turns, leans, shrinks into
-   the top-left corner and is struck into a glyph silhouette: the home mark. */
+   the top-left corner and darkens into a solid silhouette: the home mark. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .home-bottle-slot {
@@ -358,8 +348,8 @@ main {
       animation-range: 0 60dvh;
     }
 
-    .home-bottle .bottle-reel--solid {
-      animation-name: bottle-turn, bottle-strike;
+    .home-bottle .bottle-silhouette {
+      animation-name: bottle-mask-turn, bottle-strike;
       animation-timing-function: steps(var(--frames), jump-none), linear;
       animation-fill-mode: both, both;
       animation-timeline: scroll(root);
@@ -391,9 +381,9 @@ main {
   }
 }
 
-@keyframes bottle-turn {
+@keyframes bottle-mask-turn {
   to {
-    translate: 0 calc(-100% * (var(--frames) - 1) / var(--frames));
+    mask-position: 100% 0;
   }
 }
 
@@ -446,7 +436,7 @@ main {
     top: 1rem;
     /* A 45deg lean widens the box; shift right so the tilted neck stays inside the column. */
     left: calc(var(--shell-left) + var(--logo-width) * 0.73);
-    height: calc(var(--logo-width) * var(--rows) / (var(--cols) * 0.6));
+    height: var(--logo-height);
     rotate: -45deg;
   }
 }
