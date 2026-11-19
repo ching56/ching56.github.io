@@ -876,3 +876,8 @@
 - Intent: fix two production-only defects found by checking the built site through `astro preview` (port 4322, new launch.json entry)
 - Why: lightningcss folded `animation-timeline` into the `animation` shorthand for single-animation rules (`animation:linear both bottle-dock scroll(root)`), which Chrome rejects, so in production the bottle never docked and photos never developed; dev was fine. Separately, `<button>` does not inherit font-family, so feed thumbnail glyphs rendered in a proportional face (the "grey static" the reviewer saw)
 - Result: all scroll-driven rules rewritten as longhands; new test asserts no shorthand carries a timeline in built CSS; `.diary-photo { font-family: inherit }`. 40/40 tests; production preview shows the docked 73px mark, glyph state and develop on home and articles
+
+## 2026-11-19 14:58 · claude-code
+- Intent: record the Character Proof world: DESIGN.md and .impeccable/design.json rewritten by the impeccable documenter from the built code; STATE decision 19 and next steps; the route surface brief rewritten
+- Why: a new world is unfinished until it is documented; the design hook reads DESIGN.md
+- Result: read back. Palette hexes match global.css, no Story Journal tokens remain, and the detector reports 0 findings on global.css against the new DESIGN.md. Open items go to the user: Chinese on the cell grid (Song/Ming with size-adjust), and the handwritten date face

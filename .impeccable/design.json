@@ -1,208 +1,149 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-06T12:27:55Z",
-  "title": "Design System: Accession Tabs",
+  "generatedAt": "2026-11-19T00:00:00Z",
+  "title": "Design System: Character Proof",
   "extensions": {
     "colorMeta": {
-      "stock": {
+      "paper": {
         "role": "neutral",
-        "displayName": "Cool Index Stock",
-        "canonical": "#f6f7f5",
-        "tonalRamp": ["oklch(15% 0.003 128.5)", "oklch(26% 0.003 128.5)", "oklch(38% 0.003 128.5)", "oklch(50% 0.003 128.5)", "oklch(62% 0.003 128.5)", "oklch(74% 0.003 128.5)", "oklch(86% 0.003 128.5)", "oklch(95% 0.003 128.5)"]
-      },
-      "stock-bright": {
-        "role": "neutral",
-        "displayName": "Bright Stock",
-        "canonical": "#fcfdfb",
-        "tonalRamp": ["oklch(15% 0.003 128.5)", "oklch(26% 0.003 128.5)", "oklch(38% 0.003 128.5)", "oklch(50% 0.003 128.5)", "oklch(62% 0.003 128.5)", "oklch(74% 0.003 128.5)", "oklch(86% 0.003 128.5)", "oklch(95% 0.003 128.5)"]
+        "displayName": "Struck White Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#141414", "#2f2f2f", "#5f5f5f", "#808080", "#b4b4b4", "#d4d4d4", "#ebebeb", "#ffffff"]
       },
       "ink": {
         "role": "neutral",
-        "displayName": "Near-black Ink",
-        "canonical": "#202322",
-        "tonalRamp": ["oklch(15% 0.005 174.0)", "oklch(26% 0.005 174.0)", "oklch(38% 0.005 174.0)", "oklch(50% 0.005 174.0)", "oklch(62% 0.005 174.0)", "oklch(74% 0.005 174.0)", "oklch(86% 0.005 174.0)", "oklch(95% 0.005 174.0)"]
+        "displayName": "Typewriter Black",
+        "canonical": "#141414",
+        "tonalRamp": ["#141414", "#2f2f2f", "#5f5f5f", "#808080", "#b4b4b4", "#d4d4d4", "#ebebeb", "#ffffff"]
       },
       "ink-muted": {
         "role": "neutral",
-        "displayName": "Muted Graphite",
-        "canonical": "#555c59",
-        "tonalRamp": ["oklch(15% 0.010 168.4)", "oklch(26% 0.010 168.4)", "oklch(38% 0.010 168.4)", "oklch(50% 0.010 168.4)", "oklch(62% 0.010 168.4)", "oklch(74% 0.010 168.4)", "oklch(86% 0.010 168.4)", "oklch(95% 0.010 168.4)"]
+        "displayName": "Carbon Grey",
+        "canonical": "#5f5f5f",
+        "tonalRamp": ["#141414", "#2f2f2f", "#5f5f5f", "#808080", "#b4b4b4", "#d4d4d4", "#ebebeb", "#ffffff"]
       },
-      "rule": {
+      "ink-faint": {
         "role": "neutral",
-        "displayName": "Pencil Rule",
-        "canonical": "#b9bfbb",
-        "tonalRamp": ["oklch(15% 0.009 157.0)", "oklch(26% 0.009 157.0)", "oklch(38% 0.009 157.0)", "oklch(50% 0.009 157.0)", "oklch(62% 0.009 157.0)", "oklch(74% 0.009 157.0)", "oklch(86% 0.009 157.0)", "oklch(95% 0.009 157.0)"]
+        "displayName": "Faint Pencil Grey",
+        "canonical": "#b4b4b4",
+        "tonalRamp": ["#141414", "#2f2f2f", "#5f5f5f", "#808080", "#b4b4b4", "#d4d4d4", "#ebebeb", "#ffffff"]
       },
-      "rule-strong": {
-        "role": "neutral",
-        "displayName": "Registration Rule",
-        "canonical": "#777f7b",
-        "tonalRamp": ["oklch(15% 0.011 164.6)", "oklch(26% 0.011 164.6)", "oklch(38% 0.011 164.6)", "oklch(50% 0.011 164.6)", "oklch(62% 0.011 164.6)", "oklch(74% 0.011 164.6)", "oklch(86% 0.011 164.6)", "oklch(95% 0.011 164.6)"]
-      },
-      "cobalt": {
+      "ribbon": {
         "role": "primary",
-        "displayName": "Cobalt Glass",
-        "canonical": "#4f73d9",
-        "tonalRamp": ["oklch(15% 0.161 266.8)", "oklch(26% 0.161 266.8)", "oklch(38% 0.161 266.8)", "oklch(50% 0.161 266.8)", "oklch(62% 0.161 266.8)", "oklch(74% 0.161 266.8)", "oklch(86% 0.161 266.8)", "oklch(95% 0.161 266.8)"]
-      },
-      "cobalt-deep": {
-        "role": "primary",
-        "displayName": "Deep Cobalt",
-        "canonical": "#294daf",
-        "tonalRamp": ["oklch(15% 0.162 265.2)", "oklch(26% 0.162 265.2)", "oklch(38% 0.162 265.2)", "oklch(50% 0.162 265.2)", "oklch(62% 0.162 265.2)", "oklch(74% 0.162 265.2)", "oklch(86% 0.162 265.2)", "oklch(95% 0.162 265.2)"]
-      },
-      "cobalt-ink": {
-        "role": "primary",
-        "displayName": "Cobalt Ink",
-        "canonical": "#14204a",
-        "tonalRamp": ["oklch(15% 0.080 266.0)", "oklch(26% 0.080 266.0)", "oklch(38% 0.080 266.0)", "oklch(50% 0.080 266.0)", "oklch(62% 0.080 266.0)", "oklch(74% 0.080 266.0)", "oklch(86% 0.080 266.0)", "oklch(95% 0.080 266.0)"]
-      },
-      "citron": {
-        "role": "secondary",
-        "displayName": "Citron Glass",
-        "canonical": "#d8e54a",
-        "tonalRamp": ["oklch(15% 0.173 114.1)", "oklch(26% 0.173 114.1)", "oklch(38% 0.173 114.1)", "oklch(50% 0.173 114.1)", "oklch(62% 0.173 114.1)", "oklch(74% 0.173 114.1)", "oklch(86% 0.173 114.1)", "oklch(95% 0.173 114.1)"]
-      },
-      "citron-deep": {
-        "role": "secondary",
-        "displayName": "Deep Citron",
-        "canonical": "#b9c528",
-        "tonalRamp": ["oklch(15% 0.167 114.2)", "oklch(26% 0.167 114.2)", "oklch(38% 0.167 114.2)", "oklch(50% 0.167 114.2)", "oklch(62% 0.167 114.2)", "oklch(74% 0.167 114.2)", "oklch(86% 0.167 114.2)", "oklch(95% 0.167 114.2)"]
-      },
-      "citron-ink": {
-        "role": "secondary",
-        "displayName": "Citron Ink",
-        "canonical": "#202300",
-        "tonalRamp": ["oklch(15% 0.065 114.0)", "oklch(26% 0.065 114.0)", "oklch(38% 0.065 114.0)", "oklch(50% 0.065 114.0)", "oklch(62% 0.065 114.0)", "oklch(74% 0.065 114.0)", "oklch(86% 0.065 114.0)", "oklch(95% 0.065 114.0)"]
+        "displayName": "Ribbon Red",
+        "canonical": "#c4161c",
+        "tonalRamp": ["oklch(15% 0.12 25)", "oklch(26% 0.15 25)", "oklch(38% 0.18 25)", "oklch(50% 0.2 25)", "oklch(62% 0.2 25)", "oklch(74% 0.14 25)", "oklch(86% 0.07 25)", "oklch(95% 0.025 25)"]
       }
     },
     "typographyMeta": {
-      "display": { "displayName": "Register Display", "purpose": "Primary register and section headings." },
-      "headline": { "displayName": "Article Headline", "purpose": "Balanced long-form article titles." },
-      "title": { "displayName": "Register Title", "purpose": "Scan-friendly post and item titles." },
-      "body": { "displayName": "Reading Body", "purpose": "Unhurried Traditional Chinese and English prose." },
-      "subheading": { "displayName": "Reading Subheading", "purpose": "Secondary headings inside long-form prose." },
-      "metadata": { "displayName": "Reading Metadata", "purpose": "Localized dates and restrained secondary identity text." },
-      "utility": { "displayName": "Structural Utility", "purpose": "Footer copy and compact structural metadata." },
-      "navigation": { "displayName": "Tab Navigation", "purpose": "Compact functional labels in glass tabs." },
-      "label": { "displayName": "Accession Label", "purpose": "Uppercase stamps and tabular metadata." },
-      "signature": { "displayName": "Author Signature", "purpose": "The restrained author identity in the shared header." }
+      "display": { "displayName": "Entry Title", "purpose": "Article h1; also the 1.5rem type ceiling." },
+      "date": { "displayName": "Handwritten Date", "purpose": "Diary entry dates only. The face is an open user decision; the stack is a placeholder." },
+      "body": { "displayName": "Reading Body", "purpose": "Article prose in a 64ch column." },
+      "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, step numbers, carriage scale (--type-size)." },
+      "metadata": { "displayName": "Metadata", "purpose": "Generic time, performer line, provider links." },
+      "label": { "displayName": "Label", "purpose": "Language link, intro sub-headings, English list dates." },
+      "signature": { "displayName": "Author Signature", "purpose": "The author name beside the docked bottle." }
     },
-    "shadows": [
-      { "name": "glass-rest", "value": "inset 0 1px 0 rgb(255 255 255 / 64%), inset 0 -1px 0 rgb(32 35 34 / 12%), 0 0.45rem 1.2rem rgb(32 35 34 / 10%)", "purpose": "Inset refraction and restrained ambient separation for glass tabs at rest." },
-      { "name": "glass-hover", "value": "inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(32 35 34 / 14%), 0 0.7rem 1.4rem rgb(32 35 34 / 14%)", "purpose": "A small optical lift on glass-tab hover." }
-    ],
+    "shadows": [],
     "motion": [
-      { "name": "glass-state", "value": "180ms cubic-bezier(0.2, 0.8, 0.2, 1)", "purpose": "Moves and reshapes glass-tab depth on hover." },
-      { "name": "glass-color", "value": "180ms ease-out", "purpose": "Changes glass-tab background color between states." },
-      { "name": "register-state", "value": "160ms ease-out", "purpose": "Introduces the faint cobalt wash on register hover or focus-within." }
+      { "name": "color-hover", "value": "120ms ease-out", "purpose": "Control and mark color shift to ribbon red." },
+      { "name": "key-press", "value": "translate: 0 1px", "purpose": "A pressed control sinks one pixel like a key." },
+      { "name": "arrow-slide", "value": "200ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "External-link arrow slides 2px up-right on hover." },
+      { "name": "bottle-dock", "value": "linear, scroll(root), range 0 40dvh, steps(frames, jump-none) for the turn", "purpose": "The home bottle turns, leans, shrinks and is struck solid into the logo. Longhands only." },
+      { "name": "platen-rise", "value": "linear, scroll(root), range 30dvh 40dvh", "purpose": "Paper band fades in once the mark is docked." },
+      { "name": "photo-develop", "value": "linear, view-timeline, range entry 0% cover 55%", "purpose": "Glyph art fades out while the photo moves from grayscale(1) contrast(1.3) to true color. Longhands only." }
     ],
     "breakpoints": [
-      { "name": "stacked-reading", "value": "48rem" }
+      { "name": "narrow", "value": "48rem" },
+      { "name": "two-column-home", "value": "64.0625rem" }
     ]
   },
   "components": [
     {
-      "name": "Glass Navigation Tabs",
+      "name": "Bracket Control",
+      "kind": "button",
+      "refersTo": "bracket-control",
+      "description": "Every control is a struck [ label ] with ribbon-red brackets; hover turns the label red, press sinks 1px.",
+      "html": "<a class=\"ds-bracket\" href=\"#\">jcli@pm.me</a>",
+      "css": ".ds-bracket { display: inline-flex; gap: 0.5ch; align-items: center; min-height: 2.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; font-size: 0.9375rem; font-weight: 400; line-height: 1; white-space: nowrap; text-decoration: none; transition: color 120ms ease-out; } .ds-bracket::before { color: var(--ribbon, #c4161c); content: \"[\"; } .ds-bracket::after { color: var(--ribbon, #c4161c); content: \"]\"; } .ds-bracket:hover { color: var(--ribbon, #c4161c); } .ds-bracket:active { translate: 0 1px; } .ds-bracket:focus-visible { outline: 1px dashed var(--ink, #141414); outline-offset: 4px; }"
+    },
+    {
+      "name": "Language Link",
       "kind": "nav",
-      "refersTo": "glass-tab",
-      "description": "The signature top-edge navigation in active cobalt, resting citron, and neutral clear glass.",
-      "html": "<nav class=\"ds-tab-list\" aria-label=\"主要導覽\"><a class=\"ds-glass-tab ds-glass-tab--cobalt ds-is-active\" href=\"/zh-TW/\" aria-current=\"page\">文章</a><a class=\"ds-glass-tab ds-glass-tab--citron\" href=\"/zh-TW/#about\">關於</a><a class=\"ds-glass-tab ds-glass-tab--clear\" href=\"/en/\">English</a></nav>",
-      "css": ".ds-tab-list { display: flex; gap: 0.35rem; align-items: end; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-glass-tab { position: relative; isolation: isolate; display: grid; place-items: center; min-width: 6.25rem; min-height: 3.5rem; padding: 0.85rem 1.25rem 0.75rem; overflow: hidden; border: 1px solid rgb(32 35 34 / 28%); border-bottom-color: var(--rule-strong); border-radius: 0.75rem 0.75rem 0 0; color: var(--ink); font-size: 0.9375rem; font-weight: 610; line-height: 1; text-align: center; text-decoration: none; white-space: nowrap; box-shadow: inset 0 1px 0 rgb(255 255 255 / 64%), inset 0 -1px 0 rgb(32 35 34 / 12%), 0 0.45rem 1.2rem rgb(32 35 34 / 10%); backdrop-filter: blur(14px) saturate(135%); transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 180ms ease-out; } .ds-glass-tab::before { position: absolute; z-index: -1; inset: 0; background: linear-gradient(155deg, rgb(255 255 255 / 58%), transparent 38%), linear-gradient(90deg, transparent 8%, rgb(255 255 255 / 20%) 50%, transparent 82%); content: \"\"; pointer-events: none; } .ds-glass-tab::after { position: absolute; z-index: -1; right: 0.55rem; bottom: 0.45rem; width: 1.8rem; height: 0.62rem; background: linear-gradient(110deg, transparent 8%, rgb(255 255 255 / 58%) 50%, transparent 88%); clip-path: polygon(18% 0, 100% 0, 78% 100%, 0 100%); filter: blur(0.5px); content: \"\"; pointer-events: none; } .ds-glass-tab:hover { z-index: 2; transform: translateY(-0.2rem); box-shadow: inset 0 1px 0 rgb(255 255 255 / 72%), inset 0 -1px 0 rgb(32 35 34 / 14%), 0 0.7rem 1.4rem rgb(32 35 34 / 14%); } .ds-glass-tab:focus-visible { z-index: 3; outline: 3px solid var(--ink); outline-offset: 3px; } .ds-glass-tab--cobalt { color: #14204a; background-color: rgb(79 115 217 / 42%); } .ds-glass-tab--cobalt.ds-is-active { color: #fff; background-color: rgb(41 77 175 / 90%); } .ds-glass-tab--citron { color: #252800; background-color: rgb(216 229 74 / 58%); } .ds-glass-tab--clear { background-color: rgb(255 255 255 / 62%); } @media (prefers-reduced-motion: reduce) { .ds-glass-tab { transition-duration: 0.01ms; } } @media (forced-colors: active) { .ds-glass-tab { border-color: ButtonText; color: LinkText; background: ButtonFace; box-shadow: none; } .ds-glass-tab.ds-is-active { color: HighlightText; background: Highlight; } }"
+      "refersTo": "language-link",
+      "description": "The only navigation: a muted bracket control in the header.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-lang\" href=\"#\">English</a></nav>",
+      "css": ".ds-lang { display: inline-flex; gap: 0.5ch; align-items: center; min-height: 2.75rem; color: var(--ink-muted, #5f5f5f); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; font-size: 0.8125rem; font-weight: 400; line-height: 1; text-decoration: none; transition: color 120ms ease-out; } .ds-lang::before { color: var(--ribbon, #c4161c); content: \"[\"; } .ds-lang::after { color: var(--ribbon, #c4161c); content: \"]\"; } .ds-lang:hover { color: var(--ribbon, #c4161c); } .ds-lang:active { translate: 0 1px; } .ds-lang:focus-visible { outline: 1px dashed var(--ink, #141414); outline-offset: 4px; }"
     },
     {
-      "name": "Homepage Introduction",
+      "name": "Carriage Scale",
       "kind": "custom",
-      "refersTo": "homepage-introduction",
-      "description": "The title-free, three-paragraph author introduction and direct mail invitation that open the zh-TW homepage.",
-      "html": "<section id=\"about\" class=\"ds-homepage-introduction\" aria-label=\"關於\"><div class=\"ds-about-copy\"><p>我是李至青 Jhih Cing, Li。我寫程式，喜歡咖啡和文字。我寫生活裡的變化、迷惘、幸運，還有那些值得留下來的片刻。</p><p>我相信自己是幸運的人，期望透過寫作分享我的幸運給更多人。選擇部落格作為載體，是希望有一個安安靜靜的地方，讓我能夠傳達自己的想法，沒有通知，沒有廣告，獨立於平台。</p><p>寫給所有迷惘、脆弱、無助、自卑的人，你們不是獨自一人。寫給幫助過我的人，是你們讓我有能力分享。寫給未來的我自己，故事是從這裡開始。</p></div><footer class=\"ds-about-cta\"><p>如果有一段文字讓你想起自己，歡迎寫信告訴我。</p><a href=\"mailto:jcli@pm.me\">寫信給我</a></footer></section>",
-      "css": ".ds-homepage-introduction { width: min(100%, 70ch); margin-inline: auto; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-about-copy { max-width: 70ch; font-size: 1.0625rem; line-height: 1.9; overflow-wrap: anywhere; } .ds-about-copy p { margin-block: 0 1.4em; } .ds-about-copy p:first-child { margin-top: 0; font-size: clamp(1.0625rem, 2vw, 1.5rem); font-weight: 580; line-height: 1.65; text-wrap: balance; } .ds-about-copy p:last-child { margin-bottom: 0; } .ds-about-cta { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: baseline; justify-content: space-between; max-width: 70ch; margin-top: clamp(2.5rem, 5vw, 4rem); } .ds-about-cta p { margin: 0; color: var(--ink-muted); font-size: 0.9375rem; } .ds-about-cta a { display: inline-flex; align-items: center; min-height: 2.75rem; color: inherit; font-weight: 650; text-underline-offset: 0.2em; } .ds-about-cta a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }"
+      "refersTo": "carriage-scale",
+      "description": "A typewriter paper scale in faint grey: | every ten cells, : every five, . between.",
+      "html": "<div class=\"ds-scale\">|....:....|....:....|....:....|</div>",
+      "css": ".ds-scale { margin-left: 5ch; overflow: hidden; color: var(--ink-faint, #b4b4b4); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, monospace; font-size: 0.9375rem; line-height: 1.15; white-space: pre; }"
     },
     {
-      "name": "Register Header",
-      "kind": "custom",
-      "refersTo": "register-header",
-      "description": "A frameless reading-route header containing only the page topic, 文章.",
-      "html": "<section class=\"ds-register-panel\" aria-labelledby=\"ds-register-heading\"><header class=\"ds-register-header\"><h1 id=\"ds-register-heading\" class=\"ds-register-title\">文章</h1></header></section>",
-      "css": ".ds-register-panel { color: var(--ink); background: transparent; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-register-header { padding-bottom: 1.25rem; } .ds-register-title { margin: 0; font-size: 1.5rem; font-weight: 710; line-height: 1; letter-spacing: -0.02em; } @media (max-width: 48rem) { .ds-register-header { min-height: 6rem; } }"
+      "name": "Numbered Diary Entry",
+      "kind": "card",
+      "refersTo": "diary-step",
+      "description": "Red step number hangs in the 5ch gutter beside a handwritten date and clamped typed text.",
+      "html": "<article class=\"ds-entry\"><p class=\"ds-step\">12</p><p class=\"ds-date\">11月 8日</p><div class=\"ds-text\"><p>今天把瓶子上了第一層釉。</p></div></article>",
+      "css": ".ds-entry { display: grid; grid-template-columns: 5ch minmax(0, 1fr); gap: 0.75rem 0; align-items: baseline; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-entry > * { grid-column: 2; } .ds-step { grid-row: 1; grid-column: 1; margin: 0; color: var(--ribbon, #c4161c); font-size: 0.9375rem; line-height: 1; font-variant-numeric: tabular-nums; } .ds-step::after { content: \".\"; } .ds-date { grid-row: 1; margin: 0; font-family: \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
     },
     {
-      "name": "Register Row",
+      "name": "Glyph Photo",
       "kind": "custom",
-      "refersTo": "register-row",
-      "description": "A semantic chronological row with accession number, linked title, date, and a faint cobalt interaction wash.",
-      "html": "<ol class=\"ds-register-list\"><li class=\"ds-register-row\"><span class=\"ds-accession-number\" aria-hidden=\"true\"></span><a href=\"#post\">一切不滅定律</a><time datetime=\"2023-01-27\">2023年1月27日</time></li></ol>",
-      "css": ".ds-register-list { display: grid; gap: 0.25rem; margin: 0; padding: 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; list-style: none; counter-reset: accession; } .ds-register-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) auto; gap: clamp(1rem, 2.5vw, 2rem); align-items: center; min-height: 5.25rem; padding: 1rem 0; counter-increment: accession; transition: background-color 160ms ease-out; } .ds-register-row:hover, .ds-register-row:focus-within { background: rgb(79 115 217 / 8%); } .ds-accession-number::before { color: var(--ink-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; font-weight: 650; letter-spacing: 0.1em; content: counter(accession, decimal-leading-zero); } .ds-register-row a { width: fit-content; color: inherit; font-size: clamp(1.0625rem, 1.5vw, 1.25rem); font-weight: 560; line-height: 1.35; text-decoration-color: transparent; text-underline-offset: 0.2em; text-decoration-thickness: 0.08em; transition: text-decoration-color 160ms ease-out; } .ds-register-row a:hover, .ds-register-row a:focus-visible { text-decoration-color: currentColor; } .ds-register-row a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; } .ds-register-row time { color: var(--ink-muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; white-space: nowrap; } @media (max-width: 48rem) { .ds-register-row { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 0.35rem 0.75rem; min-height: 5.5rem; padding-block: 1rem; } .ds-register-row time { grid-column: 2; } } @media (prefers-reduced-motion: reduce) { .ds-register-row, .ds-register-row a { transition-duration: 0.01ms; } }"
+      "refersTo": "glyph-photo",
+      "description": "A photo overlaid by its own glyph rendering; on scroll the glyphs fade and the photo develops from grayscale.",
+      "html": "<div class=\"ds-glyph\"><pre class=\"ds-glyph-art\" aria-hidden=\"true\">@@%#*+=-:.\n%#*+=-:.  \n#*+=-:.    </pre><div class=\"ds-photo\"></div></div>",
+      "css": ".ds-glyph { position: relative; display: block; width: 18rem; height: 6rem; background: var(--paper, #ffffff); } .ds-glyph-art { position: absolute; inset: 0; margin: 0; overflow: hidden; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, monospace; font-size: 0.5rem; line-height: 1; letter-spacing: 0; white-space: pre; background: var(--paper, #ffffff); } .ds-photo { width: 100%; height: 100%; background: var(--ink-faint, #b4b4b4); filter: grayscale(1) contrast(1.3); }"
     },
     {
-      "name": "Article Header",
+      "name": "English Plain List Row",
       "kind": "custom",
-      "refersTo": "article-header",
-      "description": "A balanced frameless article title with date and accession metadata.",
-      "html": "<header class=\"ds-article-header\"><h1>2025</h1><time datetime=\"2026-01-01\">2026年1月1日</time><span class=\"ds-article-stamp\" aria-hidden=\"true\">ZH-TW · 2026-01-01</span></header>",
-      "css": ".ds-article-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem 2rem; align-items: end; padding: clamp(1.5rem, 4vw, 2.75rem) 0; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-article-header h1 { margin: 0; font-size: 1.5rem; line-height: 1.16; letter-spacing: -0.025em; text-wrap: balance; } .ds-article-header time { grid-column: 1; color: var(--ink-muted); font-size: 0.875rem; font-variant-numeric: tabular-nums; } .ds-article-stamp { grid-row: 1 / span 2; grid-column: 2; align-self: center; max-width: 12rem; color: var(--ink-muted); font-size: 0.75rem; font-variant-numeric: tabular-nums; font-weight: 650; letter-spacing: 0.12em; text-align: right; text-transform: uppercase; } @media (max-width: 48rem) { .ds-article-header { grid-template-columns: minmax(0, 1fr); } .ds-article-header time, .ds-article-stamp { grid-row: auto; grid-column: 1; text-align: left; } .ds-article-stamp { order: 3; margin-top: 0.25rem; } }"
-    },
-    {
-      "name": "Reader Response",
-      "kind": "custom",
-      "refersTo": "reader-response",
-      "description": "A quiet, frameless article-ending question and canonical mail action after generous whitespace.",
-      "html": "<footer class=\"ds-reader-response\"><p>讀完有想說的嗎？</p><a href=\"mailto:jcli@pm.me\">寫信給我</a></footer>",
-      "css": ".ds-reader-response { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: baseline; justify-content: space-between; max-width: 70ch; margin-top: clamp(3.5rem, 8vw, 6rem); padding-block: 1.5rem; color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; } .ds-reader-response p { margin: 0; color: var(--ink-muted); font-size: 0.9375rem; } .ds-reader-response a { display: inline-flex; align-items: center; min-height: 2.75rem; color: inherit; font-weight: 650; text-underline-offset: 0.2em; } .ds-reader-response a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }"
-    },
-    {
-      "name": "Reading Blockquote",
-      "kind": "custom",
-      "refersTo": "reading-blockquote",
-      "description": "A flat long-form quotation distinguished by indentation and muted ink rather than a card or divider.",
-      "html": "<blockquote class=\"ds-reading-blockquote\">保留呼吸與停頓，讓文字本身維持重量。</blockquote>",
-      "css": ".ds-reading-blockquote { max-width: 70ch; margin-inline: 0; padding: 1rem 1.25rem; color: var(--ink-muted); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 1.0625rem; line-height: 1.9; }"
-    },
-    {
-      "name": "Site Footer",
-      "kind": "custom",
-      "refersTo": "site-footer",
-      "description": "The restrained, frameless global close showing the canonical email address.",
-      "html": "<footer class=\"ds-site-footer\"><a href=\"mailto:jcli@pm.me\">jcli@pm.me</a></footer>",
-      "css": ".ds-site-footer { display: flex; justify-content: space-between; gap: 2rem; padding-block: 1.5rem 2rem; color: var(--ink-muted); font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif; font-size: 0.8125rem; letter-spacing: 0.04em; } .ds-site-footer a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--ink); text-underline-offset: 0.2em; text-decoration-thickness: 0.08em; } .ds-site-footer a:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; } @media (max-width: 48rem) { .ds-site-footer { padding-bottom: 1.5rem; } }"
+      "refersTo": "post-list-item",
+      "description": "A frameless 2.75rem row with a title link and small date; hover turns the title ribbon red.",
+      "html": "<ul class=\"ds-list\"><li class=\"ds-row\"><a href=\"#\">Glazing a bottle</a><time>2026-11-08</time></li></ul>",
+      "css": ".ds-list { margin: 0; padding: 0; list-style: none; font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, monospace; color: var(--ink, #141414); } .ds-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2ch; align-items: center; min-height: 2.75rem; padding: 0.25rem 0; } .ds-row a { color: inherit; font-size: 0.9375rem; font-weight: 400; line-height: 1.2; text-decoration: none; } .ds-row:hover a { color: var(--ribbon, #c4161c); } .ds-row time { color: var(--ink-muted, #5f5f5f); font-size: 0.8125rem; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }"
     }
   ],
   "narrative": {
-    "northStar": "Accession Tabs",
-    "overview": "Accession Tabs is a calm, interesting, wondering, modern, and quietly joyful system. It borrows the memory of notebook tabs and index stock, then translates them into modern web materials: cool paper, precise alignment, restrained registration marks, and fictional translucent cobalt/citron glass.\n\nThe system avoids depressing or boring minimalism and avoids literal archival bureaucracy. The confirmed site title and author identity are both `李至青`, so shared chrome renders that restrained signature once. Accession Tabs governs the durable material, type, and interaction language; the Compact Register arrangement is the composition for the current reading routes and remains specified in `.impeccable/surfaces/route-zh-tw.md`, not as a universal page template.",
+    "northStar": "Character Proof",
+    "overview": "The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Step numbers hang in a margin gutter like manuscript line numbers, a carriage scale marks cell zero, and controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
-      "Cool index-stock surfaces with near-black ink and crisp spatial structure.",
-      "Translucent cobalt and citron glass reserved for familiar, functional navigation.",
-      "System-sans typography that stays clear across Traditional Chinese and English.",
-      "Restrained signatures, accession labels, and numeric marks instead of oversized branding.",
-      "Flat reading surfaces with selective, technically precise depth at interactive glass edges."
+      "Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
+      "One monospace stack for every typed cell; no webfonts, no @font-face.",
+      "A fixed margin gutter (5ch, 4ch on narrow screens) holds red step numbers; all other text starts on cell zero.",
+      "Pictures exist twice: as glyph art struck from the photo, and as the photo itself, cross-developed on scroll.",
+      "Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil."
     ],
     "rules": [
-      { "name": "The Paper, Ink, Space Rule", "body": "Establish hierarchy with stock, ink, alignment, and whitespace before introducing an accent. Borders are reserved for controls, not for separating content sections or list items.", "section": "colors" },
-      { "name": "The Two Glass Accents Rule", "body": "Cobalt and citron belong to meaningful navigation and state, never to scattered decorative confetti.", "section": "colors" },
-      { "name": "The System Voice Rule", "body": "Use the platform system sans stack only; do not introduce webfonts or simulated display personalities.", "section": "typography" },
-      { "name": "The Restrained Signature Rule", "body": "Keep `李至青` at navigation scale and render the shared site-title/author identity once.", "section": "typography" },
-      { "name": "The Compact Type Ceiling Rule", "body": "No type exceeds `1.5rem`; use weight, spacing, and column relationships to establish hierarchy.", "section": "typography" },
-      { "name": "The Reading Measure Rule", "body": "Keep sustained prose at or below 70ch and preserve the implemented 1.9 body line-height.", "section": "layout" },
-      { "name": "The Selective Glass Rule", "body": "Reserve layered shadow and backdrop blur for functional glass navigation; reading surfaces stay flat, tonal, and frameless.", "section": "elevation" },
-      { "name": "The Top-edge Tab Rule", "body": "Round the exposed top of a navigation tab while keeping its bottom edge visually flush with the header.", "section": "shapes" }
+      { "name": "The Single Ribbon Rule", "body": "Red is struck only as a mark: brackets, step numbers, hover, selection, link underline. It never fills a block or sets paragraph text.", "section": "colors" },
+      { "name": "The White Paper Rule", "body": "The paper is pure white; do not tint it. Every veil, backing, and band uses the same paper value.", "section": "colors" },
+      { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (gutter 5ch, measures 64ch and 70ch).", "section": "typography" },
+      { "name": "The Handwritten Date Rule", "body": "Only dates take --diary-date-font. No other element may borrow it.", "section": "typography" },
+      { "name": "The Type Ceiling Rule", "body": "Nothing exceeds 1.5rem.", "section": "typography" },
+      { "name": "The No Webfont Rule", "body": "System faces only; no @font-face. A test enforces this.", "section": "typography" },
+      { "name": "The Flat Paper Rule", "body": "No shadows, glass, blur, or gradients. Depth is paper over text, nothing more.", "section": "elevation" }
     ],
     "dos": [
-      "Do use cool stock, ink, alignment, and whitespace before reaching for accent color.",
-      "Do keep the shared `李至青` site title/author identity at restrained signature scale and render it once.",
-      "Do reserve the translucent cobalt/citron treatment for clear interactive state, with strong focus and forced-colors fallbacks.",
-      "Do keep reading text in the system sans stack at a maximum 70ch measure and honor reduced motion.",
-      "Do keep every type role at or below the confirmed `1.5rem` ceiling."
+      "Do set everything in the one monospace stack at weight 400, with hierarchy from scale, ink tone, and grid position.",
+      "Do keep step numbers in the 5ch gutter (4ch at 48rem and below) and start all other text at cell zero.",
+      "Do strike controls as [ label ] with ribbon-red brackets and a 1px press sink.",
+      "Do write scroll-driven animations as longhands and gate them on @supports and prefers-reduced-motion: no-preference.",
+      "Do render every article photo with a glyph twin and let the photo develop from it on scroll.",
+      "Do keep zero runtime JS on content pages; only posts load the likes script.",
+      "Do keep type at or below 1.5rem."
     ],
     "donts": [
-      "Don't turn the Compact Register's page topology into a mandatory layout for unrelated surfaces; its composition belongs to the route brief.",
-      "Don't introduce webfonts, handwritten imitation, or display-serif personality.",
-      "Don't enlarge `李至青` into a hero or duplicate it as adjacent title and author labels.",
-      "Don't restore oversized display headings; hierarchy must survive within the compact type ceiling.",
-      "Don't flatten the world into depressing or boring minimalism, and don't literalize it as archival bureaucracy.",
-      "Don't scatter cobalt and citron as decorative specks or apply glass depth to reading content.",
-      "Don't use borders to separate content sections, article rows, response endings, or the global footer."
+      "Don't use --diary-date-font for anything but dates.",
+      "Don't add @font-face or any webfont.",
+      "Don't add shadows, border radii, glass, blur, fills, or card frames.",
+      "Don't fill with ribbon red or set paragraph text in it.",
+      "Don't tint the paper away from pure white.",
+      "Don't write animation: shorthand with a timeline.",
+      "Don't treat the handwriting face as chosen, or Chinese as grid-aligned; both are open (see Typography)."
     ]
   }
 }

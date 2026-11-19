@@ -1,268 +1,230 @@
 ---
-name: Story Journal
-description: A calm, continuous storytelling journal built from cool stock, compact typography, and uninterrupted editorial flow.
+name: Character Proof
+description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, where every picture is first struck as glyphs and develops into the photograph.
 colors:
-  stock: "#f6f7f5"
-  stock-bright: "#fcfdfb"
-  ink: "#202322"
-  ink-soft: "#292c2b"
-  ink-muted: "#555c59"
-  rule: "#b9bfbb"
-  cobalt: "#4f73d9"
+  paper: "#ffffff"
+  ink: "#141414"
+  ink-muted: "#5f5f5f"
+  ink-faint: "#b4b4b4"
+  ribbon: "#c4161c"
 typography:
   display:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
     fontSize: "1.5rem"
     fontWeight: 400
-    lineHeight: 1
-    letterSpacing: "-0.02em"
-  headline:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    lineHeight: 1.3
+    letterSpacing: "normal"
+  date:
+    fontFamily: '"Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive'
     fontSize: "1.5rem"
-    lineHeight: 1.16
-    letterSpacing: normal
-  title:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "clamp(1.0625rem, 1.5vw, 1.25rem)"
-    fontWeight: 400
-    lineHeight: 1.35
-  body:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "1.0625rem"
-    lineHeight: 1.9
-  compact-body:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "0.9375rem"
-    lineHeight: 1.65
-  compact-title:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.2
-  register-label:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    letterSpacing: "0.02em"
+  body:
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.9
+  type-cell:
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
     fontSize: "0.9375rem"
     fontWeight: 400
-    lineHeight: 1.3
-    letterSpacing: "0.02em"
-  subheading:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "1.5rem"
-    lineHeight: 1.35
+    lineHeight: 1.75
   metadata:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
     fontSize: "0.875rem"
+    fontWeight: 400
     lineHeight: 1.4
-  utility:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+  label:
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
     fontSize: "0.8125rem"
     fontWeight: 400
-    lineHeight: 1.3
-  response:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
+    letterSpacing: "0.1em"
+  signature:
+    fontFamily: 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace'
     fontSize: "0.9375rem"
     fontWeight: 400
-    lineHeight: 1
-  label:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "0.75rem"
-    fontWeight: 400
-    letterSpacing: "0.12em"
-  signature:
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif'
-    fontSize: "1.0625rem"
-    fontWeight: 400
     letterSpacing: "0.08em"
+rounded: {}
+spacing:
+  gutter: "5ch"
+  gutter-narrow: "4ch"
+  control-height: "2.75rem"
+  diary-gap: "4rem"
 components:
-  language-utility:
-    typography: "{typography.utility}"
-    textColor: "{colors.ink-muted}"
-    fontWeight: 400
-    letterSpacing: normal
-    minHeight: "2.75rem"
-  homepage-introduction:
-    typography: "{typography.compact-body}"
-  response-cta:
-    typography: "{typography.response}"
+  bracket-control:
     textColor: "{colors.ink}"
-    fontWeight: 400
-    textDecoration: "none"
-    border: "1px solid {colors.rule}"
-    rounded: "0"
-    minHeight: "2.75rem"
-    padding: "0 1rem"
-  register-header:
-    typography: "{typography.register-label}"
-    padding: "0 0 0.625rem"
-  register-row:
-    typography: "{typography.compact-title}"
-    textColor: "{colors.ink-soft}"
-    padding: "0.25rem 0"
-  article-header:
-    textColor: "{colors.ink}"
-    typography: "{typography.headline}"
-    padding: "clamp(1.5rem, 4vw, 2.75rem) 0"
-  reading-blockquote:
+    typography: "{typography.type-cell}"
+    height: "2.75rem"
+    padding: "0"
+  bracket-control-hover:
+    textColor: "{colors.ribbon}"
+  language-link:
     textColor: "{colors.ink-muted}"
+    typography: "{typography.label}"
+    height: "2.75rem"
+  carriage-scale:
+    textColor: "{colors.ink-faint}"
+    typography: "{typography.type-cell}"
+  diary-step:
+    textColor: "{colors.ribbon}"
+    typography: "{typography.type-cell}"
+    width: "5ch"
+  diary-date:
+    textColor: "{colors.ink}"
+    typography: "{typography.date}"
+  diary-text:
+    textColor: "{colors.ink}"
+    typography: "{typography.type-cell}"
+  post-body:
+    textColor: "{colors.ink}"
     typography: "{typography.body}"
-    padding: "1rem 1.25rem"
-  response-ending:
-    textColor: "{colors.ink-muted}"
-    typography: "{typography.compact-body}"
-    padding: "1.5rem 0"
+  glyph-photo:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+  lightbox:
+    backgroundColor: "{colors.paper}"
+  bottle:
+    textColor: "{colors.ink}"
+  bottle-hover:
+    textColor: "{colors.ribbon}"
+  post-list-item:
+    textColor: "{colors.ink}"
+    typography: "{typography.type-cell}"
+    height: "2.75rem"
 ---
 
-# Design System: Story Journal
+# Design System: Character Proof
 
 ## Overview
 
-**Creative North Star: "Story Journal"**
+**Creative North Star: "Character Proof"**
 
-Story Journal is a calm, interesting, wondering, modern, and quietly joyful system. It treats the homepage as one uninterrupted personal narrative: cool paper, precise alignment, restrained registration marks, and editorial whitespace carry readers from the author introduction into the chronology without app-like section controls.
+The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Pictures are not placed, they are struck first as characters and then develop into the photograph as they scroll into view. The page never decorates; it types.
 
-The system avoids depressing or boring minimalism and avoids literal archival bureaucracy. The confirmed site title and author identity are both `李至青`, so shared chrome renders that restrained signature once. Story Journal governs the durable material, type, and uninterrupted reading rhythm; the current homepage arrangement remains specified in `.impeccable/surfaces/route-zh-tw.md`, not as a universal page template.
+Hierarchy comes from the cell grid, not from size. Step numbers hang in a margin gutter like manuscript line numbers, a carriage scale marks cell zero, and controls are struck as `[ label ]` brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio (direction contract).
 
 **Key Characteristics:**
 
-- Cool index-stock surfaces with near-black ink and crisp spatial structure.
-- One continuous homepage narrative with no Posts/About section navigation.
-- System-sans typography that stays clear across Traditional Chinese and English.
-- Restrained signatures, accession labels, and numeric marks instead of oversized branding.
-- Flat, frameless reading surfaces whose rhythm comes from spacing rather than boxes or borders.
+- Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
+- One monospace stack for every typed cell; no webfonts, no `@font-face`.
+- A fixed margin gutter (5ch, 4ch on narrow screens) holds red step numbers; all other text starts on cell zero.
+- Pictures exist twice: as glyph art struck from the photo, and as the photo itself, cross-developed on scroll.
+- Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil.
 
 ## Colors
 
-The palette starts with paper, ink, and restrained registration accents. A low-opacity cobalt wash is reserved for quiet hover feedback in the chronological register.
+Five inks on white paper. The ribbon red is rare by design and always appears as a mark, never as a surface.
 
-### Accent
-
-- **Cobalt Wash** (`#4f73d9` at 8%): A quiet focus-within or hover field for register rows; never a navigation surface or decorative block.
+### Primary
+- **Ribbon Red** (`#c4161c`): Control brackets, step numbers, hover state of controls and titles, text selection background, the underline of body links, the focus outline of photo thumbnails, pressed-like-state likes count.
 
 ### Neutral
-
-- **Cool Index Stock** (`#f6f7f5`): The default page field.
-- **Bright Stock** (`#fcfdfb`): The lifted paper tone behind the ambient page wash.
-- **Near-black Ink** (`#202322`): Primary copy, outlines, and focus visibility.
-- **Soft Near-black Ink** (`#292c2b`): A barely lifted black reserved for homepage article-list titles.
-- **Muted Graphite** (`#555c59`): Dates, stamps, secondary titles, and restrained metadata.
-- **Pencil Rule** (`#b9bfbb`): The conditional identity separator in shared chrome.
+- **Struck White Paper** (`#ffffff`): Page, platen band, glyph-art backing, buttons-as-paper, lightbox (veiled at 97%).
+- **Typewriter Black** (`#141414`): Body text, glyph art, bottle at rest, dashed focus outline.
+- **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
+- **Faint Pencil Grey** (`#b4b4b4`): The carriage scale only.
 
 ### Named Rules
+**The Single Ribbon Rule.** Red is struck only as a mark: brackets, step numbers, hover, selection, link underline. It never fills a block or sets paragraph text.
 
-**The Paper, Ink, Space Rule.** Establish hierarchy with stock, ink, alignment, and whitespace before introducing an accent. Borders never separate content sections or list items.
-
-**The Quiet Cobalt Rule.** Cobalt appears only as a low-opacity interaction wash; it never becomes a section marker, tab, or decorative confetti.
+**The White Paper Rule.** The paper is pure white; do not tint it. Every veil, backing, and band uses the same paper value.
 
 ## Typography
 
-**Display Font:** System sans (with platform-native fallbacks)
-**Body Font:** System sans (with platform-native fallbacks)
-**Label Font:** System sans (with platform-native fallbacks)
+**Display, Body and Label Font:** one monospace stack, `ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono"`, then CJK fallbacks `"PingFang TC", "Noto Sans TC", "Microsoft JhengHei"`, then `monospace` (`--font-type`).
+**Date Font:** the handwriting stack `"Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive` through `--diary-date-font`.
 
-**Character:** One system-sans voice handles Traditional Chinese, English, titles, and metadata. Outside authored article content, hierarchy comes from optical scale, spacing, tone, tracking, and tabular numerals while every role stays at regular weight 400. Article titles, headings, and semantic `strong` text retain their native emphasis. Sustained Chinese and Chinese headlines use solid/default character spacing; short identity and metadata labels may use intentional positive tracking.
+**Character:** A typewriter's single face, with handwriting allowed only where a person wrote the date. Weight is 400 everywhere; hierarchy is scale, muted ink, and position on the grid.
 
 ### Hierarchy
-
-- **Display** (weight 400, `1.5rem`, line-height 1): Primary register and section headings.
-- **Headline** (`1.5rem`, line-height 1.16): Balanced article titles with solid/default character spacing.
-- **Title** (weight 400, `clamp(1.0625rem, 1.5vw, 1.25rem)`, line-height 1.35): Scan-friendly post and item titles.
-- **Body** (`1.0625rem`, line-height 1.9): Unhurried long-form reading within a maximum 70ch measure.
-- **Compact Body** (`0.9375rem`, line-height 1.65): Dense homepage introduction and its plain-text contact line.
-- **Compact Title** (weight 400, `1rem`, line-height 1.2): Regular-weight homepage article links inside the dense register.
-- **Register Label** (weight 400, `0.9375rem`, line-height 1.3, letter-spacing 0.02em): Reserved; the homepage register heading `文章` is now visually hidden (screen readers only).
-- **Subheading** (`1.5rem`, line-height 1.35): Secondary headings inside long-form prose.
-- **Metadata** (`0.875rem`, line-height 1.4): Localized dates and restrained secondary identity text.
-- **Utility** (weight 400, `0.8125rem`, line-height 1.3): Compact structural metadata and other small utility copy.
-- **Response** (weight 400, `0.9375rem`, line-height 1): The Response Ending CTA label.
-- **Label** (weight 400, `0.75rem`, letter-spacing 0.12em): Uppercase accession stamps and tabular numeric metadata.
-- **Signature** (weight 400, `1.0625rem`, letter-spacing 0.08em): The author's small, regular-weight identity mark in the shared header.
+- **Display** (400, `1.5rem`, 1.3): Article title (`h1`). This is also the type ceiling.
+- **Date** (handwriting, 400, `1.5rem`, 1.2, 0.02em): The diary entry date, in the feed and in the article header. The only handwriting.
+- **Body** (400, `1rem`, 1.9): Long-form article prose in a 64ch column (plus gutter).
+- **Type Cell** (400, `0.9375rem` as `--type-size`, 1.75): Feed text, intro and now note, controls, step numbers, response prompts, carriage scale.
+- **Metadata** (`0.875rem`): Generic `time`, performer line, music provider links.
+- **Label** (`0.8125rem`): Language link, intro sub-headings (0.1em tracking, muted), English list dates.
+- **Signature** (`0.9375rem`, 0.08em tracking): The author name beside the docked bottle.
 
 ### Named Rules
+**The One Cell Rule.** Everything typed uses the single monospace stack; text widths are measured in `ch` (gutter 5ch, measures 64ch and 70ch).
 
-**The System Voice Rule.** Use the platform system sans stack only; do not introduce webfonts or simulated display personalities.
+**The Handwritten Date Rule.** Only dates take `--diary-date-font`. No other element may borrow it.
 
-**The Restrained Signature Rule.** Keep `李至青` at utility scale, regular weight, and slightly open tracking; render the shared site-title/author identity once.
+**The Type Ceiling Rule.** Nothing exceeds `1.5rem`.
 
-**The Compact Type Ceiling Rule.** No type exceeds `1.5rem`; use scale, spacing, tone, tracking, and column relationships to establish hierarchy outside article content.
+**The No Webfont Rule.** System faces only; no `@font-face`. A test enforces this.
 
-**The Unadorned Link Rule.** Links never use underlines, including hover and focus states. Communicate interactivity through context, quiet ink shifts or row washes, and retain the global 3px keyboard-focus outline.
-
-**The Chinese Reading Rhythm Rule.** Keep sustained zh-TW text within a 1.5–2 line-height range, use normal inter-character spacing for prose and headlines, and apply strict language-aware line breaking. Reserve positive tracking for short signatures and metadata—not reading text.
-
-**The Regular Journal Chrome Rule.** Every role outside authored article content uses weight 400. Preserve native bold only for the article title, article subheadings, and semantic `strong` emphasis supplied by the author.
+### Open and known gaps
+- **Open decision:** the handwriting face for dates is not chosen. `--diary-date-system-font` is the placeholder stack; the user is choosing in a dev-only panel. Do not invent a face.
+- **Known gap:** Chinese is not on the cell grid. CJK falls back to the platform sans, so a Chinese glyph is not an integer number of cells wide and `ch` alignment drifts. Aligning would need a Song/Ming face tuned with `size-adjust`; that is an open user decision, not a rule.
 
 ## Layout
 
-The durable spatial grammar uses one centered shell (`min(100% - clamp(2rem, 5vw, 5rem), 82rem)`), generous fluid main padding (`clamp(3rem, 7vw, 6.75rem)`), and a long-form reading measure capped at 70ch. Above `64.0625rem`, the zh-TW homepage becomes a two-column stage: a left content column capped at 44rem and a right creative-coding region at least 18rem wide, separated only by a fluid `clamp(3rem, 7vw, 7rem)` gap. The creative region stays full-height, title-free, empty until authored, and has no divider border. At the implemented 48rem breakpoint, the shell narrows to a 1rem side gutter, the compact identity and language utility remain on one line, the creative region is absent, chronological dates move beneath titles, and article metadata becomes one column.
+One centered shell, `min(100% - clamp(2rem, 5vw, 5rem), 82rem)`, with main padding `clamp(3rem, 7vw, 6.75rem)`. The gutter (`--gutter`, 5ch; 4ch at 48rem and below, where the shell narrows to `min(100% - 2rem, 42rem)` and main padding to `2rem 3.5rem`) is the margin that holds step numbers; everything else, including the carriage scale and all typed text, starts at cell zero one gutter in. The carriage scale ends on a `|` at a multiple of ten cells (`round(down, ...)`).
 
-The zh-TW homepage opens with an unbordered, title-free author introduction aligned to the left edge of the content column. Its short paragraphs use the compact body role, carry identity, subject, purpose, and audience without mini-headings, and identify the author only as `李至青` in zh-TW. It is the garden entrance (decision 16): **bio → now → cards**, with no visible section headings. An optional `now` note (author-written `now.md`) follows the bio, and then a frameless compact list where every post is a card, ordered by its last-updated date (`updated` frontmatter, falling back to `date`) and showing that date; no growth-stage labels and no aggregate count compete with the writing. There are no top-level Posts/About links: the two passages belong to one storytelling journal. Headers, articles, response endings, and list items use space rather than divider borders. Preserve that author-first sequence and the reserved creative-coding column through the route surface brief; new surfaces inherit the system's stock, type, and continuous editorial logic without automatically inheriting the homepage topology.
+The zh-TW home is a column of the bottle hero (40dvh slot), introduction (max 70ch), now note, and the numbered diary feed (entries 4rem apart). Above `64.0625rem` it becomes two columns, a 44rem content column and a reserved empty creative-coding region at least 18rem wide. Articles are 64ch plus gutter, with the step number hanging in the margin on the date line. Photos for a feed entry sit in a row below the text, `12rem` tall, wrapping by default, swiping with scroll-snap on touch, and a no-wrap row with typed `[<]` `[>]` scroll buttons where `::scroll-button` is supported with a fine pointer.
 
-**The Reading Measure Rule.** Keep sustained article prose at or below 70ch with the 1.9 long-form body line-height; the homepage introduction intentionally uses the denser compact-body rhythm.
+Minimum control height is `2.75rem`. English register is a plain list (see Components).
 
 ## Elevation & Depth
 
-Paper fields remain flat. The bright-stock radial wash provides the only ambient depth; shared chrome, the introduction, register, articles, and response endings use no component shadows or backdrop blur.
+Flat. There are no box-shadows and no radii anywhere. The only layers are a paper-white platen band that fades in across the top 5.5rem once the home bottle has docked (so text scrolls under paper, never under the mark), and the lightbox's `rgb(255 255 255 / 97%)` backdrop.
 
-**The Flat Journal Rule.** Depth belongs to the page atmosphere, never to section containers or navigation controls.
+**The Flat Paper Rule.** No shadows, glass, blur, or gradients. Depth is paper over text, nothing more.
 
 ## Shapes
 
-The form language is open rectilinear paper. The identity, language utility, introduction, register, articles, response endings, and reserved creative-coding region remain frameless; whitespace and alignment make their relationships visible.
-
-**The Uninterrupted Page Rule.** Do not turn passages into rounded containers, tabs, or parallel destinations when they belong to the same reading sequence.
+Rectilinear and unframed. Brackets are the only container device: `[` and `]` characters in ribbon red. Borders are absent; the one outline vocabulary is a 1px dashed ink focus ring (offset 4px) and a 1px solid ribbon outline (offset 3px) on photo thumbnails in hover and focus. Icons are square-capped, miter-joined strokes at 0.875rem.
 
 ## Components
 
-### Homepage Introduction
+### Bracket Controls
+Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, regular-weight ink label at the type-cell size, with the brackets in ribbon red. Hover turns the label ribbon red over 120ms ease-out. Press sinks the control by 1px (`translate: 0 1px`). Applies to the response CTA (mail and Threads), the language link (muted ink, 0.8125rem), the likes button, and music provider links. Controls hang one cell into the margin (`-1ch`) so the label lands on cell zero.
 
-A title-free, left-aligned introduction (the bio) uses a few short, author-written lines saying who the author is and what they make; since 2026-10-18 it is two lines, the greeting naming 至青 and where they live. Its body is `0.9375rem` at 1.65 line-height with `0.6em` paragraph spacing; the regular-weight opening line is `1rem` at 1.68. In zh-TW the opening names only `李至青`, without English romanization. The passage closes with the shared Response Ending: a prompt-free mail CTA labelled `jcli@pm.me`. No header link isolates this passage from the chronology; legacy About URLs still redirect to its anchor.
+### Carriage Scale
+A typewriter paper scale in faint pencil grey at the text size: `|` at every tenth cell, `:` at every fifth, `.` between. Opens the diary and the article, starting one gutter in.
 
-### Language Utility
+### Numbered Diary Entry
+A two-column grid: a 5ch gutter holding the ribbon-red step number with a trailing `.`, then the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
-The shared header contains only the regular-weight `李至青` signature, set with `0.08em` tracking, and one plain-text locale switch. The utility link is `0.8125rem`, weight 400 with normal tracking, muted graphite, at least `2.75rem` high, unbordered, unfilled, and unrounded; hover strengthens it to near-black and keyboard focus retains the global 3px outline. There are no Posts/About header links.
+### Glyph Bottle
+A turntable of 21 character-art frames. On the home page it sits pinned over a 40dvh slot; across the first 40dvh of scrolling it steps through frames, leans to -45deg, shrinks into the top-left corner, and crossfades from the ramp-shaded art to a solid silhouette struck in `█`. That docked form is the logo on every other page. It turns ribbon red on hover. Header height is `6rem` (5rem narrow).
 
-### Register Header
+### Paper Platen Band
+A fixed paper-white strip, 5.5rem tall, fading in over the last 10dvh of the dock (30dvh to 40dvh).
 
-The register keeps a semantic `<h1>文章</h1>` for assistive technology, but it is visually hidden. Each row shows the post's last-updated date, rows are ordered by that date, and no aggregate article count is shown. The list remains frameless.
+### Glyph Photo Develop
+Every photo carries a build-time glyph rendering (ramp ` .:-=+*#%@`, cell aspect 0.6, 40 rows for article photos, scaled to the column by container units). As a photo row scrolls into view (view-timeline, `entry 0% cover 55%`), the glyphs fade out while the photo changes from `grayscale(1) contrast(1.3)` to its true colors.
 
-### Register Row
+### Lightbox
+A native popover, full viewport, on a 97% white veil. A tap, Escape, or outside click closes it; the photo is contained to the viewport minus 1rem each side. The cursor is zoom-out.
 
-Rows are semantic list items, not cards. A `1rem` regular-weight linked title at 1.2 line-height uses soft near-black `#292c2b`, a barely perceptible lift from primary ink; the `0.8125rem` muted date aligns beside it without divider rules or numeric accession indices in a 2.75rem minimum row with `0.25rem` vertical padding. Hover or focus-within introduces only an 8% cobalt wash, and the full row remains the link target. On narrow screens the row stays dense at a 3rem minimum with the same padding; the date stacks directly under the title.
-
-### Article Header and Reading Body
-
-Article titles sit with the published date and a regular-weight uppercase accession stamp, separated from prose by spacing rather than rules. The title, article subheadings, and semantic `strong` text are the only roles allowed to retain bold emphasis. The content column remains flat, centered, and no wider than 70ch. Blockquotes use indentation and muted ink rather than a card, quotation mark graphic, fill, or divider border.
+### English Plain List
+A grid list of 2.75rem rows: a type-cell title link, a `0.8125rem` date to the right (stacked under the title on narrow screens), the whole row the link target. Hover turns the title ribbon red. A title-less Threads post previews its text on one line with an ellipsis.
 
 ### Response Ending
+One closing invitation for the bio and every article: an optional muted prompt above one bracket control. Mail uses the stroke envelope icon; external links end with the top-right arrow, which slides 2px up-right on hover.
 
-One component (`ResponseEnding.astro`) closes the homepage bio and every article. It is left-aligned: an optional muted prompt (`0.9375rem`, 1.65 leading) sits above one CTA. The CTA is a square, thin-outline button: `0.9375rem` regular-weight ink label, `2.75rem` minimum height, `1rem` inline padding, a `1px` pencil-rule border, and a transparent fill. On hover the border turns near-black and the 8% cobalt wash fills it; on press the wash deepens to 14%; keyboard focus keeps the global 3px outline. Mail CTAs lead with the stroke envelope icon. External CTAs (Threads) end with the top-right arrow, which slides 2px up-right on hover, open a new tab, and carry a visually hidden new-tab note. Articles show a prompt (「讀完有想說的嗎？」 with 「寫信給我」, or 「同步發佈在 Threads」 with 「在上面和我互動」); the homepage bio has no prompt and labels its CTA `jcli@pm.me`. The address always comes from shared metadata. The ending wrapper itself stays frameless. There is no global footer contact.
-
-**The External Arrow Rule.** Every link that leaves the site ends with the same top-right arrow icon (`M4.5 11.5 11.5 4.5M5.5 4.5h6v6` on a 16-unit grid, 1.4 stroke) and opens in a new tab with a hidden new-tab note; internal and mail links never use it.
+### Motion
+Every scroll-driven animation is written as longhands (`animation-name`, `animation-timing-function`, `animation-fill-mode`, `animation-timeline`, `animation-range`). The minifier folds `animation-timeline` into the `animation` shorthand and browsers reject that; a test enforces longhands. Animations are scoped to `@supports (animation-timeline: ...)` and `prefers-reduced-motion: no-preference`. With reduced motion or no support, photos show plainly (glyph art stays hidden) and the bottle shows a static first frame in its slot.
 
 ## Do's and Don'ts
 
 ### Do:
-
-- **Do** use cool stock, ink, alignment, and whitespace before reaching for accent color.
-- **Do** keep the shared `李至青` site title/author identity at restrained signature scale and render it once.
-- **Do** let the homepage introduction and chronology read as one continuous story.
-- **Do** keep the locale switch as a quiet plain-text utility with a strong keyboard focus state.
-- **Do** keep links underline-free while preserving clear keyboard focus and contextual affordance.
-- **Do** keep reading text in the system sans stack at a maximum 70ch measure and honor reduced motion.
-- **Do** keep every type role at or below the confirmed `1.5rem` ceiling.
-- **Do** keep every non-article role at regular weight 400 and let scale, tone, tracking, and space carry hierarchy.
-- **Do** leave the desktop creative-coding region empty, full-height, title-free, and frameless until real work is added there.
+- **Do** set everything in the one monospace stack at weight 400, with hierarchy from scale, ink tone, and grid position.
+- **Do** keep step numbers in the 5ch gutter (4ch at 48rem and below) and start all other text at cell zero.
+- **Do** strike controls as `[ label ]` with ribbon-red brackets and a 1px press sink.
+- **Do** write scroll-driven animations as longhands and gate them on `@supports` and `prefers-reduced-motion: no-preference`.
+- **Do** render every article photo with a glyph twin and let the photo develop from it on scroll.
+- **Do** keep zero runtime JS on content pages; only posts load the likes script.
+- **Do** keep type at or below `1.5rem`.
 
 ### Don't:
-
-- **Don't** turn the Compact Register's page topology into a mandatory layout for unrelated surfaces; its composition belongs to the route brief.
-- **Don't** introduce webfonts, handwritten imitation, or display-serif personality.
-- **Don't** enlarge `李至青` into a hero or duplicate it as adjacent title and author labels.
-- **Don't** restore oversized display headings; hierarchy must survive within the compact type ceiling.
-- **Don't** flatten the world into depressing or boring minimalism, and don't literalize it as archival bureaucracy.
-- **Don't** restore Posts/About tabs, rounded navigation controls, decorative glass, or backdrop blur.
-- **Don't** expand the locale utility into a second navigation system.
-- **Don't** use borders to separate content sections, article rows, response endings, or the creative-coding region.
-- **Don't** restore underlines on links in any interaction state.
-- **Don't** introduce bold interface, metadata, navigation, register, card, CTA, or response text; reserve bold for authored article content.
-- **Don't** restore a global footer email; contact belongs to the homepage introduction and article response endings.
+- **Don't** use `--diary-date-font` for anything but dates.
+- **Don't** add `@font-face` or any webfont.
+- **Don't** add shadows, border radii, glass, blur, fills, or card frames.
+- **Don't** fill with ribbon red or set paragraph text in it.
+- **Don't** tint the paper away from pure white.
+- **Don't** write `animation:` shorthand with a timeline.
+- **Don't** treat the handwriting face as chosen, or Chinese as grid-aligned; both are open (see Typography).
