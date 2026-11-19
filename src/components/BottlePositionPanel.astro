@@ -17,6 +17,7 @@
     <button type="button" role="tab" data-tab="layout">版面</button>
     <button type="button" role="tab" data-tab="paper">紙張</button>
     <button type="button" role="tab" data-tab="grid">格線</button>
+    <button type="button" role="tab" data-tab="date">日期</button>
   </div>
   <section class="bottle-panel-section" role="tabpanel" data-panel="bottle">
     <label>
@@ -126,6 +127,13 @@
       <label><input type="radio" name="layout-variant" value="baseline" />3 基線格</label>
       <label><input type="radio" name="layout-variant" value="columns" />4 欄格</label>
       <label><input type="radio" name="layout-variant" value="cutout" />5 挖空</label>
+    </div>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="date">
+    <p class="bottle-panel-hint">文章日期的樣式</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="date-variant" value="" />手寫（目前）</label>
+      <label><input type="radio" name="date-variant" value="bracket" />[ 方括號 ]</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="grid">
@@ -687,6 +695,29 @@
       grid = null;
       applyGrid({}, false);
     });
+
+    // Which post-date style to preview.
+    const DATE = "date-variant";
+    const setDate = (value) => {
+      if (value) root.dataset.date = value;
+      else delete root.dataset.date;
+      for (const radio of panel.querySelectorAll('input[name="date-variant"]')) {
+        radio.checked = radio.value === value;
+      }
+    };
+    let dateStyle = "";
+    try {
+      dateStyle = localStorage.getItem(DATE) || "";
+    } catch {}
+    setDate(dateStyle);
+    for (const radio of panel.querySelectorAll('input[name="date-variant"]')) {
+      radio.addEventListener("change", () => {
+        setDate(radio.value);
+        try {
+          localStorage.setItem(DATE, radio.value);
+        } catch {}
+      });
+    }
 
     // Tabs keep the panel short; the last one opened is remembered.
     const TAB = "bottle-panel-tab";
@@ -1274,6 +1305,33 @@
     background:
       var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
       var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
+  }
+
+  /* ---------- Post-date candidate (dev only) ----------
+     The date struck like the email control: the typewriter face at the
+     type size, between ribbon-red brackets that hang one cell left. */
+  :global(html[data-date="bracket"] .diary-date) {
+    display: flex;
+    gap: 0.5ch;
+    align-items: center;
+    justify-self: start;
+    min-height: 2.75rem;
+    margin-inline-start: -1ch;
+    font-family: var(--font-type);
+    font-size: var(--type-size);
+    line-height: 1;
+    letter-spacing: normal;
+    white-space: nowrap;
+  }
+
+  :global(html[data-date="bracket"] .diary-date::before) {
+    color: var(--ribbon);
+    content: "[";
+  }
+
+  :global(html[data-date="bracket"] .diary-date::after) {
+    color: var(--ribbon);
+    content: "]";
   }
 
 </style>

@@ -1075,3 +1075,8 @@
 - Intent: a 格線 tab in the dev panel to tune the ruling: cell size (10–40px, the shell re-rounds to it), colour, opacity, line width, style (dashed verticals as now, solid, or dots at the crossings), the dash gap, and the margin marks on or off. The panel rebuilds the SVG cell and edge as data URIs and sets --grid, --grid-cell, --grid-edge and --grid-line on the root; stored under `grid`
 - Why: user: "提供調整格線的選項：包含但不限于顏色，疏密"
 - Result: done (dev only). Verified: 30px cells re-round the shell to 660px (22 cells); a green at 20% recolours the ruling; dot style draws only crossings. Removed the test grid from storage afterwards (the user's own paper choice, white with morning light, untouched). yarn run check clean, 40/40 tests
+
+## 2026-11-20 02:10 · claude-code
+- Intent: a 日期 tab in the dev panel with a post-date candidate in the email's style: the date set like `[ ✉ jcli@pm.me ]` (the monospace face at the type size, ribbon-red typed brackets, 0.5ch gap, hanging one cell left), against the current handwriting; applies to the feed dates and the article date
+- Why: user: "add a control for post date. add a variant in the same style of email. use []" + "and the same font"
+- Result: done (dev only). Verified: with 日期 set to [ 方括號 ] the date uses the same face and 15px size as the email control, ribbon brackets, hanging 9px left of the text edge; reads `[ 2026/10/31 ]`. yarn run check clean, 40/40 tests
