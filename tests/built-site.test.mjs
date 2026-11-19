@@ -827,6 +827,20 @@ test("content pages request neither webfonts nor Astro runtime JavaScript", asyn
   }
 });
 
+test("scroll-driven animations survive minification as longhands", async () => {
+  // Minifiers can fold animation-timeline into the animation shorthand, which
+  // browsers reject, silently freezing the bottle and the glyph develop.
+  const stylesheets = (await walkFiles(distDirectory)).filter((file) => file.endsWith(".css"));
+  const css = (
+    await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
+  ).join("\n");
+
+  assert.doesNotMatch(css, /animation:[^;}]*(?:scroll\(|--photo-row|--glyph-photo)/);
+  for (const timeline of ["scroll(root)", "--photo-row", "--glyph-photo"]) {
+    assert.ok(css.includes(`animation-timeline:${timeline}`), `expected animation-timeline:${timeline}`);
+  }
+});
+
 test("the compact frameless content contract stays within its confirmed limits", async () => {
   const css = await readFile(
     new URL("../src/styles/global.css", import.meta.url),

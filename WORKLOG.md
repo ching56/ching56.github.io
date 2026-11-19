@@ -871,3 +871,8 @@
 - Intent: apply the finish reviewer's material fixes #2–#6 (glyph legibility, paper band behind the docked mark, glyph-developed article photos via a Satteri hast plugin, typed [<]/[>] scroll buttons, carriage scale ending on a ten-cell stop)
 - Why: fresh-context finish review returned disposition "fix"; #1 (CJK size-adjust @font-face, which would switch Chinese to Song/Ming and breaks the no-@font-face rule) goes to the user; #7 declined because the contract already carries the printed seed key
 - Result: done, yarn run check clean, 39/39 tests; recaptured desktop and mobile; verdict pass requested from the same reviewer
+
+## 2026-11-19 14:50 · claude-code
+- Intent: fix two production-only defects found by checking the built site through `astro preview` (port 4322, new launch.json entry)
+- Why: lightningcss folded `animation-timeline` into the `animation` shorthand for single-animation rules (`animation:linear both bottle-dock scroll(root)`), which Chrome rejects, so in production the bottle never docked and photos never developed; dev was fine. Separately, `<button>` does not inherit font-family, so feed thumbnail glyphs rendered in a proportional face (the "grey static" the reviewer saw)
+- Result: all scroll-driven rules rewritten as longhands; new test asserts no shorthand carries a timeline in built CSS; `.diary-photo { font-family: inherit }`. 40/40 tests; production preview shows the docked 73px mark, glyph state and develop on home and articles

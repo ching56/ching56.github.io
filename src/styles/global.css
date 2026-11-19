@@ -303,26 +303,25 @@ main {
       top: var(--start-top);
       left: var(--shell-left);
       height: 40dvh;
-      animation: bottle-dock linear both;
+      /* Longhands only: a minifier folding the timeline into the shorthand
+         produces a declaration browsers reject. */
+      animation-name: bottle-dock;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: scroll(root);
       animation-range: 0 40dvh;
     }
 
     .home-bottle .bottle-reel {
-      animation:
-        bottle-turn steps(var(--frames), jump-none) both,
-        bottle-lift linear both;
+      animation-name: bottle-turn, bottle-lift;
+      animation-timing-function: steps(var(--frames), jump-none), linear;
+      animation-fill-mode: both, both;
       animation-timeline: scroll(root);
       animation-range: 0 40dvh;
     }
 
-    /* The shorthand resets the timeline, so the solid reel restates it. */
     .home-bottle .bottle-reel--solid {
-      animation:
-        bottle-turn steps(var(--frames), jump-none) both,
-        bottle-strike linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 40dvh;
+      animation-name: bottle-turn, bottle-strike;
     }
 
     /* Mirror the narrow-screen shell width and main padding. */
@@ -347,7 +346,9 @@ main {
       height: 5.5rem;
       background: var(--paper);
       content: "";
-      animation: platen-rise linear both;
+      animation-name: platen-rise;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: scroll(root);
       animation-range: 30dvh 40dvh;
     }
@@ -590,6 +591,8 @@ time {
   position: relative;
   flex: none;
   padding: 0;
+  /* Buttons don't inherit the page face; the glyph art needs the mono cell. */
+  font-family: inherit;
   overflow: hidden;
   border: 0;
   background: var(--paper);
@@ -633,13 +636,17 @@ time {
     }
 
     .diary-photo-ascii {
-      animation: type-develop linear both;
+      animation-name: type-develop;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --photo-row;
       animation-range: entry 0% cover 55%;
     }
 
     .diary-photo-image {
-      animation: photo-develop linear both;
+      animation-name: photo-develop;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --photo-row;
       animation-range: entry 0% cover 55%;
     }
@@ -992,13 +999,17 @@ time {
     }
 
     .glyph-photo-ascii {
-      animation: type-develop linear both;
+      animation-name: type-develop;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --glyph-photo;
       animation-range: entry 0% cover 55%;
     }
 
     .glyph-photo img {
-      animation: photo-develop linear both;
+      animation-name: photo-develop;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: --glyph-photo;
       animation-range: entry 0% cover 55%;
     }
