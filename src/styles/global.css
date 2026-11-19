@@ -134,62 +134,91 @@ main {
   padding-block: clamp(3rem, 7vw, 6.75rem);
 }
 
-/* Below the desktop stage the flow dissolves into the stage grid, so the
-   bottle can share the greeting's row while now/list span the full width. */
-.home-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 1.25rem;
-  row-gap: clamp(4.5rem, 9vw, 8rem);
-}
-
 .home-flow {
-  display: contents;
-}
-
-.home-flow > * {
-  grid-column: 1 / -1;
-}
-
-.home-flow > .about-intro {
-  grid-column: 1;
-  grid-row: 1;
+  display: grid;
+  align-content: start;
+  gap: clamp(4.5rem, 9vw, 8rem);
+  min-width: 0;
 }
 
 .creative-coding-area {
-  grid-column: 2;
-  grid-row: 1;
+  display: none;
 }
 
-/* 21-frame turntable sprite; plays only while hovered, holds its angle otherwise. */
-.spinning-bottle {
+/* Hero: a 40dvh bottle with the greeting directly beneath it. */
+.home-hero {
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.home-bottle-slot {
+  height: 40dvh;
+}
+
+/* 21-frame turntable sprite. */
+.home-bottle {
   --frames: 21;
-  width: 3.75rem;
+  display: block;
+  height: 100%;
   aspect-ratio: 297 / 735;
-  background: url("/media/home/bottle-spin-small.webp") 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
-  animation: bottle-spin 2.4s steps(var(--frames)) infinite paused;
+  background: url("/media/home/bottle-spin.webp") 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
 }
 
-.spinning-bottle:hover {
-  animation-play-state: running;
+/* Where scroll-driven animation is supported, the bottle is pinned over its
+   slot and, across the first 40dvh of scrolling, turns, leans, shrinks into
+   the top-left corner and becomes an ink silhouette: the home button. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .home-bottle {
+      --shell-left: calc((100% - min(100% - clamp(2rem, 5vw, 5rem), 82rem)) / 2);
+      --start-top: clamp(3rem, 7vw, 6.75rem);
+      --logo-width: 30px;
+      position: fixed;
+      z-index: 10;
+      top: var(--start-top);
+      left: var(--shell-left);
+      height: 40dvh;
+      animation:
+        bottle-turn steps(var(--frames), jump-none) both,
+        bottle-dock linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 40dvh;
+    }
+
+    /* Mirror the narrow-screen shell width and main padding. */
+    @media (max-width: 48rem) {
+      .home-bottle {
+        --shell-left: calc((100% - min(100% - 2rem, 42rem)) / 2);
+        --start-top: 2rem;
+      }
+    }
+
+    /* Guarantee enough scroll for the bottle to finish docking. */
+    .home-stage:has(.home-bottle) {
+      min-height: 140dvh;
+    }
+  }
 }
 
-@keyframes bottle-spin {
+@keyframes bottle-turn {
   to {
-    background-position: calc(var(--frames) / (var(--frames) - 1) * 100%) 0;
+    background-position: 100% 0;
   }
 }
 
-/* Touch has no hover; a pointer cursor makes iOS Safari emulate it on tap. */
-@media (hover: none) {
-  .spinning-bottle {
-    cursor: pointer;
+@keyframes bottle-dock {
+  40% {
+    filter: brightness(1);
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .spinning-bottle {
-    animation: none;
+  to {
+    top: 1rem;
+    /* A 45deg lean widens the box; shift right so the tilted neck stays inside the column. */
+    left: calc(var(--shell-left) + var(--logo-width) * 0.73);
+    height: calc(var(--logo-width) * 735 / 297);
+    rotate: -45deg;
+    filter: brightness(0);
   }
 }
 
@@ -584,19 +613,9 @@ time {
     min-height: calc(100svh - 13rem);
   }
 
-  .home-flow {
-    display: grid;
-    gap: clamp(4.5rem, 9vw, 8rem);
-    min-width: 0;
-  }
-
   .creative-coding-area {
+    display: block;
     min-height: 100%;
-  }
-
-  .spinning-bottle {
-    width: 148.5px;
-    background-image: url("/media/home/bottle-spin.webp");
   }
 }
 

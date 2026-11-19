@@ -374,9 +374,13 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chineseList, /如果有一段文字讓你想起自己/);
   assert.match(
     chineseList,
-    /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true">\s*<div class="spinning-bottle"><\/div>\s*<\/div>/,
+    /<div class="home-stage">[\s\S]*<div class="creative-coding-area" data-creative-coding-area aria-hidden="true"><\/div>/,
   );
-  for (const sprite of ["bottle-spin.webp", "bottle-spin-small.webp"]) {
+  assert.match(
+    chineseList,
+    /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"><\/a>\s*<\/div>\s*<section id="about"/,
+  );
+  for (const sprite of ["bottle-spin.webp"]) {
     assert.ok(
       (await stat(new URL(`media/home/${sprite}`, distDirectory))).size > 0,
       `homepage bottle sprite ${sprite} is published`,
