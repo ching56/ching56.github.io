@@ -9,6 +9,7 @@ import { Image } from "astro:assets";
 
 import mark from "../assets/home/bottle-mark.webp";
 import spin from "../assets/home/bottle-spin.webp";
+import spinSmall from "../assets/home/bottle-spin-small.webp";
 import still from "../assets/home/bottle-still.webp";
 
 interface Props {
@@ -23,14 +24,14 @@ const { variant, href, label } = Astro.props;
 
 {
   variant === "turntable" ? (
-    <a class="home-bottle" href={href} aria-label={label} style={`--frames:${FRAMES};--sprite:url(${spin.src})`}>
+    <a class="home-bottle" href={href} aria-label={label} style={`--frames:${FRAMES};--sprite-large:url(${spin.src});--sprite-small:url(${spinSmall.src})`}>
       <span class="bottle-photo" aria-hidden="true"></span>
       <Image
         class="bottle-still"
         src={still}
         alt=""
-        widths={[333, 500, 666]}
-        sizes="(max-width: 48rem) 61vh, 69vh"
+        widths={[160, 264, 400]}
+        sizes="(max-width: 48rem) 6.5vh, 14.6vh"
         loading="eager"
         fetchpriority="high"
       />

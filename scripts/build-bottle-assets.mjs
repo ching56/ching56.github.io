@@ -1,7 +1,9 @@
 // Rebuilds the homepage bottle assets from the turntable cutouts in the
 // untracked `photo/cutout/` folder (IMG_0263.png … IMG_0283.png, one per
 // turntable position, already trimmed to the bottle):
-//   src/assets/home/bottle-spin.webp   21 frames side by side, for the turn
+//   src/assets/home/bottle-spin.webp       21 frames side by side, for the
+//                                          turn on wide screens
+//   src/assets/home/bottle-spin-small.webp the same, smaller, for phones
 //   src/assets/home/bottle-still.webp  frame 0 at full resolution, for the
 //                                      resting hero shown larger than the screen
 //   src/assets/home/bottle-mark.webp   the last frame, small, whose outline
@@ -13,7 +15,11 @@ import sharp from "sharp";
 
 const FIRST = 263;
 const COUNT = 21;
-const SPRITE_BOTTLE = 900;
+// Bottle heights in the sprites: the wide-screen bottle rests at up to about
+// 36dvh (about 320–520px), the phone one at about 16dvh (about 130px), so
+// these cover 2x and 3x screens respectively.
+const SPRITE_BOTTLE = 600;
+const SMALL_SPRITE_BOTTLE = 360;
 const STILL_BOTTLE = 1514; // the shortest cutout, so no frame is upscaled
 const MARK_BOTTLE = 220; // about 3x the docked logo's height
 const files = Array.from({ length: COUNT }, (_, i) => `photo/cutout/IMG_0${FIRST + i}.png`);
@@ -34,14 +40,20 @@ async function frame(file, bottle) {
   return { buffer, width, height };
 }
 
-const frames = await Promise.all(files.map((file) => frame(file, SPRITE_BOTTLE)));
-const { width, height } = frames[0];
-await sharp({
-  create: { width: width * COUNT, height, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
-})
-  .composite(frames.map(({ buffer }, i) => ({ input: buffer, left: i * width, top: 0 })))
-  .webp({ quality: 72, alphaQuality: 70, effort: 6 })
-  .toFile("src/assets/home/bottle-spin.webp");
+async function sprite(bottle, out) {
+  const frames = await Promise.all(files.map((file) => frame(file, bottle)));
+  const { width, height } = frames[0];
+  await sharp({
+    create: { width: width * COUNT, height, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
+  })
+    .composite(frames.map(({ buffer }, i) => ({ input: buffer, left: i * width, top: 0 })))
+    .webp({ quality: 72, alphaQuality: 70, effort: 6 })
+    .toFile(out);
+  return `${width * COUNT}×${height}`;
+}
+
+const large = await sprite(SPRITE_BOTTLE, "src/assets/home/bottle-spin.webp");
+const small = await sprite(SMALL_SPRITE_BOTTLE, "src/assets/home/bottle-spin-small.webp");
 
 const still = await frame(files[0], STILL_BOTTLE);
 await sharp(still.buffer)
@@ -56,4 +68,4 @@ await sharp({ create: { width: mark.width, height: mark.height, channels: 3, bac
   .webp({ lossless: true })
   .toFile("src/assets/home/bottle-mark.webp");
 
-console.log(`sprite ${width * COUNT}×${height}, still ${still.width}×${still.height}`);
+console.log(`sprites ${large} and ${small}, still ${still.width}×${still.height}`);

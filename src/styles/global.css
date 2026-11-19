@@ -308,9 +308,17 @@ main {
 }
 
 .home-bottle {
+  /* Each screen fetches only its own turntable sprite. */
+  --sprite: var(--sprite-large);
   height: var(--bottle-height);
   aspect-ratio: 396 / 980;
   rotate: var(--bottle-rotate);
+}
+
+@media (max-width: 48rem) {
+  .home-bottle {
+    --sprite: var(--sprite-small);
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

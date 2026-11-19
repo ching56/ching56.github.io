@@ -389,18 +389,28 @@ test("the approved continuous journal structure is semantic across reading surfa
   const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
   assert.match(hero, /<span class="bottle-silhouette" aria-hidden="true"><\/span>/);
   assert.doesNotMatch(hero, /█|bottle-frame/);
-  const sprite = hero.match(/--sprite:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
-  assert.ok(sprite, "expected the hero to reference the fingerprinted bottle sprite");
+  // Wide screens and phones each get their own turntable sprite, sized for
+  // the small resting bottle.
+  const sprite = hero.match(/--sprite-large:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
+  const smallSprite = hero.match(/--sprite-small:url\((\/_astro\/bottle-spin-small\.[^.)]+\.webp)\)/)?.[1];
+  assert.ok(sprite, "expected the hero to reference the wide-screen sprite");
+  assert.ok(smallSprite, "expected the hero to reference the phone sprite");
   assert.match(hero, /<span class="bottle-photo" aria-hidden="true"><\/span>/);
-  // At rest the hero is larger than the screen, so it shows a full-resolution
-  // still of the first frame, fetched first.
+  // At rest the hero shows a still of the first frame, fetched first, in a
+  // width that suits the screen.
   const stillTag = hero.match(/<img\b[^>]*class="bottle-still"[^>]*>/)?.[0] ?? "";
   assert.match(stillTag, /fetchpriority="high"/);
   assert.match(stillTag, /\salt(?:="")?[\s>]/);
   const still = stillTag.match(/\bsrc="(\/_astro\/[^"]+)"/)?.[1];
   assert.ok(still, "expected the hero to show the high-resolution still");
+  assert.match(stillTag, /\bsrcset="[^"]*160w[^"]*264w[^"]*400w"/);
   await stat(new URL(still.slice(1), distDirectory));
-  await stat(new URL(sprite.slice(1), distDirectory));
+  for (const file of [sprite, smallSprite]) {
+    const { size } = await stat(new URL(file.slice(1), distDirectory));
+    assert.ok(size < 500 * 1024, `expected ${file} under 500 KB, got ${size}`);
+  }
+  const { size: smallSize } = await stat(new URL(smallSprite.slice(1), distDirectory));
+  assert.ok(smallSize < 200 * 1024, `expected the phone sprite under 200 KB, got ${smallSize}`);
   await assert.rejects(stat(new URL("media/home/bottle-spin.webp", distDirectory)));
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(englishList, /<section class="register-panel"/);
