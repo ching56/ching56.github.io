@@ -909,7 +909,7 @@
 ## 2026-11-19 18:00 · claude-code
 - Intent: (1) on screens wider than 48rem put the greeting at the top right of the shell and default the bleeding bottle to the left (x 0.08); (2) derive the hero's height and the dock's scroll range from the bottle's own top and height, so the diary never scrolls under the shrinking bottle (hero ends where the bottle ends; dock range = top + height - 6rem); (3) add a dev-only `BottlePositionPanel.astro` (like DiaryFontPanel): drag the bottle at scroll 0 and use sliders for top/x/height, stored per breakpoint in localStorage `bottle-position` so the agent can read the chosen values from the browser pane
 - Why: user wants to place the bottle themselves and wants text right, bottle left, no overlap while it shrinks
-- Result: (pending)
+- Result: done; verified in dev at 1440×900 and 375×812 by sampling the bottle's box against the greeting and first diary entry every 20–30px of scroll: no overlap until the bottle has docked (then the diary slides under the platen band as designed); greeting at 1087–1376, bottle 142–760 at rest; dragging moves it, saves {"wide":…}, and does not follow the home link; no horizontal overflow at 375. yarn run check clean, 40/40 tests
 
 ## 2026-11-19 18:10 · claude-code
 - Intent: remove the character-art treatment from photos: feed thumbnails lose `diary-photo-ascii` and the scroll develop; article photos lose the `glyphPhotos()` Satteri plugin (file deleted, unregistered) and its CSS; tests now assert no glyph markup and the minification test keeps only `scroll(root)`

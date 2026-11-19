@@ -224,23 +224,31 @@ main {
   display: none;
 }
 
-/* The hero fills the first screen: the greeting at the top left, the bottle
-   set larger than the screen and cut off by its bottom edge, so the clay is
-   seen up close first. Positions are in viewport units so the pinned bottle
-   (below) and this static fallback land in the same place. */
+/* The hero: the greeting at the top right (top left on narrow screens), the
+   bottle on the left, set larger than the screen and cut off by its bottom
+   edge, so the clay is seen up close first. Positions are in viewport units
+   so the pinned bottle (below) and this static fallback land in the same
+   place.
+
+   The hero is exactly as tall as the bottle, and the dock runs over that
+   height less 6rem. Top and height shrink linearly, so the bottle's bottom
+   edge always stays above the diary scrolling up beneath it: they never
+   overlap, wherever the bottle starts. */
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
   --bottle-top: 14dvh;
   /* Fraction of the shell width from its left edge. */
-  --bottle-x: 0.42;
+  --bottle-x: 0.06;
   --bottle-height: 170dvh;
+  --bottle-end: calc(var(--bottle-top) + var(--bottle-height));
+  --dock-range: max(40dvh, var(--bottle-end) - 6rem);
   position: relative;
 }
 
 .home-hero {
   display: grid;
   align-content: start;
-  min-height: calc(100dvh - var(--main-top));
+  min-height: calc(var(--bottle-end) - var(--main-top));
 }
 
 .home-hero .about-intro {
@@ -249,12 +257,21 @@ main {
   max-width: 30ch;
 }
 
+@media (min-width: 48.0625rem) {
+  .home-hero .about-intro {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(30ch, 40%);
+  }
+}
+
 .home-bottle-slot {
   position: absolute;
   top: calc(var(--bottle-top) - var(--main-top));
   right: 0;
   left: calc(var(--bottle-x) * 100%);
-  height: calc(100dvh - var(--bottle-top));
+  height: var(--bottle-height);
   overflow: clip;
 }
 
@@ -317,7 +334,7 @@ main {
 }
 
 /* Where scroll-driven animation is supported, the bottle is pinned over its
-   slot and, across the first 60dvh of scrolling, turns, leans, shrinks into
+   slot and, across the dock range of scrolling, turns, leans, shrinks into
    the top-left corner and darkens into a solid silhouette: the home mark. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -338,7 +355,7 @@ main {
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
-      animation-range: 0 60dvh;
+      animation-range: 0 var(--dock-range);
     }
 
     /* Gone exactly when the first frame turns: 1/21 of the range. */
@@ -347,7 +364,7 @@ main {
       animation-timing-function: steps(1, jump-end);
       animation-fill-mode: both;
       animation-timeline: scroll(root);
-      animation-range: 0 calc(60dvh / 21);
+      animation-range: 0 calc(var(--dock-range) / 21);
     }
 
     .home-bottle .bottle-photo {
@@ -355,7 +372,7 @@ main {
       animation-timing-function: steps(var(--frames), jump-none), linear;
       animation-fill-mode: both, both;
       animation-timeline: scroll(root);
-      animation-range: 0 60dvh;
+      animation-range: 0 var(--dock-range);
     }
 
     .home-bottle .bottle-silhouette {
@@ -363,7 +380,7 @@ main {
       animation-timing-function: steps(var(--frames), jump-none), linear;
       animation-fill-mode: both, both;
       animation-timeline: scroll(root);
-      animation-range: 0 60dvh;
+      animation-range: 0 var(--dock-range);
     }
 
     /* Mirror the narrow-screen shell width. */
@@ -386,7 +403,7 @@ main {
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
-      animation-range: 45dvh 60dvh;
+      animation-range: calc(var(--dock-range) - 15dvh) var(--dock-range);
     }
   }
 }

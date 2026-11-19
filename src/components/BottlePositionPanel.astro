@@ -1,0 +1,225 @@
+---
+// Dev-only tool for placing the homepage bottle at rest. Drag the bottle at
+// the top of the page, or use the sliders; values are kept per breakpoint in
+// localStorage ("bottle-position") so they survive reloads and can be read
+// back and written into global.css. Never rendered in production.
+---
+
+<details class="bottle-panel" open>
+  <summary>瓶子位置　<span data-mode></span></summary>
+  <label>
+    <span>上</span>
+    <input type="range" data-key="top" min="-20" max="80" step="1" />
+    <output data-out="top"></output>
+  </label>
+  <label>
+    <span>左</span>
+    <input type="range" data-key="x" min="-20" max="90" step="1" />
+    <output data-out="x"></output>
+  </label>
+  <label>
+    <span>高</span>
+    <input type="range" data-key="height" min="40" max="240" step="1" />
+    <output data-out="height"></output>
+  </label>
+  <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
+  <div class="bottle-panel-actions">
+    <button type="button" data-reset>重設</button>
+    <button type="button" data-copy>複製數值</button>
+  </div>
+</details>
+
+<script is:inline>
+  (() => {
+    const KEY = "bottle-position";
+    const stage = document.querySelector(".home-stage");
+    const bottle = document.querySelector(".home-bottle");
+    const panel = document.querySelector(".bottle-panel");
+    if (!stage || !bottle || !panel) return;
+
+    const narrow = matchMedia("(max-width: 48rem)");
+    const mode = () => (narrow.matches ? "narrow" : "wide");
+    const label = () => (narrow.matches ? "窄螢幕" : "寬螢幕");
+    const props = { top: "--bottle-top", x: "--bottle-x", height: "--bottle-height" };
+
+    const read = () => {
+      try {
+        return JSON.parse(localStorage.getItem(KEY) || "{}");
+      } catch {
+        return {};
+      }
+    };
+    const write = (all) => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(all));
+      } catch {}
+    };
+
+    // The stylesheet's values for this breakpoint, read with no overrides.
+    const defaults = () => {
+      for (const prop of Object.values(props)) stage.style.removeProperty(prop);
+      const style = getComputedStyle(stage);
+      return {
+        top: parseFloat(style.getPropertyValue("--bottle-top")),
+        x: Math.round(parseFloat(style.getPropertyValue("--bottle-x")) * 100),
+        height: parseFloat(style.getPropertyValue("--bottle-height")),
+      };
+    };
+
+    let current = {};
+    const apply = () => {
+      stage.style.setProperty("--bottle-top", `${current.top}dvh`);
+      stage.style.setProperty("--bottle-x", `${current.x / 100}`);
+      stage.style.setProperty("--bottle-height", `${current.height}dvh`);
+      for (const key of Object.keys(props)) {
+        panel.querySelector(`[data-key="${key}"]`).value = current[key];
+        panel.querySelector(`[data-out="${key}"]`).textContent =
+          key === "x" ? `${current[key]}%` : `${current[key]}dvh`;
+      }
+      panel.querySelector("[data-mode]").textContent = label();
+    };
+    const save = () => {
+      const all = read();
+      all[mode()] = { ...current };
+      write(all);
+    };
+    const load = () => {
+      current = { ...defaults(), ...(read()[mode()] || {}) };
+      apply();
+    };
+
+    for (const input of panel.querySelectorAll("input[data-key]")) {
+      input.addEventListener("input", () => {
+        current[input.dataset.key] = Number(input.value);
+        apply();
+        save();
+      });
+    }
+
+    panel.querySelector("[data-reset]").addEventListener("click", () => {
+      const all = read();
+      delete all[mode()];
+      write(all);
+      load();
+    });
+
+    panel.querySelector("[data-copy]").addEventListener("click", async (event) => {
+      const all = read();
+      const line = (name, value) =>
+        value ? `${name}　上 ${value.top}dvh　左 ${value.x}%　高 ${value.height}dvh` : `${name}　未調整`;
+      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow)].join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        event.target.textContent = "已複製";
+        setTimeout(() => (event.target.textContent = "複製數值"), 1200);
+      } catch {}
+    });
+
+    // Drag the bottle while the page is at the top, where it rests.
+    let drag = null;
+    let moved = false;
+    bottle.addEventListener("pointerdown", (event) => {
+      if (scrollY > 2) return;
+      event.preventDefault();
+      bottle.setPointerCapture(event.pointerId);
+      drag = { x: event.clientX, y: event.clientY, top: current.top, left: current.x };
+      moved = false;
+    });
+    bottle.addEventListener("pointermove", (event) => {
+      if (!drag) return;
+      const dx = event.clientX - drag.x;
+      const dy = event.clientY - drag.y;
+      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+      const shell = stage.getBoundingClientRect().width;
+      current.top = Math.round(drag.top + (dy / innerHeight) * 100);
+      current.x = Math.round(drag.left + (dx / shell) * 100);
+      apply();
+    });
+    const end = () => {
+      if (!drag) return;
+      drag = null;
+      save();
+    };
+    bottle.addEventListener("pointerup", end);
+    bottle.addEventListener("pointercancel", end);
+    // A drag is not a click on the home link.
+    bottle.addEventListener(
+      "click",
+      (event) => {
+        if (moved) {
+          event.preventDefault();
+          moved = false;
+        }
+      },
+      true,
+    );
+    bottle.addEventListener("dragstart", (event) => event.preventDefault());
+
+    narrow.addEventListener("change", load);
+    load();
+  })();
+</script>
+
+<style>
+  .bottle-panel {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 30;
+    width: 16rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: rgb(255 255 255 / 96%);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 14%);
+    font-size: 0.8125rem;
+  }
+
+  .bottle-panel summary {
+    cursor: pointer;
+    color: var(--ink-muted);
+  }
+
+  .bottle-panel label {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr 4rem;
+    gap: 0.5rem;
+    align-items: center;
+    min-height: 2.25rem;
+  }
+
+  .bottle-panel input {
+    width: 100%;
+    accent-color: var(--ribbon);
+  }
+
+  .bottle-panel output {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bottle-panel-hint {
+    margin: 0.25rem 0 0.5rem;
+    color: var(--ink-muted);
+  }
+
+  .bottle-panel-actions {
+    display: flex;
+    gap: 1ch;
+  }
+
+  .bottle-panel button {
+    min-height: 2rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--ink-muted);
+    border-radius: 0.25rem;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  :global(.home-bottle) {
+    cursor: grab;
+    touch-action: none;
+  }
+</style>
