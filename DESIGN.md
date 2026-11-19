@@ -108,7 +108,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 
 ### Neutral
 - **Notebook Paper** (`#f5f3e6`): Page, platen band, buttons-as-paper, lightbox (veiled at 97%).
-- **Grid Rule** (`#141414` at 11%): The 20px ruling printed over the shell: horizontal rules run through, vertical ones stop 3px short of each crossing (dashed, after a Japanese square-grid notebook); in the 12px right margin each rule runs out 4px and a dot marks every tenth row.
+- **Grid Rule** (`#141414` at 11%): The 20px ruling printed over the shell: horizontal rules run through, vertical ones stop 3px short of each crossing (dashed, after a Japanese square-grid notebook); in the 12px right margin every second rule runs out 4px and a dot marks every tenth.
 - **Typewriter Black** (`#141414`): Body text, the bottle silhouette, dashed focus outline.
 - **Carbon Grey** (`#5f5f5f`): Dates, language link, muted prompts, performer lines, blockquotes, disabled control.
 

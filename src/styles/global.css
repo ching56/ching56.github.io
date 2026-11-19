@@ -136,8 +136,8 @@ a {
 
 /* The notebook's printed area is the shell: a whole number of cells, so the
    text column starts and ends on a rule. Outside it is plain paper, except
-   for the right margin, where each rule runs out a few pixels and a dot
-   marks every tenth row, as on the printed page. */
+   for the right margin, where every second rule runs out a few pixels and a
+   dot marks every tenth, as on the printed page. */
 .site-shell::before {
   position: absolute;
   z-index: -1;
@@ -147,7 +147,7 @@ a {
     radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
       calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
     linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
-      4px var(--grid) repeat-y border-box,
+      4px calc(var(--grid) * 2) repeat-y border-box,
     var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
     var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
   background-clip: border-box, border-box, border-box, content-box;
