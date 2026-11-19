@@ -15,6 +15,7 @@
     <button type="button" role="tab" data-tab="header">頁首</button>
     <button type="button" role="tab" data-tab="arrows">照片</button>
     <button type="button" role="tab" data-tab="layout">版面</button>
+    <button type="button" role="tab" data-tab="paper">紙張</button>
   </div>
   <section class="bottle-panel-section" role="tabpanel" data-panel="bottle">
     <label>
@@ -116,14 +117,34 @@
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="layout">
-    <p class="bottle-panel-hint">每篇日記的群組與階層</p>
+    <p class="bottle-panel-hint">只變化格線，表現群組與階層</p>
     <div class="bottle-panel-choices">
       <label><input type="radio" name="layout-variant" value="" />原本</label>
-      <label><input type="radio" name="layout-variant" value="invert" />1 反白日期列</label>
-      <label><input type="radio" name="layout-variant" value="sheet" />2 貼紙</label>
-      <label><input type="radio" name="layout-variant" value="vertical" />3 直書日期</label>
-      <label><input type="radio" name="layout-variant" value="checker" />4 黑白格</label>
-      <label><input type="radio" name="layout-variant" value="box" />5 TUI 框</label>
+      <label><input type="radio" name="layout-variant" value="broken" />1 斷格</label>
+      <label><input type="radio" name="layout-variant" value="major" />2 主次格線</label>
+      <label><input type="radio" name="layout-variant" value="pages" />3 四種內頁</label>
+      <label><input type="radio" name="layout-variant" value="density" />4 濃淡</label>
+      <label><input type="radio" name="layout-variant" value="scale" />5 疏密</label>
+    </div>
+  </section>
+  <section class="bottle-panel-section" role="tabpanel" data-panel="paper">
+    <p class="bottle-panel-hint">紙色</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="paper-color" value="#f5f3e6" />米白（目前）</label>
+      <label><input type="radio" name="paper-color" value="#ffffff" />純白</label>
+      <label><input type="radio" name="paper-color" value="#faf7ee" />象牙</label>
+      <label><input type="radio" name="paper-color" value="#f1f1ee" />灰白</label>
+      <label><input type="radio" name="paper-color" value="#ebe2cf" />牛皮</label>
+      <label><input type="color" data-paper-custom />自訂</label>
+    </div>
+    <p class="bottle-panel-heading">光線（極淡的漸層）</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="paper-light" value="" />無</label>
+      <label><input type="radio" name="paper-light" value="morning" />晨光</label>
+      <label><input type="radio" name="paper-light" value="dusk" />暮色</label>
+      <label><input type="radio" name="paper-light" value="kiln" />窯火</label>
+      <label><input type="radio" name="paper-light" value="celadon" />青瓷</label>
+      <label><input type="radio" name="paper-light" value="vignette" />暈邊</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="arrows">
@@ -257,7 +278,9 @@
       delete all[mode()];
       delete all.logo;
       delete all.motion;
+      delete all.paper;
       write(all);
+      panel.dispatchEvent(new Event("paper-reset"));
       load();
       loadLogo();
       loadMotion();
@@ -276,7 +299,10 @@
       const motionLine = m
         ? `動畫　停靠 ${m.out}ms　返回 ${m.in}ms　門檻 ${m.threshold}px　變暗 ${m.darken}%　曲線 ${m.ease}　轉台 ${m.spin ? "開" : "關"}`
         : "動畫　未調整";
-      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine, motionLine].join("\n");
+      const paperLine = all.paper
+        ? `紙張　紙色 ${all.paper.color || DEFAULT_PAPER}　光線 ${all.paper.light || "無"}`
+        : "紙張　未調整";
+      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine, motionLine, paperLine].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         event.target.textContent = "已複製";
@@ -512,6 +538,51 @@
         try {
           localStorage.setItem(LAYOUT, radio.value);
         } catch {}
+      });
+    }
+
+    // Paper colour and light, kept with the other values.
+    const DEFAULT_PAPER = "#f5f3e6";
+    const applyPaper = (paper) => {
+      if (paper.color && paper.color !== DEFAULT_PAPER) root.style.setProperty("--paper", paper.color);
+      else root.style.removeProperty("--paper");
+      if (paper.light) root.dataset.light = paper.light;
+      else delete root.dataset.light;
+      const color = paper.color || DEFAULT_PAPER;
+      for (const radio of panel.querySelectorAll('input[name="paper-color"]')) {
+        radio.checked = radio.value === color;
+      }
+      panel.querySelector("[data-paper-custom]").value = color;
+      for (const radio of panel.querySelectorAll('input[name="paper-light"]')) {
+        radio.checked = radio.value === (paper.light || "");
+      }
+    };
+    let paper = { ...(read().paper || {}) };
+    const savePaper = () => {
+      const all = read();
+      all.paper = { ...paper };
+      write(all);
+      applyPaper(paper);
+    };
+    applyPaper(paper);
+    panel.addEventListener("paper-reset", () => {
+      paper = {};
+      applyPaper(paper);
+    });
+    for (const radio of panel.querySelectorAll('input[name="paper-color"]')) {
+      radio.addEventListener("change", () => {
+        paper.color = radio.value;
+        savePaper();
+      });
+    }
+    panel.querySelector("[data-paper-custom]").addEventListener("input", (event) => {
+      paper.color = event.target.value;
+      savePaper();
+    });
+    for (const radio of panel.querySelectorAll('input[name="paper-light"]')) {
+      radio.addEventListener("change", () => {
+        paper.light = radio.value;
+        savePaper();
       });
     }
 
@@ -962,115 +1033,123 @@
     }
   }
 
-  /* ---------- Layout candidates (dev only) ----------
-     Each makes one diary entry read as one object on the grid paper. */
+  /* ---------- Ruling candidates (dev only) ----------
+     Only the grid changes; it alone shows what belongs together. */
 
-  /* 1: each entry opens on a full-width ink bar, the date reversed out. */
-  :global(html[data-layout="invert"] .diary-feed) {
+  /* 1: the ruling prints only under each block; between blocks the paper
+     is plain. A paper outline hides the shared grid around each block, so
+     every patch stays on the same ruling. */
+  /* Outlines paint over later content, so every gap is at least two
+     outlines wide. */
+  :global(html[data-layout="broken"] .diary-feed),
+  :global(html[data-layout="broken"] .home-flow),
+  :global(html[data-layout="density"] .home-flow) {
     gap: calc(var(--grid) * 4);
   }
 
-  :global(html[data-layout="invert"] .diary-entry) {
-    gap: var(--grid);
+  :global(html[data-layout="broken"] .home-hero),
+  :global(html[data-layout="broken"] .diary-entry) {
+    outline: calc(var(--grid) * 2) solid var(--paper);
   }
 
-  :global(html[data-layout="invert"] .diary-date) {
-    margin-inline: calc(var(--grid) * -1);
-    padding-inline: var(--grid);
-    background: var(--ink);
-    color: var(--paper);
-    line-height: calc(var(--grid) * 2);
+  /* 2: engineering paper: every fifth rule darker. */
+  :global(html[data-layout="major"] .site-shell::before) {
+    background:
+      radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
+        calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
+      linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
+        4px calc(var(--grid) * 2) repeat-y border-box,
+      var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
+      linear-gradient(rgb(20 20 20 / 16%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 5)
+        calc(var(--grid) * 5) repeat content-box,
+      linear-gradient(90deg, rgb(20 20 20 / 16%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 5)
+        calc(var(--grid) * 5) repeat content-box,
+      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
   }
 
-  /* 2: entries as paper slips taped into the notebook, each a little askew. */
-  :global(html[data-layout="sheet"] .diary-feed) {
-    gap: calc(var(--grid) * 3);
+  /* 3: the four rulings of the reference notebook, one per role: dots
+     under the greeting, lines under the words (at their own line pitch),
+     squares under the date, blank under the photographs. */
+  :global(html[data-layout="pages"] .site-shell::before),
+  :global(html[data-layout="scale"] .site-shell::before) {
+    background: none;
   }
 
-  :global(html[data-layout="sheet"] .diary-entry) {
-    position: relative;
-    margin-inline: calc(var(--grid) * -1);
-    padding: calc(var(--grid) * 1.5) var(--grid) var(--grid);
-    border: 1px solid rgb(20 20 20 / 22%);
-    background: var(--paper);
-    rotate: -0.6deg;
+  :global(html[data-layout="pages"] .home-hero) {
+    background: radial-gradient(circle, rgb(20 20 20 / 22%) 1px, transparent 1.4px) 0 0 / var(--grid)
+      var(--grid);
   }
 
-  :global(html[data-layout="sheet"] .diary-entry:nth-child(even)) {
-    rotate: 0.5deg;
+  :global(html[data-layout="pages"] .diary-text) {
+    background: linear-gradient(transparent calc(1lh - 1px), rgb(20 20 20 / 14%) calc(1lh - 1px)) 0 0 /
+      100% 1lh;
   }
 
-  :global(html[data-layout="sheet"] .diary-entry::before) {
-    position: absolute;
-    top: calc(var(--grid) * -0.5);
-    left: 50%;
-    width: calc(var(--grid) * 5);
-    height: var(--grid);
-    background: rgb(196 22 28 / 16%);
-    translate: -50% 0;
-    rotate: 1.5deg;
-    content: "";
+  :global(html[data-layout="pages"] .diary-date) {
+    background: var(--grid-cell) 0 0 / var(--grid) var(--grid);
   }
 
-  /* 3: dates stand vertically in their own column, behind an ink rule. */
-  @media (min-width: 48.0625rem) {
-    :global(html[data-layout="vertical"] .diary-feed) {
-      gap: calc(var(--grid) * 4);
-    }
-
-    :global(html[data-layout="vertical"] .diary-entry) {
-      grid-template-columns: calc(var(--grid) * 3) minmax(0, 1fr);
-      column-gap: var(--grid);
-    }
-
-    :global(html[data-layout="vertical"] .diary-entry > *) {
-      grid-column: 2;
-    }
-
-    :global(html[data-layout="vertical"] .diary-date) {
-      grid-column: 1;
-      grid-row: 1 / span 4;
-      align-self: start;
-      padding-inline-end: calc(var(--grid) * 0.5);
-      border-inline-end: 1px solid var(--ink);
-      writing-mode: vertical-rl;
-      line-height: calc(var(--grid) * 2);
-    }
+  /* 4: dark ruling inside each block, faint between: a translucent paper
+     outline over a doubled grid. */
+  :global(html[data-layout="density"] .site-shell::before) {
+    background:
+      radial-gradient(circle, var(--grid-line) 1.2px, transparent 1.7px) right 0 top
+        calc(var(--grid) * 10 - 3px) / 6px calc(var(--grid) * 10) repeat-y border-box,
+      linear-gradient(var(--grid-line) 1px, transparent 1px) right calc(var(--grid-margin) - 4px) top 0 /
+        4px calc(var(--grid) * 2) repeat-y border-box,
+      var(--grid-edge) right var(--grid-margin) top 0 / var(--grid) var(--grid) repeat-y border-box,
+      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box,
+      var(--grid-cell) 0 0 / var(--grid) var(--grid) repeat content-box;
   }
 
-  /* 4: a row of alternately inked cells heads each entry. */
-  :global(html[data-layout="checker"] .diary-feed) {
+  :global(html[data-layout="density"] .diary-feed) {
     gap: calc(var(--grid) * 4);
   }
 
-  :global(html[data-layout="checker"] .diary-entry::before) {
-    height: var(--grid);
-    background: repeating-linear-gradient(
-      90deg,
-      var(--ink) 0 var(--grid),
-      transparent var(--grid) calc(var(--grid) * 2)
-    );
-    content: "";
+  :global(html[data-layout="density"] .home-hero),
+  :global(html[data-layout="density"] .diary-entry) {
+    outline: calc(var(--grid) * 2) solid color-mix(in srgb, var(--paper) 72%, transparent);
   }
 
-  /* 5: a TUI window: a double-rule frame with the date set into its top. */
-  :global(html[data-layout="box"] .diary-feed) {
-    gap: calc(var(--grid) * 3);
+  /* 5: scale for rank: large 40px squares under the greeting, the fine
+     20px ruling under each entry. */
+  :global(html[data-layout="scale"] .home-hero) {
+    background:
+      linear-gradient(rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 2)
+        calc(var(--grid) * 2),
+      linear-gradient(90deg, rgb(20 20 20 / 12%) 1px, transparent 1px) 0 0 / calc(var(--grid) * 2)
+        calc(var(--grid) * 2);
   }
 
-  :global(html[data-layout="box"] .diary-entry) {
-    position: relative;
-    margin-inline: calc(var(--grid) * -1);
-    padding: calc(var(--grid) * 2) var(--grid) var(--grid);
-    border: 3px double var(--ink);
+  :global(html[data-layout="scale"] .diary-entry) {
+    background: var(--grid-cell) 0 0 / var(--grid) var(--grid);
   }
 
-  :global(html[data-layout="box"] .diary-date) {
-    position: absolute;
-    top: -0.7em;
-    left: var(--grid);
-    padding-inline: 0.5ch;
-    background: var(--paper);
+  /* ---------- Paper light candidates (dev only) ----------
+     Barely-there light over the paper, fixed to the screen like light in
+     the room rather than printed on the page. */
+  :global(html[data-light]) {
+    background-attachment: fixed;
+  }
+
+  :global(html[data-light="morning"]) {
+    background-image: radial-gradient(120% 80% at 0% 0%, rgb(255 255 255 / 60%), transparent 60%);
+  }
+
+  :global(html[data-light="dusk"]) {
+    background-image: linear-gradient(to bottom, transparent 35%, rgb(120 90 40 / 8%));
+  }
+
+  :global(html[data-light="kiln"]) {
+    background-image: radial-gradient(90% 60% at 50% 115%, rgb(196 22 28 / 8%), transparent 70%);
+  }
+
+  :global(html[data-light="celadon"]) {
+    background-image: radial-gradient(100% 70% at 100% 0%, rgb(120 160 140 / 14%), transparent 65%);
+  }
+
+  :global(html[data-light="vignette"]) {
+    background-image: radial-gradient(130% 100% at 50% 40%, transparent 55%, rgb(20 20 20 / 7%));
   }
 
 </style>
