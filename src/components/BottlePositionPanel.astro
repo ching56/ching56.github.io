@@ -1,5 +1,5 @@
 ---
-// Dev-only tool for placing the homepage bottle at rest and the logo it docks
+// Dev-only tool for placing the homepage bottle and tuning the article-header logo
 // into. Drag the bottle at the top of the page, or use the sliders. Bottle
 // values are kept per breakpoint, logo values once, in localStorage
 // ("bottle-position") so they survive reloads and can be read back and
@@ -11,8 +11,6 @@
   <div class="bottle-panel-tabs" role="tablist">
     <button type="button" role="tab" data-tab="bottle">瓶子</button>
     <button type="button" role="tab" data-tab="logo">Logo</button>
-    <button type="button" role="tab" data-tab="motion">動畫</button>
-    <button type="button" role="tab" data-tab="header">頁首</button>
     <button type="button" role="tab" data-tab="arrows">照片</button>
     <button type="button" role="tab" data-tab="layout">版面</button>
     <button type="button" role="tab" data-tab="paper">紙張</button>
@@ -56,7 +54,7 @@
     <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="logo">
-    <p class="bottle-panel-hint">捲到 logo 停靠後再調</p>
+    <p class="bottle-panel-hint">文章頁頂端的 logo（上、左目前沒有作用）</p>
     <label>
       <span>上</span>
       <input type="range" data-logo="top" min="0" max="80" step="1" />
@@ -77,46 +75,6 @@
       <input type="range" data-logo="width" min="12" max="80" step="1" />
       <output data-logo-out="width"></output>
     </label>
-  </section>
-  <section class="bottle-panel-section" role="tabpanel" data-panel="motion">
-    <p class="bottle-panel-hint">捲過門檻看效果</p>
-    <label>
-      <span>停靠</span>
-      <input type="range" data-motion="out" min="100" max="1500" step="10" />
-      <output data-motion-out="out"></output>
-    </label>
-    <label>
-      <span>返回</span>
-      <input type="range" data-motion="in" min="100" max="1500" step="10" />
-      <output data-motion-out="in"></output>
-    </label>
-    <label>
-      <span>門檻</span>
-      <input type="range" data-motion="threshold" min="0" max="300" step="2" />
-      <output data-motion-out="threshold"></output>
-    </label>
-    <label>
-      <span>變暗</span>
-      <input type="range" data-motion="darken" min="0" max="90" step="5" />
-      <output data-motion-out="darken"></output>
-    </label>
-    <label class="bottle-panel-wide">
-      <span>曲線</span>
-      <select data-motion="ease">
-        <option value="cubic-bezier(0.77, 0, 0.175, 1)">Emil ease-in-out</option>
-        <option value="cubic-bezier(0.32, 0.72, 0, 1)">iOS drawer</option>
-        <option value="cubic-bezier(0.23, 1, 0.32, 1)">Emil ease-out</option>
-        <option value="cubic-bezier(0.65, 0, 0.35, 1)">柔和 in-out</option>
-        <option value="linear">linear（對照）</option>
-      </select>
-    </label>
-    <label class="bottle-panel-check">
-      <input type="checkbox" data-motion="spin" />
-      <span>停靠時轉台轉一圈</span>
-    </label>
-    <div class="bottle-panel-actions">
-      <button type="button" data-emil>套用 Emil 建議</button>
-    </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="layout">
     <p class="bottle-panel-hint">格線替排版服務：群組、對齊、節奏</p>
@@ -202,47 +160,6 @@
       <label><input type="radio" name="arrows-variant" value="dots" />3 圓點</label>
       <label><input type="radio" name="arrows-variant" value="text" />4 文字</label>
       <label><input type="radio" name="arrows-variant" value="wrap" />5 不捲動</label>
-    </div>
-  </section>
-  <section class="bottle-panel-section" role="tabpanel" data-panel="header">
-    <p class="bottle-panel-hint">捲下去比較停靠後的頁首</p>
-    <div class="bottle-panel-choices">
-      <label><input type="radio" name="header-variant" value="" />原本</label>
-      <label><input type="radio" name="header-variant" value="lying" />1 橫躺</label>
-      <label><input type="radio" name="header-variant" value="chip" />2 紙片</label>
-      <label><input type="radio" name="header-variant" value="signed" />3 署名列</label>
-      <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
-      <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
-      <label><input type="radio" name="header-variant" value="impressed" />6 壓印</label>
-      <label><input type="radio" name="header-variant" value="disc" />7 圓紙片</label>
-    </div>
-    <p class="bottle-panel-heading">logo 強調（套在圓紙片上）</p>
-    <div class="bottle-panel-choices">
-      <label><input type="radio" name="mark-variant" value="" />原本</label>
-      <label><input type="radio" name="mark-variant" value="ring" />1 圓框</label>
-      <label><input type="radio" name="mark-variant" value="lifted" />2 浮起</label>
-      <label><input type="radio" name="mark-variant" value="reverse" />3 反白</label>
-      <label><input type="radio" name="mark-variant" value="seal" />4 紅印</label>
-      <label><input type="radio" name="mark-variant" value="double" />5 雙圈</label>
-      <label><input type="radio" name="mark-variant" value="faint" />6 淡影</label>
-      <label><input type="radio" name="mark-variant" value="inset" />7 內陰影</label>
-    </div>
-    <p class="bottle-panel-heading">淡陰影</p>
-    <div class="bottle-panel-choices">
-      <label><input type="radio" name="mark-variant" value="contact" />a 接觸陰影</label>
-      <label><input type="radio" name="mark-variant" value="layered" />b 分層柔影</label>
-      <label><input type="radio" name="mark-variant" value="hairline" />c 髮絲環</label>
-      <label><input type="radio" name="mark-variant" value="clay" />d 陶土色影</label>
-      <label><input type="radio" name="mark-variant" value="toplight" />e 頂光</label>
-    </div>
-    <p class="bottle-panel-heading">反白延伸</p>
-    <div class="bottle-panel-choices">
-      <label><input type="radio" name="header-variant" value="bbs" />反白</label>
-      <label><input type="radio" name="header-variant" value="kiln" />a 窯窗</label>
-      <label><input type="radio" name="header-variant" value="negative" />b 負片</label>
-      <label><input type="radio" name="header-variant" value="seal" />c 陰刻印</label>
-      <label><input type="radio" name="header-variant" value="giveway" />d 讓位</label>
-      <label><input type="radio" name="header-variant" value="wetink" />e 墨未乾</label>
     </div>
   </section>
   <div class="bottle-panel-actions">
@@ -343,14 +260,12 @@
       const all = read();
       delete all[mode()];
       delete all.logo;
-      delete all.motion;
       delete all.paper;
       delete all.grid;
       write(all);
       panel.dispatchEvent(new Event("paper-reset"));
       load();
       loadLogo();
-      loadMotion();
     });
 
     panel.querySelector("[data-copy]").addEventListener("click", async (event) => {
@@ -362,10 +277,6 @@
       const logoLine = all.logo
         ? `Logo　上 ${all.logo.top}px　左 ${all.logo.left}px　角度 ${all.logo.rotate}deg　寬 ${all.logo.width}px`
         : "Logo　未調整";
-      const m = all.motion;
-      const motionLine = m
-        ? `動畫　停靠 ${m.out}ms　返回 ${m.in}ms　門檻 ${m.threshold}px　變暗 ${m.darken}%　曲線 ${m.ease}　轉台 ${m.spin ? "開" : "關"}`
-        : "動畫　未調整";
       const paperLine = all.paper
         ? `紙張　紙色 ${all.paper.color || DEFAULT_PAPER}　光線 ${all.paper.light || "無"}`
         : "紙張　未調整";
@@ -373,7 +284,7 @@
       const gridLine = gr
         ? `格線　疏密 ${gr.cell}px　濃度 ${gr.opacity}%　線寬 ${gr.width}px　斷口 ${gr.gap}px　顏色 ${gr.color}　樣式 ${gr.mode}　頁邊記號 ${gr.marks ? "開" : "關"}`
         : "格線　未調整";
-      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine, motionLine, paperLine, gridLine].join("\n");
+      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine, paperLine, gridLine].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         event.target.textContent = "已複製";
@@ -421,7 +332,7 @@
     );
     bottle.addEventListener("dragstart", (event) => event.preventDefault());
 
-    // The logo's docked state: one set of values for every breakpoint.
+    // The logo variables: one set of values for every breakpoint.
     const root = document.documentElement;
     const logoProps = { top: "--logo-top", left: "--logo-left", rotate: "--logo-rotate", width: "--logo-width" };
     const logoUnits = { top: "px", left: "px", rotate: "deg", width: "px" };
@@ -467,102 +378,6 @@
         const all = read();
         all.logo = { ...logo };
         write(all);
-      });
-    }
-
-    // The dock's motion: one set of values for every breakpoint.
-    const EMIL = {
-      out: 450,
-      in: 550,
-      threshold: 48,
-      darken: 30,
-      ease: "cubic-bezier(0.32, 0.72, 0, 1)",
-      spin: true,
-    };
-    const motionVars = {
-      out: ["--dock-out-duration", "ms"],
-      in: ["--dock-in-duration", "ms"],
-      threshold: ["--dock-threshold", "px"],
-    };
-    const motionDefaults = () => {
-      for (const prop of ["--dock-out-duration", "--dock-in-duration", "--dock-threshold", "--dock-ease", "--dock-spin", "--dock-darken-from"]) {
-        root.style.removeProperty(prop);
-      }
-      const style = getComputedStyle(root);
-      const read = (name) => style.getPropertyValue(name).trim();
-      return {
-        out: parseFloat(read("--dock-out-duration")),
-        in: parseFloat(read("--dock-in-duration")),
-        threshold: parseFloat(read("--dock-threshold")),
-        darken: Math.round(parseFloat(read("--dock-darken-from")) * 100),
-        ease: read("--dock-ease"),
-        spin: parseFloat(read("--dock-spin")) === 1,
-      };
-    };
-    let motion = {};
-    const applyMotion = () => {
-      for (const [key, [prop, unit]] of Object.entries(motionVars)) {
-        root.style.setProperty(prop, `${motion[key]}${unit}`);
-      }
-      root.style.setProperty("--dock-darken-from", `${motion.darken / 100}`);
-      root.style.setProperty("--dock-ease", motion.ease);
-      root.style.setProperty("--dock-spin", motion.spin ? "1" : "0");
-      for (const key of ["out", "in", "threshold", "darken"]) {
-        panel.querySelector(`[data-motion="${key}"]`).value = motion[key];
-        panel.querySelector(`[data-motion-out="${key}"]`).textContent =
-          key === "darken" ? `${motion[key]}%` : key === "threshold" ? `${motion[key]}px` : `${motion[key]}ms`;
-      }
-      const select = panel.querySelector('[data-motion="ease"]');
-      if (![...select.options].some((option) => option.value === motion.ease)) {
-        select.add(new Option(`目前：${motion.ease}`, motion.ease));
-      }
-      select.value = motion.ease;
-      panel.querySelector('[data-motion="spin"]').checked = motion.spin;
-    };
-    const saveMotion = () => {
-      const all = read();
-      all.motion = { ...motion };
-      write(all);
-    };
-    const loadMotion = () => {
-      motion = { ...motionDefaults(), ...(read().motion || {}) };
-      applyMotion();
-    };
-    for (const control of panel.querySelectorAll("[data-motion]")) {
-      control.addEventListener(control.type === "range" ? "input" : "change", () => {
-        const key = control.dataset.motion;
-        motion[key] =
-          control.type === "checkbox" ? control.checked : control.tagName === "SELECT" ? control.value : Number(control.value);
-        applyMotion();
-        saveMotion();
-      });
-    }
-    panel.querySelector("[data-emil]").addEventListener("click", () => {
-      motion = { ...EMIL };
-      applyMotion();
-      saveMotion();
-    });
-
-    // Which docked-header candidate to preview.
-    const HEADER = "header-variant";
-    const setHeader = (value) => {
-      if (value) root.dataset.header = value;
-      else delete root.dataset.header;
-      for (const radio of panel.querySelectorAll('input[name="header-variant"]')) {
-        radio.checked = radio.value === value;
-      }
-    };
-    let header = "";
-    try {
-      header = localStorage.getItem(HEADER) || "";
-    } catch {}
-    setHeader(header);
-    for (const radio of panel.querySelectorAll('input[name="header-variant"]')) {
-      radio.addEventListener("change", () => {
-        setHeader(radio.value);
-        try {
-          localStorage.setItem(HEADER, radio.value);
-        } catch {}
       });
     }
 
@@ -738,29 +553,6 @@
       });
     }
 
-    // Which emphasis for the docked mark to preview.
-    const MARK = "mark-variant";
-    const setMark = (value) => {
-      if (value) root.dataset.mark = value;
-      else delete root.dataset.mark;
-      for (const radio of panel.querySelectorAll('input[name="mark-variant"]')) {
-        radio.checked = radio.value === value;
-      }
-    };
-    let markStyle = "";
-    try {
-      markStyle = localStorage.getItem(MARK) || "";
-    } catch {}
-    setMark(markStyle);
-    for (const radio of panel.querySelectorAll('input[name="mark-variant"]')) {
-      radio.addEventListener("change", () => {
-        setMark(radio.value);
-        try {
-          localStorage.setItem(MARK, radio.value);
-        } catch {}
-      });
-    }
-
     // Tabs keep the panel short; the last one opened is remembered.
     const TAB = "bottle-panel-tab";
     const showTab = (name) => {
@@ -786,7 +578,6 @@
     narrow.addEventListener("change", load);
     load();
     loadLogo();
-    loadMotion();
   })();
 </script>
 
@@ -916,209 +707,6 @@
   :global(.home-bottle) {
     cursor: grab;
     touch-action: none;
-  }
-
-  /* ---------- Docked header candidates (dev only) ---------- */
-  @supports (animation-timeline: scroll()) {
-    /* The shell's left edge, for the paper behind the mark. */
-    :global(html[data-header] .home-stage) {
-      --edge: calc((100vw - var(--shell-width-vw)) / 2);
-    }
-
-    /* 1: the mark lies on its side, so the band is only as tall as the
-       bottle is wide. */
-    /* !important only to win over the panel's own logo sliders, which
-       write inline styles on the root. */
-    :global(html[data-header="lying"]) {
-      --logo-rotate: -90deg !important;
-      --logo-top: calc(12px - (var(--logo-height) - var(--logo-width)) / 2) !important;
-      --logo-left: calc((var(--logo-height) - var(--logo-width)) / 2) !important;
-    }
-
-    :global(html[data-header="lying"] .home-stage::before) {
-      height: calc(var(--logo-width) + 24px);
-    }
-
-    /* 2: no band; a small patch of paper behind the mark only. The
-       reverse-video candidates below dress the same patch. */
-    :global(html[data-header="chip"] .home-stage::before),
-    :global(html[data-header="margin"] .home-stage::before),
-    :global(html[data-header="bbs"] .home-stage::before),
-    :global(html[data-header="impressed"] .home-stage::before),
-    :global(html[data-header="kiln"] .home-stage::before),
-    :global(html[data-header="negative"] .home-stage::before),
-    :global(html[data-header="seal"] .home-stage::before),
-    :global(html[data-header="giveway"] .home-stage::before),
-    :global(html[data-header="wetink"] .home-stage::before) {
-      inset: auto;
-      top: calc(var(--logo-top) - 8px);
-      left: calc(var(--edge) + var(--logo-left) - 8px);
-      width: calc(var(--logo-width) + 16px);
-      height: calc(var(--logo-height) + 16px);
-    }
-
-    /* 7: the paper patch as a disc with the mark at its exact centre. Where
-       the mark sits too close to the screen edge for the whole disc (narrow
-       screens), the mark itself moves in rather than the disc off-centre. */
-    :global(html[data-header="disc"] .home-stage) {
-      --disc: calc(var(--logo-height) + var(--grid));
-      --logo-left: max(-4px, var(--disc) / 2 + 4px - var(--logo-width) / 2 - var(--edge));
-    }
-
-    :global(html[data-header="disc"] .home-stage::before) {
-      inset: auto;
-      top: calc(var(--logo-top) + var(--logo-height) / 2 - var(--disc) / 2);
-      left: calc(var(--edge) + var(--logo-left) + var(--logo-width) / 2 - var(--disc) / 2);
-      width: var(--disc);
-      height: var(--disc);
-      border-radius: 50%;
-    }
-
-    /* 6: impressed, like a potter's stamp pressed into soft clay: the patch
-       is a recess in the page, shadowed along its top inner edge with a
-       light lip below, and the mark sits in it. (Breaks the Flat Paper
-       Rule on purpose; a candidate only.) */
-    :global(html[data-header="impressed"] .home-stage::before) {
-      background: rgb(238 238 238);
-      box-shadow:
-        inset 0 3px 6px rgb(20 20 20 / 38%),
-        inset 2px 0 4px rgb(20 20 20 / 14%),
-        inset 0 -1px 0 rgb(255 255 255 / 95%);
-    }
-
-    /* Reverse video (BBS): the mark as a highlighted cell. */
-    :global(html[data-header="bbs"] .home-stage::before) {
-      background: var(--ink);
-    }
-
-    @container style(--docked: 1) {
-      :global(html[data-header="bbs"] .home-bottle),
-      :global(html[data-header="kiln"] .home-bottle),
-      :global(html[data-header="negative"] .home-bottle),
-      :global(html[data-header="seal"] .home-bottle),
-      :global(html[data-header="giveway"] .home-bottle),
-      :global(html[data-header="wetink"] .home-bottle) {
-        color: var(--paper);
-      }
-    }
-
-    /* Reverse video, five ways. Blur and opacity serve each idea. */
-
-    /* a: the kiln's spy hole: smoked glass, the page behind it hazy, the
-       bottle inside lit white. */
-    :global(html[data-header="kiln"] .home-stage::before) {
-      background: rgb(20 20 20 / 80%);
-      -webkit-backdrop-filter: blur(6px);
-      backdrop-filter: blur(6px);
-    }
-
-    /* b: a frame of film negative laid over the page: what lies under it
-       turns negative and slightly out of focus. */
-    :global(html[data-header="negative"] .home-stage::before) {
-      background: transparent;
-      -webkit-backdrop-filter: invert(1) grayscale(1) blur(1.5px);
-      backdrop-filter: invert(1) grayscale(1) blur(1.5px);
-    }
-
-    /* c: a carved seal (陰刻), the potter's chop in red with the bottle cut
-       out; its edge softened as ink soaks into paper. */
-    :global(html[data-header="seal"] .home-stage::before) {
-      background: var(--ribbon);
-      opacity: calc(var(--docked) * 0.92);
-      filter: blur(0.4px);
-    }
-
-    /* d: gives way while reading: faint and soft scrolling down, sharp the
-       moment the reader scrolls back up. */
-    :global(html[data-header="giveway"]) {
-      container-type: scroll-state;
-    }
-
-    :global(html[data-header="giveway"] .home-stage::before) {
-      background: var(--ink);
-      transition:
-        opacity 300ms ease-out,
-        filter 300ms ease-out;
-    }
-
-    @container scroll-state(scrolled: bottom) {
-      @container style(--docked: 1) {
-        :global(html[data-header="giveway"] .home-bottle) {
-          opacity: 0.4;
-          filter: blur(1.5px);
-        }
-      }
-
-      :global(html[data-header="giveway"] .home-stage::before) {
-        opacity: calc(var(--docked) * 0.22);
-        filter: blur(1.5px);
-      }
-    }
-
-    :global(html[data-header="giveway"] .home-bottle) {
-      transition-property: translate, scale, top, rotate, color, --dock-t, opacity, filter;
-      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
-        var(--dock-duration), 120ms, var(--dock-duration), 300ms, 300ms;
-    }
-
-    /* e: ink not yet dry: the patch lands soft and spreads, then sets
-       sharp. */
-    :global(html[data-header="wetink"] .home-stage::before) {
-      background: var(--ink);
-      filter: blur(calc((1 - var(--docked)) * 8px));
-      transition:
-        opacity 250ms ease-out,
-        filter 700ms cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    /* 3: the band carries the name, like the article header. */
-    :global(html[data-header="signed"] .home-stage::before) {
-      height: calc(var(--logo-height) + 2 * var(--logo-top));
-      padding-inline-start: calc(var(--edge) + var(--logo-left) + var(--logo-width) + 1.75rem);
-      color: var(--ink);
-      font-size: var(--type-size);
-      letter-spacing: 0.08em;
-      line-height: calc(var(--logo-height) + 2 * var(--logo-top));
-      content: "李至青";
-    }
-
-    /* 4: on wide screens the mark sits in the empty left margin, so nothing
-       covers the text; phones have no margin and keep the patch. */
-    @media (min-width: 48.0625rem) {
-      :global(html[data-header="margin"]) {
-        --logo-left: calc(-1 * var(--logo-width) - 1.25rem) !important;
-      }
-
-      :global(html[data-header="margin"] .home-stage::before) {
-        display: none;
-      }
-    }
-
-    /* 5: band and mark step aside while reading down, and return the
-       moment the reader scrolls back up. */
-    :global(html[data-header="reveal"]) {
-      container-type: scroll-state;
-    }
-
-    @container scroll-state(scrolled: bottom) {
-      :global(html[data-header="reveal"] .home-stage::before) {
-        opacity: 0;
-      }
-
-      /* Only the docked mark steps aside, never the hero bottle. */
-      @container style(--docked: 1) {
-        :global(html[data-header="reveal"] .home-bottle) {
-          opacity: 0;
-          pointer-events: none;
-        }
-      }
-    }
-
-    :global(html[data-header="reveal"] .home-bottle) {
-      transition-property: translate, scale, top, rotate, color, --dock-t, opacity;
-      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
-        var(--dock-duration), 120ms, var(--dock-duration), 200ms;
-    }
   }
 
   /* ---------- Photo-row button candidates (dev only) ---------- */
@@ -1392,93 +980,4 @@
     color: var(--ribbon);
     content: "]";
   }
-
-  /* ---------- Docked-mark emphasis candidates (dev only) ----------
-     All dress the shipped paper disc behind the docked home mark. */
-  @supports (animation-timeline: scroll()) {
-    /* 1: a fine ink ring. */
-    :global(html[data-mark="ring"] .home-stage::before) {
-      box-sizing: border-box;
-      border: 1.5px solid var(--ink);
-    }
-
-    /* 2: lifted: the disc as a sticker, standing off the page. */
-    :global(html[data-mark="lifted"] .home-stage::before) {
-      box-shadow:
-        0 1px 2px rgb(20 20 20 / 18%),
-        0 4px 12px rgb(20 20 20 / 14%);
-    }
-
-    /* 3 and 4: the disc inked, the mark in paper: reverse in ink, a seal in
-       ribbon red. */
-    :global(html[data-mark="reverse"] .home-stage::before) {
-      background: var(--ink);
-    }
-
-    :global(html[data-mark="seal"] .home-stage::before) {
-      background: var(--ribbon);
-    }
-
-    @container style(--docked: 1) {
-      :global(html[data-mark="reverse"] .home-bottle),
-      :global(html[data-mark="seal"] .home-bottle) {
-        color: var(--paper);
-      }
-    }
-
-    /* 6: a barely-there shadow, just enough to part disc from page. */
-    :global(html[data-mark="faint"] .home-stage::before) {
-      box-shadow: 0 1px 4px rgb(20 20 20 / 10%);
-    }
-
-    /* 7: inner shadow only: the disc reads as a shallow recess. */
-    :global(html[data-mark="inset"] .home-stage::before) {
-      box-shadow:
-        inset 0 1px 3px rgb(20 20 20 / 22%),
-        inset 0 -1px 1px rgb(255 255 255 / 80%);
-    }
-
-    /* Subtle shadows, each from a known use case. */
-    /* a: contact: paper resting on paper, a tight shadow where they meet. */
-    :global(html[data-mark="contact"] .home-stage::before) {
-      box-shadow: 0 1px 1px rgb(20 20 20 / 9%);
-    }
-
-    /* b: layered: contact, penumbra and ambient light together. */
-    :global(html[data-mark="layered"] .home-stage::before) {
-      box-shadow:
-        0 1px 1px rgb(20 20 20 / 6%),
-        0 2px 4px rgb(20 20 20 / 5%),
-        0 6px 12px rgb(20 20 20 / 4%);
-    }
-
-    /* c: hairline: a 1px translucent ring with a hint of drop. */
-    :global(html[data-mark="hairline"] .home-stage::before) {
-      box-shadow:
-        0 0 0 1px rgb(20 20 20 / 8%),
-        0 1px 2px rgb(20 20 20 / 6%);
-    }
-
-    /* d: clay: the shadow tinted warm brown, like clay's, not black. */
-    :global(html[data-mark="clay"] .home-stage::before) {
-      box-shadow:
-        0 1px 2px rgb(110 80 50 / 12%),
-        0 3px 8px rgb(110 80 50 / 10%);
-    }
-
-    /* e: top light: a highlight along the top edge, a soft fall below. */
-    :global(html[data-mark="toplight"] .home-stage::before) {
-      box-shadow:
-        inset 0 1px 0 rgb(255 255 255 / 85%),
-        0 1px 2px rgb(20 20 20 / 10%),
-        0 3px 8px rgb(20 20 20 / 6%);
-    }
-
-    /* 5: a double rule, like the border of a carved chop. */
-    :global(html[data-mark="double"] .home-stage::before) {
-      box-sizing: border-box;
-      border: 4px double var(--ink);
-    }
-  }
-
 </style>

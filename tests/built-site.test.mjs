@@ -385,10 +385,9 @@ test("the approved continuous journal structure is semantic across reading surfa
     /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<script>[\s\S]*?<\/script>\s*<\/div>\s*<section id="about"/,
   );
   // The hero shows the real bottle photo (the fingerprinted turntable sprite),
-  // which darkens into a solid silhouette masked by the same sprite as it docks.
+  // which turns as the page scrolls; it no longer docks into a logo.
   const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
-  assert.match(hero, /<span class="bottle-silhouette" aria-hidden="true"><\/span>/);
-  assert.doesNotMatch(hero, /█|bottle-frame/);
+  assert.doesNotMatch(hero, /█|bottle-frame|bottle-silhouette/);
   // Wide screens and phones each get their own turntable sprite, sized for
   // the small resting bottle.
   const sprite = hero.match(/--sprite-large:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
@@ -800,6 +799,19 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
   assert.ok(html.indexOf('id="about"') < html.indexOf('id="now"'));
   assert.ok(html.indexOf('id="now"') < html.indexOf('class="register-panel'));
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
+});
+
+test("every page offers a back-to-top link that appears a screen down", async () => {
+  const pages = [listPage, new URL("en/index.html", distDirectory), new URL("zh-TW/blog/bottles/index.html", distDirectory)];
+  for (const page of pages) {
+    const html = await readFile(page, "utf8");
+    assert.match(html, /<a class="to-top" href="#top" aria-label="(?:回到頂端|Back to top)">↑<\/a>/);
+  }
+  const stylesheets = (await walkFiles(distDirectory)).filter((file) => file.endsWith(".css"));
+  const css = (
+    await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
+  ).join("\n");
+  assert.match(css, /animation-name:to-top-in/);
 });
 
 test("content pages load no external webfonts or Astro runtime JavaScript beyond the bottle loader", async () => {

@@ -60,8 +60,8 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
     <!--
     THESIS: Character Proof types the pottery diary out on white paper beside plain photographs of the work, refusing the soft-paper journal and the photo-grid portfolio.
     OWN-WORLD: Pure white stock, black and red ribbon ink, one monospace cell grid, plain photographs, square typed brackets for controls; the dates alone are handwritten.
-    STORY: Readers watch the bottle photo turn and settle into the silhouette home mark, meet the potter, then follow the diary entries and their photos.
-    FIRST VIEWPORT: The greeting and typed mail bracket top right; the bottle photo on the left, set larger than the screen and cut off by its bottom edge; the diary follows once the bottle has docked.
+    STORY: Readers meet the potter beside the bottle, watch it turn as they scroll, then follow the diary entries and their photos.
+    FIRST VIEWPORT: The bottle photo on the left with the greeting and typed mail bracket beside it; the bottle turns on its turntable as the reader scrolls on into the diary.
     FORM: Typewriter type on white (the character art was later removed by the user), a challenger fused with the pinned grid-and-numbered-steps concept; direction seed 9062ef67.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
     -->
@@ -92,5 +92,6 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
         <slot />
       </main>
     </div>
+    <a class="to-top" href="#top" aria-label={ui.backToTopLabel}>↑</a>
   </body>
 </html>
