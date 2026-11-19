@@ -384,12 +384,15 @@ test("the approved continuous journal structure is semantic across reading surfa
     chineseList,
     /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<section id="about"/,
   );
-  // The bottle is typed out in glyphs: 21 shaded frames and their 21 solid
-  // silhouettes, with no raster sprite shipped.
+  // The hero shows the real bottle photo (the fingerprinted turntable sprite),
+  // which is struck into 21 glyph silhouettes as it docks.
   const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
-  assert.equal([...hero.matchAll(/class="bottle-frame"/g)].length, 42);
+  assert.equal([...hero.matchAll(/class="bottle-frame"/g)].length, 21);
   assert.match(hero, /█/);
-  assert.doesNotMatch(hero, /<img\b/);
+  const sprite = hero.match(/--sprite:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
+  assert.ok(sprite, "expected the hero to reference the fingerprinted bottle sprite");
+  assert.match(hero, /<span class="bottle-photo" aria-hidden="true"><\/span>/);
+  await stat(new URL(sprite.slice(1), distDirectory));
   await assert.rejects(stat(new URL("media/home/bottle-spin.webp", distDirectory)));
   assert.match(chinesePost, /<article class="reading-article">/);
   assert.match(englishList, /<section class="register-panel"/);

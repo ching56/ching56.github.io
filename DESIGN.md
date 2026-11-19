@@ -1,6 +1,6 @@
 ---
 name: Character Proof
-description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, where every picture is first struck as glyphs and develops into the photograph.
+description: A pottery diary typed out on white paper in one monospace cell, with black and red ribbon ink, where diary pictures are first struck as glyphs and develop into the photograph, and the bottle hero is the real photo.
 colors:
   paper: "#ffffff"
   ink: "#141414"
@@ -174,8 +174,8 @@ Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, r
 ### Diary Entry
 A single column: the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
-### Glyph Bottle
-A turntable of 21 character-art frames. On the home page it sits pinned over a 40dvh slot; across the first 40dvh of scrolling it steps through frames, leans to -45deg, shrinks into the top-left corner, and crossfades from the ramp-shaded art to a solid silhouette struck in `█`. That docked form is the logo on every other page. It turns ribbon red on hover. Header height is `6rem` (5rem narrow).
+### Bottle Mark
+The real bottle photo, a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, fingerprinted by Astro), because the hero shows the potter's work. On the home page it sits pinned over a 40dvh slot; across the first 40dvh of scrolling it steps through frames, leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid glyph silhouette struck in `█`. That docked form is the logo on every other page. The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
 
 ### Paper Platen Band
 A fixed paper-white strip, 5.5rem tall, fading in over the last 10dvh of the dock (30dvh to 40dvh).

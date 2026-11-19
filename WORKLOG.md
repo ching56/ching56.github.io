@@ -891,3 +891,8 @@
 - Intent: remove the step numbers from feed entries and article headers (DiaryFeed, PostArticle, getPostStep, .diary-step CSS, the test), and the --gutter margin that existed only to hold them, so typed text starts flush with the bottle's column edge
 - Why: user: "we don't need the index"
 - Result: done; --gutter removed, text now starts flush on the column edge, brackets still hang 1ch. DESIGN.md, design.json, route brief and contract comment updated. yarn run check clean, 40/40 tests
+
+## 2026-11-19 16:50 · claude-code
+- Intent: show the real bottle photo again in the homepage hero (the 21-frame turntable sprite, imported from src/assets so Astro fingerprints it), turning on scroll as before; while it docks the photo fades into the glyph silhouette, so the docked mark and the article-page logo stay the typed silhouette. Drop the shaded glyph frames
+- Why: user: "I want it to keep photo, as it demonstrates my work"
+- Result: done; hero sprite is /_astro/bottle-spin.<hash>.webp (666 KB, eager background). Verified in dev: frame steps on scroll, docks 73px at 16,16 as the silhouette (photo opacity 0, solid 1); built CSS keeps longhands. yarn run check clean, 40/40 tests

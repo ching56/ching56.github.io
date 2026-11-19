@@ -68,16 +68,14 @@ export function photoToAscii(file: string, rows: number): Promise<AsciiArt> {
 }
 
 export interface TurntableArt {
-  /** Shaded frames, one per turntable position. */
-  frames: string[];
-  /** The same frames with every inked cell struck solid: the silhouette. */
+  /** One silhouette per turntable position: every opaque cell struck solid. */
   silhouettes: string[];
   cols: number;
   rows: number;
 }
 
-/** A horizontal sprite of `count` transparent frames, typed out frame by frame.
-    Transparent cells stay blank, so the bottle stands on the page itself. */
+/** A horizontal sprite of `count` transparent frames, struck as solid
+    silhouettes frame by frame. Transparent cells stay blank. */
 export function turntableToAscii(
   file: string,
   count: number,
@@ -88,7 +86,6 @@ export function turntableToAscii(
     const { width = 1, height = 1 } = await sharp(source).metadata();
     const frameWidth = Math.floor(width / count);
     const cols = columnsFor(frameWidth, height, rows);
-    const frames: string[] = [];
     const silhouettes: string[] = [];
 
     for (let index = 0; index < count; index += 1) {
@@ -98,35 +95,19 @@ export function turntableToAscii(
         .ensureAlpha()
         .raw()
         .toBuffer();
-      const shaded: string[] = [];
       const solid: string[] = [];
 
       for (let y = 0; y < rows; y += 1) {
-        let line = "";
         let mass = "";
         for (let x = 0; x < cols; x += 1) {
-          const at = (y * cols + x) * 4;
-          const alpha = data[at + 3] / 255;
-          const light =
-            (0.2126 * data[at] + 0.7152 * data[at + 1] + 0.0722 * data[at + 2]) / 255;
-
-          if (alpha < 0.3) {
-            line += " ";
-            mass += " ";
-          } else {
-            const ink = Math.round(alpha * (1 - light) * (RAMP.length - 1));
-            line += RAMP[Math.min(RAMP.length - 1, Math.max(1, ink))];
-            mass += "█";
-          }
+          mass += data[(y * cols + x) * 4 + 3] < 0.3 * 255 ? " " : "█";
         }
-        shaded.push(line);
         solid.push(mass);
       }
 
-      frames.push(shaded.join("\n"));
       silhouettes.push(solid.join("\n"));
     }
 
-    return { frames, silhouettes, cols, rows };
+    return { silhouettes, cols, rows };
   });
 }
