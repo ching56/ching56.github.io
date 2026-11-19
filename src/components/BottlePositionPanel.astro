@@ -135,13 +135,14 @@
       <label><input type="radio" name="header-variant" value="margin" />4 邊欄</label>
       <label><input type="radio" name="header-variant" value="reveal" />5 捲動隱藏</label>
     </div>
-    <p class="bottle-panel-heading">紙片延伸</p>
+    <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
-      <label><input type="radio" name="header-variant" value="grid" />a 方格紙</label>
-      <label><input type="radio" name="header-variant" value="tui" />b 雙線框</label>
-      <label><input type="radio" name="header-variant" value="bbs" />c BBS 反白</label>
-      <label><input type="radio" name="header-variant" value="cursor" />d 游標</label>
-      <label><input type="radio" name="header-variant" value="window" />e 視窗</label>
+      <label><input type="radio" name="header-variant" value="bbs" />反白</label>
+      <label><input type="radio" name="header-variant" value="kiln" />a 窯窗</label>
+      <label><input type="radio" name="header-variant" value="negative" />b 負片</label>
+      <label><input type="radio" name="header-variant" value="seal" />c 陰刻印</label>
+      <label><input type="radio" name="header-variant" value="giveway" />d 讓位</label>
+      <label><input type="radio" name="header-variant" value="wetink" />e 墨未乾</label>
     </div>
   </section>
   <div class="bottle-panel-actions">
@@ -649,15 +650,16 @@
       height: calc(var(--logo-width) + 24px);
     }
 
-    /* 2: no band; a small patch of paper behind the mark only. The a–e
-       candidates below dress the same patch. */
+    /* 2: no band; a small patch of paper behind the mark only. The
+       reverse-video candidates below dress the same patch. */
     :global(html[data-header="chip"] .home-stage::before),
     :global(html[data-header="margin"] .home-stage::before),
-    :global(html[data-header="grid"] .home-stage::before),
-    :global(html[data-header="tui"] .home-stage::before),
     :global(html[data-header="bbs"] .home-stage::before),
-    :global(html[data-header="cursor"] .home-stage::before),
-    :global(html[data-header="window"] .home-stage::before) {
+    :global(html[data-header="kiln"] .home-stage::before),
+    :global(html[data-header="negative"] .home-stage::before),
+    :global(html[data-header="seal"] .home-stage::before),
+    :global(html[data-header="giveway"] .home-stage::before),
+    :global(html[data-header="wetink"] .home-stage::before) {
       inset: auto;
       top: calc(var(--logo-top) - 8px);
       left: calc(var(--edge) + var(--logo-left) - 8px);
@@ -665,65 +667,89 @@
       height: calc(var(--logo-height) + 16px);
     }
 
-    /* a: graph paper, the mark drawn on a notebook's squares. */
-    :global(html[data-header="grid"] .home-stage::before) {
-      border: 1px solid rgb(20 20 20 / 22%);
-      background-color: var(--paper);
-      background-image:
-        linear-gradient(rgb(20 20 20 / 10%) 1px, transparent 1px),
-        linear-gradient(90deg, rgb(20 20 20 / 10%) 1px, transparent 1px);
-      background-size: 8px 8px;
-    }
-
-    /* b: a TUI frame, double-ruled like ╔═╗. */
-    :global(html[data-header="tui"] .home-stage::before) {
-      border: 3px double var(--ink);
-    }
-
-    /* c: BBS reverse video, the mark as a highlighted cell. */
+    /* Reverse video (BBS): the mark as a highlighted cell. */
     :global(html[data-header="bbs"] .home-stage::before) {
       background: var(--ink);
     }
 
     @container style(--docked: 1) {
-      :global(html[data-header="bbs"] .home-bottle) {
+      :global(html[data-header="bbs"] .home-bottle),
+      :global(html[data-header="kiln"] .home-bottle),
+      :global(html[data-header="negative"] .home-bottle),
+      :global(html[data-header="seal"] .home-bottle),
+      :global(html[data-header="giveway"] .home-bottle),
+      :global(html[data-header="wetink"] .home-bottle) {
         color: var(--paper);
       }
     }
 
-    /* d: a terminal prompt, the block cursor blinking beside the mark. */
-    :global(html[data-header="cursor"] .home-stage::after) {
-      position: fixed;
-      z-index: 9;
-      top: calc(var(--logo-top) + var(--logo-height) - 14px);
-      left: calc(var(--edge) + var(--logo-left) + var(--logo-width) + 12px);
-      width: 8px;
-      height: 14px;
+    /* Reverse video, five ways. Blur and opacity serve each idea. */
+
+    /* a: the kiln's spy hole: smoked glass, the page behind it hazy, the
+       bottle inside lit white. */
+    :global(html[data-header="kiln"] .home-stage::before) {
+      background: rgb(20 20 20 / 80%);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
+
+    /* b: a frame of film negative laid over the page: what lies under it
+       turns negative and slightly out of focus. */
+    :global(html[data-header="negative"] .home-stage::before) {
+      background: transparent;
+      -webkit-backdrop-filter: invert(1) grayscale(1) blur(1.5px);
+      backdrop-filter: invert(1) grayscale(1) blur(1.5px);
+    }
+
+    /* c: a carved seal (陰刻), the potter's chop in red with the bottle cut
+       out; its edge softened as ink soaks into paper. */
+    :global(html[data-header="seal"] .home-stage::before) {
+      background: var(--ribbon);
+      opacity: calc(var(--docked) * 0.92);
+      filter: blur(0.4px);
+    }
+
+    /* d: gives way while reading: faint and soft scrolling down, sharp the
+       moment the reader scrolls back up. */
+    :global(html[data-header="giveway"]) {
+      container-type: scroll-state;
+    }
+
+    :global(html[data-header="giveway"] .home-stage::before) {
       background: var(--ink);
-      opacity: var(--docked);
-      pointer-events: none;
-      content: "";
-      animation: cursor-blink 1.06s steps(2, jump-none) infinite;
+      transition:
+        opacity 300ms ease-out,
+        filter 300ms ease-out;
     }
 
-    @keyframes cursor-blink {
-      to {
-        background: transparent;
+    @container scroll-state(scrolled: bottom) {
+      @container style(--docked: 1) {
+        :global(html[data-header="giveway"] .home-bottle) {
+          opacity: 0.4;
+          filter: blur(1.5px);
+        }
+      }
+
+      :global(html[data-header="giveway"] .home-stage::before) {
+        opacity: calc(var(--docked) * 0.22);
+        filter: blur(1.5px);
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      :global(html[data-header="cursor"] .home-stage::after) {
-        animation: none;
-      }
+    :global(html[data-header="giveway"] .home-bottle) {
+      transition-property: translate, scale, top, rotate, color, --dock-t, opacity, filter;
+      transition-duration: var(--dock-duration), var(--dock-duration), var(--dock-duration),
+        var(--dock-duration), 120ms, var(--dock-duration), 300ms, 300ms;
     }
 
-    /* e: a small TUI window: a framed patch under an ink title bar. */
-    :global(html[data-header="window"] .home-stage::before) {
-      top: calc(var(--logo-top) - 14px);
-      height: calc(var(--logo-height) + 22px);
-      border: 1px solid var(--ink);
-      border-top-width: 6px;
+    /* e: ink not yet dry: the patch lands soft and spreads, then sets
+       sharp. */
+    :global(html[data-header="wetink"] .home-stage::before) {
+      background: var(--ink);
+      filter: blur(calc((1 - var(--docked)) * 8px));
+      transition:
+        opacity 250ms ease-out,
+        filter 700ms cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     /* 3: the band carries the name, like the article header. */

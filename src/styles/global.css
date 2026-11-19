@@ -291,6 +291,31 @@ main {
   max-width: 30ch;
 }
 
+/* The greeting ends at a typewriter-terminal cursor: one cell, blinking,
+   as if the line were still being typed. */
+.home-hero .about-copy > p:last-child::after {
+  display: inline-block;
+  width: 1ch;
+  height: 1.15em;
+  margin-inline-start: 0.4ch;
+  vertical-align: -0.2em;
+  background: var(--ink);
+  content: "";
+  animation: caret-blink 1.06s steps(2, jump-none) infinite;
+}
+
+@keyframes caret-blink {
+  to {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero .about-copy > p:last-child::after {
+    animation: none;
+  }
+}
+
 /* Static fallback: the bottle in place. */
 .home-bottle-slot {
   position: absolute;

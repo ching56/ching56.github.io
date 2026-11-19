@@ -1032,3 +1032,13 @@
 - Intent: five more docked-header candidates built on the left-hand paper patch, in a grid-notebook / BBS / TUI vein, added to the panel's 頁首 tab: grid (8px graph-paper squares behind the mark), tui (a double-rule frame), bbs (reverse video: ink patch, paper mark), cursor (a blinking block cursor beside the patch), window (a framed patch with an ink title bar)
 - Why: user: "能夠基於紙片（靠左的方格），給我一個方格筆記本、或是 BBS, TUI 的5 個 variant 嗎"
 - Result: done (dev only; dev server restarted first, as the panel stylesheet goes stale on edits). Checked each after docking at the user's pane width: grid shows 8px squares under a faint frame; tui a double rule; bbs an ink patch with the mark turned paper-white (style query on --docked); cursor an 8×14 block blinking beside the patch (stopped under reduced motion); window a framed patch with a 6px ink title bar. yarn run check clean
+
+## 2026-11-20 00:05 · claude-code
+- Intent: five concept-led takes on the reverse-video (BBS) patch, using blur and opacity only where the concept calls for them: kiln (a smoked-glass spy hole: translucent ink with backdrop blur), negative (a film negative over the page: backdrop invert, greyscale and slight blur), seal (a carved 陰刻 chop in ribbon red, the bottle cut out in paper, edge softened like ink soaking in), giveway (the mark recedes, faint and soft, while reading down and sharpens on scrolling up), wetink (the patch lands blurred like fresh ink and dries sharp over 0.7s)
+- Why: user liked 反白 and asked for blur/opacity effects, "但不要從效果出發，從概念出發"
+- Result: (pending)
+
+## 2026-11-20 00:15 · claude-code
+- Intent: (1) ship the blinking block cursor at the end of the homepage greeting ("…歡迎來到我的做陶日記 :)"), as a CSS ::after on the greeting paragraph: one cell wide, ink, blinking at 1.06s in two steps, steady under reduced motion; (2) remove the 紙片延伸 group (grid, tui, cursor, window) from the dev panel, keeping bbs as the base of the 反白延伸 group
+- Why: user: "我喜歡游標的概念，幫我加在 歡迎來到我的做陶日記 🙂 最後方" and "移除其他的延伸"
+- Result: done. The greeting ends in a 1ch × 1.15em ink block blinking (caret-blink, two steps over 1.06s), steady under reduced motion; it follows whatever the about.md greeting says. Panel: 紙片延伸 removed; 反白延伸 now lists 反白 (bbs) plus kiln, negative, seal, giveway, wetink, each checked after docking (kiln translucent ink with a 6px backdrop blur and the text hazy behind; negative a backdrop invert; seal a red chop with the bottle cut out; wetink lands blurred and sets sharp). yarn run check clean, 40/40 tests
