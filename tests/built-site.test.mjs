@@ -332,11 +332,12 @@ test("the approved continuous journal structure is semantic across reading surfa
     assert.match(html, /<body data-surface="character-proof">/);
     assert.match(html, /direction seed 9062ef67/);
     if (html !== chineseList) {
-      // The docked bottle silhouette and the name share one home link.
+      // The header is a breadcrumb: the bottle silhouette alone links home.
       assert.match(
         html,
-        /<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>/,
+        /<nav class="site-identity" aria-label="(?:目前位置|You are here)">\s*<ol class="site-crumbs">\s*<li>\s*<a class="site-mark" href="\/(?:zh-TW|en)\/" aria-label="(?:首頁|Home)">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<\/a>\s*<\/li>/,
       );
+      assert.doesNotMatch(html, /class="author-signature"/);
     }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
@@ -924,10 +925,11 @@ test("the compact frameless content contract stays within its confirmed limits",
     );
   }
 
-  const signatureRule = css.match(/\.author-signature\s*\{([^}]*)\}/);
-  assert.ok(signatureRule, "expected a CSS rule for the site signature");
-  assert.match(signatureRule[1], /font-weight:\s*400;/);
-  assert.match(signatureRule[1], /letter-spacing:\s*0\.08em;/);
+  // The header breadcrumb's title is regular-weight type on one line.
+  const crumbRule = css.match(/\.site-crumb\s*\{([^}]*)\}/);
+  assert.ok(crumbRule, "expected a CSS rule for the header breadcrumb");
+  assert.match(crumbRule[1], /font-size:\s*var\(--type-size\);/);
+  assert.doesNotMatch(css, /\.author-signature/);
 
   const linkRule = css.match(/^a\s*\{([^}]*)\}/m);
   assert.ok(linkRule, "expected a global link rule");
