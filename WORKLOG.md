@@ -1145,3 +1145,6 @@
 - Intent: housekeeping after the experiments: delete the dev-only BottlePositionPanel (and its import), the switched-off ruling (grid vars, .site-shell::before, the shell rounding it needed), the dead --logo-top/--logo-left, the unused breadcrumb `crumb` step (prop and CSS; the nav with the bottle stays), the untracked hero-layout comparison mock and its launch config; update DESIGN.md, design.json, STATE and the tests to match
 - Why: user: "Clean up unused code control panel and things we try. House keeping"
 - Result: done. Removed BottlePositionPanel.astro (~1,400 lines) and its import; the ruling vars and .site-shell::before; the shell's grid rounding; --logo-top/--logo-left; the crumb prop and its CSS; dock-era comments; the untracked .impeccable/mocks/hero-variants and its launch config (other pre-existing mocks left alone). STATE's Now rewritten as a concise handoff; DESIGN.md and design.json drop the panel, ruling, grid rule and breadcrumb step. yarn run check clean, 42/42 tests
+
+## 2026-11-20 04:55 · claude-code
+- Correction to the 04:45 result: BottlePositionPanel.astro was 983 lines, not ~1,400 (commit `6aaf819`: 1,085 deletions in all). Verified in dev after the server restarted: no panel, the bottle turns on scroll (40% at 150px), the shell is no longer rounded (972.8px at 1024), no horizontal overflow
