@@ -935,3 +935,8 @@
 - Intent: expose the logo's end state as :root variables (`--logo-top`, `--logo-left` from the shell's left edge, `--logo-rotate`, `--logo-width`; height derived) used by the dock keyframe, the article-header logo and the platen band height, and add a "Logo" section to the dev BottlePositionPanel to tune them live (stored globally under `logo` in localStorage `bottle-position`)
 - Why: user wants to adjust the logo's end position, rotation and size
 - Result: done; verified in dev at 1440×900: setting width 48 / rotate -20 / top 24 / left 10 moved the docked mark live (29×74 → 48×119 box) and saved under `logo`; the article header reads the same variables. Restored the panel's logo values to what it showed before the test. yarn run check clean, 40/40 tests
+
+## 2026-11-19 19:20 · claude-code
+- Intent: write the user's logo values from the dev panel into :root (top 16px, left -4px, rotate -3deg, width 22px) and clear the panel's stored logo values
+- Why: user sent "Logo　上 16px　左 -4px　角度 -3deg　寬 22px"
+- Result: done; verified at 1440×900: the docked home mark is 22px wide at -3deg, 16px from the top and -4px from the shell edge, and the article header logo matches; panel's stored logo cleared so its sliders show the CSS values. yarn run check clean, 40/40 tests

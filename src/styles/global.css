@@ -25,13 +25,12 @@
   --type-size: 0.9375rem;
   /* The bottle logo, docked on the home page and in every page header. Its
      frames are 396 by 980. Top and left place the docked mark (left from the
-     shell's edge); a 45deg lean widens the box, so the default left keeps the
-     tilted neck inside the column. */
-  --logo-width: 30px;
+     shell's edge). Values set by the user with the dev panel. */
+  --logo-width: 22px;
   --logo-height: calc(var(--logo-width) * 980 / 396);
-  --logo-rotate: -45deg;
-  --logo-top: 1rem;
-  --logo-left: calc(var(--logo-width) * 0.73);
+  --logo-rotate: -3deg;
+  --logo-top: 16px;
+  --logo-left: -4px;
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
