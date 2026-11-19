@@ -881,3 +881,8 @@
 - Intent: record the Character Proof world: DESIGN.md and .impeccable/design.json rewritten by the impeccable documenter from the built code; STATE decision 19 and next steps; the route surface brief rewritten
 - Why: a new world is unfinished until it is documented; the design hook reads DESIGN.md
 - Result: read back. Palette hexes match global.css, no Story Journal tokens remain, and the detector reports 0 findings on global.css against the new DESIGN.md. Open items go to the user: Chinese on the cell grid (Song/Ming with size-adjust), and the handwritten date face
+
+## 2026-11-19 16:20 · claude-code
+- Intent: remove the carriage scale (CarriageScale.astro, its CSS, its uses in DiaryFeed and PostArticle) and its mentions in the contract comment, DESIGN.md, design.json and STATE
+- Why: the user judged it "redundant and meaningless" on the homepage; it also clipped its last number ("5" of 50). The typed mail bracket was explicitly approved and stays
+- Result: done; the --ink-faint token went with it (no other use). yarn run check clean, 40/40 tests

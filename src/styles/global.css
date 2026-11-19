@@ -5,7 +5,6 @@
   --paper: #ffffff;
   --ink: #141414;
   --ink-muted: #5f5f5f;
-  --ink-faint: #b4b4b4;
   --ribbon: #c4161c;
   /* Monospace for every typed cell; CJK falls back to the platform's sans. */
   --font-type: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono",
@@ -204,19 +203,6 @@ main {
   padding-block: clamp(3rem, 7vw, 6.75rem);
 }
 
-/* A typewriter's paper scale over typed text, at the text's own size. */
-.carriage-scale {
-  /* Always stop on a "|" at a multiple of ten cells. */
-  width: calc(round(down, 100% - var(--gutter) - 1ch, 10ch) + 1ch);
-  margin: 0 0 2.5rem var(--gutter);
-  overflow: hidden;
-  color: var(--ink-faint);
-  font-family: inherit;
-  font-size: var(--type-size);
-  line-height: 1.15;
-  white-space: pre;
-}
-
 /* ---------- The glyph bottle ---------- */
 
 .home-flow {
@@ -405,7 +391,7 @@ main {
 
 /* ---------- Introduction and now note ---------- */
 
-/* Typed text starts on cell zero of the carriage scale, one gutter in. */
+/* Typed text starts one gutter in, past the step-number margin. */
 .about-intro,
 .now-note {
   margin-inline-start: var(--gutter);
@@ -505,7 +491,7 @@ time {
 }
 
 /* Step numbers hang in the left margin like a typed manuscript's line
-   numbers; everything else starts at cell zero of the carriage scale. */
+   numbers; everything else starts one gutter in. */
 .diary-entry {
   display: grid;
   grid-template-columns: var(--gutter) minmax(0, 1fr);
@@ -850,7 +836,7 @@ time {
   width: min(100%, calc(64ch + var(--gutter)));
 }
 
-.reading-article > :not(.carriage-scale) {
+.reading-article > * {
   margin-inline-start: var(--gutter);
 }
 

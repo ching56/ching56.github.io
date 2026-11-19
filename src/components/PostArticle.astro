@@ -5,7 +5,6 @@ import { UI } from "../config/i18n";
 import { SITE } from "../config/site.js";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getPostDate, getPostLabel, getPostSlug, getPostStep } from "../lib/posts";
-import CarriageScale from "./CarriageScale.astro";
 import MusicLinkCard from "./MusicLinkCard.astro";
 import PostLikes from "./PostLikes.astro";
 import ResponseEnding from "./ResponseEnding.astro";
@@ -48,7 +47,6 @@ const step = await getPostStep(post);
   languageSwitchPath={translatedPostPath}
 >
   <article class="reading-article">
-    <CarriageScale />
     <header class:list={["post-header", { "post-header--untitled": !post.data.title }]}>
       <p class="diary-step"><span class="visually-hidden">{post.data.language === "zh-TW" ? "步驟 " : "Step "}</span>{step}</p>
       {

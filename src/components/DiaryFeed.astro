@@ -5,7 +5,6 @@ import { render, type CollectionEntry } from "astro:content";
 import { UI, type SiteLanguage } from "../config/i18n";
 import { photoToAscii } from "../lib/ascii";
 import { getPostDate, getPostSlug, getPostsByLanguage } from "../lib/posts";
-import CarriageScale from "./CarriageScale.astro";
 
 interface Props {
   language: SiteLanguage;
@@ -55,7 +54,6 @@ const entries = await Promise.all(
 
 <section class="register-panel diary-feed" aria-labelledby="register-heading">
   <h1 id="register-heading" class="visually-hidden">{ui.postsLabel}</h1>
-  <CarriageScale />
   {entries.length === 0 ? (
     <p class="empty-register">{ui.emptyPostsMessage}</p>
   ) : (
