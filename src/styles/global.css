@@ -134,14 +134,63 @@ main {
   padding-block: clamp(3rem, 7vw, 6.75rem);
 }
 
-.home-flow {
+/* Below the desktop stage the flow dissolves into the stage grid, so the
+   bottle can share the greeting's row while now/list span the full width. */
+.home-stage {
   display: grid;
-  gap: clamp(4.5rem, 9vw, 8rem);
-  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1.25rem;
+  row-gap: clamp(4.5rem, 9vw, 8rem);
+}
+
+.home-flow {
+  display: contents;
+}
+
+.home-flow > * {
+  grid-column: 1 / -1;
+}
+
+.home-flow > .about-intro {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .creative-coding-area {
-  display: none;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* 21-frame turntable sprite; plays only while hovered, holds its angle otherwise. */
+.spinning-bottle {
+  --frames: 21;
+  width: 3.75rem;
+  aspect-ratio: 297 / 735;
+  background: url("/media/home/bottle-spin-small.webp") 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
+  animation: bottle-spin 2.4s steps(var(--frames)) infinite paused;
+}
+
+.spinning-bottle:hover {
+  animation-play-state: running;
+}
+
+@keyframes bottle-spin {
+  to {
+    background-position: calc(var(--frames) / (var(--frames) - 1) * 100%) 0;
+  }
+}
+
+/* Touch has no hover; a pointer cursor makes iOS Safari emulate it on tap. */
+@media (hover: none) {
+  .spinning-bottle {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinning-bottle {
+    animation: none;
+  }
 }
 
 .about-intro {
@@ -535,34 +584,19 @@ time {
     min-height: calc(100svh - 13rem);
   }
 
+  .home-flow {
+    display: grid;
+    gap: clamp(4.5rem, 9vw, 8rem);
+    min-width: 0;
+  }
+
   .creative-coding-area {
-    display: block;
     min-height: 100%;
   }
 
-  /* 21-frame turntable sprite; plays only while hovered, holds its angle otherwise. */
   .spinning-bottle {
-    --frames: 21;
     width: 148.5px;
-    aspect-ratio: 297 / 735;
-    background: url("/media/home/bottle-spin.webp") 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
-    animation: bottle-spin 2.4s steps(var(--frames)) infinite paused;
-  }
-
-  .spinning-bottle:hover {
-    animation-play-state: running;
-  }
-
-  @keyframes bottle-spin {
-    to {
-      background-position: calc(var(--frames) / (var(--frames) - 1) * 100%) 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .spinning-bottle {
-      animation: none;
-    }
+    background-image: url("/media/home/bottle-spin.webp");
   }
 }
 
