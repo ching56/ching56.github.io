@@ -43,7 +43,7 @@
       { "name": "color-hover", "value": "120ms ease-out", "purpose": "Control and mark color shift to ribbon red." },
       { "name": "key-press", "value": "translate: 0 1px", "purpose": "A pressed control sinks one pixel like a key." },
       { "name": "arrow-slide", "value": "200ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "External-link arrow slides 2px up-right on hover." },
-      { "name": "bottle-dock", "value": "linear, scroll(root), range 0 to the dock range (bottle top + height - 6rem, min 40dvh), steps(frames, jump-none) for the turn", "purpose": "The home bottle photo turns, leans, shrinks and darkens into a solid masked silhouette as the logo. Longhands only." },
+      { "name": "bottle-dock", "value": "linear, scroll(root), range 0 to the dock range (bottle top + height - 6rem, min 40dvh), steps(frames, jump-none) for the turn", "purpose": "The home bottle photo turns, leans, shrinks and darkens into a solid masked silhouette as the logo, ending at the :root logo variables (--logo-top, --logo-left from the shell edge, --logo-rotate, --logo-width) that the page-header logo shares. Longhands only." },
       { "name": "platen-rise", "value": "linear, scroll(root), range over the last 15dvh of the dock range", "purpose": "Paper band fades in once the mark is docked." }
     ],
     "breakpoints": [
