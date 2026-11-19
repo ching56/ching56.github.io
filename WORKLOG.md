@@ -830,3 +830,8 @@
 ## 2026-11-19 · claude-code
 - Intent: set the homepage greeting hero to `font-size: 1rem` as the user specified.
 - Result: done — 43/43 tests pass; greeting now fits on one line at 800px. Not pushed.
+
+## 2026-11-19 · claude-code
+- Intent: remove the article-header stamp ("ZH-TW　2026-10-11") so only the localized date remains; collapse the post header to one column and drop the now-unused stamp CSS and its test selector.
+- Why: user asked to remove it; it duplicates the date.
+- Result: done — check 0 errors/warnings; 43/43 tests pass (new assertion: no stamp on articles). Viewed covid at desktop and bottles at 375px: header shows only 「2026年10月11日」. Not pushed.

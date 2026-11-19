@@ -55,9 +55,6 @@ const label = getPostLabel(post);
         )
       }
       <time datetime={date.dateTime}>{date.label}</time>
-      <span class="article-stamp" aria-hidden="true">
-        {post.data.language.toUpperCase()}　{date.dateTime}
-      </span>
     </header>
     {post.data.musicLinkCard && <MusicLinkCard card={post.data.musicLinkCard} />}
     <div class="post-body">

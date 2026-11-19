@@ -359,6 +359,7 @@ test("the approved continuous journal structure is semantic across reading surfa
   ]);
 
   assert.doesNotMatch(chineseList, /class="author-signature"/);
+  assert.doesNotMatch(chinesePost, /article-stamp|ZH-TW　/);
 
   for (const html of [englishList, chineseList, chinesePost]) {
     assert.match(html, /<body data-surface="story-journal">/);
@@ -871,7 +872,6 @@ test("the compact frameless content contract stays within its confirmed limits",
 
   for (const selector of [
     ".about-copy h2",
-    ".article-stamp",
     ".music-link-card__work",
     ".music-link-card__providers a",
     ".response-cta",
