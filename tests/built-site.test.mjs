@@ -843,24 +843,17 @@ test("content pages load no external webfonts or Astro runtime JavaScript beyond
     }
   }
 
-  // The one font is the diary dates' handwriting, self-hosted as only the
-  // digits and slash a date needs.
+  // System faces only: no font files and no @font-face.
   assert.deepEqual(
     outputFiles.filter((file) => /\.(?:woff2?|ttf|otf|eot)$/i.test(file)),
-    ["fonts/nanum-pen-script-digits.woff2"],
+    [],
   );
-  const { size } = await stat(new URL("fonts/nanum-pen-script-digits.woff2", distDirectory));
-  assert.ok(size < 4096, `expected the date subset to stay tiny, got ${size} bytes`);
 
   const stylesheets = outputFiles.filter((file) => file.endsWith(".css"));
-  const css = (
-    await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
-  ).join("\n");
-  assert.doesNotMatch(css, /@import\b/i);
-  const faces = css.match(/@font-face\s*\{[^}]*\}/gi) ?? [];
-  assert.equal(faces.length, 1);
-  assert.match(faces[0], /url\(["']?\/fonts\/nanum-pen-script-digits\.woff2["']?\)/);
-  assert.match(faces[0], /unicode-range:\s*U\+2f-39/i);
+  for (const stylesheet of stylesheets) {
+    const css = await readFile(new URL(stylesheet, distDirectory), "utf8");
+    assert.doesNotMatch(css, forbiddenFontRule);
+  }
 });
 
 test("scroll-driven animations survive minification as longhands", async () => {

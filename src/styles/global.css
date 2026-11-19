@@ -1,28 +1,20 @@
 /* Character Proof: a pottery diary typed on white paper. Black and red ribbon
-   ink, one monospace cell, plain photographs. Dates are the only handwriting
-   on the page. */
-/* The diary dates' handwriting: Nanum Pen Script (OFL, licence beside the
-   file), self-hosted as just the digits and "/" a date needs, under 2 KB.
-   Anything else falls through to the platform's handwriting faces. */
-@font-face {
-  font-family: "Diary Date";
-  src: url("/fonts/nanum-pen-script-digits.woff2") format("woff2");
-  font-display: swap;
-  unicode-range: U+2F-39;
-}
+   ink, one monospace cell, plain photographs. */
 
 :root {
-  /* Notebook paper: a cream stock ruled in faint squares (see html). */
-  --paper: #f5f3e6;
-  --grid: 20px;
+  /* White paper. A notebook ruling can be printed over the shell (see
+     .site-shell::before); the user has it switched off (opacity 0), so its
+     cell and edge are none, while the 10px cell still sizes the shell. */
+  --paper: #ffffff;
+  --grid: 10px;
   /* The printed area's right margin: ticks and dots live here. */
   --grid-margin: 12px;
-  /* One 20px cell of the ruling, after a Japanese notebook's square grid:
-     the horizontal rule runs through, the vertical one stops short of each
-     crossing, so it reads as dashed. */
-  --grid-cell: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M0 .5H20' stroke='%23141414' stroke-opacity='.11'/%3E%3Cpath d='M.5 3V18' stroke='%23141414' stroke-opacity='.11'/%3E%3C/svg%3E");
-  --grid-edge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M19.5 3V18' stroke='%23141414' stroke-opacity='.11'/%3E%3C/svg%3E");
-  --grid-line: rgb(20 20 20 / 11%);
+  /* The ruling's cell and right-edge rule, as SVG (the dev panel rebuilds
+     them): horizontal rules run through, verticals stop short of each
+     crossing, after a Japanese square-grid notebook. Off: none. */
+  --grid-cell: none;
+  --grid-edge: none;
+  --grid-line: transparent;
   /* The shell is a whole number of grid cells wide, so its edges sit on
      the ruling. */
   --shell-width-vw: round(down, min(100vw - clamp(2rem, 5vw, 5rem), 82rem), var(--grid));
@@ -32,9 +24,6 @@
   /* Monospace for every typed cell; CJK falls back to the platform's sans. */
   --font-type: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono",
     "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace;
-  /* Diary dates: the self-hosted digits, then platform handwriting faces. */
-  --diary-date-font: "Diary Date", "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual,
-    cursive;
   --type-size: 0.9375rem;
   /* The bottle logo, docked on the home page and in every page header. Its
      frames are 396 by 980. Top and left place the docked mark (left from the
@@ -324,31 +313,6 @@ main {
   max-width: 30ch;
 }
 
-/* The greeting ends at a typewriter-terminal cursor: one cell, blinking,
-   as if the line were still being typed. */
-.home-hero .about-copy > p:last-child::after {
-  display: inline-block;
-  width: 1ch;
-  height: 1.15em;
-  margin-inline-start: 0.4ch;
-  vertical-align: -0.2em;
-  background: var(--ink);
-  content: "";
-  animation: caret-blink 1.06s steps(2, jump-none) infinite;
-}
-
-@keyframes caret-blink {
-  to {
-    background: transparent;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-hero .about-copy > p:last-child::after {
-    animation: none;
-  }
-}
-
 /* Static fallback: the bottle in place. */
 .home-bottle-slot {
   position: absolute;
@@ -579,11 +543,24 @@ html[data-spin="ready"] .home-bottle {
 
   /* Once docked, the mark sits on a strip of paper, like the platen's top
      edge: text scrolls under paper, never under the mark. */
+  /* Once docked, the mark sits on a disc of paper centred on it, so text
+     scrolling past never runs under the mark. Where the mark is too close
+     to the screen edge for the whole disc (narrow screens), the mark moves
+     in rather than the disc off-centre. */
+  .home-stage:has(.home-bottle) {
+    --disc: calc(var(--logo-height) + 10px);
+    --edge: calc((100vw - var(--shell-width-vw)) / 2);
+    --logo-left: max(-4px, var(--disc) / 2 + 4px - var(--logo-width) / 2 - var(--edge));
+  }
+
   .home-stage:has(.home-bottle)::before {
     position: fixed;
     z-index: 9;
-    inset: 0 0 auto;
-    height: max(5.5rem, var(--logo-top) + var(--logo-height));
+    top: calc(var(--logo-top) + var(--logo-height) / 2 - var(--disc) / 2);
+    left: calc(var(--edge) + var(--logo-left) + var(--logo-width) / 2 - var(--disc) / 2);
+    width: var(--disc);
+    height: var(--disc);
+    border-radius: 50%;
     background: var(--paper);
     content: "";
     opacity: var(--docked);
@@ -712,13 +689,30 @@ time {
   min-width: 0;
 }
 
+/* Dates are struck like the email control: the typewriter face at the
+   type size between ribbon-red brackets, the "[" on the text's edge. */
 .diary-date {
+  display: flex;
+  gap: 0.5ch;
+  align-items: center;
+  justify-self: start;
+  min-height: 2.75rem;
   margin: 0;
-  font-family: var(--diary-date-font);
-  font-size: 1.5rem;
+  font-family: var(--font-type);
+  font-size: var(--type-size);
   font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.diary-date::before {
+  color: var(--ribbon);
+  content: "[";
+}
+
+.diary-date::after {
+  color: var(--ribbon);
+  content: "]";
 }
 
 .diary-date time {
@@ -837,14 +831,15 @@ time {
       translate: 0 -50%;
       display: grid;
       place-items: center;
-      min-width: 2.75rem;
+      min-width: 2rem;
       height: 2.75rem;
-      padding-inline: 0.5ch;
+      padding-inline: 0;
       border: 0;
       background: var(--paper);
       color: var(--ink);
       font-family: var(--font-type);
-      font-size: var(--type-size);
+      font-size: 1.5rem;
+      line-height: 1;
       cursor: pointer;
     }
 
@@ -856,14 +851,16 @@ time {
       opacity: 0;
     }
 
+    /* Bare arrows beside the row: in the page margin when there is room,
+       otherwise against the screen edge. */
     .diary-photos::scroll-button(left) {
-      content: "[<]" / "上一張";
-      left: calc(anchor(left) + 0.5rem);
+      content: "←" / "上一張";
+      left: max(0px, calc(anchor(left) - 2.5rem));
     }
 
     .diary-photos::scroll-button(right) {
-      content: "[>]" / "下一張";
-      right: calc(anchor(right) + 0.5rem);
+      content: "→" / "下一張";
+      right: max(0px, calc(anchor(right) - 2.5rem));
     }
   }
 }

@@ -6,8 +6,8 @@
     "colorMeta": {
       "paper": {
         "role": "neutral",
-        "displayName": "Notebook Paper",
-        "canonical": "#f5f3e6",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
         "tonalRamp": ["#141414", "#2f2f2f", "#5f5f5f", "#808080", "#b4b4b4", "#d4d4d4", "#ebebeb", "#ffffff"]
       },
       "ink": {
@@ -31,7 +31,7 @@
     },
     "typographyMeta": {
       "display": { "displayName": "Entry Title", "purpose": "Article h1; also the 1.5rem type ceiling." },
-      "date": { "displayName": "Handwritten Date", "purpose": "Diary entry dates only. The face is an open user decision; the stack is a placeholder." },
+      "date": { "displayName": "Bracketed Date", "purpose": "Diary entry dates, typed in the monospace stack at the type size between ribbon-red brackets, like the email control." },
       "body": { "displayName": "Reading Body", "purpose": "Article prose in a 64ch column." },
       "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, (--type-size)." },
       "metadata": { "displayName": "Metadata", "purpose": "Generic time, performer line, provider links." },
@@ -44,10 +44,9 @@
       { "name": "key-press", "value": "translate: 0 1px", "purpose": "A pressed control sinks one pixel like a key." },
       { "name": "arrow-slide", "value": "200ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "External-link arrow slides 2px up-right on hover." },
       { "name": "bottle-dock", "value": "triggered past --dock-threshold (48px) by a step-end scroll(root) flip of @property --docked; --dock-out-duration 450ms / --dock-in-duration 550ms (switched by @container style(--docked: 1), since animation-derived values are invalid in transitions), cubic-bezier(0.32, 0.72, 0, 1) on translate/scale/rotate, darkening from --dock-darken-from, turn toggled by --dock-spin; the turntable sprite steps once (steps(21, jump-none)) and the photo darkens via --dock-t before the silhouette replaces it; at rest the bottle stands in one row with the greeting (wide 12dvh/36dvh at the shell edge; narrow 3dvh/16dvh, 5% in, -21deg, 76px gap, greeting aligned to the bottle's foot via --greeting-align: end). Sprites: 264×653 frames (wide, ~460 KB) and 158×392 (phone, ~180 KB), referenced only after an inline loader sets html[data-spin=ready]; otherwise the bottle docks without turning", "purpose": "The home bottle photo turns, leans, shrinks and darkens into a solid masked silhouette as the logo, ending at the :root logo variables (--logo-top 16px, --logo-left -4px from the shell edge, --logo-rotate -3deg, --logo-width 22px; set by the user) that the page-header logo shares. Longhands only." },
-      { "name": "platen-rise", "value": "opacity follows --docked, transitioned with the dock", "purpose": "Paper band fades in once the mark is docked." },
+      { "name": "paper-disc", "value": "opacity follows --docked, transitioned with the dock", "purpose": "A paper disc centred on the docked mark fades in once it docks." },
       { "name":  "lightbox", "value":  "open 200ms cubic-bezier(0.23, 1, 0.32, 1) from scale 0.95 via @starting-style; close 150ms ease-out; display/overlay allow-discrete", "purpose":  "Photo lightbox enters gently and leaves faster; reduced motion keeps only the fade." },
-      { "name":  "reduced-dock", "value":  "300ms linear fade, position swapped at the midpoint while invisible", "purpose":  "Under reduced motion the dock fades out and back in as the mark, with no travel or turn." },
-      { "name": "greeting-cursor", "value": "1.06s steps(2, jump-none) infinite, background ink to transparent", "purpose": "The homepage greeting ends in a blinking 1ch block cursor, as if still being typed; steady under reduced motion." }
+      { "name":  "reduced-dock", "value":  "300ms linear fade, position swapped at the midpoint while invisible", "purpose":  "Under reduced motion the dock fades out and back in as the mark, with no travel or turn." }
     ],
     "breakpoints": [
       { "name": "narrow", "value": "48rem" },
@@ -75,9 +74,9 @@
       "name": "Diary Entry",
       "kind": "card",
       "refersTo": "diary-entry",
-      "description": "A handwritten date heads clamped typed text in a single column.",
+      "description": "A bracketed date heads clamped typed text in a single column.",
       "html": "<article class=\"ds-entry\"><p class=\"ds-date\">11月 8日</p><div class=\"ds-text\"><p>今天把瓶子上了第一層釉。</p></div></article>",
-      "css": ".ds-entry { display: grid; gap: 0.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-date { margin: 0; font-family: \"Diary Date\", \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
+      "css": ".ds-entry { display: grid; gap: 0.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-date { margin: 0; font-family: ui-monospace, monospace; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
     },
     {
       "name": "English Plain List Row",
@@ -90,21 +89,20 @@
   ],
   "narrative": {
     "northStar": "Character Proof",
-    "overview": "The pottery diary is typed out like a proof pulled on a typewriter onto a page of grid notebook paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
+    "overview": "The pottery diary is typed out like a proof pulled on a typewriter onto white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. Dates are struck in brackets like the controls. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
-      "Cream notebook paper (#f5f3e6) ruled in 20px squares (dashed verticals; in the right margin every second rule runs out and a dot marks every tenth), with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
+      "White paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink. A notebook ruling exists but is switched off.",
       "One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.",
       "All text starts flush on the column edge; only control brackets hang one cell into the margin.",
       "Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.",
-      "Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil."
+      "Flat everywhere: no shadows, no fills; the one radius is the paper disc behind the docked mark, and depth is only that disc and the lightbox veil."
     ],
     "rules": [
       { "name": "The Single Ribbon Rule", "body": "Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.", "section": "colors" },
-      { "name": "The Notebook Rule", "body": "The page is cream grid paper; the shell is the printed area, a whole number of 20px cells wide so the text column starts and ends on a rule. Every veil, backing and band uses the same paper value.", "section": "colors" },
+      { "name": "The Paper Rule", "body": "The page is plain white paper; the shell is a whole number of --grid cells wide, so a ruling, when switched on, starts and ends on the text column's edges.", "section": "colors" },
       { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (measures 64ch and 70ch).", "section": "typography" },
-      { "name": "The Handwritten Date Rule", "body": "Only dates take --diary-date-font. No other element may borrow it.", "section": "typography" },
       { "name": "The Type Ceiling Rule", "body": "Nothing exceeds 1.5rem.", "section": "typography" },
-      { "name": "The One Subset Rule", "body": "System faces everywhere except the dates' handwriting, which ships as one same-origin digits-and-slash subset under 4 KB. A test enforces exactly that one @font-face.", "section": "typography" },
+      { "name": "The No Webfont Rule", "body": "System faces only; no @font-face. A test enforces it.", "section": "typography" },
       { "name": "The Flat Paper Rule", "body": "No shadows, glass, blur, or gradients. Depth is paper over text, nothing more.", "section": "elevation" }
     ],
     "dos": [
@@ -116,13 +114,12 @@
       "Do keep type at or below 1.5rem."
     ],
     "donts": [
-      "Don't use --diary-date-font for anything but dates.",
-      "Don't add any other @font-face or webfont; Chinese webfonts are megabytes.",
+            "Don't add any other @font-face or webfont; Chinese webfonts are megabytes.",
       "Don't add shadows, border radii, glass, blur, fills, or card frames.",
       "Don't fill with ribbon red or set paragraph text in it.",
       "Don't draw the ruling outside the shell or change its cell without rounding the shell to match.",
       "Don't write animation: shorthand with a timeline.",
-      "Don't treat the handwriting face as chosen, or Chinese as grid-aligned; both are open (see Typography)."
+      "Don't treat Chinese as grid-aligned; that is open (see Typography)."
     ]
   }
 }

@@ -132,8 +132,7 @@
   <section class="bottle-panel-section" role="tabpanel" data-panel="date">
     <p class="bottle-panel-hint">文章日期的樣式</p>
     <div class="bottle-panel-choices">
-      <label><input type="radio" name="date-variant" value="" />手寫（目前）</label>
-      <label><input type="radio" name="date-variant" value="bracket" />[ 方括號 ]</label>
+      <label><input type="radio" name="date-variant" value="" />[ 方括號 ]（目前）</label>
     </div>
   </section>
   <section class="bottle-panel-section" role="tabpanel" data-panel="grid">
@@ -177,8 +176,8 @@
   <section class="bottle-panel-section" role="tabpanel" data-panel="paper">
     <p class="bottle-panel-hint">紙色</p>
     <div class="bottle-panel-choices">
-      <label><input type="radio" name="paper-color" value="#f5f3e6" />米白（目前）</label>
-      <label><input type="radio" name="paper-color" value="#ffffff" />純白</label>
+      <label><input type="radio" name="paper-color" value="#ffffff" />純白（目前）</label>
+      <label><input type="radio" name="paper-color" value="#f5f3e6" />米白</label>
       <label><input type="radio" name="paper-color" value="#faf7ee" />象牙</label>
       <label><input type="radio" name="paper-color" value="#f1f1ee" />灰白</label>
       <label><input type="radio" name="paper-color" value="#ebe2cf" />牛皮</label>
@@ -595,7 +594,7 @@
     }
 
     // Paper colour and light, kept with the other values.
-    const DEFAULT_PAPER = "#f5f3e6";
+    const DEFAULT_PAPER = "#ffffff";
     const applyPaper = (paper) => {
       if (paper.color && paper.color !== DEFAULT_PAPER) root.style.setProperty("--paper", paper.color);
       else root.style.removeProperty("--paper");
@@ -640,7 +639,7 @@
     }
 
     // The ruling: rebuilt as SVG cells from the chosen values.
-    const GRID_DEFAULTS = { cell: 20, opacity: 11, width: 1, gap: 3, color: "#141414", mode: "dash", marks: true };
+    const GRID_DEFAULTS = { cell: 10, opacity: 0, width: 1, gap: 3, color: "#141414", mode: "dash", marks: true };
     const svgUrl = (body, cell) =>
       `url("data:image/svg+xml,${encodeURIComponent(
         `<svg xmlns='http://www.w3.org/2000/svg' width='${cell}' height='${cell}'>${body}</svg>`,

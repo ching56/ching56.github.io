@@ -1091,3 +1091,8 @@
 
 ## 2026-11-20 02:30 · claude-code
 - Intent/Result: the disc candidate now keeps the mark at its exact centre; instead of clamping the disc in from the screen edge (which put it off-centre on narrow screens), the mark's --logo-left is raised just enough for the whole disc to fit. User: "in circle variant, logo should be centered vertically and horizontally"
+
+## 2026-11-20 02:40 · claude-code
+- Intent: ship the user's panel config ("save config"): paper #ffffff; ruling cell 10px with opacity 0, so the ruling is switched off (vars kept so the panel can bring it back) while the shell still rounds to 10px; photo-row arrows → thin (bare ←/→ on paper, in the margin or clamped to the screen edge); post dates → the email style `[ 2026/11/12 ]` (mono, type size, ribbon brackets on the text edge), which retires Nanum Pen Script (font file, @font-face and the one-subset test exception removed); docked header → the paper disc centred on the mark (mark moved in on narrow screens so the disc fits). Then clear the panel's stored values so it shows the shipped defaults
+- Why: user: "save config"
+- Result: done, together with the user's mid-turn ask to remove the greeting's blinking cursor. Verified in dev after clearing the panel's stored choices: white paper, no visible ruling, `[ 2026/10/31 ]` in ui-monospace, → arrows, cursor gone, a 64px disc whose centre matches the mark's (36.2px at the user's ~700px pane). Font file, licence and @font-face removed; the font test asserts none again. DESIGN.md, design.json, STATE, AGENTS updated. yarn run check clean, 40/40 tests
