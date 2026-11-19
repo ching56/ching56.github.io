@@ -3,8 +3,9 @@
 // to the browser; pages receive plain text inside <pre> elements.
 import sharp from "sharp";
 
-// Light to dark: a typewriter's own marks, from a blank cell to a struck-over @.
-const RAMP = " .,:;-~=+*x#%@";
+// Light to dark: a typewriter's own marks, from a blank cell to a struck-over @,
+// ordered so each step lays down visibly more ink than the last.
+const RAMP = " .:-=+*#%@";
 // A monospace cell is about 0.6em wide; art is set with line-height 1.
 export const CELL_ASPECT = 0.6;
 
@@ -37,10 +38,15 @@ export function photoToAscii(file: string, rows: number): Promise<AsciiArt> {
     const source = fromProject(file);
     const { width = 1, height = 1 } = await sharp(source).rotate().metadata();
     const cols = columnsFor(width, height, rows);
+    // Local contrast first, so the pot separates from table and wall before
+    // the picture is reduced to a few hundred cells.
     const data = await sharp(source)
       .rotate()
-      .resize(cols, rows, { fit: "fill" })
       .greyscale()
+      .normalise()
+      .clahe({ width: 8, height: 8 })
+      .resize(cols, rows, { fit: "fill" })
+      .sharpen()
       .raw()
       .toBuffer();
     const sorted = [...data].sort((a, b) => a - b);
@@ -52,7 +58,7 @@ export function photoToAscii(file: string, rows: number): Promise<AsciiArt> {
       let line = "";
       for (let x = 0; x < cols; x += 1) {
         const light = Math.min(1, Math.max(0, (data[y * cols + x] - low) / (high - low)));
-        line += RAMP[Math.round((1 - light) ** 1.2 * (RAMP.length - 1))];
+        line += RAMP[Math.round((1 - light) * (RAMP.length - 1))];
       }
       lines.push(line);
     }

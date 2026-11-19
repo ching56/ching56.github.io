@@ -18,8 +18,9 @@ const postImages = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 const MARKDOWN_IMAGE = /!\[([^\]]*)\]\((\.\/[^)\s]+)\)/g;
-// Thumbnail art is typed at this many lines, one per 12rem / 32 of height.
-const ASCII_ROWS = 32;
+// Thumbnail art is typed at this many lines: about 8px glyphs at 12rem,
+// large enough to read as typed characters rather than grey texture.
+const ASCII_ROWS = 24;
 
 async function getPhotos(post: CollectionEntry<"posts">) {
   const directory = `/${post.filePath ?? ""}`.replace(/\/[^/]*$/, "");

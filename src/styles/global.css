@@ -206,6 +206,8 @@ main {
 
 /* A typewriter's paper scale over typed text, at the text's own size. */
 .carriage-scale {
+  /* Always stop on a "|" at a multiple of ten cells. */
+  width: calc(round(down, 100% - var(--gutter) - 1ch, 10ch) + 1ch);
   margin: 0 0 2.5rem var(--gutter);
   overflow: hidden;
   color: var(--ink-faint);
@@ -335,6 +337,20 @@ main {
     .home-stage:has(.home-bottle) {
       min-height: 140dvh;
     }
+
+    /* Once docked, the mark sits on a strip of paper, like the platen's
+       top edge: text scrolls under paper, never under the mark. */
+    .home-stage:has(.home-bottle)::before {
+      position: fixed;
+      z-index: 9;
+      inset: 0 0 auto;
+      height: 5.5rem;
+      background: var(--paper);
+      content: "";
+      animation: platen-rise linear both;
+      animation-timeline: scroll(root);
+      animation-range: 30dvh 40dvh;
+    }
   }
 }
 
@@ -358,6 +374,16 @@ main {
 @keyframes bottle-strike {
   0%,
   45% {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes platen-rise {
+  from {
     opacity: 0;
   }
 
@@ -545,8 +571,9 @@ time {
 }
 
 /* Photos move to the row below, so the text keeps only words. */
-.diary-text p:has(> img),
-.diary-text img {
+.diary-text p:has(img),
+.diary-text img,
+.diary-text .glyph-photo {
   display: none;
 }
 
@@ -683,9 +710,10 @@ time {
       translate: 0 -50%;
       display: grid;
       place-items: center;
-      width: 2.75rem;
+      min-width: 2.75rem;
       height: 2.75rem;
-      border: 1px solid var(--ink);
+      padding-inline: 0.5ch;
+      border: 0;
       background: var(--paper);
       color: var(--ink);
       font-family: var(--font-type);
@@ -695,7 +723,6 @@ time {
 
     .diary-photos::scroll-button(*):hover {
       color: var(--ribbon);
-      border-color: var(--ribbon);
     }
 
     .diary-photos::scroll-button(*):disabled {
@@ -703,12 +730,12 @@ time {
     }
 
     .diary-photos::scroll-button(left) {
-      content: "<" / "上一張";
+      content: "[<]" / "上一張";
       left: calc(anchor(left) + 0.5rem);
     }
 
     .diary-photos::scroll-button(right) {
-      content: ">" / "下一張";
+      content: "[>]" / "下一張";
       right: calc(anchor(right) + 0.5rem);
     }
   }
@@ -934,6 +961,48 @@ time {
 .post-body video {
   width: auto;
   max-height: 85svh;
+}
+
+/* Article photos carry their typed rendering, sized from the column width. */
+.glyph-photo {
+  container-type: inline-size;
+  position: relative;
+  display: block;
+}
+
+.glyph-photo-ascii {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: calc(100cqw / (var(--cols) * 0.6));
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: pre;
+  background: var(--paper);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .glyph-photo {
+      view-timeline: --glyph-photo block;
+    }
+
+    .glyph-photo-ascii {
+      animation: type-develop linear both;
+      animation-timeline: --glyph-photo;
+      animation-range: entry 0% cover 55%;
+    }
+
+    .glyph-photo img {
+      animation: photo-develop linear both;
+      animation-timeline: --glyph-photo;
+      animation-range: entry 0% cover 55%;
+    }
+  }
 }
 
 .post-body pre {

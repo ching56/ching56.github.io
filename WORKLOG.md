@@ -866,3 +866,8 @@
 - Why: user judged the current look "too generic"; scope is the whole site; the bottle hero→logo and the diary-feed form must survive
 - Plan: build-time ASCII renders (sharp) for the 21-frame bottle and every feed photo, zero runtime JS; scroll-driven glyph→photo reveal; typewriter black/red ribbon palette; step numbers on entries; tests updated; finish review + DESIGN.md rewrite at the end
 - Result: built and verified (yarn run check clean, 39/39 tests). Homepage HTML is 29.5 KB gzipped with the glyph bottle inlined; the 650 KB bottle sprite moved to src/assets and no longer ships. Desktop 1440 and mobile 375 inspected in two rounds; no horizontal overflow. Next: finish review, then DESIGN.md rewrite by the documenter.
+
+## 2026-11-19 14:45 · claude-code
+- Intent: apply the finish reviewer's material fixes #2–#6 (glyph legibility, paper band behind the docked mark, glyph-developed article photos via a Satteri hast plugin, typed [<]/[>] scroll buttons, carriage scale ending on a ten-cell stop)
+- Why: fresh-context finish review returned disposition "fix"; #1 (CJK size-adjust @font-face, which would switch Chinese to Song/Ming and breaks the no-@font-face rule) goes to the user; #7 declined because the contract already carries the printed seed key
+- Result: done, yarn run check clean, 39/39 tests; recaptured desktop and mobile; verdict pass requested from the same reviewer
