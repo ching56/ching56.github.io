@@ -821,3 +821,8 @@
 - Intent: remove the " · " separator from the blog: the page title ("Title · 李至青的部落格") and the article stamp ("ZH-TW · date"); separate with an ideographic space instead, and update the two test assertions that encode the old format.
 - Why: the user said "Never use this separator" (applies across their projects; dream-room prototypes already converted). The blog already uses U+3000 to join untitled previews, so it is the house separator.
 - Result: done — astro check 0 errors/warnings, production build 11 pages, 43/43 tests pass. No other separator remains in src/ or tests/ text files. Not pushed.
+
+## 2026-11-19 · claude-code
+- Intent: drop the site header (signature + locale switch) from the zh-TW homepage only, and replace the two-line bio with the single greeting 「嗨，我是至青。我喜歡捏陶跟做網站，歡迎來到我的做陶日記 :)」 set as the homepage hero (1.5rem, the type ceiling). Article pages keep the header so readers can still get home.
+- Why: user asked to remove the header and use one greeting + self-intro as the main hero.
+- Result: done — `yarn run check` 0 errors/warnings; 43/43 tests pass (homepage tests now assert no `<header>` and the new greeting). Viewed at 375px, 800px and 1440px; `word-break: keep-all` added so the hero breaks only at 。and ，. Not pushed.

@@ -15,6 +15,7 @@ interface Props {
     path: string;
   }>;
   languageSwitchPath?: string;
+  showHeader?: boolean;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   language,
   alternates = [],
   languageSwitchPath = UI[language].languageSwitch.href,
+  showHeader = true,
 } = Astro.props;
 const pageTitle = title ? `${title}　${SITE.title}` : SITE.title;
 const canonicalUrl = new URL(Astro.url.pathname, SITE.url);
@@ -64,6 +66,7 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
     -->
     <a class="skip-link" href="#main-content">{ui.skipContentLabel}</a>
     <div class="site-shell">
+      {showHeader && (
       <header class="site-header">
         <div class="site-identity">
           <a class="author-signature" href={ui.homePath}>
@@ -82,6 +85,7 @@ const showSecondarySiteTitle = SITE.title !== SITE.author.displayName;
           </a>
         </nav>
       </header>
+      )}
       <main id="main-content">
         <slot />
       </main>

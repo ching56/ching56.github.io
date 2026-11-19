@@ -1,11 +1,9 @@
 ---
 title: "關於"
 date: 2022-12-22
-updated: 2026-10-18
+updated: 2026-11-19
 language: zh-TW
 contentType: page
 ---
 
-Hi，我是至青，我喜歡做網站、App 跟陶瓷！
-
-現居高雄。
+嗨，我是至青。我喜歡捏陶跟做網站，歡迎來到我的做陶日記 :)

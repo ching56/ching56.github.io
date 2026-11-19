@@ -329,8 +329,7 @@ test("readers can switch languages using locale-aware chrome", async () => {
   );
   assert.doesNotMatch(englishList, /class="site-footer"|href="mailto:/);
 
-  assert.match(chineseList, /<nav[^>]*aria-label="主要導覽"/);
-  assert.match(chineseList, /class="language-link"[^>]*href="\/en\/"[^>]*>English<\/a>/);
+  assert.doesNotMatch(chineseList, /<header\b|class="language-link"/);
   assert.match(
     chineseList,
     /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/,
@@ -359,10 +358,14 @@ test("the approved continuous journal structure is semantic across reading surfa
     readFile(new URL("zh-TW/blog/covid/index.html", distDirectory), "utf8"),
   ]);
 
+  assert.doesNotMatch(chineseList, /class="author-signature"/);
+
   for (const html of [englishList, chineseList, chinesePost]) {
     assert.match(html, /<body data-surface="story-journal">/);
     assert.match(html, /direction seed f0bd5f13/);
-    assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
+    if (html !== chineseList) {
+      assert.match(html, /<a\b[^>]*class="author-signature"[^>]*>\s*李至青\s*<\/a>/);
+    }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
     assert.doesNotMatch(html, /<h1[^>]*>\s*李至青\s*<\/h1>/);
@@ -371,10 +374,6 @@ test("the approved continuous journal structure is semantic across reading surfa
 
   assert.equal(SITE.title, SITE.author.displayName);
 
-  assert.match(
-    chineseList,
-    /<a\b[^>]*class="language-link"[^>]*href="\/en\/"[^>]*>\s*English\s*<\/a>/,
-  );
   assert.match(
     englishList,
     /<a\b[^>]*class="language-link"[^>]*href="\/zh-TW\/"[^>]*>\s*繁體中文\s*<\/a>/,
@@ -706,9 +705,12 @@ test("the zh-TW homepage introduces the writer before the article register", asy
 
   assert.match(html, /<html lang="zh-TW">/);
   assert.match(html, /<section id="about" class="about-intro" aria-label="關於">/);
-  assert.match(html, /Hi，我是至青，我喜歡做網站、App 跟陶瓷！/);
-  assert.doesNotMatch(html, /Jhih Cing, Li/);
-  assert.match(html, /現居高雄。/);
+  assert.match(
+    html,
+    /<div class="about-copy">\s*<p>嗨，我是至青。我喜歡捏陶跟做網站，歡迎來到我的做陶日記 :\)<\/p>\s*<\/div>/,
+  );
+  assert.doesNotMatch(html, /Jhih Cing, Li|現居高雄/);
+  assert.doesNotMatch(html, /<header\b/);
   assert.match(html, /href="mailto:jcli@pm\.me"[^>]*>\s*<svg class="mail-icon"[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>/);
   assert.ok(html.indexOf('id="about"') < html.indexOf('class="register-panel"'));
 });
