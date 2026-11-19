@@ -33,9 +33,19 @@
   --logo-left: -4px;
   /* The home bottle docks once the page scrolls past this, in one move,
      turning once on its turntable. */
-  --dock-threshold: 2rem;
-  --dock-duration: 900ms;
+  --dock-threshold: 32px;
+  /* Docking and returning can take different times. --dock-duration is the
+     return time here and the docking time while docked (a style query
+     below); it cannot be computed from --docked, because a value derived
+     from an animation is invalid in transition properties. */
+  --dock-out-duration: 900ms;
+  --dock-in-duration: 900ms;
+  --dock-duration: var(--dock-in-duration);
   --dock-ease: cubic-bezier(0.77, 0, 0.175, 1);
+  /* 1: the turntable turns once on the way; 0: it does not. */
+  --dock-spin: 1;
+  /* How far into the move the photo starts to darken (0 to 0.9). */
+  --dock-darken-from: 0;
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
@@ -431,7 +441,9 @@ main {
   /* The photo darkens into the silhouette as it moves. */
   .home-bottle .bottle-still,
   .home-bottle .bottle-photo {
-    filter: brightness(calc(1 - var(--dock-t)));
+    filter: brightness(
+      calc(1 - clamp(0, (var(--dock-t) - var(--dock-darken-from)) / (1 - var(--dock-darken-from)), 1))
+    );
   }
 
   /* The turntable turns once on the way: the full-resolution still steps
@@ -441,7 +453,7 @@ main {
      even when the threshold is crossed back and forth mid-move, the photo
      and the silhouette always show the same frame: one bottle, never two. */
   .home-bottle {
-    --dock-frame: round(down, var(--dock-t) * 20, 1);
+    --dock-frame: round(down, var(--dock-t) * 20 * var(--dock-spin), 1);
   }
 
   .home-bottle .bottle-still {
@@ -482,6 +494,14 @@ main {
     opacity: var(--docked);
     pointer-events: none;
     transition: opacity var(--dock-duration) ease-out;
+  }
+}
+
+/* Moving towards the docked state takes the docking time. Transitions read
+   the new state's values, so this picks the right time for each direction. */
+@container style(--docked: 1) {
+  .home-bottle {
+    --dock-duration: var(--dock-out-duration);
   }
 }
 

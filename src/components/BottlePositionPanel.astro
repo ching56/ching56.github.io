@@ -35,6 +35,44 @@
     <output data-out="gap"></output>
   </label>
   <p class="bottle-panel-hint">在頁面最上方直接拖曳瓶子</p>
+  <p class="bottle-panel-heading">動畫（捲過門檻看效果）</p>
+  <label>
+    <span>停靠</span>
+    <input type="range" data-motion="out" min="100" max="1500" step="10" />
+    <output data-motion-out="out"></output>
+  </label>
+  <label>
+    <span>返回</span>
+    <input type="range" data-motion="in" min="100" max="1500" step="10" />
+    <output data-motion-out="in"></output>
+  </label>
+  <label>
+    <span>門檻</span>
+    <input type="range" data-motion="threshold" min="0" max="300" step="2" />
+    <output data-motion-out="threshold"></output>
+  </label>
+  <label>
+    <span>變暗</span>
+    <input type="range" data-motion="darken" min="0" max="90" step="5" />
+    <output data-motion-out="darken"></output>
+  </label>
+  <label class="bottle-panel-wide">
+    <span>曲線</span>
+    <select data-motion="ease">
+      <option value="cubic-bezier(0.77, 0, 0.175, 1)">Emil ease-in-out</option>
+      <option value="cubic-bezier(0.32, 0.72, 0, 1)">iOS drawer</option>
+      <option value="cubic-bezier(0.23, 1, 0.32, 1)">Emil ease-out</option>
+      <option value="cubic-bezier(0.65, 0, 0.35, 1)">柔和 in-out</option>
+      <option value="linear">linear（對照）</option>
+    </select>
+  </label>
+  <label class="bottle-panel-check">
+    <input type="checkbox" data-motion="spin" />
+    <span>停靠時轉台轉一圈</span>
+  </label>
+  <div class="bottle-panel-actions">
+    <button type="button" data-emil>套用 Emil 建議</button>
+  </div>
   <p class="bottle-panel-heading">Logo（捲到底看停靠的樣子）</p>
   <label>
     <span>上</span>
@@ -145,9 +183,11 @@
       const all = read();
       delete all[mode()];
       delete all.logo;
+      delete all.motion;
       write(all);
       load();
       loadLogo();
+      loadMotion();
     });
 
     panel.querySelector("[data-copy]").addEventListener("click", async (event) => {
@@ -159,7 +199,11 @@
       const logoLine = all.logo
         ? `Logo　上 ${all.logo.top}px　左 ${all.logo.left}px　角度 ${all.logo.rotate}deg　寬 ${all.logo.width}px`
         : "Logo　未調整";
-      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine].join("\n");
+      const m = all.motion;
+      const motionLine = m
+        ? `動畫　停靠 ${m.out}ms　返回 ${m.in}ms　門檻 ${m.threshold}px　變暗 ${m.darken}%　曲線 ${m.ease}　轉台 ${m.spin ? "開" : "關"}`
+        : "動畫　未調整";
+      const text = [line("寬螢幕", all.wide), line("窄螢幕", all.narrow), logoLine, motionLine].join("\n");
       try {
         await navigator.clipboard.writeText(text);
         event.target.textContent = "已複製";
@@ -249,9 +293,83 @@
       });
     }
 
+    // The dock's motion: one set of values for every breakpoint.
+    const EMIL = {
+      out: 450,
+      in: 550,
+      threshold: 48,
+      darken: 30,
+      ease: "cubic-bezier(0.32, 0.72, 0, 1)",
+      spin: true,
+    };
+    const motionVars = {
+      out: ["--dock-out-duration", "ms"],
+      in: ["--dock-in-duration", "ms"],
+      threshold: ["--dock-threshold", "px"],
+    };
+    const motionDefaults = () => {
+      for (const prop of ["--dock-out-duration", "--dock-in-duration", "--dock-threshold", "--dock-ease", "--dock-spin", "--dock-darken-from"]) {
+        root.style.removeProperty(prop);
+      }
+      const style = getComputedStyle(root);
+      const read = (name) => style.getPropertyValue(name).trim();
+      return {
+        out: parseFloat(read("--dock-out-duration")),
+        in: parseFloat(read("--dock-in-duration")),
+        threshold: parseFloat(read("--dock-threshold")),
+        darken: Math.round(parseFloat(read("--dock-darken-from")) * 100),
+        ease: read("--dock-ease"),
+        spin: parseFloat(read("--dock-spin")) === 1,
+      };
+    };
+    let motion = {};
+    const applyMotion = () => {
+      for (const [key, [prop, unit]] of Object.entries(motionVars)) {
+        root.style.setProperty(prop, `${motion[key]}${unit}`);
+      }
+      root.style.setProperty("--dock-darken-from", `${motion.darken / 100}`);
+      root.style.setProperty("--dock-ease", motion.ease);
+      root.style.setProperty("--dock-spin", motion.spin ? "1" : "0");
+      for (const key of ["out", "in", "threshold", "darken"]) {
+        panel.querySelector(`[data-motion="${key}"]`).value = motion[key];
+        panel.querySelector(`[data-motion-out="${key}"]`).textContent =
+          key === "darken" ? `${motion[key]}%` : key === "threshold" ? `${motion[key]}px` : `${motion[key]}ms`;
+      }
+      const select = panel.querySelector('[data-motion="ease"]');
+      if (![...select.options].some((option) => option.value === motion.ease)) {
+        select.add(new Option(`目前：${motion.ease}`, motion.ease));
+      }
+      select.value = motion.ease;
+      panel.querySelector('[data-motion="spin"]').checked = motion.spin;
+    };
+    const saveMotion = () => {
+      const all = read();
+      all.motion = { ...motion };
+      write(all);
+    };
+    const loadMotion = () => {
+      motion = { ...motionDefaults(), ...(read().motion || {}) };
+      applyMotion();
+    };
+    for (const control of panel.querySelectorAll("[data-motion]")) {
+      control.addEventListener(control.type === "range" ? "input" : "change", () => {
+        const key = control.dataset.motion;
+        motion[key] =
+          control.type === "checkbox" ? control.checked : control.tagName === "SELECT" ? control.value : Number(control.value);
+        applyMotion();
+        saveMotion();
+      });
+    }
+    panel.querySelector("[data-emil]").addEventListener("click", () => {
+      motion = { ...EMIL };
+      applyMotion();
+      saveMotion();
+    });
+
     narrow.addEventListener("change", load);
     load();
     loadLogo();
+    loadMotion();
   })();
 </script>
 
@@ -262,6 +380,8 @@
     left: 1rem;
     z-index: 30;
     width: 16rem;
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     background: rgb(255 255 255 / 96%);
@@ -302,6 +422,24 @@
     color: var(--ink-muted);
   }
 
+
+  .bottle-panel-wide {
+    grid-template-columns: 2rem 1fr;
+  }
+
+  .bottle-panel select {
+    width: 100%;
+    min-height: 2rem;
+    font: inherit;
+  }
+
+  .bottle-panel-check {
+    grid-template-columns: auto 1fr;
+  }
+
+  .bottle-panel-check input {
+    width: auto;
+  }
 
   .bottle-panel-actions {
     display: flex;
