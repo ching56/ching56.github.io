@@ -980,3 +980,8 @@
 - Intent: write the user's motion values from the dev panel into :root (dock 450ms, return 550ms, threshold 48px, darken from 15%, iOS drawer curve cubic-bezier(0.32, 0.72, 0, 1), turntable on) and clear the panel's stored motion
 - Why: user: "記住數值"
 - Result: done
+
+## 2026-11-19 21:45 · claude-code
+- Intent: three Emil-guided fixes the user approved: (1) reduced motion keeps a short fade for the dock (fade out, swap position unseen at the midpoint, fade in; no travel, no turn) instead of an instant swap, overriding the global 0.01ms rule for the bottle only; (2) gate every :hover style behind `@media (hover: hover) and (pointer: fine)` so taps on phones don't leave sticky hover colours; (3) animate the photo lightbox with @starting-style and allow-discrete: open 200ms (scale 0.95 → 1, fade, strong ease-out), close faster at 150ms
+- Why: user approved the three suggestions
+- Result: done. Measured in dev: the lightbox opens 0 → 1 opacity and 0.95 → 1 scale in about 200ms and closes in about 160ms, ending display:none; no :hover rule remains ungated (scroll buttons already sit in a fine-pointer query); the reduced-motion dock, simulated by injecting its declarations, fades to 0 at about 150ms, changes place while invisible, and fades back in by about 330ms without turning. yarn run check clean, 40/40 tests

@@ -156,11 +156,13 @@ a {
   content: "]";
 }
 
-.response-cta:hover,
-.language-link:hover,
-.post-likes button:hover,
-.music-link-card__providers a:hover {
-  color: var(--ribbon);
+@media (hover: hover) and (pointer: fine) {
+  .response-cta:hover,
+  .language-link:hover,
+  .post-likes button:hover,
+  .music-link-card__providers a:hover {
+    color: var(--ribbon);
+  }
 }
 
 .response-cta:active,
@@ -211,9 +213,11 @@ a {
   transition: color 120ms ease-out;
 }
 
-.site-mark:hover .author-signature,
-.site-mark:hover .bottle-logo {
-  color: var(--ribbon);
+@media (hover: hover) and (pointer: fine) {
+  .site-mark:hover .author-signature,
+  .site-mark:hover .bottle-logo {
+    color: var(--ribbon);
+  }
 }
 
 .site-nav {
@@ -309,8 +313,10 @@ main {
   rotate: var(--bottle-rotate);
 }
 
-.home-bottle:hover {
-  color: var(--ribbon);
+@media (hover: hover) and (pointer: fine) {
+  .home-bottle:hover {
+    color: var(--ribbon);
+  }
 }
 
 /* At rest: the first frame at full resolution, since the hero is larger than
@@ -356,8 +362,8 @@ main {
    root, and the bottle transitions from the hero to the home mark in one
    move, turning once on its turntable as its photo darkens into the
    silhouette. Scrolling back to the top
-   reverses it. Reduced motion gets the same swap instantly (see the global
-   reduced-motion rule). */
+   reverses it. Reduced motion gets a short fade instead of the move (see
+   below). */
 @property --docked {
   syntax: "<number>";
   inherits: true;
@@ -473,6 +479,19 @@ main {
      photo only once fully docked, where the two are identical. */
   .home-bottle .bottle-silhouette {
     opacity: clamp(0, (var(--dock-t) - 0.99) * 100, 1);
+  }
+
+  /* Reduced motion: no travel and no turn, but not an instant cut either.
+     The bottle fades out, changes place while unseen at the midpoint, and
+     fades back in as the mark (and the reverse on the way back). */
+  @media (prefers-reduced-motion: reduce) {
+    .home-bottle {
+      --dock-spin: 0;
+      opacity: max(1 - 2 * var(--dock-t), 2 * var(--dock-t) - 1);
+      transition-duration: 0s, 0s, 0s, 0s, 0s, 300ms !important;
+      transition-delay: 150ms, 150ms, 150ms, 150ms, 0s, 0s !important;
+      transition-timing-function: linear !important;
+    }
   }
 
   /* Mirror the narrow-screen shell width. */
@@ -632,8 +651,10 @@ time {
   letter-spacing: inherit;
 }
 
-.diary-date a:hover {
-  color: var(--ribbon);
+@media (hover: hover) and (pointer: fine) {
+  .diary-date a:hover {
+    color: var(--ribbon);
+  }
 }
 
 .diary-title {
@@ -680,10 +701,16 @@ time {
   cursor: zoom-in;
 }
 
-.diary-photo:hover,
 .diary-photo:focus-visible {
   outline: 1px solid var(--ribbon);
   outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .diary-photo:hover {
+    outline: 1px solid var(--ribbon);
+    outline-offset: 3px;
+  }
 }
 
 .diary-photo-image {
@@ -778,6 +805,48 @@ time {
   background: transparent;
 }
 
+/* Opens in 200ms, growing from 0.95 (never from nothing) on a strong
+   ease-out; closes faster, in 150ms. Each state carries the timing of the
+   move into it. */
+.lightbox,
+.lightbox::backdrop {
+  opacity: 0;
+  transition:
+    opacity 150ms ease-out,
+    scale 150ms ease-out,
+    display 150ms allow-discrete,
+    overlay 150ms allow-discrete;
+}
+
+.lightbox {
+  scale: 0.97;
+}
+
+.lightbox:popover-open,
+.lightbox:popover-open::backdrop {
+  opacity: 1;
+  transition:
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    scale 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    display 200ms allow-discrete,
+    overlay 200ms allow-discrete;
+}
+
+.lightbox:popover-open {
+  scale: 1;
+}
+
+@starting-style {
+  .lightbox:popover-open,
+  .lightbox:popover-open::backdrop {
+    opacity: 0;
+  }
+
+  .lightbox:popover-open {
+    scale: 0.95;
+  }
+}
+
 .lightbox::backdrop {
   background: rgb(255 255 255 / 97%);
 }
@@ -829,8 +898,10 @@ time {
   line-height: 1.2;
 }
 
-.post-list-item:hover a {
-  color: var(--ribbon);
+@media (hover: hover) and (pointer: fine) {
+  .post-list-item:hover a {
+    color: var(--ribbon);
+  }
 }
 
 /* An untitled Threads post previews its own text on one line. */
@@ -1041,8 +1112,10 @@ time {
   transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.response-cta:hover .external-link-icon {
-  transform: translate(2px, -2px);
+@media (hover: hover) and (pointer: fine) {
+  .response-cta:hover .external-link-icon {
+    transform: translate(2px, -2px);
+  }
 }
 
 .reading-article > .response-ending {
@@ -1111,5 +1184,12 @@ time {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Reduce, don't remove: the lightbox still fades, without the scale. */
+  .lightbox,
+  .lightbox::backdrop {
+    scale: none;
+    transition-duration: 150ms !important;
   }
 }
