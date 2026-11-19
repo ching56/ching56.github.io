@@ -935,11 +935,8 @@ test("the compact frameless content contract stays within its confirmed limits",
     );
   }
 
-  // The header breadcrumb's title is regular-weight type on one line.
-  const crumbRule = css.match(/\.site-crumb\s*\{([^}]*)\}/);
-  assert.ok(crumbRule, "expected a CSS rule for the header breadcrumb");
-  assert.match(crumbRule[1], /font-size:\s*var\(--type-size\);/);
-  assert.doesNotMatch(css, /\.author-signature/);
+  // The header holds only the bottle: no name, no crumb trail.
+  assert.doesNotMatch(css, /\.author-signature|\.site-crumb\b/);
 
   const linkRule = css.match(/^a\s*\{([^}]*)\}/m);
   assert.ok(linkRule, "expected a global link rule");

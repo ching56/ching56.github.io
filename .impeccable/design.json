@@ -36,7 +36,7 @@
       "type-cell": { "displayName": "Type Cell", "purpose": "Feed text, intro, controls, (--type-size)." },
       "metadata": { "displayName": "Metadata", "purpose": "Generic time, performer line, provider links." },
       "label": { "displayName": "Label", "purpose": "Intro sub-headings, English list dates." },
-      "signature": { "displayName": "Breadcrumb", "purpose": "An optional \"/ title\" step after the header's bottle mark, currently unused; the header holds only the bottle." }
+      "signature": { "displayName": "Header Mark", "purpose": "The header holds only the bottle silhouette linking home; no name, no crumb trail." }
     },
     "shadows": [],
     "motion": [
@@ -84,7 +84,7 @@
     "northStar": "Character Proof",
     "overview": "The pottery diary is typed out like a proof pulled on a typewriter onto white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. Dates are struck in brackets like the controls. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
-      "White paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink. A notebook ruling exists but is switched off.",
+      "White paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
       "One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.",
       "All text starts flush on the column edge; only control brackets hang one cell into the margin.",
       "Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.",
@@ -92,7 +92,7 @@
     ],
     "rules": [
       { "name": "The Single Ribbon Rule", "body": "Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.", "section": "colors" },
-      { "name": "The Paper Rule", "body": "The page is plain white paper; the shell is a whole number of --grid cells wide, so a ruling, when switched on, starts and ends on the text column's edges.", "section": "colors" },
+      { "name": "The Paper Rule", "body": "The page is plain white paper. Every veil and backing uses the same paper value.", "section": "colors" },
       { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (measures 64ch and 70ch).", "section": "typography" },
       { "name": "The Type Ceiling Rule", "body": "Nothing exceeds 1.5rem.", "section": "typography" },
       { "name": "The No Webfont Rule", "body": "System faces only; no @font-face. A test enforces it.", "section": "typography" },
@@ -110,7 +110,6 @@
             "Don't add any other @font-face or webfont; Chinese webfonts are megabytes.",
       "Don't add shadows, border radii, glass, blur, fills, or card frames.",
       "Don't fill with ribbon red or set paragraph text in it.",
-      "Don't draw the ruling outside the shell or change its cell without rounding the shell to match.",
       "Don't write animation: shorthand with a timeline.",
       "Don't treat Chinese as grid-aligned; that is open (see Typography)."
     ]

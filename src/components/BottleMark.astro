@@ -41,7 +41,7 @@ const { variant, href, label } = Astro.props;
       // The turntable only turns once its sprite is in hand. The still loads
       // first; the sprite for this screen follows, and only once it has
       // loaded does data-spin="ready" let CSS use it. Data saver, 2G, or no
-      // sprite within 8s: the bottle docks without turning.
+      // sprite within 8s: the bottle stays still.
       (() => {
         const root = document.documentElement;
         const bottle = document.querySelector(".home-bottle");

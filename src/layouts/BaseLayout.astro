@@ -16,8 +16,6 @@ interface Props {
     path: string;
   }>;
   showHeader?: boolean;
-  /** The current page's name in the header breadcrumb, after the bottle. */
-  crumb?: string;
   /** Article pages: the mark goes back to home's place when home sent you. */
   markReturns?: boolean;
 }
@@ -27,7 +25,6 @@ const {
   language,
   alternates = [],
   showHeader = true,
-  crumb,
   markReturns = false,
 } = Astro.props;
 const pageTitle = title ? `${title}　${SITE.title}` : SITE.title;
@@ -79,11 +76,6 @@ const ui = UI[language];
                 <BottleMark variant="logo" />
               </a>
             </li>
-            {crumb && (
-              <li class="site-crumb" aria-current="page">
-                <span class="crumb-title">{crumb}</span>
-              </li>
-            )}
           </ol>
         </nav>
         {markReturns && (

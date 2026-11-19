@@ -89,7 +89,7 @@ Hierarchy comes from the cell grid, not from size. Controls and dates are struck
 
 **Key Characteristics:**
 
-- White paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink. A notebook ruling exists but is switched off.
+- White paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
 - One monospace stack for every typed cell, dates included; no webfonts.
 - All text starts flush on the column's left edge; only control brackets hang one cell into the margin.
 - Photographs appear as they are; the only image treatment is the bottle hero turning on its turntable as the page scrolls.
@@ -104,14 +104,13 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 
 ### Neutral
 - **Paper** (`#ffffff`): Page, buttons-as-paper, the back-to-top backing, lightbox (veiled at 97%).
-- **Grid Rule** (off): the notebook ruling (`.site-shell::before`: horizontal rules through, verticals stopping short of each crossing, right-margin marks every second rule and a dot every tenth) is switched off by the user (`--grid-cell` and `--grid-edge` none, `--grid-line` transparent); `--grid` stays 10px and still rounds the shell. The dev panel's 格線 tab brings it back.
 - **Typewriter Black** (`#141414`): Body text, the bottle silhouette, dashed focus outline.
-- **Carbon Grey** (`#5f5f5f`): Breadcrumb separator, muted prompts, performer lines, blockquotes, disabled control.
+- **Carbon Grey** (`#5f5f5f`): Muted prompts, performer lines, blockquotes, disabled control.
 
 ### Named Rules
 **The Single Ribbon Rule.** Red is struck only as a mark: brackets, hover, selection, link underline. It never fills a block or sets paragraph text.
 
-**The Paper Rule.** The page is plain white paper. The shell is a whole number of `--grid` cells wide (`round(down, …, var(--grid))`), so a ruling, when switched on, starts and ends on the text column's edges. Every veil and backing uses the same paper value.
+**The Paper Rule.** The page is plain white paper. Every veil and backing uses the same paper value.
 
 ## Typography
 
@@ -127,7 +126,6 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 - **Type Cell** (400, `0.9375rem` as `--type-size`, 1.75): Feed text, intro and now note, controls, response prompts.
 - **Metadata** (`0.875rem`): Generic `time`, performer line, music provider links.
 - **Label** (`0.8125rem`): Intro sub-headings (0.1em tracking, muted), English list dates.
-- **Breadcrumb** (`0.9375rem`): An optional "/ title" step after the bottle mark (currently unused).
 
 ### Named Rules
 **The One Cell Rule.** Everything typed uses the single monospace stack; text widths are measured in `ch` (measures 64ch and 70ch).
@@ -166,10 +164,10 @@ Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, r
 A single column: the bracketed date, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
 ### Bottle Mark
-The real bottle photo, because the hero shows the potter's work: 21-frame turntable sprites sized for the small resting bottle (`src/assets/home/bottle-spin.webp`, 264×653 frames, about 460 KB, for wide screens; `bottle-spin-small.webp`, 158×392 frames, about 180 KB, for 48rem and below; CSS picks one through `--sprite`, so each screen fetches only its own) and a still of the first frame (`bottle-still.webp`, srcset 160/264/400w, sizes from the bottle's rendered width, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it stands in one row with the greeting: a smaller bottle at the shell's left edge (36dvh tall at 12dvh from the top; at 48rem and below 16dvh at 3dvh, 5% in, leaning -21deg via `--bottle-rotate`, 76px gap, greeting aligned to the bottle's foot via `--greeting-align: end`), the greeting padded to start just past it and centred on its height; all tuned with the dev-only `BottlePositionPanel`. It no longer docks into a header logo (the user removed that for now): the bottle stays in the hero and turns once on its turntable as the reader scrolls it away, the frame scrubbed by `scroll(root)` from the top of the page to the bottle's bottom edge (`steps(21, jump-none)`); the still gives way to the sprite at the first step. The sprite is referenced only after an inline loader sets `html[data-spin="ready"]`; without it, and under reduced motion, the still simply stays. The page header is a breadcrumb: the bottle's silhouette alone links home (labelled 首頁/Home), with nothing after it for now (the layout still accepts a `crumb` for a "/ title" step, unused). The silhouette is masked by a 2 KB last-frame outline (`bottle-mark.webp`), turning ribbon red on hover. Header height is `6rem` (5rem narrow).
+The real bottle photo, because the hero shows the potter's work: 21-frame turntable sprites sized for the small resting bottle (`src/assets/home/bottle-spin.webp`, 264×653 frames, about 460 KB, for wide screens; `bottle-spin-small.webp`, 158×392 frames, about 180 KB, for 48rem and below; CSS picks one through `--sprite`, so each screen fetches only its own) and a still of the first frame (`bottle-still.webp`, srcset 160/264/400w, sizes from the bottle's rendered width, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it stands in one row with the greeting: a smaller bottle at the shell's left edge (36dvh tall at 12dvh from the top; at 48rem and below 16dvh at 3dvh, 5% in, leaning -21deg via `--bottle-rotate`, 76px gap, greeting aligned to the bottle's foot via `--greeting-align: end`), the greeting padded to start just past it and centred on its height. It no longer docks into a header logo (the user removed that for now): the bottle stays in the hero and turns once on its turntable as the reader scrolls it away, the frame scrubbed by `scroll(root)` from the top of the page to the bottle's bottom edge (`steps(21, jump-none)`); the still gives way to the sprite at the first step. The sprite is referenced only after an inline loader sets `html[data-spin="ready"]`; without it, and under reduced motion, the still simply stays. The page header holds only the bottle's silhouette, linking home (labelled 首頁/Home, inside a nav labelled 目前位置). The silhouette is masked by a 2 KB last-frame outline (`bottle-mark.webp`), turning ribbon red on hover. Header height is `6rem` (5rem narrow).
 
 ### Logo Variables
-`--logo-width` (22px; height follows the 396:980 frame) and `--logo-rotate` (-3deg) on `:root` size and lean the article-header logo. `--logo-top`/`--logo-left` are left from the removed home dock.
+`--logo-width` (22px; height follows the 396:980 frame) and `--logo-rotate` (-3deg) on `:root` size and lean the header logo.
 
 ### Bottle Across Pages
 Cross-document view transitions (`@view-transition { navigation: auto }`, CSS only): the article header's silhouette and the home hero share `view-transition-name: bottle`, so following the mark home grows it back into the photo and opening a post shrinks the photo into the mark, 550ms on `cubic-bezier(0.32, 0.72, 0, 1)`; off under reduced motion; unsupported browsers just navigate. Two small inline scripts refine it: on posts, the header mark goes `history.back()` when the reader came from that home page (so home keeps its scroll; any other way in, it is a plain link); on home, a `pageswap`/`pagereveal` guard skips the transition entirely whenever the hero bottle is off screen.
@@ -204,6 +202,5 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 - **Don't** add `@font-face` or any webfont; Chinese webfonts are megabytes.
 - **Don't** add shadows, border radii, glass, blur, fills, or card frames.
 - **Don't** fill with ribbon red or set paragraph text in it.
-- **Don't** draw a ruling outside the shell or change `--grid` without the shell rounding to match.
 - **Don't** write `animation:` shorthand with a timeline.
 - **Don't** treat Chinese as grid-aligned; that is open (see Typography).

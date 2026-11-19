@@ -2,7 +2,6 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AboutSection from "../../components/AboutSection.astro";
 import BottleMark from "../../components/BottleMark.astro";
-import BottlePositionPanel from "../../components/BottlePositionPanel.astro";
 import NowSection from "../../components/NowSection.astro";
 import DiaryFeed from "../../components/DiaryFeed.astro";
 import { EDITION_HOME_ALTERNATES, UI } from "../../config/i18n";
@@ -30,5 +29,4 @@ if (!about) {
     </div>
     <div class="creative-coding-area" data-creative-coding-area aria-hidden="true"></div>
   </div>
-  {import.meta.env.DEV && <BottlePositionPanel />}
 </BaseLayout>
