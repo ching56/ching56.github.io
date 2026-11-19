@@ -268,14 +268,15 @@ main {
   --bottle-width: calc(var(--bottle-height) * 396 / 980);
   /* Space between the bottle and the greeting. */
   --hero-gap: 32px;
-  /* Nudges the greeting up (negative) or down from centred on the bottle. */
-  --greeting-offset: 0px;
+  /* Where the greeting sits against the bottle's height: start, center or
+     end (grid alignment). */
+  --greeting-align: center;
   position: relative;
 }
 
 .home-hero {
   display: grid;
-  align-content: center;
+  align-content: var(--greeting-align);
   min-height: calc(var(--bottle-top) - var(--main-top) + var(--bottle-height));
   padding-top: calc(var(--bottle-top) - var(--main-top));
   padding-inline-start: calc(
@@ -286,7 +287,6 @@ main {
 
 .home-hero .about-intro {
   position: relative;
-  top: var(--greeting-offset);
   z-index: 1;
   max-width: 30ch;
 }
