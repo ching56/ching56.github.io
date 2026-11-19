@@ -227,6 +227,14 @@
       <label><input type="radio" name="mark-variant" value="faint" />6 淡影</label>
       <label><input type="radio" name="mark-variant" value="inset" />7 內陰影</label>
     </div>
+    <p class="bottle-panel-heading">淡陰影</p>
+    <div class="bottle-panel-choices">
+      <label><input type="radio" name="mark-variant" value="contact" />a 接觸陰影</label>
+      <label><input type="radio" name="mark-variant" value="layered" />b 分層柔影</label>
+      <label><input type="radio" name="mark-variant" value="hairline" />c 髮絲環</label>
+      <label><input type="radio" name="mark-variant" value="clay" />d 陶土色影</label>
+      <label><input type="radio" name="mark-variant" value="toplight" />e 頂光</label>
+    </div>
     <p class="bottle-panel-heading">反白延伸</p>
     <div class="bottle-panel-choices">
       <label><input type="radio" name="header-variant" value="bbs" />反白</label>
@@ -1428,6 +1436,42 @@
       box-shadow:
         inset 0 1px 3px rgb(20 20 20 / 22%),
         inset 0 -1px 1px rgb(255 255 255 / 80%);
+    }
+
+    /* Subtle shadows, each from a known use case. */
+    /* a: contact: paper resting on paper, a tight shadow where they meet. */
+    :global(html[data-mark="contact"] .home-stage::before) {
+      box-shadow: 0 1px 1px rgb(20 20 20 / 9%);
+    }
+
+    /* b: layered: contact, penumbra and ambient light together. */
+    :global(html[data-mark="layered"] .home-stage::before) {
+      box-shadow:
+        0 1px 1px rgb(20 20 20 / 6%),
+        0 2px 4px rgb(20 20 20 / 5%),
+        0 6px 12px rgb(20 20 20 / 4%);
+    }
+
+    /* c: hairline: a 1px translucent ring with a hint of drop. */
+    :global(html[data-mark="hairline"] .home-stage::before) {
+      box-shadow:
+        0 0 0 1px rgb(20 20 20 / 8%),
+        0 1px 2px rgb(20 20 20 / 6%);
+    }
+
+    /* d: clay: the shadow tinted warm brown, like clay's, not black. */
+    :global(html[data-mark="clay"] .home-stage::before) {
+      box-shadow:
+        0 1px 2px rgb(110 80 50 / 12%),
+        0 3px 8px rgb(110 80 50 / 10%);
+    }
+
+    /* e: top light: a highlight along the top edge, a soft fall below. */
+    :global(html[data-mark="toplight"] .home-stage::before) {
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 85%),
+        0 1px 2px rgb(20 20 20 / 10%),
+        0 3px 8px rgb(20 20 20 / 6%);
     }
 
     /* 5: a double rule, like the border of a carved chop. */

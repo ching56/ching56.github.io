@@ -1104,3 +1104,8 @@
 
 ## 2026-11-20 03:05 · claude-code
 - Intent/Result: two more docked-mark emphasis candidates in the panel, per the user ("more subtle shadow, and inner shadow only"): faint (0 1px 4px at 10%) and inset (an inner shadow at the top with a light lower lip, no outer shadow)
+
+## 2026-11-20 03:15 · claude-code
+- Intent: five researched subtle-shadow candidates for the docked mark's paper disc, each from a known use case, in a new 淡陰影 group of the panel's 頁首 tab (same `data-mark` switch): contact (paper resting on paper), layered (contact + penumbra + ambient, after Josh Comeau and Tobias Ahlin), hairline (a 1px translucent ring shadow plus a hint of drop, Tailwind/Vercel style), clay (a warm brown-tinted shadow instead of black), toplight (a top inner highlight with a soft fall below, key light from above)
+- Why: user: "search for different shadow use case, give me 5 subtle shadow"
+- Result: done (dev only). All five apply to the docked disc (checked computed box-shadow for each; layered and toplight eyeballed over a photo, where the disc edge separates gently). Sources: joshwcomeau.com/css/designing-shadows, tobiasahlin.com/blog/layered-smooth-box-shadows. yarn run check clean
