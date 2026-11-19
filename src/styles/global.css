@@ -237,9 +237,12 @@ main {
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
   --bottle-top: 14dvh;
-  /* Fraction of the shell width from its left edge. */
+  /* Where the bottle stands, as a fraction of the shell width, and which part
+     of the bottle stands there: 0 its left edge, 0.5 its centre. */
   --bottle-x: 0.06;
+  --bottle-align: 0;
   --bottle-height: 170dvh;
+  --bottle-width: calc(var(--bottle-height) * 396 / 980);
   --bottle-end: calc(var(--bottle-top) + var(--bottle-height));
   --dock-range: max(40dvh, var(--bottle-end) - 6rem);
   position: relative;
@@ -270,7 +273,7 @@ main {
   position: absolute;
   top: calc(var(--bottle-top) - var(--main-top));
   right: 0;
-  left: calc(var(--bottle-x) * 100%);
+  left: calc(var(--bottle-x) * 100% - var(--bottle-width) * var(--bottle-align));
   height: var(--bottle-height);
   overflow: clip;
 }
@@ -348,7 +351,10 @@ main {
       position: fixed;
       z-index: 10;
       top: var(--bottle-top);
-      left: calc(var(--shell-left) + var(--shell-width) * var(--bottle-x));
+      left: calc(
+        var(--shell-left) + var(--shell-width) * var(--bottle-x) - var(--bottle-width) *
+          var(--bottle-align)
+      );
       /* Longhands only: a minifier folding the timeline into the shorthand
          produces a declaration browsers reject. */
       animation-name: bottle-dock;
@@ -1030,9 +1036,11 @@ time {
 
   .home-stage {
     --main-top: 2rem;
-    --bottle-top: 34dvh;
-    --bottle-x: 0.18;
-    --bottle-height: 150dvh;
+    /* Centred, placed by the user with the dev panel. */
+    --bottle-top: 26dvh;
+    --bottle-x: 0.5;
+    --bottle-align: 0.5;
+    --bottle-height: 90dvh;
   }
 
   .site-header {

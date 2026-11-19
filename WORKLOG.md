@@ -925,3 +925,8 @@
 - Intent: fix the diary date face at Nanum Pen Script and delete the dev-only DiaryFontPanel. Self-host a Google Fonts `text=` subset of just "0123456789/" as public/fonts/nanum-pen-script-digits.woff2 with its OFL licence beside it; one @font-face in global.css; relax decision 7 and the no-webfont test to allow exactly this subset (tiny, same-origin, no external stylesheet)
 - Why: user: "remove font menu, fixed at Nanum Pen Script at the moment"
 - Result: done; the subset is 1,796 bytes (Google Fonts `text=` API, unicode-range U+2F-39), CSS family named "Diary Date". Verified in dev: face loads, panel gone. yarn run check clean, 40/40 tests
+
+## 2026-11-19 18:55 · claude-code
+- Intent: write the user's narrow-screen bottle placement into global.css (top 26dvh, height 90dvh) and centre it horizontally there via a new `--bottle-align` (0 = left edge at x, 0.5 = centre at x; narrow uses x 0.5, align 0.5); wide stays untouched. Clear the panel's stored narrow values afterwards so the CSS defaults show
+- Why: user sent "窄螢幕　上 26dvh　左 17%　高 90dvh" and asked to centre it on small screens
+- Result: done; at 375×812 the bottle sits at 39–335 (centred to the pixel), top 211, below the greeting (bottom 148); no overlap until docked at 840px of scroll; no horizontal overflow. Wide unchanged. Panel's stored narrow values cleared. yarn run check clean, 40/40 tests
