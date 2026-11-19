@@ -901,3 +901,7 @@
 - Intent: switch the homepage hero to the "bleed" layout the user picked from the five mocks (`.impeccable/mocks/hero-variants/`, variant 4): the bottle photo set larger than the screen (170dvh desktop, 150dvh narrow) and cut by the viewport's bottom edge, greeting top-left; scroll still turns it and docks it as the glyph-silhouette logo (range widened to 0–60dvh). New `scripts/build-bottle-assets.mjs` rebuilds the turntable sprite from the untracked `photo/cutout/` PNGs at the original geometry (bottle 900px tall in a 396×980 frame, was 297×735) plus a sharp 1514px-tall still of frame 0 for the resting hero, swapped out exactly when the first frame turns
 - Why: user: "I like 出血, lets change to it." The old sprite is far too small to show at bleed size
 - Result: (pending)
+
+## 2026-11-19 17:45 · claude-code
+- Result of the 17:30 entry: done in `6108404`; sprite 882 KB (8316×980), still 38/65/93 KB at 333/500/666w via astro:assets with fetchpriority high. Verified in dev at 1440×900 (bottle 623×1530 at 615,126, cut by the bottom edge; turning at 25%; docked 73px at 64,16) and 375×812 (496×1218 at 78,276; docked at 16,16; no horizontal overflow). Built CSS keeps longhands. The content-image srcset test now skips the decorative still. yarn run check clean, 40/40 tests
+- Correction: a doc-update script failed partway and the commit ran anyway, so the contract comment, route brief, STATE and the platen range in design.json land in a follow-up commit
