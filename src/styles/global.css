@@ -1047,8 +1047,11 @@ time {
   .home-stage {
     --main-top: 2rem;
     --shell-width-vw: min(100vw - 2rem, 42rem);
-    --bottle-top: 4dvh;
-    --bottle-height: 22dvh;
+    /* Placed by the user with the dev panel. */
+    --bottle-top: 3dvh;
+    --bottle-x: 0.05;
+    --bottle-height: 16dvh;
+    --bottle-rotate: -21deg;
     --hero-gap: 1.25rem;
   }
 

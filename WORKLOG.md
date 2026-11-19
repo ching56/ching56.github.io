@@ -955,3 +955,8 @@
 - Intent: put the bottle and the greeting in one row: a smaller bottle at the left of the shell (wide 12dvh/36dvh, narrow 4dvh/22dvh, x 0, align 0, no bleed), the greeting padded to start just right of it and centred on its height (hero padding derived from the bottle vars, using a viewport-measured shell width); add a resting `--bottle-rotate` that the dock turns from (to `--logo-rotate`) and an 角度 slider for it in the dev panel (per breakpoint)
 - Why: user: "我想把瓶子跟 greeting 改成在同一列，瓶子縮小，幫我在 panel 瓶子加上角度的選項"
 - Result: done, and in the same change: the photo now darkens into the silhouette instead of crossfading (user saw two bottles when undocking), via a registered `--dock-t` transitioned with the move, the silhouette appearing only at full dock; and per the user's pick only 轉盤收合 remains, now the shipped dock (900ms, sprite stepped once), with the other candidates and the panel's 動畫 control removed. Verified in dev: bottle and greeting centres 2px apart; sampled every 50ms both ways, frames step 0→100% and back, still hidden in motion, silhouette only at t=1. yarn run check clean, 40/40 tests
+
+## 2026-11-19 20:50 · claude-code
+- Intent: write the user's narrow-screen bottle placement from the dev panel into global.css (top 3dvh, x 0.05, height 16dvh, rotate -21deg) and clear the panel's stored values; wide stays at the defaults (the user has not tuned it)
+- Why: user: "記住現在瓶子的參數"
+- Result: done; yarn run check clean, 40/40 tests
