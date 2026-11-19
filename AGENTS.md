@@ -32,7 +32,7 @@ The active Astro scaffold uses the default project roots:
 - `src/content.config.ts` / `src/content/posts/` — typed Markdown collections organized by locale.
 - `src/pages/` — locale-prefixed list and post routes; the first tracer lives under `/zh-TW/`.
 - `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only baseline CSS.
-- `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no webfonts/runtime JS).
+- `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no runtime JS, only the one date-digits font subset).
 - `public/` — static assets and Cloudflare's `_redirects` file, copied verbatim into `dist/`.
 - `dist/` — generated build output, gitignored.
 

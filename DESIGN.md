@@ -14,7 +14,7 @@ typography:
     lineHeight: 1.3
     letterSpacing: "normal"
   date:
-    fontFamily: '"Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive'
+    fontFamily: '"Diary Date", "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive'
     fontSize: "1.5rem"
     fontWeight: 400
     lineHeight: 1.2
@@ -94,7 +94,7 @@ Hierarchy comes from the cell grid, not from size. Controls are struck as `[ lab
 **Key Characteristics:**
 
 - Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.
-- One monospace stack for every typed cell; no webfonts, no `@font-face`.
+- One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.
 - All text starts flush on the column's left edge; only control brackets hang one cell into the margin.
 - Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.
 - Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil.
@@ -119,7 +119,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 ## Typography
 
 **Display, Body and Label Font:** one monospace stack, `ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono"`, then CJK fallbacks `"PingFang TC", "Noto Sans TC", "Microsoft JhengHei"`, then `monospace` (`--font-type`).
-**Date Font:** the handwriting stack `"Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive` through `--diary-date-font`.
+**Date Font:** Nanum Pen Script (OFL), self-hosted as `"Diary Date"`: only `0-9` and `/` (`unicode-range: U+2F-39`, 1.8 KB, `public/fonts/`), then the platform handwriting stack `"Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive`, all through `--diary-date-font`.
 
 **Character:** A typewriter's single face, with handwriting allowed only where a person wrote the date. Weight is 400 everywhere; hierarchy is scale, muted ink, and position on the grid.
 
@@ -139,7 +139,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 
 **The Type Ceiling Rule.** Nothing exceeds `1.5rem`.
 
-**The No Webfont Rule.** System faces only; no `@font-face`. A test enforces this.
+**The One Subset Rule.** System faces everywhere except the dates' handwriting, which ships as one same-origin digits-and-slash subset under 4 KB. A test enforces exactly that one `@font-face`.
 
 ### Open and known gaps
 - **Open decision:** the handwriting face for dates is not chosen. `--diary-date-system-font` is the placeholder stack; the user is choosing in a dev-only panel. Do not invent a face.
@@ -201,7 +201,7 @@ Every scroll-driven animation is written as longhands (`animation-name`, `animat
 
 ### Don't:
 - **Don't** use `--diary-date-font` for anything but dates.
-- **Don't** add `@font-face` or any webfont.
+- **Don't** add any other `@font-face` or webfont; Chinese webfonts are megabytes.
 - **Don't** add shadows, border radii, glass, blur, fills, or card frames.
 - **Don't** fill with ribbon red or set paragraph text in it.
 - **Don't** tint the paper away from pure white.

@@ -4,7 +4,6 @@ import AboutSection from "../../components/AboutSection.astro";
 import BottleMark from "../../components/BottleMark.astro";
 import NowSection from "../../components/NowSection.astro";
 import DiaryFeed from "../../components/DiaryFeed.astro";
-import DiaryFontPanel from "../../components/DiaryFontPanel.astro";
 import { EDITION_HOME_ALTERNATES, UI } from "../../config/i18n";
 import { getPageByLanguage, hasContent } from "../../lib/posts";
 
@@ -30,5 +29,4 @@ if (!about) {
     </div>
     <div class="creative-coding-area" data-creative-coding-area aria-hidden="true"></div>
   </div>
-  {import.meta.env.DEV && <DiaryFontPanel />}
 </BaseLayout>

@@ -920,3 +920,8 @@
 - Intent: make the docked logo a crisp solid silhouette instead of `█` glyph rows: the home dock masks the turntable sprite's alpha (`mask-image`, stepped like the photo) filled with currentColor; other pages' logo masks a small last-frame asset `bottle-mark.webp` from build-bottle-assets.mjs. Delete `src/lib/ascii.ts` (no users left) and the glyph frame CSS; update docs for both this and the photo change
 - Why: user: logo should be "minimal 清晰的剪影，沒有橫線，不是 ascii 風格"
 - Result: done; bottle-mark.webp is 2 KB (black + alpha). Verified in dev (restarted the 4321 server through launch.json because the old one could not see the new asset): home docks a crisp 74px silhouette at 16,16; the article header shows the same outline. ascii.ts deleted. yarn run check clean, 40/40 tests
+
+## 2026-11-19 18:35 · claude-code
+- Intent: fix the diary date face at Nanum Pen Script and delete the dev-only DiaryFontPanel. Self-host a Google Fonts `text=` subset of just "0123456789/" as public/fonts/nanum-pen-script-digits.woff2 with its OFL licence beside it; one @font-face in global.css; relax decision 7 and the no-webfont test to allow exactly this subset (tiny, same-origin, no external stylesheet)
+- Why: user: "remove font menu, fixed at Nanum Pen Script at the moment"
+- Result: done; the subset is 1,796 bytes (Google Fonts `text=` API, unicode-range U+2F-39), CSS family named "Diary Date". Verified in dev: face loads, panel gone. yarn run check clean, 40/40 tests

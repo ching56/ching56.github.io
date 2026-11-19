@@ -74,7 +74,7 @@
       "refersTo": "diary-entry",
       "description": "A handwritten date heads clamped typed text in a single column.",
       "html": "<article class=\"ds-entry\"><p class=\"ds-date\">11月 8日</p><div class=\"ds-text\"><p>今天把瓶子上了第一層釉。</p></div></article>",
-      "css": ".ds-entry { display: grid; gap: 0.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-date { margin: 0; font-family: \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
+      "css": ".ds-entry { display: grid; gap: 0.75rem; color: var(--ink, #141414); font-family: ui-monospace, \"SF Mono\", Menlo, Consolas, \"PingFang TC\", \"Noto Sans TC\", monospace; } .ds-date { margin: 0; font-family: \"Diary Date\", \"Bradley Hand\", \"Noteworthy\", \"Segoe Print\", \"Ink Free\", casual, cursive; font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: 0.02em; } .ds-text { font-size: 0.9375rem; line-height: 1.75; } .ds-text p { margin: 0 0 0.75em; }"
     },
     {
       "name": "English Plain List Row",
@@ -90,7 +90,7 @@
     "overview": "The pottery diary is typed out like a proof pulled on a typewriter: pure white paper, black ink, one red ribbon, and a single monospace cell that everything sits on. Photographs are shown plainly; the type does the shaping. The page never decorates; it types.\n\nHierarchy comes from the cell grid, not from size. Controls are struck as [ label ] brackets whose brackets carry the red. The dates are the only handwriting on the page. The world refuses the soft-paper journal and the photo-grid portfolio.",
     "keyCharacteristics": [
       "Pure white paper (#ffffff) with near-black ink (#141414); red ribbon (#c4161c) is the only chromatic ink.",
-      "One monospace stack for every typed cell; no webfonts, no @font-face.",
+      "One monospace stack for every typed cell; the only webfont is a self-hosted digits-and-slash subset for the dates.",
       "All text starts flush on the column edge; only control brackets hang one cell into the margin.",
       "Photographs appear as they are; the only image treatment is the bottle hero docking into a solid silhouette.",
       "Flat everywhere: no shadows, no radii, no fills; depth is only the platen band and the lightbox veil."
@@ -101,7 +101,7 @@
       { "name": "The One Cell Rule", "body": "Everything typed uses the single monospace stack; text widths are measured in ch (measures 64ch and 70ch).", "section": "typography" },
       { "name": "The Handwritten Date Rule", "body": "Only dates take --diary-date-font. No other element may borrow it.", "section": "typography" },
       { "name": "The Type Ceiling Rule", "body": "Nothing exceeds 1.5rem.", "section": "typography" },
-      { "name": "The No Webfont Rule", "body": "System faces only; no @font-face. A test enforces this.", "section": "typography" },
+      { "name": "The One Subset Rule", "body": "System faces everywhere except the dates' handwriting, which ships as one same-origin digits-and-slash subset under 4 KB. A test enforces exactly that one @font-face.", "section": "typography" },
       { "name": "The Flat Paper Rule", "body": "No shadows, glass, blur, or gradients. Depth is paper over text, nothing more.", "section": "elevation" }
     ],
     "dos": [
@@ -114,7 +114,7 @@
     ],
     "donts": [
       "Don't use --diary-date-font for anything but dates.",
-      "Don't add @font-face or any webfont.",
+      "Don't add any other @font-face or webfont; Chinese webfonts are megabytes.",
       "Don't add shadows, border radii, glass, blur, fills, or card frames.",
       "Don't fill with ribbon red or set paragraph text in it.",
       "Don't tint the paper away from pure white.",

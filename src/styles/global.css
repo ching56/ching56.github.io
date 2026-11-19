@@ -1,6 +1,16 @@
 /* Character Proof: a pottery diary typed on white paper. Black and red ribbon
    ink, one monospace cell, plain photographs. Dates are the only handwriting
    on the page. */
+/* The diary dates' handwriting: Nanum Pen Script (OFL, licence beside the
+   file), self-hosted as just the digits and "/" a date needs, under 2 KB.
+   Anything else falls through to the platform's handwriting faces. */
+@font-face {
+  font-family: "Diary Date";
+  src: url("/fonts/nanum-pen-script-digits.woff2") format("woff2");
+  font-display: swap;
+  unicode-range: U+2F-39;
+}
+
 :root {
   --paper: #ffffff;
   --ink: #141414;
@@ -9,9 +19,9 @@
   /* Monospace for every typed cell; CJK falls back to the platform's sans. */
   --font-type: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono",
     "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", monospace;
-  /* Handwriting faces for diary dates: Apple, Windows, then Android's aliases. */
-  --diary-date-system-font: "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual, cursive;
-  --diary-date-font: var(--diary-date-system-font);
+  /* Diary dates: the self-hosted digits, then platform handwriting faces. */
+  --diary-date-font: "Diary Date", "Bradley Hand", "Noteworthy", "Segoe Print", "Ink Free", casual,
+    cursive;
   --type-size: 0.9375rem;
   font-family: var(--font-type);
   font-size: 100%;
