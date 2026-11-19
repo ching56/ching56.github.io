@@ -896,3 +896,8 @@
 - Intent: show the real bottle photo again in the homepage hero (the 21-frame turntable sprite, imported from src/assets so Astro fingerprints it), turning on scroll as before; while it docks the photo fades into the glyph silhouette, so the docked mark and the article-page logo stay the typed silhouette. Drop the shaded glyph frames
 - Why: user: "I want it to keep photo, as it demonstrates my work"
 - Result: done; hero sprite is /_astro/bottle-spin.<hash>.webp (666 KB, eager background). Verified in dev: frame steps on scroll, docks 73px at 16,16 as the silhouette (photo opacity 0, solid 1); built CSS keeps longhands. yarn run check clean, 40/40 tests
+
+## 2026-11-19 17:30 · claude-code
+- Intent: switch the homepage hero to the "bleed" layout the user picked from the five mocks (`.impeccable/mocks/hero-variants/`, variant 4): the bottle photo set larger than the screen (170dvh desktop, 150dvh narrow) and cut by the viewport's bottom edge, greeting top-left; scroll still turns it and docks it as the glyph-silhouette logo (range widened to 0–60dvh). New `scripts/build-bottle-assets.mjs` rebuilds the turntable sprite from the untracked `photo/cutout/` PNGs at the original geometry (bottle 900px tall in a 396×980 frame, was 297×735) plus a sharp 1514px-tall still of frame 0 for the resting hero, swapped out exactly when the first frame turns
+- Why: user: "I like 出血, lets change to it." The old sprite is far too small to show at bleed size
+- Result: (pending)

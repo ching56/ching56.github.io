@@ -1,9 +1,14 @@
 ---
-// The bottle from its 21-frame turntable cutout. "turntable" is the homepage
-// hero: the real photo, which turns on scroll and is struck into a solid glyph
-// silhouette as it docks as the home logo. "logo" is that docked state on every
-// other page: the last frame's silhouette.
+// The bottle from its 21-frame turntable cutout (assets rebuilt by
+// scripts/build-bottle-assets.mjs). "turntable" is the homepage hero: the real
+// photo, set larger than the screen, which turns on scroll and is struck into a
+// solid glyph silhouette as it docks as the home logo. At rest it shows a
+// full-resolution still of the first frame. "logo" is that docked state on
+// every other page: the last frame's silhouette.
+import { Image } from "astro:assets";
+
 import spin from "../assets/home/bottle-spin.webp";
+import still from "../assets/home/bottle-still.webp";
 import { turntableToAscii } from "../lib/ascii";
 
 interface Props {
@@ -23,6 +28,15 @@ const size = `--cols:${art.cols};--rows:${art.rows};--frames:${FRAMES}`;
   variant === "turntable" ? (
     <a class="home-bottle" href={href} aria-label={label} style={`${size};--sprite:url(${spin.src})`}>
       <span class="bottle-photo" aria-hidden="true"></span>
+      <Image
+        class="bottle-still"
+        src={still}
+        alt=""
+        widths={[333, 500, 666]}
+        sizes="(max-width: 48rem) 61vh, 69vh"
+        loading="eager"
+        fetchpriority="high"
+      />
       <span class="bottle-reel bottle-reel--solid" aria-hidden="true">
         {art.silhouettes.map((frame) => <span class="bottle-frame">{frame}</span>)}
       </span>

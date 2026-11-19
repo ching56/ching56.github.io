@@ -392,6 +392,14 @@ test("the approved continuous journal structure is semantic across reading surfa
   const sprite = hero.match(/--sprite:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
   assert.ok(sprite, "expected the hero to reference the fingerprinted bottle sprite");
   assert.match(hero, /<span class="bottle-photo" aria-hidden="true"><\/span>/);
+  // At rest the hero is larger than the screen, so it shows a full-resolution
+  // still of the first frame, fetched first.
+  const stillTag = hero.match(/<img\b[^>]*class="bottle-still"[^>]*>/)?.[0] ?? "";
+  assert.match(stillTag, /fetchpriority="high"/);
+  assert.match(stillTag, /\salt(?:="")?[\s>]/);
+  const still = stillTag.match(/\bsrc="(\/_astro\/[^"]+)"/)?.[1];
+  assert.ok(still, "expected the hero to show the high-resolution still");
+  await stat(new URL(still.slice(1), distDirectory));
   await stat(new URL(sprite.slice(1), distDirectory));
   await assert.rejects(stat(new URL("media/home/bottle-spin.webp", distDirectory)));
   assert.match(chinesePost, /<article class="reading-article">/);
@@ -511,6 +519,9 @@ test("optimized content images ship a srcset sized to the reading column", async
         srcset.split(",").filter(Boolean).length >= 1,
         `expected a srcset on ${image} in ${page}`,
       );
+      // The hero bottle is decorative (its link carries the label) and is
+      // sized by the screen's height.
+      if (/class="bottle-still"/.test(image)) continue;
       // Feed thumbnails are fixed-height and lightbox photos fill the screen;
       // every other content image sits in the reading column.
       const expectedSizes = /class="diary-photo-image"/.test(image)

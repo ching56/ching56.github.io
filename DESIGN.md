@@ -152,7 +152,7 @@ Five inks on white paper. The ribbon red is rare by design and always appears as
 
 One centered shell, `min(100% - clamp(2rem, 5vw, 5rem), 82rem)`, with main padding `clamp(3rem, 7vw, 6.75rem)`. At 48rem and below the shell narrows to `min(100% - 2rem, 42rem)` and main padding to `2rem 3.5rem`. All typed text starts flush on the column edge; there is no index gutter.
 
-The zh-TW home is a column of the bottle hero (40dvh slot), introduction (max 70ch), now note, and the diary feed (entries 4rem apart). Above `64.0625rem` it becomes two columns, a 44rem content column and a reserved empty creative-coding region at least 18rem wide. Articles are 64ch, with the date above the title. Photos for a feed entry sit in a row below the text, `12rem` tall, wrapping by default, swiping with scroll-snap on touch, and a no-wrap row with typed `[<]` `[>]` scroll buttons where `::scroll-button` is supported with a fine pointer.
+The zh-TW home opens on a full-screen hero (the greeting top left at max 30ch, the bleeding bottle beside and below it), then the now note and the diary feed (entries 4rem apart). Above `64.0625rem` it becomes two columns, a 44rem content column and a reserved empty creative-coding region at least 18rem wide. Articles are 64ch, with the date above the title. Photos for a feed entry sit in a row below the text, `12rem` tall, wrapping by default, swiping with scroll-snap on touch, and a no-wrap row with typed `[<]` `[>]` scroll buttons where `::scroll-button` is supported with a fine pointer.
 
 Minimum control height is `2.75rem`. English register is a plain list (see Components).
 
@@ -175,10 +175,10 @@ Every control is struck as `[ label ]`: a 2.75rem-high inline flex, 0.5ch gap, r
 A single column: the handwritten date at `1.5rem`, then typed text clamped to 10 lines. Photos are removed from the text and shown in the photo row below.
 
 ### Bottle Mark
-The real bottle photo, a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, fingerprinted by Astro), because the hero shows the potter's work. On the home page it sits pinned over a 40dvh slot; across the first 40dvh of scrolling it steps through frames, leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid glyph silhouette struck in `█`. That docked form is the logo on every other page. The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
+The real bottle photo, because the hero shows the potter's work: a 21-frame turntable sprite (`src/assets/home/bottle-spin.webp`, 396×980 frames) and a full-resolution still of the first frame (`bottle-still.webp`, 666×1649, srcset 333/500/666w, fetched first), both rebuilt from the untracked `photo/cutout/` by `scripts/build-bottle-assets.mjs`. On the home page it bleeds: set larger than the screen (170dvh tall at 14dvh from the top and 42% across the shell; 150dvh at 34dvh and 18% at 48rem and below) and cut off by the viewport's bottom edge, so the clay is seen up close first. Across the first 60dvh of scrolling it steps through frames (the still gives way to the sprite exactly when the first frame turns), leans to -45deg, shrinks into the top-left corner, and crossfades from the photo to a solid glyph silhouette struck in `█`. That docked form is the logo on every other page. The silhouette turns ribbon red on hover. Header height is `6rem` (5rem narrow).
 
 ### Paper Platen Band
-A fixed paper-white strip, 5.5rem tall, fading in over the last 10dvh of the dock (30dvh to 40dvh).
+A fixed paper-white strip, 5.5rem tall, fading in over the last 10dvh of the dock (45dvh to 60dvh).
 
 ### Glyph Photo Develop
 Every photo carries a build-time glyph rendering (ramp ` .:-=+*#%@`, cell aspect 0.6, 40 rows for article photos, scaled to the column by container units). As a photo row scrolls into view (view-timeline, `entry 0% cover 55%`), the glyphs fade out while the photo changes from `grayscale(1) contrast(1.3)` to its true colors.

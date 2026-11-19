@@ -214,14 +214,38 @@ main {
   display: none;
 }
 
+/* The hero fills the first screen: the greeting at the top left, the bottle
+   set larger than the screen and cut off by its bottom edge, so the clay is
+   seen up close first. Positions are in viewport units so the pinned bottle
+   (below) and this static fallback land in the same place. */
+.home-stage {
+  --main-top: clamp(3rem, 7vw, 6.75rem);
+  --bottle-top: 14dvh;
+  /* Fraction of the shell width from its left edge. */
+  --bottle-x: 0.42;
+  --bottle-height: 170dvh;
+  position: relative;
+}
+
 .home-hero {
   display: grid;
   align-content: start;
-  gap: 1.5rem;
+  min-height: calc(100dvh - var(--main-top));
+}
+
+.home-hero .about-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 30ch;
 }
 
 .home-bottle-slot {
-  height: 40dvh;
+  position: absolute;
+  top: calc(var(--bottle-top) - var(--main-top));
+  right: 0;
+  left: calc(var(--bottle-x) * 100%);
+  height: calc(100dvh - var(--bottle-top));
+  overflow: clip;
 }
 
 /* Each frame is one container-height tall, so the reel steps by whole frames
@@ -238,12 +262,22 @@ main {
 
 .home-bottle {
   --logo-width: 30px;
-  height: 100%;
+  height: var(--bottle-height);
   aspect-ratio: calc(var(--cols) * 0.6) / var(--rows);
 }
 
 .home-bottle:hover {
   color: var(--ribbon);
+}
+
+/* At rest: the first frame at full resolution, since the hero is larger than
+   the screen. It gives way to the sprite the moment the bottle starts turning. */
+.bottle-still {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* The real photo: a horizontal sprite of turntable frames, showing one. */
@@ -283,25 +317,37 @@ main {
 }
 
 /* Where scroll-driven animation is supported, the bottle is pinned over its
-   slot and, across the first 40dvh of scrolling, turns, leans, shrinks into
+   slot and, across the first 60dvh of scrolling, turns, leans, shrinks into
    the top-left corner and is struck into a glyph silhouette: the home mark. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
+    .home-bottle-slot {
+      overflow: visible;
+    }
+
     .home-bottle {
-      --shell-left: calc((100% - min(100% - clamp(2rem, 5vw, 5rem), 82rem)) / 2);
-      --start-top: clamp(3rem, 7vw, 6.75rem);
+      --shell-width: min(100% - clamp(2rem, 5vw, 5rem), 82rem);
+      --shell-left: calc((100% - var(--shell-width)) / 2);
       position: fixed;
       z-index: 10;
-      top: var(--start-top);
-      left: var(--shell-left);
-      height: 40dvh;
+      top: var(--bottle-top);
+      left: calc(var(--shell-left) + var(--shell-width) * var(--bottle-x));
       /* Longhands only: a minifier folding the timeline into the shorthand
          produces a declaration browsers reject. */
       animation-name: bottle-dock;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
-      animation-range: 0 40dvh;
+      animation-range: 0 60dvh;
+    }
+
+    /* Gone exactly when the first frame turns: 1/21 of the range. */
+    .home-bottle .bottle-still {
+      animation-name: bottle-still-out;
+      animation-timing-function: steps(1, jump-end);
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0 calc(60dvh / 21);
     }
 
     .home-bottle .bottle-photo {
@@ -309,7 +355,7 @@ main {
       animation-timing-function: steps(var(--frames), jump-none), linear;
       animation-fill-mode: both, both;
       animation-timeline: scroll(root);
-      animation-range: 0 40dvh;
+      animation-range: 0 60dvh;
     }
 
     .home-bottle .bottle-reel--solid {
@@ -317,20 +363,14 @@ main {
       animation-timing-function: steps(var(--frames), jump-none), linear;
       animation-fill-mode: both, both;
       animation-timeline: scroll(root);
-      animation-range: 0 40dvh;
+      animation-range: 0 60dvh;
     }
 
-    /* Mirror the narrow-screen shell width and main padding. */
+    /* Mirror the narrow-screen shell width. */
     @media (max-width: 48rem) {
       .home-bottle {
-        --shell-left: calc((100% - min(100% - 2rem, 42rem)) / 2);
-        --start-top: 2rem;
+        --shell-width: min(100% - 2rem, 42rem);
       }
-    }
-
-    /* Guarantee enough scroll for the bottle to finish docking. */
-    .home-stage:has(.home-bottle) {
-      min-height: 140dvh;
     }
 
     /* Once docked, the mark sits on a strip of paper, like the platen's
@@ -346,7 +386,7 @@ main {
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
-      animation-range: 30dvh 40dvh;
+      animation-range: 45dvh 60dvh;
     }
   }
 }
@@ -354,6 +394,12 @@ main {
 @keyframes bottle-turn {
   to {
     translate: 0 calc(-100% * (var(--frames) - 1) / var(--frames));
+  }
+}
+
+@keyframes bottle-still-out {
+  to {
+    opacity: 0;
   }
 }
 
@@ -1076,6 +1122,13 @@ time {
 @media (max-width: 48rem) {
   .site-shell {
     width: min(100% - 2rem, 42rem);
+  }
+
+  .home-stage {
+    --main-top: 2rem;
+    --bottle-top: 34dvh;
+    --bottle-x: 0.18;
+    --bottle-height: 150dvh;
   }
 
   .site-header {
