@@ -975,3 +975,8 @@
 - Intent: re-review the dock against Emil Kowalski's animation principles and expose its tunable parts in the dev panel: separate dock/return durations (asymmetric, chosen by --docked at transition time), easing preset, threshold, turntable on/off (`--dock-spin`), and where the darkening starts (`--dock-darken-from`), plus an "Emil 建議" preset button; shipped defaults stay as they are until the user picks
 - Why: user asked which parts of the current animation break Emil's principles, what could improve, and for a panel to fine-tune
 - Result: done. Found and fixed a real bug on the way (also reported by the user: docking after a return jumped instead of animating): a duration computed from --docked is animation-tainted, so transition-duration became invalid (0s) while docked. Durations now switch through `@container style(--docked: 1)` instead. Measured in dev: defaults dock 0.90s / return 0.90s, Emil preset dock 0.45s / return 0.55s, both directions animate. yarn run check clean, 40/40 tests
+
+## 2026-11-19 21:40 · claude-code
+- Intent: write the user's motion values from the dev panel into :root (dock 450ms, return 550ms, threshold 48px, darken from 15%, iOS drawer curve cubic-bezier(0.32, 0.72, 0, 1), turntable on) and clear the panel's stored motion
+- Why: user: "記住數值"
+- Result: done

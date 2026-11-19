@@ -33,19 +33,19 @@
   --logo-left: -4px;
   /* The home bottle docks once the page scrolls past this, in one move,
      turning once on its turntable. */
-  --dock-threshold: 32px;
+  --dock-threshold: 48px;
   /* Docking and returning can take different times. --dock-duration is the
      return time here and the docking time while docked (a style query
      below); it cannot be computed from --docked, because a value derived
      from an animation is invalid in transition properties. */
-  --dock-out-duration: 900ms;
-  --dock-in-duration: 900ms;
+  --dock-out-duration: 450ms;
+  --dock-in-duration: 550ms;
   --dock-duration: var(--dock-in-duration);
-  --dock-ease: cubic-bezier(0.77, 0, 0.175, 1);
+  --dock-ease: cubic-bezier(0.32, 0.72, 0, 1);
   /* 1: the turntable turns once on the way; 0: it does not. */
   --dock-spin: 1;
   /* How far into the move the photo starts to darken (0 to 0.9). */
-  --dock-darken-from: 0;
+  --dock-darken-from: 0.15;
   font-family: var(--font-type);
   font-size: 100%;
   color: var(--ink);
