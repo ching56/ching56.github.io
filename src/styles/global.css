@@ -172,12 +172,14 @@ a {
 }
 
 /* Header: the bottle silhouette alone, the way home. */
+/* The mark sits exactly where the home bottle docks (on a strip
+   --logo-width + 24px tall at the top of the page), so crossing between home
+   and a post the mark stays put instead of jumping. */
 .site-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: start;
   min-height: 6rem;
-  padding-top: 0.5rem;
 }
 
 .site-identity {
@@ -197,13 +199,15 @@ a {
   display: inline-flex;
   align-items: center;
   min-width: 2.75rem;
-  min-height: 2.75rem;
+  min-height: calc(var(--logo-width) + 24px);
 }
 
 /* The mark lies on its side; its box is still upright, so margins the size
-   of the overhang keep the visible mark inside the link, on the shell's
-   edge. */
+   of the overhang (outward sideways, inward top and bottom) make it take up
+   exactly the space it is seen in: on the shell's edge, centred in the
+   strip. */
 .site-mark .bottle-logo {
+  margin-block: calc((var(--logo-width) - var(--logo-height)) / 2);
   margin-inline: calc((var(--logo-height) - var(--logo-width)) / 2);
 }
 

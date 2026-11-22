@@ -41,12 +41,9 @@ const { variant, href, label } = Astro.props;
       <span class="bottle-silhouette" aria-hidden="true"></span>
     </a>
     <script is:inline>
-      // The turntable turns only once its sprite is in hand. Each sprite
-      // size is a small state machine, idle -> loading -> ready | failed,
-      // started after the still has loaded; data-spin="ready" (which lets
-      // CSS use the sprite) follows the current size's state. Data saver,
-      // 2G, a failed load or no sprite within 8s: the bottle stays still,
-      // and a failed size is not retried.
+      // The turntable turns only once its sprite is in hand: per sprite
+      // size, idle -> loading -> ready | failed (no retry). data-spin
+      // follows the current size. Data saver, 2G, an error or 8s: no turn.
       (() => {
         const root = document.documentElement;
         const bottle = document.querySelector(".home-bottle");
@@ -97,16 +94,17 @@ const { variant, href, label } = Astro.props;
         narrow.addEventListener("change", show);
       })();
 
-      // The bottle morphs across pages only while it is on screen. Leaving
-      // or landing on home scrolled past it, the page simply changes, with
-      // no transition at all.
+      // The bottle morphs across pages only from the hero. Docked, it is
+      // already where every header's mark sits, so the page just changes.
       (() => {
         const bottle = document.querySelector(".home-bottle");
         if (!bottle) return;
+        const root = document.documentElement;
         const guard = (event) => {
           if (!event.viewTransition) return;
+          const docked = scrollY >= parseFloat(getComputedStyle(root).getPropertyValue("--dock-threshold"));
           const box = bottle.getBoundingClientRect();
-          if (box.bottom > 0 && box.top < innerHeight) return;
+          if (!docked && box.bottom > 0 && box.top < innerHeight) return;
           event.viewTransition.skipTransition();
         };
         addEventListener("pageswap", guard);
