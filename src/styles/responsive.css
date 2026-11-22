@@ -1,0 +1,73 @@
+/* Wide and narrow screens, and reduced motion. Imported last so it overrides. Part of global.css, in cascade order. */
+
+/* ---------- Wide and narrow screens ---------- */
+
+@media (min-width: 64.0625rem) {
+  .home-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 44rem) minmax(18rem, 1fr);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: stretch;
+    min-height: calc(100svh - 13rem);
+  }
+
+  .creative-coding-area {
+    display: block;
+    min-height: 100%;
+  }
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --shell-width-vw: min(100vw - 2rem, 42rem);
+  }
+
+  .site-shell {
+    width: min(100% - 2rem, 42rem);
+  }
+
+  .home-stage {
+    --main-top: 2rem;
+    /* Placed by the user. */
+    --bottle-top: 3dvh;
+    --bottle-x: 0.05;
+    --bottle-height: 16dvh;
+    --bottle-rotate: -21deg;
+    --hero-gap: 76px;
+    --greeting-align: end;
+  }
+
+  .site-header {
+    min-height: 5rem;
+  }
+
+  main {
+    padding-block: 2rem 3.5rem;
+  }
+
+  .post-list-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.125rem;
+    min-height: 3rem;
+  }
+
+  .post-list-item time {
+    grid-column: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Reduce, don't remove: the lightbox still fades, without the scale. */
+  .lightbox,
+  .lightbox::backdrop {
+    scale: none;
+    transition-duration: 150ms !important;
+  }
+}

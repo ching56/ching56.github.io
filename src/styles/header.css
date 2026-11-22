@@ -1,0 +1,69 @@
+/* The page header: the lying bottle mark, fixed to the top on a strip of paper. Part of global.css, in cascade order. */
+
+/* Header: the bottle silhouette alone, the way home. */
+/* The mark sits exactly where the home bottle docks (on a strip
+   --logo-width + 24px tall at the top of the page), so crossing between home
+   and a post the mark stays put instead of jumping. */
+.site-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  min-height: 6rem;
+}
+
+/* Like the docked home bottle, the mark stays at the top of the page on a
+   full-width strip of paper (the same strip as home's), so text scrolls
+   under paper, never under the mark. The header itself keeps its height in
+   the flow. */
+.site-identity {
+  position: fixed;
+  z-index: 10;
+  inset: 0 0 auto;
+  height: calc(var(--logo-width) + 24px);
+  min-width: 0;
+  padding-inline-start: calc((100% - min(100% - clamp(2rem, 5vw, 5rem), 82rem)) / 2);
+  background: var(--paper);
+}
+
+@media (max-width: 48rem) {
+  .site-identity {
+    padding-inline-start: calc((100% - min(100% - 2rem, 42rem)) / 2);
+  }
+}
+
+.site-crumbs {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-mark {
+  display: inline-flex;
+  align-items: center;
+  min-width: 2.75rem;
+  min-height: calc(var(--logo-width) + 24px);
+}
+
+/* The mark lies on its side; its box is still upright, so margins the size
+   of the overhang (outward sideways, inward top and bottom) make it take up
+   exactly the space it is seen in: on the shell's edge, centred in the
+   strip. */
+.site-mark .bottle-logo {
+  margin-block: calc((var(--logo-width) - var(--logo-height)) / 2);
+  margin-inline: calc((var(--logo-height) - var(--logo-width)) / 2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-mark:hover .bottle-logo {
+    color: var(--ribbon);
+  }
+}
+
+main {
+  flex: 1;
+  min-width: 0;
+  padding-block: clamp(3rem, 7vw, 6.75rem);
+}

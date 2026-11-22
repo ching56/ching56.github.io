@@ -1,0 +1,195 @@
+/* Reading an entry: the article, likes and response ending. Part of global.css, in cascade order. */
+
+/* ---------- Reading an entry ---------- */
+
+.reading-article {
+  width: min(100%, 64ch);
+}
+
+.post-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+/* The date heads the entry, above its title. */
+.post-header .diary-date {
+  grid-row: 1;
+}
+
+.post-header h1 {
+  grid-row: 2;
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* An untitled Threads post opens straight into its text. */
+.post-header--untitled {
+  margin-bottom: clamp(1rem, 3vw, 1.75rem);
+}
+
+.music-link-card {
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+}
+
+.music-link-card__work,
+.music-link-card__performer {
+  margin: 0;
+}
+
+.music-link-card__work {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.music-link-card__performer {
+  margin-top: 0.2rem;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.music-link-card__providers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2ch;
+  margin: 0.75rem 0 0 -1ch;
+  padding: 0;
+  list-style: none;
+}
+
+.music-link-card__providers a {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.post-body {
+  font-size: 1rem;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.post-body :where(p, ul, ol, blockquote, pre, video) {
+  margin-block: 0 1.5em;
+}
+
+.post-body :where(h2, h3, h4) {
+  margin-block: 2.4em 0.75em;
+  font-size: 1rem;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.post-body :where(ul, ol) {
+  padding-inline-start: 3ch;
+}
+
+.post-body li + li {
+  margin-top: 0.5em;
+}
+
+.post-body blockquote {
+  margin-inline: 0;
+  padding-inline-start: 3ch;
+  color: var(--ink-muted);
+}
+
+.post-body :where(img, video) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Tall phone clips stay within one screen; width follows the video's
+   own aspect ratio from its width/height attributes and poster. */
+.post-body video {
+  width: auto;
+  max-height: 85svh;
+}
+
+.post-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.post-body a {
+  text-decoration: underline;
+  text-decoration-color: var(--ribbon);
+  text-underline-offset: 0.2em;
+}
+
+.post-likes {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+/* Brackets hang one cell into the margin so the label sits on cell zero. */
+.reading-article > .post-likes {
+  margin-inline-start: -1ch;
+}
+
+.post-likes button {
+  padding: 0;
+  font-weight: 400;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.post-likes button[aria-pressed="true"] output {
+  color: var(--ribbon);
+}
+
+.post-likes button:disabled {
+  cursor: wait;
+  color: var(--ink-muted);
+}
+
+.post-likes output {
+  min-width: 2ch;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* One closing invitation for the bio and every article: an optional muted
+   prompt above a typed bracket. */
+.response-ending {
+  display: grid;
+  gap: 0.25rem;
+  justify-items: start;
+}
+
+.response-ending p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-size);
+  line-height: 1.75;
+}
+
+.response-cta {
+  font-weight: 400;
+}
+
+.response-cta svg {
+  flex: none;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .response-cta:hover .external-link-icon {
+    transform: translate(2px, -2px);
+  }
+}
+
+.reading-article > .response-ending {
+  margin-top: clamp(3rem, 7vw, 4.5rem);
+}
+
+.reading-article > .response-ending .response-cta {
+  margin-inline-start: -1ch;
+}

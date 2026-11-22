@@ -1,0 +1,75 @@
+/* Moving between pages: the bottle's cross-page morph and back to top. Part of global.css, in cascade order. */
+
+/* ---------- Across pages ---------- */
+
+/* The bottle moves across pages only when its two ends look different: the
+   hero photo and the header mark share one transition name, so it morphs
+   between them. Docked, it already is the mark, so the bottle script skips
+   the transition and the mark stays still. The root has no animation, so
+   the page itself never blinks. Browsers without cross-document view
+   transitions, and reduced motion, simply navigate. */
+@view-transition {
+  navigation: auto;
+}
+
+.site-mark .bottle-logo,
+.home-bottle {
+  view-transition-name: bottle;
+}
+
+::view-transition-group(bottle) {
+  animation-duration: 550ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* ---------- Back to top ---------- */
+
+/* A typed [ ↑ ] in the bottom-right corner, on a sliver of paper so it
+   reads over text and photos. It fades in only once the reader is a screen
+   down (scroll-driven), so short pages never show it. Without scroll
+   timelines it simply stays. */
+.to-top {
+  position: fixed;
+  z-index: 20;
+  right: max(1rem, (100vw - var(--shell-width-vw)) / 2);
+  bottom: 1rem;
+  padding-inline: 0.5ch;
+  background: var(--paper);
+}
+
+@supports (animation-timeline: scroll()) {
+  .to-top {
+    opacity: 0;
+    visibility: hidden;
+    animation-name: to-top-in;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root);
+    animation-range: 80dvh 100dvh;
+  }
+}
+
+@keyframes to-top-in {
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Glide back up, unless the reader asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.to-top) {
+    scroll-behavior: smooth;
+  }
+}

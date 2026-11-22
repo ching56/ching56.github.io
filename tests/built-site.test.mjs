@@ -909,10 +909,14 @@ test("scroll-driven animations survive minification as longhands", async () => {
 });
 
 test("the compact frameless content contract stays within its confirmed limits", async () => {
-  const css = await readFile(
-    new URL("../src/styles/global.css", import.meta.url),
-    "utf8",
-  );
+  // global.css imports ordered partials; read them all, in import order.
+  const stylesDirectory = new URL("../src/styles/", import.meta.url);
+  const entry = await readFile(new URL("global.css", stylesDirectory), "utf8");
+  const partials = [...entry.matchAll(/@import "\.\/([\w-]+\.css)";/g)].map(([, file]) => file);
+  assert.ok(partials.length > 0, "expected global.css to import its partials");
+  const css = (
+    await Promise.all(partials.map((file) => readFile(new URL(file, stylesDirectory), "utf8")))
+  ).join("\n");
   const fontSizeDeclarations = [
     ...css.matchAll(/font-size:\s*([^;]+);/g),
   ];

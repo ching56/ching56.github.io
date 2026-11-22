@@ -31,7 +31,8 @@ The active Astro scaffold uses the default project roots:
 - `src/config/site.js` — the single source for site title, canonical URL, description, and author.
 - `src/content.config.ts` / `src/content/posts/` — typed Markdown collections organized by locale.
 - `src/pages/` — locale-prefixed list and post routes; the first tracer lives under `/zh-TW/`.
-- `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only baseline CSS.
+- `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only CSS. `global.css` only `@import`s ordered partials (base, header, bottle, dock, navigation, intro, diary, register, article, responsive); the import order is the cascade order. Keep every source file under 300 lines.
+- `src/scripts/bottle-home.js` — the home bottle's state machines, inlined minified by `BottleMark.astro`.
 - `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no runtime JS beyond the likes script and the homepage bottle loader, no webfonts).
 - `public/` — static assets and Cloudflare's `_redirects` file, copied verbatim into `dist/`.
 - `dist/` — generated build output, gitignored.

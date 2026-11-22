@@ -1,0 +1,134 @@
+/* The home hero: the bottle photo, its turntable sprite and silhouette. Part of global.css, in cascade order. */
+
+/* ---------- The bottle ---------- */
+
+.home-flow {
+  display: grid;
+  align-content: start;
+  gap: clamp(3.5rem, 7vw, 5.5rem);
+  min-width: 0;
+}
+
+.creative-coding-area {
+  display: none;
+}
+
+/* The hero is one row: the bottle on the left and the greeting beside it,
+   aligned to the bottle's height. The greeting is padded to start just past
+   the bottle wherever it stands. */
+.home-stage {
+  --main-top: clamp(3rem, 7vw, 6.75rem);
+  --bottle-top: 12dvh;
+  /* Where the bottle stands, as a fraction of the shell width, and which part
+     of the bottle stands there: 0 its left edge, 0.5 its centre. */
+  --bottle-x: 0;
+  --bottle-align: 0;
+  --bottle-height: 36dvh;
+  --bottle-rotate: 0deg;
+  --bottle-width: calc(var(--bottle-height) * 396 / 980);
+  /* Space between the bottle and the greeting. */
+  --hero-gap: 32px;
+  /* Where the greeting sits against the bottle's height: start, center or
+     end (grid alignment). */
+  --greeting-align: center;
+  position: relative;
+}
+
+.home-hero {
+  display: grid;
+  align-content: var(--greeting-align);
+  min-height: calc(var(--bottle-top) - var(--main-top) + var(--bottle-height));
+  padding-top: calc(var(--bottle-top) - var(--main-top));
+  padding-inline-start: calc(
+    var(--shell-width-vw) * var(--bottle-x) + var(--bottle-width) * (1 - var(--bottle-align)) +
+      var(--hero-gap)
+  );
+}
+
+.home-hero .about-intro {
+  position: relative;
+  z-index: 1;
+  max-width: 30ch;
+}
+
+/* The bottle's place in the hero. */
+.home-bottle-slot {
+  position: absolute;
+  top: calc(var(--bottle-top) - var(--main-top));
+  right: 0;
+  left: calc(var(--bottle-x) * 100% - var(--bottle-width) * var(--bottle-align));
+  height: var(--bottle-height);
+  overflow: clip;
+}
+
+.home-bottle,
+.bottle-logo {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  transition: color 120ms ease-out;
+}
+
+.home-bottle {
+  height: var(--bottle-height);
+  aspect-ratio: 396 / 980;
+  rotate: var(--bottle-rotate);
+}
+
+/* The turntable sprite is used only once the page has loaded it (see
+   BottleMark's script): until then nothing references it, so the still is
+   never competing with it, and each screen fetches only its own size. */
+html[data-spin="ready"] .home-bottle {
+  --sprite: var(--sprite-large);
+}
+
+@media (max-width: 48rem) {
+  html[data-spin="ready"] .home-bottle {
+    --sprite: var(--sprite-small);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-bottle:hover {
+    color: var(--ribbon);
+  }
+}
+
+/* At rest: the first frame at full resolution, since the hero is larger than
+   the screen. */
+.bottle-still {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The turntable sprite, showing one frame. */
+.bottle-photo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: var(--sprite) 0 0 / calc(var(--frames) * 100%) 100% no-repeat;
+  opacity: 0;
+}
+
+/* The silhouette: the last turntable frame's outline, filled with ink. */
+.bottle-silhouette {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: currentColor;
+  mask: var(--sprite) 100% 0 / calc(var(--frames) * 100%) 100% no-repeat;
+  opacity: 0;
+}
+
+.bottle-logo {
+  flex: none;
+  width: var(--logo-width);
+  height: var(--logo-height);
+  background: currentColor;
+  mask: var(--mark) center / contain no-repeat;
+  rotate: var(--logo-rotate);
+}
