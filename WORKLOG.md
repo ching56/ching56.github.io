@@ -1153,3 +1153,8 @@
 - Intent: make the two pieces of implicit client state explicit finite-state machines. (1) likes.js: the state lived across root.hidden, button.disabled, aria-pressed and the status text; now `loading → ready | unavailable`, `ready|liked|failed —press→ sending`, `sending → liked | failed`, a transition table that ignores events a state doesn't accept, one render() from (state, count, liked), and the state mirrored to `data-state`. Fixes on the way: a failed send's message is cleared on the next press; `aria-busy` while sending. (2) The home sprite loader: per-size states `idle → loading → ready | failed` in a table, `data-spin` derived from the current size's state; a size that failed or timed out stays failed instead of silently retrying when the breakpoint flips back
 - Why: user: "Find implicit state and make it explicit fsm"
 - Result: (pending)
+
+## 2026-11-22 10:00 · claude-code
+- Intent: make `http://localhost:4321/` redirect in `astro dev` the way production does, through a dev-only integration (`src/lib/dev-root-redirect.mjs`, hook `astro:server:setup`) that calls the real Pages Function `functions/index.js` for `/`. No effect on `astro build`/`dist`
+- Why: user saw 404 at the dev root; the root redirect lives in a Cloudflare Pages Function, which Astro dev doesn't run
+- Result: done. curl on dev `/`: zh-TW → 302 /zh-TW/, en-US → 302 /en/, query string kept on the match; browser pane lands on /zh-TW/. check 0/0, test 42/42, dist still has no root index.html
