@@ -1243,3 +1243,8 @@
 - Intent: add a `returning` state to the bottle's place machine (`returning --past|hand--> docked`, rendered as `data-bottle="docked"`): a back_forward return to a home left docked starts there and ignores `back` while the browser restores the scroll
 - Why: a per-frame recorder (temporary rAF probe in bottle-head.js writing pseudo-element animations, `data-bottle` and the bottle's rect to sessionStorage each frame; removed before commit) caught the dance: (1) the body script's initial `track()` ran at scrollY 0 before restoration and demoted the seed to hero, so the transition captured the hero photo and morphed; (2) after skipping that, a restoration scroll event at ~55ms with scrollY < 48 still flipped it to hero for a few frames
 - Result: done. Chromium dev, docked home (900px) → third-teapot → header mark: all 91 frames (≈1.5s) `docked 16,12,54,22`, no bottle view-transition animation, scroll restored to 900. Home at top → november-bottles → mark: the bottle morph runs (34 frames ≈ 550ms). check 0/0, test 42/42; head script 251 B, body 1,669 B. Safari not yet run (safaridriver session creation timed out)
+
+## 2026-11-23 03:30 · claude-code
+- Intent: record the deploy of aa7c638 and the Safari attempt
+- Why: user asked for push and deploy; they enabled safaridriver
+- Result: pages.dev served the new build 45s after the push (head seed script, `returning` state in the body script, CSS naming only the hero bottle). safaridriver on :4444 runs, but `POST /session` times out twice ("Request creation of a new automation session"): Safari's Allow Remote Automation (Settings ▸ Developer) is likely still off, or a Safari prompt is waiting. Safari focus ring and Safari morph remain unverified
