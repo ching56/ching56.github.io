@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import AboutSection from "../../components/AboutSection.astro";
+import BottleHead from "../../components/BottleHead.astro";
 import BottleMark from "../../components/BottleMark.astro";
 import NowSection from "../../components/NowSection.astro";
 import DiaryFeed from "../../components/DiaryFeed.astro";
@@ -16,6 +17,7 @@ if (!about) {
 ---
 
 <BaseLayout language="zh-TW" alternates={EDITION_HOME_ALTERNATES} showHeader={false}>
+  <BottleHead slot="head" />
   <div class="home-stage">
     <div class="home-flow">
       <div class="home-hero">

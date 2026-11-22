@@ -27,9 +27,11 @@ interface Props {
 // derives every root attribute from their states and nothing else writes
 // them:
 //   place   hero --past--> docked --back--> hero   (scrollY vs --dock-threshold)
-//           -> html[data-bottle]; CSS docks the bottle from it. Coming back
-//           to home in history starts in the place it was left in (saved on
-//           pagehide), so it is docked before the browser restores scroll.
+//           -> html[data-bottle]; CSS docks the bottle from it. The head
+//           script (BottleHead.astro, bottle-head.js) seeds it before the
+//           first frame: coming back to home in history starts in the place
+//           it was left in (saved on pagehide), so it is docked before the
+//           browser restores scroll or a transition captures the page.
 //   motion  still --hand--> live   (first wheel, touch, key or pointer)
 //           -> html[data-bottle-motion]; while still, docking is instant, so
 //           a page reopened scrolled down never plays the move.
@@ -39,8 +41,9 @@ interface Props {
 //           the still has loaded; skipped on data saver or 2G; 8s timeout.
 // Across pages the bottle moves only when its two ends look different: in
 // the hero (a photo) it morphs into or out of the header mark, both ways.
-// Docked, it already is the mark, exactly where every header's mark sits, so
-// the transition is skipped (pageswap/pagereveal) and the mark stays still.
+// Docked, it already is the mark, exactly where every header's mark sits;
+// CSS then gives it no transition name (navigation.css), so the mark stays
+// still. No script decides this, so it works without pageswap/pagereveal.
 const FRAMES = 21;
 // Shipped minified: readable source, small page.
 const bottleScript = transformSync(bottleSource, { minify: true, target: "es2020" }).code.trim();

@@ -811,7 +811,11 @@ test("only the bottle moves across pages, and the page itself never fades", asyn
   ).join("\n");
   assert.match(css, /@view-transition\s*\{\s*navigation:\s*auto/);
   assert.match(css, /view-transition-name:\s*bottle/);
-  assert.match(css, /::view-transition-old\(root\),\s*::view-transition-new\(root\)\s*\{\s*animation:\s*none/);
+  // Only the hero bottle is named; a lone mark (home docked) does not move.
+  assert.match(css, /html\[data-bottle=hero\] \.home-bottle\{view-transition-name:bottle\}/);
+  assert.doesNotMatch(css, /(?:^|[,}])\.home-bottle\{view-transition-name/);
+  assert.match(css, /::view-transition-old\(bottle\):only-child,::view-transition-new\(bottle\):only-child\{animation:none\}/);
+  assert.match(css, /::view-transition-old\(root\),\s*::view-transition-new\(root\)[^{]*\{\s*animation:\s*none/);
 });
 
 test("every page offers a back-to-top link that appears a screen down", async () => {
@@ -847,12 +851,17 @@ test("content pages load no external webfonts or Astro runtime JavaScript beyond
       // machines: place (hero/docked -> data-bottle), motion (still/live ->
       // data-bottle-motion) and the sprite loader (-> data-spin="ready",
       // never on Save-Data, 2G or after 8s); it also guards the morph.
-      assert.deepEqual(scripts, ["<script>"]);
-      const [script] = html.match(/<script>[\s\S]*?<\/script>/);
+      // A head script seeds the bottle's place before the first frame and
+      // guards the transition on arrival; the body script runs the machines.
+      assert.deepEqual(scripts, ["<script>", "<script>"]);
+      const [headScript, script] = [...html.matchAll(/<script>[\s\S]*?<\/script>/g)].map(([s]) => s);
+      assert.ok(html.indexOf(headScript) < html.indexOf("</head>"), "expected the seed script in <head>");
+      assert.match(headScript, /bottle-place/);
+      assert.match(headScript, /bottleMotion/);
+      assert.ok(headScript.length < 1024, `expected the head script under 1 KB, got ${headScript.length}`);
       assert.match(script, /\.spin="ready"/);
       assert.match(script, /docked/);
       assert.match(script, /pagehide/);
-      assert.match(script, /pagereveal/);
       assert.ok(script.length < 3072, `expected the inline script under 3 KB, got ${script.length}`);
     } else if (index === 1) {
       assert.deepEqual(scripts, []);

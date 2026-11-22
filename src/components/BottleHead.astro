@@ -1,0 +1,10 @@
+---
+// The home bottle's render-blocking head script (src/scripts/bottle-head.js),
+// shipped minified. See BottleMark.astro for the state machines it seeds.
+import { transformSync } from "esbuild";
+import source from "../scripts/bottle-head.js?raw";
+
+const code = transformSync(source, { minify: true, target: "es2020" }).code.trim();
+---
+
+<script is:inline set:html={code}></script>

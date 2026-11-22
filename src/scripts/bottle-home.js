@@ -25,12 +25,11 @@
     else delete root.dataset.spin;
   };
 
+  // The head script (bottle-head.js) has seeded the place before the first
+  // frame; the machine starts from that seed.
   const key = "bottle-place";
-  let saved = "";
-  try {
-    if (performance.getEntriesByType("navigation")[0]?.type === "back_forward") saved = sessionStorage.getItem(key);
-  } catch {}
-  const place = machine({ hero: { past: "docked" }, docked: { back: "hero" } }, saved === "docked" ? "docked" : "hero", render);
+  const seed = root.dataset.bottle === "docked" ? "docked" : "hero";
+  const place = machine({ hero: { past: "docked" }, docked: { back: "hero" } }, seed, render);
   const motion = machine({ still: { hand: "live" }, live: {} }, "still", render);
   const spriteTable = {
     idle: { request: "loading" },
@@ -56,14 +55,6 @@
       sessionStorage.setItem(key, place.state);
     } catch {}
   });
-  // The bottle moves across pages only when its two ends look different:
-  // the hero photo here and the mark on the other page. Docked, it already
-  // is the mark, so the page just changes and the mark stays still.
-  const guard = (event) => {
-    if (place.state !== "hero") event.viewTransition?.skipTransition();
-  };
-  addEventListener("pageswap", guard);
-  addEventListener("pagereveal", guard);
 
   const connection = navigator.connection;
   if (connection && (connection.saveData || /2g$/.test(connection.effectiveType))) return;

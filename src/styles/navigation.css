@@ -2,18 +2,23 @@
 
 /* ---------- Across pages ---------- */
 
-/* The bottle moves across pages only when its two ends look different: the
-   hero photo and the header mark share one transition name, so it morphs
-   between them. Docked, it already is the mark, so the bottle script skips
-   the transition and the mark stays still. The root has no animation, so
-   the page itself never blinks. Browsers without cross-document view
-   transitions, and reduced motion, simply navigate. */
+/* The bottle moves across pages only when its two ends look different. The
+   home bottle carries the transition name only while it is in the hero
+   (html[data-bottle="hero"], seeded in <head> before the first frame, so it
+   holds when a page is captured), so only the hero photo and a header mark
+   morph into each other. Docked, the home bottle has no name: the mark on
+   the other page is then alone, with no animation, and simply stays where
+   it is, as the docked bottle is at that very spot. CSS decides, so this
+   holds in every browser with cross-document view transitions, even where
+   pageswap/pagereveal are missing (Safari before 26.2). The root has no
+   animation, so the page itself never blinks. Reduced motion and browsers
+   without these transitions simply navigate. */
 @view-transition {
   navigation: auto;
 }
 
 .site-mark .bottle-logo,
-.home-bottle {
+html[data-bottle="hero"] .home-bottle {
   view-transition-name: bottle;
 }
 
@@ -23,7 +28,9 @@
 }
 
 ::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-new(root),
+::view-transition-old(bottle):only-child,
+::view-transition-new(bottle):only-child {
   animation: none;
 }
 
