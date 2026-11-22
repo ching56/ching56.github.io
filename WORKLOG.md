@@ -1163,3 +1163,8 @@
 - Intent: refresh the stale expectations in `docs/cloudflare-pages-cutover.md` before the user deploys: the legacy-slug table and content greps still expected the hidden 2022/covid/2023-2024/2025 posts; `public/_redirects` now sends them all to `/zh-TW/` (and `/about` to `/zh-TW/#about`)
 - Why: user asked how to deploy to jhihcing.li; the runbook is the path, and its checks would fail against the current build
 - Result: done; DNS rechecked (still Bluehost NS, apex A 66.235.200.145); `november-bottles` grep matches dist/zh-TW/index.html. Docs only, no deploy or push
+
+## 2026-11-22 10:40 · claude-code
+- Intent: push local `master` (138 commits ahead) to `origin/master`
+- Why: user: "push it"; Cloudflare Pages builds only from GitHub (runbook step 2). Pre-push check: clean tree, no WordPress export, `.dev.vars`, `.env` or secret files in the pushed range
+- Result: (pending)
