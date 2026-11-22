@@ -1173,3 +1173,8 @@
 - Intent: verify the user's first Cloudflare Pages deployment (`ching56-github-io.pages.dev`, deployment `fe498fff`) read-only, per runbook §2.5
 - Why: user created the Pages project (an earlier attempt was a Workers project: its `npx wrangler deploy` picked up the likes Worker's `wrangler.jsonc` and failed on the placeholder D1 id; advised deleting it and closing any rename PR Workers Builds opens)
 - Result: all pass. `/` 302 → /zh-TW/ (zh) or /en/ (en) with `Vary: Accept-Language`; /zh-TW/, /en/, a post, atom.xml (5 entries), likes.js 200; all 7 legacy slugs 301 to /zh-TW/ (/about → /zh-TW/#about); turntable sprites and CSS 200. `/api/likes` 404 as expected (Worker not deployed; likes stay hidden). Next: user attaches jhihcing.li + www (runbook §1 DNS move first, then §3–4)
+
+## 2026-11-22 23:10 · claude-code
+- Intent: revert the page header to the horizontal logo: bottle silhouette + 「李至青」 side by side in one home link (`div.site-identity > a.site-mark > .bottle-logo + .author-signature`), with the pre-breadcrumb values from `2a08371^` (gap 1.75rem, padding-inline-start 1.25rem, signature at type size, 0.08em tracking, both turn ribbon red on hover). Keep later decisions: no language switch, markReturns history.back(), the bottle's view-transition name. Drop the now-unused breadcrumbLabel/homeLabel strings and `.site-crumbs` CSS; update tests and DESIGN.md
+- Why: user: "I want to revert the header with horizontal logo version"
+- Result: done. check 0/0, test 42/42 (header regex now asserts the bottle + 李至青 link; CSS must have .author-signature and no .site-crumbs). Dev screenshots: november-bottles header shows bottle then 李至青 on one line at desktop and 375px

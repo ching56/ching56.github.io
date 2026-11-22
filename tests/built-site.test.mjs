@@ -329,14 +329,13 @@ test("the approved continuous journal structure is semantic across reading surfa
     assert.match(html, /<body data-surface="character-proof">/);
     assert.match(html, /direction seed 9062ef67/);
     if (html !== chineseList) {
-      // The header is a breadcrumb: the bottle silhouette alone links home.
+      // The header is the horizontal logo: the bottle silhouette beside the
+      // name, one link home.
       assert.match(
         html,
-        /<nav class="site-identity" aria-label="(?:目前位置|You are here)">\s*<ol class="site-crumbs">\s*<li>\s*<a class="site-mark" href="\/(?:zh-TW|en)\/" aria-label="(?:首頁|Home)">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<\/a>\s*<\/li>/,
+        /<div class="site-identity">\s*<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>\s*<\/div>/,
       );
-      assert.doesNotMatch(html, /class="author-signature"/);
-      // The header holds only the bottle for now.
-      assert.doesNotMatch(html, /class="site-crumb"/);
+      assert.doesNotMatch(html, /class="site-crumbs?"/);
     }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
@@ -935,8 +934,9 @@ test("the compact frameless content contract stays within its confirmed limits",
     );
   }
 
-  // The header holds only the bottle: no name, no crumb trail.
-  assert.doesNotMatch(css, /\.author-signature|\.site-crumb\b/);
+  // The header is the bottle beside the name; no crumb trail.
+  assert.match(css, /\.author-signature\s*\{/);
+  assert.doesNotMatch(css, /\.site-crumbs?\b/);
 
   const linkRule = css.match(/^a\s*\{([^}]*)\}/m);
   assert.ok(linkRule, "expected a global link rule");

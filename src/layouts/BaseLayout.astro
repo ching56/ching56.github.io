@@ -69,15 +69,12 @@ const ui = UI[language];
     <div class="site-shell">
       {showHeader && (
       <header class="site-header">
-        <nav class="site-identity" aria-label={ui.breadcrumbLabel}>
-          <ol class="site-crumbs">
-            <li>
-              <a class="site-mark" href={ui.homePath} aria-label={ui.homeLabel}>
-                <BottleMark variant="logo" />
-              </a>
-            </li>
-          </ol>
-        </nav>
+        <div class="site-identity">
+          <a class="site-mark" href={ui.homePath}>
+            <BottleMark variant="logo" />
+            <span class="author-signature">{SITE.author.displayName}</span>
+          </a>
+        </div>
         {markReturns && (
           <script is:inline>
             // Came here from home? Then the mark goes back rather than
