@@ -51,16 +51,11 @@
     addEventListener(type, () => motion.send("hand"), { passive: true });
   }
 
-  const guard = (event) => {
-    if (event.viewTransition && place.state !== "hero") event.viewTransition.skipTransition();
-  };
-  addEventListener("pageswap", (event) => {
+  addEventListener("pagehide", () => {
     try {
       sessionStorage.setItem(key, place.state);
     } catch {}
-    guard(event);
   });
-  addEventListener("pagereveal", guard);
 
   const connection = navigator.connection;
   if (connection && (connection.saveData || /2g$/.test(connection.effectiveType))) return;

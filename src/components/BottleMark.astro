@@ -29,7 +29,7 @@ interface Props {
 //   place   hero --past--> docked --back--> hero   (scrollY vs --dock-threshold)
 //           -> html[data-bottle]; CSS docks the bottle from it. Coming back
 //           to home in history starts in the place it was left in (saved on
-//           pageswap), so it is docked before the browser restores scroll.
+//           pagehide), so it is docked before the browser restores scroll.
 //   motion  still --hand--> live   (first wheel, touch, key or pointer)
 //           -> html[data-bottle-motion]; while still, docking is instant, so
 //           a page reopened scrolled down never plays the move.
@@ -37,8 +37,8 @@ interface Props {
 //                                               --failed--> failed (no retry)
 //           -> html[data-spin="ready"] for the current size. Started after
 //           the still has loaded; skipped on data saver or 2G; 8s timeout.
-// The cross-page morph runs only while place is hero; otherwise the page
-// simply changes, the mark already being where every header's mark is.
+// There is no cross-page morph: pages simply change. Docked, the bottle is
+// exactly where every header's mark is, so the mark stays still.
 const FRAMES = 21;
 // Shipped minified: readable source, small page.
 const bottleScript = transformSync(bottleSource, { minify: true, target: "es2020" }).code.trim();

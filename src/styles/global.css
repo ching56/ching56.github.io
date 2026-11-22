@@ -571,33 +571,6 @@ html[data-bottle-motion="still"] .home-stage::before {
   }
 }
 
-/* ---------- Across pages ---------- */
-
-/* Same-site navigations cross-fade, and the bottle carries across: the
-   article header's silhouette and the home hero share one transition name,
-   so following the mark home grows it back into the photo (and opening a
-   post shrinks the photo into the mark). CSS only;
-   browsers without cross-document view transitions simply navigate. */
-@view-transition {
-  navigation: auto;
-}
-
-.site-mark .bottle-logo,
-.home-bottle {
-  view-transition-name: bottle;
-}
-
-::view-transition-group(bottle) {
-  animation-duration: 550ms;
-  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @view-transition {
-    navigation: none;
-  }
-}
-
 /* ---------- Back to top ---------- */
 
 /* A typed [ ↑ ] in the bottom-right corner, on a sliver of paper so it
