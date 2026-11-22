@@ -534,6 +534,25 @@ html[data-spin="ready"] .home-bottle {
   }
 }
 
+/* With the script, the bottle's state machine (see BottleMark) owns the
+   dock: html[data-bottle] replaces the scroll-triggered flag, and until the
+   reader first scrolls by hand (data-bottle-motion="still") docking is
+   instant, so a page reopened scrolled down shows the bottle already docked
+   rather than playing the move. Without the script, dock-flag above still
+   docks it. */
+html[data-bottle]:has(.home-bottle) {
+  animation-name: none;
+}
+
+html[data-bottle="docked"] {
+  --docked: 1;
+}
+
+html[data-bottle-motion="still"] .home-bottle,
+html[data-bottle-motion="still"] .home-stage::before {
+  transition: none !important;
+}
+
 /* Moving towards the docked state takes the docking time. Transitions read
    the new state's values, so this picks the right time for each direction. */
 @container style(--docked: 1) {

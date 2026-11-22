@@ -839,12 +839,14 @@ test("content pages load no external webfonts or Astro runtime JavaScript beyond
   for (const [index, html] of contentHtml.entries()) {
     const scripts = [...html.matchAll(/<script\b[^>]*>/gi)].map(([tag]) => tag);
     if (index === 0) {
-      // The zh-TW home has one small inline script: it loads the bottle's
-      // turntable sprite after the still, and turns the spin on only once
-      // the sprite is in hand (never on Save-Data, 2G or after 8s).
+      // The zh-TW home has one small inline script, the bottle's state
+      // machines: place (hero/docked -> data-bottle), motion (still/live ->
+      // data-bottle-motion) and the sprite loader (-> data-spin="ready",
+      // never on Save-Data, 2G or after 8s); it also guards the morph.
       assert.deepEqual(scripts, ["<script>"]);
       const [script] = html.match(/<script>[\s\S]*?<\/script>/);
-      assert.match(script, /dataset\.spin = "ready"/);
+      assert.match(script, /\.spin="ready"/);
+      assert.match(script, /docked/);
       assert.match(script, /pagereveal/);
       assert.ok(script.length < 3072, `expected the inline script under 3 KB, got ${script.length}`);
     } else if (index === 1) {

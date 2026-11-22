@@ -7,11 +7,13 @@
 // it shows a full-resolution still of the first frame. "logo" is that docked
 // state on every other page: the last frame's outline.
 import { Image } from "astro:assets";
+import { transformSync } from "esbuild";
 
 import mark from "../assets/home/bottle-mark.webp";
 import spin from "../assets/home/bottle-spin.webp";
 import spinSmall from "../assets/home/bottle-spin-small.webp";
 import still from "../assets/home/bottle-still.webp";
+import bottleSource from "../scripts/bottle-home.js?raw";
 
 interface Props {
   variant: "turntable" | "logo";
@@ -19,7 +21,27 @@ interface Props {
   label?: string;
 }
 
+// The turntable's inline script (src/scripts/bottle-home.js, inlined
+// minified; the home page's inline budget is 3 KB) runs the bottle as explicit state
+// machines, built by one tiny machine(table, state, changed) helper; render()
+// derives every root attribute from their states and nothing else writes
+// them:
+//   place   hero --past--> docked --back--> hero   (scrollY vs --dock-threshold)
+//           -> html[data-bottle]; CSS docks the bottle from it. Coming back
+//           to home in history starts in the place it was left in (saved on
+//           pageswap), so it is docked before the browser restores scroll.
+//   motion  still --hand--> live   (first wheel, touch, key or pointer)
+//           -> html[data-bottle-motion]; while still, docking is instant, so
+//           a page reopened scrolled down never plays the move.
+//   sprite  per size, idle --request--> loading --loaded--> ready
+//                                               --failed--> failed (no retry)
+//           -> html[data-spin="ready"] for the current size. Started after
+//           the still has loaded; skipped on data saver or 2G; 8s timeout.
+// The cross-page morph runs only while place is hero; otherwise the page
+// simply changes, the mark already being where every header's mark is.
 const FRAMES = 21;
+// Shipped minified: readable source, small page.
+const bottleScript = transformSync(bottleSource, { minify: true, target: "es2020" }).code.trim();
 const { variant, href, label } = Astro.props;
 ---
 
@@ -40,77 +62,7 @@ const { variant, href, label } = Astro.props;
       />
       <span class="bottle-silhouette" aria-hidden="true"></span>
     </a>
-    <script is:inline>
-      // The turntable turns only once its sprite is in hand: per sprite
-      // size, idle -> loading -> ready | failed (no retry). data-spin
-      // follows the current size. Data saver, 2G, an error or 8s: no turn.
-      (() => {
-        const root = document.documentElement;
-        const bottle = document.querySelector(".home-bottle");
-        const still = bottle && bottle.querySelector(".bottle-still");
-        const connection = navigator.connection;
-        if (!still || (connection && (connection.saveData || /2g$/.test(connection.effectiveType)))) return;
-        const narrow = matchMedia("(max-width: 48rem)");
-        const transitions = {
-          idle: { request: "loading" },
-          loading: { loaded: "ready", failed: "failed" },
-          ready: {},
-          failed: {},
-        };
-        const sizes = { small: "idle", large: "idle" };
-        const current = () => (narrow.matches ? "small" : "large");
-        const sync = () => {
-          if (sizes[current()] === "ready") root.dataset.spin = "ready";
-          else delete root.dataset.spin;
-        };
-        const send = (size, event) => {
-          const next = transitions[sizes[size]][event];
-          if (!next) return false;
-          sizes[size] = next;
-          sync();
-          return true;
-        };
-        const show = () => {
-          const size = current();
-          sync();
-          if (!send(size, "request")) return;
-          const sprite = new Image();
-          const timeout = setTimeout(() => {
-            sprite.removeAttribute("src");
-            send(size, "failed");
-          }, 8000);
-          sprite.onload = () => {
-            clearTimeout(timeout);
-            send(size, "loaded");
-          };
-          sprite.onerror = () => {
-            clearTimeout(timeout);
-            send(size, "failed");
-          };
-          sprite.src = size === "small" ? bottle.dataset.spriteSmall : bottle.dataset.spriteLarge;
-        };
-        if (still.complete && still.naturalWidth) show();
-        else still.addEventListener("load", show, { once: true });
-        narrow.addEventListener("change", show);
-      })();
-
-      // The bottle morphs across pages only from the hero. Docked, it is
-      // already where every header's mark sits, so the page just changes.
-      (() => {
-        const bottle = document.querySelector(".home-bottle");
-        if (!bottle) return;
-        const root = document.documentElement;
-        const guard = (event) => {
-          if (!event.viewTransition) return;
-          const docked = scrollY >= parseFloat(getComputedStyle(root).getPropertyValue("--dock-threshold"));
-          const box = bottle.getBoundingClientRect();
-          if (!docked && box.bottom > 0 && box.top < innerHeight) return;
-          event.viewTransition.skipTransition();
-        };
-        addEventListener("pageswap", guard);
-        addEventListener("pagereveal", guard);
-      })();
-    </script>
+    <script is:inline set:html={bottleScript}></script>
   ) : (
     <span class="bottle-logo" style={`--mark:url(${mark.src})`} aria-hidden="true"></span>
   )
