@@ -27,6 +27,9 @@ interface Props {
 // derives every root attribute from their states and nothing else writes
 // them:
 //   place   hero --past--> docked --back--> hero   (scrollY vs --dock-threshold)
+//           returning --past|hand--> docked: a return through history to a
+//           home left docked; shown docked, deaf to "back" while the browser
+//           restores the scroll (which passes through small values)
 //           -> html[data-bottle]; CSS docks the bottle from it. The head
 //           script (BottleHead.astro, bottle-head.js) seeds it before the
 //           first frame: coming back to home in history starts in the place

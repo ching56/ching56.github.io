@@ -19,17 +19,27 @@
     },
   });
   const render = () => {
-    root.dataset.bottle = place.state;
+    root.dataset.bottle = place.state === "hero" ? "hero" : "docked";
     root.dataset.bottleMotion = motion.state;
     if (sprites[size()].state === "ready") root.dataset.spin = "ready";
     else delete root.dataset.spin;
   };
 
   // The head script (bottle-head.js) has seeded the place before the first
-  // frame; the machine starts from that seed.
+  // frame. A docked seed means a return through history to a home left
+  // scrolled down: the bottle is "returning", shown docked while the browser
+  // restores the scroll, which passes through small scrollY values on the
+  // way; only reaching the threshold or a hand scroll settles it.
   const key = "bottle-place";
-  const seed = root.dataset.bottle === "docked" ? "docked" : "hero";
-  const place = machine({ hero: { past: "docked" }, docked: { back: "hero" } }, seed, render);
+  const place = machine(
+    {
+      returning: { past: "docked", hand: "docked" },
+      hero: { past: "docked" },
+      docked: { back: "hero" },
+    },
+    root.dataset.bottle === "docked" ? "returning" : "hero",
+    render,
+  );
   const motion = machine({ still: { hand: "live" }, live: {} }, "still", render);
   const spriteTable = {
     idle: { request: "loading" },
@@ -47,12 +57,15 @@
   track();
   addEventListener("scroll", track, { passive: true });
   for (const type of ["wheel", "touchstart", "keydown", "pointerdown"]) {
-    addEventListener(type, () => motion.send("hand"), { passive: true });
+    addEventListener(type, () => {
+      motion.send("hand");
+      if (place.send("hand")) track();
+    }, { passive: true });
   }
 
   addEventListener("pagehide", () => {
     try {
-      sessionStorage.setItem(key, place.state);
+      sessionStorage.setItem(key, root.dataset.bottle);
     } catch {}
   });
 
