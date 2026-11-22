@@ -1167,4 +1167,4 @@
 ## 2026-11-22 10:40 · claude-code
 - Intent: push local `master` (138 commits ahead) to `origin/master`
 - Why: user: "push it"; Cloudflare Pages builds only from GitHub (runbook step 2). Pre-push check: clean tree, no WordPress export, `.dev.vars`, `.env` or secret files in the pushed range
-- Result: (pending)
+- Result: first push failed (HTTP 400, sideband disconnect; ~31 MB of blobs, none over 5 MB). Retried with a one-off `git -c http.postBuffer=524288000 push`: `8aac63f..966c2ab master -> master`; local and origin in sync. No Cloudflare action taken
