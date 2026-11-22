@@ -1168,3 +1168,8 @@
 - Intent: push local `master` (138 commits ahead) to `origin/master`
 - Why: user: "push it"; Cloudflare Pages builds only from GitHub (runbook step 2). Pre-push check: clean tree, no WordPress export, `.dev.vars`, `.env` or secret files in the pushed range
 - Result: first push failed (HTTP 400, sideband disconnect; ~31 MB of blobs, none over 5 MB). Retried with a one-off `git -c http.postBuffer=524288000 push`: `8aac63f..966c2ab master -> master`; local and origin in sync. No Cloudflare action taken
+
+## 2026-11-22 23:00 · claude-code
+- Intent: verify the user's first Cloudflare Pages deployment (`ching56-github-io.pages.dev`, deployment `fe498fff`) read-only, per runbook §2.5
+- Why: user created the Pages project (an earlier attempt was a Workers project: its `npx wrangler deploy` picked up the likes Worker's `wrangler.jsonc` and failed on the placeholder D1 id; advised deleting it and closing any rename PR Workers Builds opens)
+- Result: all pass. `/` 302 → /zh-TW/ (zh) or /en/ (en) with `Vary: Accept-Language`; /zh-TW/, /en/, a post, atom.xml (5 entries), likes.js 200; all 7 legacy slugs 301 to /zh-TW/ (/about → /zh-TW/#about); turntable sprites and CSS 200. `/api/likes` 404 as expected (Worker not deployed; likes stay hidden). Next: user attaches jhihcing.li + www (runbook §1 DNS move first, then §3–4)
