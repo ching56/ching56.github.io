@@ -1158,3 +1158,8 @@
 - Intent: make `http://localhost:4321/` redirect in `astro dev` the way production does, through a dev-only integration (`src/lib/dev-root-redirect.mjs`, hook `astro:server:setup`) that calls the real Pages Function `functions/index.js` for `/`. No effect on `astro build`/`dist`
 - Why: user saw 404 at the dev root; the root redirect lives in a Cloudflare Pages Function, which Astro dev doesn't run
 - Result: done. curl on dev `/`: zh-TW → 302 /zh-TW/, en-US → 302 /en/, query string kept on the match; browser pane lands on /zh-TW/. check 0/0, test 42/42, dist still has no root index.html
+
+## 2026-11-22 10:20 · claude-code
+- Intent: refresh the stale expectations in `docs/cloudflare-pages-cutover.md` before the user deploys: the legacy-slug table and content greps still expected the hidden 2022/covid/2023-2024/2025 posts; `public/_redirects` now sends them all to `/zh-TW/` (and `/about` to `/zh-TW/#about`)
+- Why: user asked how to deploy to jhihcing.li; the runbook is the path, and its checks would fail against the current build
+- Result: done; DNS rechecked (still Bluehost NS, apex A 66.235.200.145); `november-bottles` grep matches dist/zh-TW/index.html. Docs only, no deploy or push

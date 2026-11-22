@@ -6,7 +6,7 @@ DNS changes are user-only. An agent may prepare repository files and run the
 read-only verification commands, but must not operate Cloudflare, Namecheap,
 or production deployment controls.
 
-## Current state (checked 2026-07-30 19:38 Asia/Taipei)
+## Current state (checked 2026-07-30 19:38 Asia/Taipei; nameservers and apex A rechecked unchanged 2026-11-22)
 
 - Authoritative nameservers: `ns1.bluehost.com`, `ns2.bluehost.com`
 - Apex A record: `66.235.200.145`
@@ -81,13 +81,13 @@ The preparation commit containing `public/_redirects` must first be present on
 
    ```sh
    curl --silent --show-error --head https://PROJECT.pages.dev/en/
-   curl --silent --show-error https://PROJECT.pages.dev/zh-TW/ | rg '2025|2023 ~ 2024'
+   curl --silent --show-error https://PROJECT.pages.dev/zh-TW/ | rg 'november-bottles'
    curl --silent --show-error --head \
      -H 'Accept-Language: zh-TW,zh;q=0.9' \
      https://PROJECT.pages.dev/
    ```
 
-   Expected: `/en/` is HTTP 200; the Chinese list contains both newest posts;
+   Expected: `/en/` is HTTP 200; the Chinese feed links the newest post;
    `/` is HTTP 302 with `Location: https://PROJECT.pages.dev/zh-TW/` and
    `Vary: Accept-Language`.
 
@@ -171,13 +171,16 @@ Expected results:
 | Request | Status and location |
 | --- | --- |
 | `www` `/covid?source=cutover` | `301 https://jhihcing.li/covid?source=cutover` |
-| `/hello-world` | `301 https://jhihcing.li/zh-TW/blog/hello-world/` |
-| `/about` | `301 https://jhihcing.li/zh-TW/about/` |
-| `/2022-2` | `301 https://jhihcing.li/zh-TW/blog/2022/` |
-| `/covid` | `301 https://jhihcing.li/zh-TW/blog/covid/` |
+| `/hello-world` | `301 https://jhihcing.li/zh-TW/` |
+| `/about` | `301 https://jhihcing.li/zh-TW/#about` |
+| `/2022-2` | `301 https://jhihcing.li/zh-TW/` |
+| `/covid` | `301 https://jhihcing.li/zh-TW/` |
 | `/conservation-of-mass` | `301 https://jhihcing.li/zh-TW/` |
-| `/2023-2024` | `301 https://jhihcing.li/zh-TW/blog/2023-2024/` |
-| `/2025-2` | `301 https://jhihcing.li/zh-TW/blog/2025/` |
+| `/2023-2024` | `301 https://jhihcing.li/zh-TW/` |
+| `/2025-2` | `301 https://jhihcing.li/zh-TW/` |
+
+The old posts behind these slugs are hidden (`published: false`), so every
+legacy slug lands on the zh-TW home; `public/_redirects` is the source of truth.
 
 Then verify the root negotiation and built content:
 
@@ -186,14 +189,14 @@ curl -sS -D - -o /dev/null -H 'Accept-Language: zh-TW,zh;q=0.9' \
   https://jhihcing.li/
 curl -sS -D - -o /dev/null -H 'Accept-Language: en-US,en;q=0.9' \
   https://jhihcing.li/
-curl -sS https://jhihcing.li/zh-TW/ | rg '2025|2023 ~ 2024'
+curl -sS https://jhihcing.li/zh-TW/ | rg 'november-bottles'
 curl -sS https://jhihcing.li/zh-TW/atom.xml | rg \
   'application/atom\+xml|<feed|<entry'
 ```
 
 Expected: Chinese root request redirects 302 to `/zh-TW/`, English redirects
-302 to `/en/`, both include `Vary: Accept-Language`, the list exposes both
-newest posts, and the Atom response contains a feed with entries.
+302 to `/en/`, both include `Vary: Accept-Language`, the feed links the
+newest post, and the Atom response contains a feed with entries.
 
 The committed old-slug rules live in `public/_redirects` and are asserted from
 the generated `dist/_redirects` artifact by `yarn test`. Cloudflare's
