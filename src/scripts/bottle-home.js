@@ -56,6 +56,14 @@
       sessionStorage.setItem(key, place.state);
     } catch {}
   });
+  // The bottle moves across pages only when its two ends look different:
+  // the hero photo here and the mark on the other page. Docked, it already
+  // is the mark, so the page just changes and the mark stays still.
+  const guard = (event) => {
+    if (place.state !== "hero") event.viewTransition?.skipTransition();
+  };
+  addEventListener("pageswap", guard);
+  addEventListener("pagereveal", guard);
 
   const connection = navigator.connection;
   if (connection && (connection.saveData || /2g$/.test(connection.effectiveType))) return;

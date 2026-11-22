@@ -37,8 +37,10 @@ interface Props {
 //                                               --failed--> failed (no retry)
 //           -> html[data-spin="ready"] for the current size. Started after
 //           the still has loaded; skipped on data saver or 2G; 8s timeout.
-// There is no cross-page morph: pages simply change. Docked, the bottle is
-// exactly where every header's mark is, so the mark stays still.
+// Across pages the bottle moves only when its two ends look different: in
+// the hero (a photo) it morphs into or out of the header mark, both ways.
+// Docked, it already is the mark, exactly where every header's mark sits, so
+// the transition is skipped (pageswap/pagereveal) and the mark stays still.
 const FRAMES = 21;
 // Shipped minified: readable source, small page.
 const bottleScript = transformSync(bottleSource, { minify: true, target: "es2020" }).code.trim();

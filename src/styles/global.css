@@ -571,6 +571,39 @@ html[data-bottle-motion="still"] .home-stage::before {
   }
 }
 
+/* ---------- Across pages ---------- */
+
+/* The bottle moves across pages only when its two ends look different: the
+   hero photo and the header mark share one transition name, so it morphs
+   between them. Docked, it already is the mark, so the bottle script skips
+   the transition and the mark stays still. The root has no animation, so
+   the page itself never blinks. Browsers without cross-document view
+   transitions, and reduced motion, simply navigate. */
+@view-transition {
+  navigation: auto;
+}
+
+.site-mark .bottle-logo,
+.home-bottle {
+  view-transition-name: bottle;
+}
+
+::view-transition-group(bottle) {
+  animation-duration: 550ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 /* ---------- Back to top ---------- */
 
 /* A typed [ ↑ ] in the bottom-right corner, on a sliver of paper so it

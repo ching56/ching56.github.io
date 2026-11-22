@@ -801,7 +801,7 @@ test("the zh-TW homepage shows a now note only when it is published and has cont
   assert.doesNotMatch(html, /<a href="\/zh-TW\/blog\/now\/"/);
 });
 
-test("pages change without a cross-page transition, so the mark stays still", async () => {
+test("only the bottle moves across pages, and the page itself never fades", async () => {
   // The site's own stylesheets (public/css holds unreferenced Eleventy-era files).
   const stylesheets = (await walkFiles(distDirectory)).filter(
     (file) => file.includes("_astro/") && file.endsWith(".css"),
@@ -809,7 +809,9 @@ test("pages change without a cross-page transition, so the mark stays still", as
   const css = (
     await Promise.all(stylesheets.map((file) => readFile(new URL(file, distDirectory), "utf8")))
   ).join("\n");
-  assert.doesNotMatch(css, /@view-transition|view-transition-name/);
+  assert.match(css, /@view-transition\s*\{\s*navigation:\s*auto/);
+  assert.match(css, /view-transition-name:\s*bottle/);
+  assert.match(css, /::view-transition-old\(root\),\s*::view-transition-new\(root\)\s*\{\s*animation:\s*none/);
 });
 
 test("every page offers a back-to-top link that appears a screen down", async () => {
@@ -850,6 +852,7 @@ test("content pages load no external webfonts or Astro runtime JavaScript beyond
       assert.match(script, /\.spin="ready"/);
       assert.match(script, /docked/);
       assert.match(script, /pagehide/);
+      assert.match(script, /pagereveal/);
       assert.ok(script.length < 3072, `expected the inline script under 3 KB, got ${script.length}`);
     } else if (index === 1) {
       assert.deepEqual(scripts, []);

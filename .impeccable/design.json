@@ -45,7 +45,7 @@
       { "name": "arrow-slide", "value": "200ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "External-link arrow slides 2px up-right on hover." },
       { "name": "bottle-turn", "value": "scroll(root), 0 to the bottle bottom edge, steps(21, jump-none) on the sprite background-position", "purpose": "The home bottle turns once on its turntable as the reader scrolls it away; it no longer docks into a logo. Longhands only." },
       { "name": "to-top-in", "value": "scroll(root), range 80dvh 100dvh, linear, opacity and visibility", "purpose": "The back-to-top control fades in once the reader is a screen down." },
-      { "name": "bottle-across-pages", "value": "none", "purpose": "No cross-page transition (removed 2026-11-23): the docked home mark and every header mark sit at the same spot, so the mark stays still between pages." },
+      { "name": "bottle-across-pages", "value": "cross-document view transition, view-transition-name: bottle, 550ms cubic-bezier(0.32, 0.72, 0, 1); root animation none", "purpose": "Only when the ends differ: the hero photo and the header mark morph into each other; docked (mark to mark) it is skipped and the mark stays still. Off under reduced motion." },
       { "name":  "lightbox", "value":  "open 200ms cubic-bezier(0.23, 1, 0.32, 1) from scale 0.95 via @starting-style; close 150ms ease-out; display/overlay allow-discrete", "purpose":  "Photo lightbox enters gently and leaves faster; reduced motion keeps only the fade." },
       { "name": "reduced-motion", "value": "no turn; no smooth scroll", "purpose": "Under reduced motion the bottle stays on its still and back to top jumps." }
     ],
