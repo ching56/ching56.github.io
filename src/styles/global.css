@@ -182,8 +182,24 @@ a {
   min-height: 6rem;
 }
 
+/* Like the docked home bottle, the mark stays at the top of the page on a
+   full-width strip of paper (the same strip as home's), so text scrolls
+   under paper, never under the mark. The header itself keeps its height in
+   the flow. */
 .site-identity {
+  position: fixed;
+  z-index: 10;
+  inset: 0 0 auto;
+  height: calc(var(--logo-width) + 24px);
   min-width: 0;
+  padding-inline-start: calc((100% - min(100% - clamp(2rem, 5vw, 5rem), 82rem)) / 2);
+  background: var(--paper);
+}
+
+@media (max-width: 48rem) {
+  .site-identity {
+    padding-inline-start: calc((100% - min(100% - 2rem, 42rem)) / 2);
+  }
 }
 
 .site-crumbs {

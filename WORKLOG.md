@@ -1193,3 +1193,8 @@
 - Intent: the Threads ending becomes a single bracketed link `[ 同步發佈在 Threads ↗ ]` (EN "Also posted on Threads"): drop the prompt paragraph and the 「在上面和我互動」/"Talk with me there" label; the link text is the former prompt. Remove `threadsLinkLabel`; update the test and docs/threads-posts.md
 - Why: user: "make the link to [同步發佈在 Threads(arrow)], remove 在上面和我互動"
 - Result: done. Built footer is one `a.response-cta` reading 同步發佈在 Threads + ↗ icon + hidden （另開新分頁）; dev screenshot on shino-bottle shows `[ 同步發佈在 Threads ↗ ]`. check 0/0, test 42/42
+
+## 2026-11-23 00:20 · claude-code
+- Intent: fix the post header to the top like home's docked mark: `.site-identity` becomes a fixed full-width paper strip `--logo-width + 24px` tall (z-index 10), its padding putting the mark on the shell's edge (`(100% - shell width) / 2`, with the narrow-screen shell width under 48rem); the in-flow `.site-header` keeps its 6rem so content starts where it did. The mark stays at (shell edge, 12px), identical to home's docked mark
+- Why: user: "I want the header fixed on the top in the post as home page." (Also checked their report of the mark turning back into the photo and jumping when entering a post from mid-home: not reproducible on the local production build; pages.dev still runs the unpushed old version)
+- Result: done; strip given an explicit `height: calc(var(--logo-width) + 24px)` (the list's line box had made it 54px). Dev: post at 1280 and 375 wide, scrolled 600px, mark at (16, 12), strip 46px full width, text scrolls under it, no horizontal overflow; at rest the date still starts at 126px. check 0/0, test 42/42
