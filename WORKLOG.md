@@ -1188,3 +1188,8 @@
 - Intent: stop the logo "dancing" across pages: (1) put the post header's lying mark exactly where the home bottle docks (header `align-items: start`, no top padding; `.site-mark` min-height = the strip, `--logo-width + 24px`; the mark's box gets inward block margins and outward inline margins of the overhang so it takes up only the space it is seen in); (2) in the home guard, skip the cross-page transition whenever the bottle is docked (scrollY ≥ `--dock-threshold`), not only when off screen: two boxes of different size and scale interpolate unevenly even when start and end match. Trim the loader's comment to stay under the 3 KB inline budget
 - Why: user: "the logo dance when we enter and leave page, can we make it not dance"
 - Result: done. Mark at (16, 12), 54.4×22 on the post and docked on home, at 1280 and 375 wide; link box 54×46. Guard: 48px threshold read, docked false at top, true at 400. check 0/0, test 42/42, home inline script 2,930 B
+
+## 2026-11-23 00:05 · claude-code
+- Intent: the Threads ending becomes a single bracketed link `[ 同步發佈在 Threads ↗ ]` (EN "Also posted on Threads"): drop the prompt paragraph and the 「在上面和我互動」/"Talk with me there" label; the link text is the former prompt. Remove `threadsLinkLabel`; update the test and docs/threads-posts.md
+- Why: user: "make the link to [同步發佈在 Threads(arrow)], remove 在上面和我互動"
+- Result: done. Built footer is one `a.response-cta` reading 同步發佈在 Threads + ↗ icon + hidden （另開新分頁）; dev screenshot on shino-bottle shows `[ 同步發佈在 Threads ↗ ]`. check 0/0, test 42/42

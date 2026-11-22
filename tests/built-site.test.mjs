@@ -428,12 +428,13 @@ test("posts mirrored from Threads send responses to the Threads original", async
     assert.ok(footer, `expected a response ending in ${page}`);
 
     if (/同步發佈在 Threads|Also posted on Threads/.test(footer)) {
+      // One bracketed link, no prompt line: [ 同步發佈在 Threads ↗ ].
       assert.match(
         footer,
-        /<a class="response-cta" href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?" target="_blank" rel="noopener noreferrer">\s*<span>(?:在上面和我互動|Talk with me there)<\/span>\s*<svg class="external-link-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span class="visually-hidden">(?:（另開新分頁）| \(opens in a new tab\))<\/span>\s*<\/a>/,
+        /<footer class="response-ending">\s*<a class="response-cta" href="https:\/\/www\.threads\.(?:com|net)\/@[\w.]+\/post\/[\w-]+\/?" target="_blank" rel="noopener noreferrer">\s*<span>(?:同步發佈在 Threads|Also posted on Threads)<\/span>\s*<svg class="external-link-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span class="visually-hidden">(?:（另開新分頁）| \(opens in a new tab\))<\/span>\s*<\/a>/,
         `expected a Threads permalink in ${page}`,
       );
-      assert.doesNotMatch(footer, /mailto:/, `expected no email prompt in ${page}`);
+      assert.doesNotMatch(footer, /mailto:|在上面和我互動|Talk with me there/, `expected no email prompt in ${page}`);
     } else {
       assert.match(
         footer,

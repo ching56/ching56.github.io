@@ -16,7 +16,7 @@ Some posts are copied from https://www.threads.com/@ching56. They are imported b
    Post text, one paragraph per Threads paragraph.
    ```
 
-   `threadsUrl` replaces the email ending with 「同步發佈在 Threads」 and a link 「在上面和我互動」 to the original post. The build rejects anything that is not an `https://www.threads.com/@handle/post/<id>` permalink.
+   `threadsUrl` replaces the email ending with one bracketed link, `[ 同步發佈在 Threads ↗ ]`, to the original post. The build rejects anything that is not an `https://www.threads.com/@handle/post/<id>` permalink.
 
 2. For each video, run the encoder from the repo root:
 

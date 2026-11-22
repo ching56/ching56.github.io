@@ -13,8 +13,7 @@ export const UI = {
     nowLabel: "現在",
     responsePrompt: "讀完有想說的嗎？",
     responseLinkLabel: "寫信給我",
-    threadsPrompt: "同步發佈在 Threads",
-    threadsLinkLabel: "在上面和我互動",
+    threadsLinkLabel: "同步發佈在 Threads",
     newTabLabel: "（另開新分頁）",
   },
   en: {
@@ -29,8 +28,7 @@ export const UI = {
     nowLabel: "Now",
     responsePrompt: "Have something to share?",
     responseLinkLabel: "Email me",
-    threadsPrompt: "Also posted on Threads",
-    threadsLinkLabel: "Talk with me there",
+    threadsLinkLabel: "Also posted on Threads",
     newTabLabel: " (opens in a new tab)",
   },
 } as const;
