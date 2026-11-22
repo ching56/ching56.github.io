@@ -1228,3 +1228,8 @@
 - Intent: split `src/styles/global.css` (1,330 lines, the only source file over 300) into ordered partials under `src/styles/` (base, header, bottle, dock, navigation, intro, diary, register, article, responsive), each ≤ 300 lines, cut only at existing section boundaries; `global.css` becomes the header comment plus `@import`s in the original order, so the cascade is unchanged. The source-reading CSS contract test reads every stylesheet under `src/styles/`. Verify the built CSS is byte-identical apart from ordering-neutral bundling
 - Why: user: "break huge file into smaller readable one, no single component file longer than 300 lines"
 - Result: done. Partials 63–273 lines (diary.css largest), global.css 13. The built stylesheet is byte-identical to before the split (same hash, `cmp` equal). Every other source file was already under 300 (BaseLayout 112). check 0/0, test 42/42. AGENTS.md architecture notes the partials and the 300-line rule
+
+## 2026-11-23 02:20 · claude-code
+- Intent: push `master` (10 commits ahead + this log) to origin so Cloudflare Pages deploys it, then verify pages.dev serves the new build (new CSS hash, `data-bottle` script, Threads link)
+- Why: user: "push and deploy after you fix, i'll be afk, make decision"
+- Result: (pending)
