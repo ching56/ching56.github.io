@@ -1,9 +1,11 @@
 ---
 // The bottle from its 21-frame turntable cutout (assets rebuilt by
 // scripts/build-bottle-assets.mjs). "turntable" is the homepage hero: the real
-// photo, which turns once on its turntable as the reader scrolls it away. At
-// rest it shows a full-resolution still of the first frame. "logo" is the
-// small silhouette (the last frame's outline) in the article header.
+// photo, which, once the page scrolls past a threshold, turns once on its
+// turntable and darkens into a solid silhouette (the photo's own outline,
+// filled with ink) as it docks, lying on its side, as the home logo. At rest
+// it shows a full-resolution still of the first frame. "logo" is that docked
+// state on every other page: the last frame's outline.
 import { Image } from "astro:assets";
 
 import mark from "../assets/home/bottle-mark.webp";
@@ -36,6 +38,7 @@ const { variant, href, label } = Astro.props;
         loading="eager"
         fetchpriority="high"
       />
+      <span class="bottle-silhouette" aria-hidden="true"></span>
     </a>
     <script is:inline>
       // The turntable turns only once its sprite is in hand. Each sprite

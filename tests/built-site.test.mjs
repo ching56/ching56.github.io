@@ -329,13 +329,14 @@ test("the approved continuous journal structure is semantic across reading surfa
     assert.match(html, /<body data-surface="character-proof">/);
     assert.match(html, /direction seed 9062ef67/);
     if (html !== chineseList) {
-      // The header is the horizontal logo: the bottle silhouette beside the
-      // name, one link home.
+      // The header is a breadcrumb: the bottle silhouette alone links home.
       assert.match(
         html,
-        /<div class="site-identity">\s*<a class="site-mark" href="\/(?:zh-TW|en)\/">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<span class="author-signature">李至青<\/span>\s*<\/a>\s*<\/div>/,
+        /<nav class="site-identity" aria-label="(?:目前位置|You are here)">\s*<ol class="site-crumbs">\s*<li>\s*<a class="site-mark" href="\/(?:zh-TW|en)\/" aria-label="(?:首頁|Home)">\s*<span class="bottle-logo" style="--mark:url\(\/_astro\/bottle-mark\.[^)]+\.webp\)" aria-hidden="true"><\/span>\s*<\/a>\s*<\/li>/,
       );
-      assert.doesNotMatch(html, /class="site-crumbs?"/);
+      assert.doesNotMatch(html, /class="author-signature"/);
+      // The header holds only the bottle for now.
+      assert.doesNotMatch(html, /class="site-crumb"/);
     }
     assert.doesNotMatch(html, /class="site-title"/);
     assert.match(html, /<main id="main-content">/);
@@ -381,9 +382,11 @@ test("the approved continuous journal structure is semantic across reading surfa
     /<div class="home-hero">\s*<div class="home-bottle-slot">\s*<a class="home-bottle" href="\/zh-TW\/" aria-label="首頁"[^>]*>[\s\S]*?<\/a>\s*<script>[\s\S]*?<\/script>\s*<\/div>\s*<section id="about"/,
   );
   // The hero shows the real bottle photo (the fingerprinted turntable sprite),
-  // which turns as the page scrolls; it no longer docks into a logo.
+  // which turns once and darkens into its ink silhouette as it docks, lying
+  // on its side, into the header ("1 橫躺").
   const hero = chineseList.match(/<a class="home-bottle"[\s\S]*?<\/a>/)?.[0] ?? "";
-  assert.doesNotMatch(hero, /█|bottle-frame|bottle-silhouette/);
+  assert.doesNotMatch(hero, /█|bottle-frame/);
+  assert.match(hero, /<span class="bottle-silhouette" aria-hidden="true"><\/span>/);
   // Wide screens and phones each get their own turntable sprite, sized for
   // the small resting bottle.
   const sprite = hero.match(/--sprite-large:url\((\/_astro\/bottle-spin\.[^.)]+\.webp)\)/)?.[1];
@@ -890,6 +893,11 @@ test("scroll-driven animations survive minification as longhands", async () => {
   for (const timeline of ["scroll(root)"]) {
     assert.ok(css.includes(`animation-timeline:${timeline}`), `expected animation-timeline:${timeline}`);
   }
+  // Past the threshold the home bottle docks as the header mark, lying on
+  // its side ("1 橫躺"), on a strip of paper.
+  assert.match(css, /animation-name:dock-flag/);
+  assert.match(css, /@keyframes dock-flag/);
+  assert.match(css, /--logo-rotate:-90deg/);
 });
 
 test("the compact frameless content contract stays within its confirmed limits", async () => {
@@ -934,9 +942,8 @@ test("the compact frameless content contract stays within its confirmed limits",
     );
   }
 
-  // The header is the bottle beside the name; no crumb trail.
-  assert.match(css, /\.author-signature\s*\{/);
-  assert.doesNotMatch(css, /\.site-crumbs?\b/);
+  // The header holds only the bottle: no name, no crumb trail.
+  assert.doesNotMatch(css, /\.author-signature|\.site-crumb\b/);
 
   const linkRule = css.match(/^a\s*\{([^}]*)\}/m);
   assert.ok(linkRule, "expected a global link rule");
