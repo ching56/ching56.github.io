@@ -1232,4 +1232,4 @@
 ## 2026-11-23 02:20 · claude-code
 - Intent: push `master` (10 commits ahead + this log) to origin so Cloudflare Pages deploys it, then verify pages.dev serves the new build (new CSS hash, `data-bottle` script, Threads link)
 - Why: user: "push and deploy after you fix, i'll be afk, make decision"
-- Result: (pending)
+- Result: pushed `32f7a38..7adfb3d`; Pages served the new build 90s later (`BaseLayout.DE6oNY7V.css`, same as local). On pages.dev: home inline script is the minified state machines, hero has `.bottle-silhouette`; CSS has `--logo-rotate:-90deg`, `html[data-bottle=docked]`, root view-transition `animation:none`; a post ends with the single Threads link; `/` 302 → /zh-TW/, /zh-TW/, /en/, a post 200, /covid 301 → /zh-TW/. Safari focus ring still unverified
