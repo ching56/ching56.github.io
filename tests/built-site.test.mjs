@@ -629,6 +629,12 @@ test("the root route sends every reader to the zh-TW home", async () => {
   }
 });
 
+test("builds never ship the dev-only ?probe motion recorder", async () => {
+  const html = await readFile(listPage, "utf8");
+
+  assert.doesNotMatch(html, /__probe|motion-probe/);
+});
+
 test("the parked English edition redirects to the zh-TW home", async () => {
   const redirects = await readFile(new URL("_redirects", distDirectory), "utf8");
 

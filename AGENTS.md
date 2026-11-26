@@ -18,10 +18,21 @@ Personal blog (working title "The Return", 李至青的部落格, zh-TW) rebuilt
 - `yarn build` — production build into `dist/`
 - `yarn check` — Astro/TypeScript diagnostics
 - `yarn test` — production build followed by assertions against `dist/`
+- `yarn -s motion:record <url>` — headless Chrome frame-by-frame recording of a page's motion, as JSON (`--help` for options)
 
 A versioned pre-commit hook (`.githooks/pre-commit` → `scripts/bump-updated.mjs`) sets `updated:` to today's Asia/Taipei date on any staged post or page whose Markdown body changed. `yarn install` activates it through `prepare` (`core.hooksPath`). Don't bypass it with `--no-verify` for content edits.
 
 There is no linter. A clean `yarn check` plus `yarn test` is the verification bar. Dependencies are managed with Yarn 1 (`yarn.lock`; version pinned in `package.json`).
+
+### Verifying bugs the user saw
+
+`yarn check` plus `yarn test` don't see motion or devices. For a bug the user reports:
+
+1. Reproduce it on the platform they saw it on before changing code: an iPhone report means the iOS Simulator (its Safari reaches `yarn dev` at localhost), not desktop Chrome.
+2. Verify motion frame by frame on that platform. Open any dev page with `?probe` to get a frame recording overlaid on the page, or run `yarn -s motion:record` on desktop.
+3. If it doesn't reproduce there, say so. Don't fix a neighbouring bug and call the reported one fixed.
+
+How to do each step: `docs/testing-motion.md`.
 
 ## Architecture
 
@@ -33,6 +44,7 @@ The active Astro scaffold uses the default project roots:
 - `src/pages/` — locale-prefixed list and post routes; the first tracer lives under `/zh-TW/`.
 - `src/layouts/` / `src/styles/` — shared document head/layout and system-font-only CSS. `global.css` only `@import`s ordered partials (base, header, bottle, dock, navigation, intro, diary, register, article, responsive); the import order is the cascade order. Keep every source file under 300 lines.
 - `src/scripts/bottle-home.js` — the home bottle's state machines, inlined minified by `BottleMark.astro`.
+- `scripts/motion-probe.js` / `src/lib/dev-motion-probe.mjs` / `scripts/record-motion.mjs` — the `?probe` frame recorder, injected into `astro dev` pages only, and its headless Chrome runner (`docs/testing-motion.md`).
 - `tests/built-site.test.mjs` — behavioral assertions against production output (routes, content, metadata, no runtime JS beyond the likes script and the homepage bottle loader, no webfonts).
 - `public/` — static assets and Cloudflare's `_redirects` file, copied verbatim into `dist/`.
 - `dist/` — generated build output, gitignored.

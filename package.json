@@ -9,6 +9,7 @@
     "check": "astro check",
     "dev": "astro dev",
     "likes:dev": "wrangler dev --local",
+    "motion:record": "node scripts/record-motion.mjs",
     "likes:migrate:local": "wrangler d1 migrations apply LIKES_DB --local",
     "prepare": "git config core.hooksPath .githooks || true",
     "preview": "astro preview",
