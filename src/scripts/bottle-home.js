@@ -14,12 +14,15 @@
       const next = table[state][event];
       if (!next) return false;
       state = next;
-      changed();
+      changed?.();
       return true;
     },
   });
   const render = () => {
-    root.dataset.bottle = place.state === "hero" ? "hero" : "docked";
+    const where = place.state === "hero" ? "hero" : "docked";
+    root.dataset.bottle = where;
+    // Remember the place on this history entry (read by bottle-head.js).
+    if (history.state?.bottle !== where) history.replaceState({ ...history.state, bottle: where }, "");
     root.dataset.bottleMotion = motion.state;
     if (sprites[size()].state === "ready") root.dataset.spin = "ready";
     else delete root.dataset.spin;
@@ -29,13 +32,17 @@
   // first frame. A docked seed means a return (history or reload) to a home
   // left scrolled down: the bottle is "returning", shown docked while the browser
   // restores the scroll, which passes through small scrollY values on the
-  // way; only reaching the threshold or a hand scroll settles it.
-  const key = "bottle-place";
+  // way; only reaching the threshold or a hand scroll settles it. Leaving
+  // (pagehide) while docked also makes it "returning": Safari may show this
+  // very page again from its cache with the scroll reset to 0, even briefly
+  // before reloading it, and a docked bottle must not read that as a return
+  // to the top (it would mark the history entry hero, and the return would
+  // show the photo, then dock: two bottles on screen).
   const place = machine(
     {
       returning: { past: "docked", hand: "docked" },
       hero: { past: "docked" },
-      docked: { back: "hero" },
+      docked: { back: "hero", leave: "returning" },
     },
     root.dataset.bottle === "docked" ? "returning" : "hero",
     render,
@@ -54,8 +61,8 @@
   // The dock's motion, played by the script, not a CSS transition: every
   // frame it writes --docked (0 hero, 1 docked; CSS derives the whole move
   // from it) on the bottle and its paper strip.
-  //   move  rest --aim--> curve --settle--> rest
-  //         curve --turn--> spring --settle--> rest
+  //   move  rest --aim--> curve --done--> rest
+  //         curve --turn--> spring --done--> rest
   // Uninterrupted, it plays the CSS curve and duration (--dock-ease,
   // --dock-out-duration docking, --dock-in-duration returning), exactly the
   // transition it replaces. If the target changes mid-curve, a critically
@@ -64,14 +71,14 @@
   // step advances at most 1/30 s, so frames the browser holds back slow the
   // move rather than skip it. While motion is still, or under reduced
   // motion (CSS fades instead), it jumps.
-  const movers = [bottle, document.querySelector(".home-band")].filter(Boolean);
+  const movers = [bottle, document.querySelector(".home-band")];
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const target = () => (place.state === "hero" ? 0 : 1);
   const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
-  const ms = (value) => parseFloat(value) * (/ms$/.test(value) ? 1 : 1000);
+  const seconds = (value) => parseFloat(value) / (/ms$/.test(value) ? 1000 : 1);
   // cubic-bezier(x1, y1, x2, y2) as a function of progress 0..1.
   const bezier = (value) => {
-    const [x1, y1, x2, y2] = (value.match(/-?[\d.]+/g) || [0, 0, 1, 1]).map(Number);
+    const [x1, y1, x2, y2] = value.match(/-?[\d.]+/g).map(Number);
     const at = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
     return (p) => {
       let lo = 0;
@@ -84,6 +91,7 @@
       return at(y1, y2, (lo + hi) / 2);
     };
   };
+  const frame = requestAnimationFrame;
   let x = target();
   let v = 0;
   let last = 0;
@@ -93,35 +101,34 @@
   let duration = 1;
   let ease = (p) => p;
   const move = machine(
-    { rest: { aim: "curve" }, curve: { turn: "spring", settle: "rest" }, spring: { settle: "rest" } },
+    { rest: { aim: "curve" }, curve: { turn: "spring", done: "rest" }, spring: { done: "rest" } },
     "rest",
-    () => {},
   );
   const write = () => {
     for (const mover of movers) {
-      if (reduced.matches) mover.style.removeProperty("--docked");
-      else mover.style.setProperty("--docked", Math.min(1, Math.max(0, x)).toFixed(4));
+      // Empty under reduced motion: the property goes, and CSS decides.
+      mover.style.setProperty("--docked", reduced.matches ? "" : Math.min(1, Math.max(0, x)).toFixed(4));
     }
   };
   const step = (now) => {
-    const dt = Math.min((now - last) / 1000, 1 / 30);
+    const dt = Math.min((now - last) / 1000, 0.0333);
     last = now;
     if (move.state === "curve" && target() !== to) move.send("turn");
     if (move.state === "curve") {
-      elapsed += dt * 1000;
+      elapsed += dt;
       const before = x;
       x = from + (to - from) * ease(Math.min(1, elapsed / duration));
       if (dt) v = (x - before) / dt;
-      if (elapsed >= duration) move.send("settle");
+      if (elapsed >= duration) move.send("done");
     } else {
       v += (170 * (target() - x) - 26 * v) * dt;
       x += v * dt;
-      if (Math.abs(target() - x) < 0.001 && Math.abs(v) < 0.01) move.send("settle");
+      if (Math.abs(target() - x) < 0.001 && Math.abs(v) < 0.01) move.send("done");
     }
     if (move.state === "rest") {
       x = target();
       v = 0;
-    } else requestAnimationFrame(step);
+    } else frame(step);
     write();
   };
   const aim = () => {
@@ -133,14 +140,15 @@
       from = x;
       to = target();
       elapsed = 0;
-      duration = ms(css(to ? "--dock-out-duration" : "--dock-in-duration"));
+      duration = seconds(css(to ? "--dock-out-duration" : "--dock-in-duration"));
       ease = bezier(css("--dock-ease"));
       last = performance.now();
-      requestAnimationFrame(step);
+      frame(step);
     }
   };
 
-  const threshold = () => parseFloat(getComputedStyle(root).getPropertyValue("--dock-threshold"));
+  addEventListener("pagehide", () => place.send("leave"));
+  const threshold = () => parseFloat(css("--dock-threshold"));
   const track = () => {
     place.send(scrollY >= threshold() ? "past" : "back");
     aim();
@@ -149,7 +157,7 @@
   track();
   write();
   reduced.addEventListener("change", write);
-  addEventListener("scroll", track, { passive: true });
+  addEventListener("scroll", track);
   for (const type of ["wheel", "touchstart", "keydown", "pointerdown"]) {
     addEventListener(type, () => {
       motion.send("hand");
@@ -157,12 +165,6 @@
       else aim();
     }, { passive: true });
   }
-
-  addEventListener("pagehide", () => {
-    try {
-      sessionStorage.setItem(key, root.dataset.bottle);
-    } catch {}
-  });
 
   const connection = navigator.connection;
   if (connection && (connection.saveData || /2g$/.test(connection.effectiveType))) return;

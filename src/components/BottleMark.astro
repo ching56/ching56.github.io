@@ -27,14 +27,18 @@ interface Props {
 // derives every root attribute from their states and nothing else writes
 // them:
 //   place   hero --past--> docked --back--> hero   (scrollY vs --dock-threshold)
-//           returning --past|hand--> docked: a return (history or reload) to a
+//           docked --leave--> returning (pagehide: Safari may show the
+//           left page again with its scroll reset to 0 before reloading it)
+//           returning --past|hand--> docked: a return to a
 //           home left docked; shown docked, deaf to "back" while the browser
 //           restores the scroll (which passes through small values)
 //           -> html[data-bottle]; CSS docks the bottle from it. The head
 //           script (BottleHead.astro, bottle-head.js) seeds it before the
-//           first frame: coming back to home (history or reload) starts in
-//           the place it was left in (saved on pagehide), so it is docked
-//           before the browser restores scroll or a transition captures it.
+//           first frame: coming back to a home history entry starts in the
+//           place it was left in (kept on the entry as history.state.bottle,
+//           which survives however Safari labels the return), so it is
+//           docked before the browser restores scroll or a transition
+//           captures it.
 //   motion  still --hand--> live   (first wheel, touch, key or pointer)
 //           -> html[data-bottle-motion]; while still, docking is instant, so
 //           a page reopened scrolled down never plays the move. Seeded
@@ -42,8 +46,8 @@ interface Props {
 //           so the first scroll from the top plays the move however it
 //           scrolls (a still->live flip in the same style change as the dock
 //           would not transition).
-//   move    rest --aim--> curve --settle--> rest; curve --turn--> spring
-//           --settle--> rest: the dock's motion, written as --docked on the
+//   move    rest --aim--> curve --done--> rest; curve --turn--> spring
+//           --done--> rest: the dock's motion, written as --docked on the
 //           bottle and its strip every frame (CSS derives the whole move
 //           from it). Uninterrupted it plays the CSS curve and durations,
 //           exactly the old transition; a reversal mid-curve hands over to
