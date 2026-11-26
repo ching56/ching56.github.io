@@ -42,12 +42,14 @@ interface Props {
 //           so the first scroll from the top plays the move however it
 //           scrolls (a still->live flip in the same style change as the dock
 //           would not transition).
-//   spring  rest --aim--> moving --settle--> rest: the dock's motion. A
-//           critically damped spring writes --docked on the bottle and its
-//           strip every frame (CSS derives the whole move from it); a new
-//           target keeps position and velocity, so the move can be
-//           interrupted and reversed smoothly. Each step advances at most
-//           1/30 s. While still or under reduced motion it jumps (CSS fades).
+//   move    rest --aim--> curve --settle--> rest; curve --turn--> spring
+//           --settle--> rest: the dock's motion, written as --docked on the
+//           bottle and its strip every frame (CSS derives the whole move
+//           from it). Uninterrupted it plays the CSS curve and durations,
+//           exactly the old transition; a reversal mid-curve hands over to
+//           a critically damped spring from the current position and
+//           velocity. Each step advances at most 1/30 s. While still or
+//           under reduced motion it jumps (CSS fades).
 //   sprite  per size, idle --request--> loading --loaded--> ready
 //                                               --failed--> failed (no retry)
 //           -> html[data-spin="ready"] for the current size. Started after

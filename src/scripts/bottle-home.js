@@ -51,22 +51,52 @@
   const narrow = matchMedia("(max-width: 48rem)");
   const size = () => (narrow.matches ? "small" : "large");
 
-  // The dock moves on a spring, not a CSS transition: every frame it writes
-  // --docked (0 hero, 1 docked; CSS derives the whole move from it) on the
-  // bottle and its paper strip. A new target keeps the current position and
-  // velocity, so reversing mid-move turns smoothly. Each step advances at
-  // most 1/30 s, so frames the browser holds back slow the move rather than
-  // skip it. Critically damped (react-spring's default tension and
-  // friction): no overshoot. While motion is still, or under reduced motion
-  // (CSS fades instead), it jumps.
-  //   spring  rest --aim--> moving --settle--> rest
+  // The dock's motion, played by the script, not a CSS transition: every
+  // frame it writes --docked (0 hero, 1 docked; CSS derives the whole move
+  // from it) on the bottle and its paper strip.
+  //   move  rest --aim--> curve --settle--> rest
+  //         curve --turn--> spring --settle--> rest
+  // Uninterrupted, it plays the CSS curve and duration (--dock-ease,
+  // --dock-out-duration docking, --dock-in-duration returning), exactly the
+  // transition it replaces. If the target changes mid-curve, a critically
+  // damped spring (react-spring's default tension and friction) takes over
+  // from the current position and velocity, so the reversal is smooth. Each
+  // step advances at most 1/30 s, so frames the browser holds back slow the
+  // move rather than skip it. While motion is still, or under reduced
+  // motion (CSS fades instead), it jumps.
   const movers = [bottle, document.querySelector(".home-band")].filter(Boolean);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const target = () => (place.state === "hero" ? 0 : 1);
+  const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+  const ms = (value) => parseFloat(value) * (/ms$/.test(value) ? 1 : 1000);
+  // cubic-bezier(x1, y1, x2, y2) as a function of progress 0..1.
+  const bezier = (value) => {
+    const [x1, y1, x2, y2] = (value.match(/-?[\d.]+/g) || [0, 0, 1, 1]).map(Number);
+    const at = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+    return (p) => {
+      let lo = 0;
+      let hi = 1;
+      for (let i = 0; i < 24; i++) {
+        const mid = (lo + hi) / 2;
+        if (at(x1, x2, mid) < p) lo = mid;
+        else hi = mid;
+      }
+      return at(y1, y2, (lo + hi) / 2);
+    };
+  };
   let x = target();
   let v = 0;
   let last = 0;
-  const spring = machine({ rest: { aim: "moving" }, moving: { settle: "rest" } }, "rest", () => {});
+  let from = x;
+  let to = x;
+  let elapsed = 0;
+  let duration = 1;
+  let ease = (p) => p;
+  const move = machine(
+    { rest: { aim: "curve" }, curve: { turn: "spring", settle: "rest" }, spring: { settle: "rest" } },
+    "rest",
+    () => {},
+  );
   const write = () => {
     for (const mover of movers) {
       if (reduced.matches) mover.style.removeProperty("--docked");
@@ -76,12 +106,21 @@
   const step = (now) => {
     const dt = Math.min((now - last) / 1000, 1 / 30);
     last = now;
-    v += (170 * (target() - x) - 26 * v) * dt;
-    x += v * dt;
-    if (Math.abs(target() - x) < 0.001 && Math.abs(v) < 0.01) {
+    if (move.state === "curve" && target() !== to) move.send("turn");
+    if (move.state === "curve") {
+      elapsed += dt * 1000;
+      const before = x;
+      x = from + (to - from) * ease(Math.min(1, elapsed / duration));
+      if (dt) v = (x - before) / dt;
+      if (elapsed >= duration) move.send("settle");
+    } else {
+      v += (170 * (target() - x) - 26 * v) * dt;
+      x += v * dt;
+      if (Math.abs(target() - x) < 0.001 && Math.abs(v) < 0.01) move.send("settle");
+    }
+    if (move.state === "rest") {
       x = target();
       v = 0;
-      spring.send("settle");
     } else requestAnimationFrame(step);
     write();
   };
@@ -90,7 +129,12 @@
       x = target();
       v = 0;
       write();
-    } else if (x !== target() && spring.send("aim")) {
+    } else if (x !== target() && move.send("aim")) {
+      from = x;
+      to = target();
+      elapsed = 0;
+      duration = ms(css(to ? "--dock-out-duration" : "--dock-in-duration"));
+      ease = bezier(css("--dock-ease"));
       last = performance.now();
       requestAnimationFrame(step);
     }
