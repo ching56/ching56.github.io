@@ -11,7 +11,13 @@ interface Props {
 
 const { language, href, label, kind, prompt } = Astro.props;
 const external = kind === "external";
+// Cloudflare's Email Address Obfuscation would swap the address for
+// "[email protected]" and decode it with its own script, so the page would
+// flash that text and ship runtime JS. These markers make it skip the link.
+const mail = kind === "mail";
 ---
+
+{mail && <Fragment set:html="<!--email_off-->" />}
 
 <footer class="response-ending">
   {prompt && <p>{prompt}</p>}
@@ -37,3 +43,4 @@ const external = kind === "external";
     )}
   </a>
 </footer>
+{mail && <Fragment set:html="<!--/email_off-->" />}

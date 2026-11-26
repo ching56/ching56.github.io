@@ -148,14 +148,16 @@
 
   /* Once docked, the mark lies on a strip of paper, like the platen's top
      edge: text scrolls under paper, never under the mark. The strip is the
-     lying mark's height plus 12px above and below. */
-  .home-stage:has(.home-bottle)::before {
+     lying mark's height plus 12px above and below. It is a real element
+     (index.astro), not a pseudo-element: iOS Safari tints the status-bar
+     area from a fixed element along the top edge, and only then does text
+     stop showing above the strip while scrolling. */
+  .home-band {
     position: fixed;
     z-index: 9;
     inset: 0 0 auto;
     height: calc(var(--logo-width) + 24px);
     background: var(--paper);
-    content: "";
     opacity: var(--docked);
     pointer-events: none;
     transition: opacity var(--dock-duration) ease-out;
@@ -177,7 +179,7 @@ html[data-bottle="docked"] {
 }
 
 html[data-bottle-motion="still"] .home-bottle,
-html[data-bottle-motion="still"] .home-stage::before {
+html[data-bottle-motion="still"] .home-band {
   transition: none !important;
 }
 

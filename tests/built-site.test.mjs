@@ -370,7 +370,9 @@ test("the approved continuous journal structure is semantic across reading surfa
   assert.doesNotMatch(chineseList, /<h[1-6][^>]*>關於(?:這裡)?<\/h[1-6]>/);
   assert.match(
     chineseList,
-    /<section id="about"[\s\S]*?<footer class="response-ending">\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>\s*<\/footer>\s*<\/div>\s*<\/section>/,
+    // Wrapped in Cloudflare's email_off markers so Email Address Obfuscation
+    // never swaps the address for "[email protected]".
+    /<section id="about"[\s\S]*?<!--email_off--><footer class="response-ending">\s*<a class="response-cta" href="mailto:jcli@pm\.me"><svg class="mail-icon"[^>]*aria-hidden="true">[\s\S]*?<\/svg>\s*<span>jcli@pm\.me<\/span>\s*<\/a>\s*<\/footer><!--\/email_off-->\s*<\/div>\s*<\/section>/,
   );
   assert.doesNotMatch(chineseList, /如果有一段文字讓你想起自己/);
   assert.match(
