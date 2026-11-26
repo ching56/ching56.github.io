@@ -18,12 +18,12 @@
    the bottle wherever it stands. */
 .home-stage {
   --main-top: clamp(3rem, 7vw, 6.75rem);
-  --bottle-top: 12dvh;
+  --bottle-top: 12svh;
   /* Where the bottle stands, as a fraction of the shell width, and which part
      of the bottle stands there: 0 its left edge, 0.5 its centre. */
   --bottle-x: 0;
   --bottle-align: 0;
-  --bottle-height: 36dvh;
+  --bottle-height: 36svh;
   --bottle-rotate: 0deg;
   --bottle-width: calc(var(--bottle-height) * 396 / 980);
   /* Space between the bottle and the greeting. */

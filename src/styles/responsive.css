@@ -29,9 +29,9 @@
   .home-stage {
     --main-top: 2rem;
     /* Placed by the user. */
-    --bottle-top: 3dvh;
+    --bottle-top: 3svh;
     --bottle-x: 0.05;
-    --bottle-height: 16dvh;
+    --bottle-height: 16svh;
     --bottle-rotate: -21deg;
     --hero-gap: 76px;
     --greeting-align: end;

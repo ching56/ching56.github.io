@@ -1264,3 +1264,8 @@
 - Intent: (1) keep Cloudflare's Email Address Obfuscation off the mail link; (2) extend the fixed header paper above the top edge on iOS
 - Why: (1) user sees "[email protected]" flash on home: Cloudflare rewrites the mailto into /cdn-cgi/l/email-protection plus a decoder script; wrapping the mail ending in <!--email_off--> ... <!--/email_off--> makes Cloudflare skip it (the dashboard toggle is user-owned, this works without it). (2) user sees page content above the header while scrolling on iPhone: iOS Safari shows the page under its translucent top bar and in the overscroll bounce above top:0; the post header strip gets a paper ::before reaching 100vh up, and home's docked band starts 100vh above the top
 - Result: pending
+
+## 2026-11-26 20:10 · claude-code
+- Intent: size and place the home bottle in svh instead of dvh
+- Why: user says the dock animation is still broken on iOS. An on-page per-frame probe in the iOS 26.3 simulator (dev only, not committed) shows --dock-t (turn, darken) transitioning in ~350ms while translate crawls: ~3% done after 170ms, stalling while the finger moves, finishing only ~800ms in. iOS shrinks its toolbar as the page scrolls, so dvh changes every frame; --bottle-top/--bottle-height are in dvh, so the translate/scale target moves each frame and the transition restarts from its current value. svh doesn't change while scrolling (it equals dvh with the toolbar shown, i.e. at load), so the target holds still
+- Result: same probe after the change: translate now tracks --dock-t frame for frame (0.16 → 17%, 0.66 → 66%) and finishes with it in ~450ms, no stalls while the finger moves; the docked mark lands in the same spot. Probe removed. check 0 errors, test 44/44
