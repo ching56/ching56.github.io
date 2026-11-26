@@ -25,9 +25,9 @@
     else delete root.dataset.spin;
   };
 
-  // The head script (bottle-head.js) has seeded the place before the first
-  // frame. A docked seed means a return through history to a home left
-  // scrolled down: the bottle is "returning", shown docked while the browser
+  // The head script (bottle-head.js) has seeded both machines before the
+  // first frame. A docked seed means a return (history or reload) to a home
+  // left scrolled down: the bottle is "returning", shown docked while the browser
   // restores the scroll, which passes through small scrollY values on the
   // way; only reaching the threshold or a hand scroll settles it.
   const key = "bottle-place";
@@ -40,7 +40,7 @@
     root.dataset.bottle === "docked" ? "returning" : "hero",
     render,
   );
-  const motion = machine({ still: { hand: "live" }, live: {} }, "still", render);
+  const motion = machine({ still: { hand: "live" }, live: {} }, root.dataset.bottleMotion === "still" ? "still" : "live", render);
   const spriteTable = {
     idle: { request: "loading" },
     loading: { loaded: "ready", failed: "failed" },
