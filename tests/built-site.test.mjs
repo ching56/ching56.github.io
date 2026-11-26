@@ -635,6 +635,18 @@ test("builds never ship the dev-only ?probe motion recorder", async () => {
   assert.doesNotMatch(html, /__probe|motion-probe/);
 });
 
+test("every page declares the bottle favicons, and they ship", async () => {
+  const html = await readFile(listPage, "utf8");
+
+  for (const [rel, href] of [["icon", "/favicon.ico"], ["icon", "/icon.png"], ["apple-touch-icon", "/apple-touch-icon.png"]]) {
+    assert.match(html, new RegExp(`<link rel="${rel}" href="${href}"`));
+    const file = await readFile(new URL(`.${href}`, distDirectory));
+    assert.ok(file.length > 0, `${href} is empty`);
+  }
+  const ico = await readFile(new URL("./favicon.ico", distDirectory));
+  assert.equal(ico.readUInt16LE(2), 1, "favicon.ico is an ICO file");
+});
+
 test("the parked English edition redirects to the zh-TW home", async () => {
   const redirects = await readFile(new URL("_redirects", distDirectory), "utf8");
 
