@@ -81,15 +81,15 @@ The preparation commit containing `public/_redirects` must first be present on
 
    ```sh
    curl --silent --show-error --head https://PROJECT.pages.dev/en/
+   curl --silent --show-error --head https://PROJECT.pages.dev/zh-tw/
    curl --silent --show-error https://PROJECT.pages.dev/zh-TW/ | rg 'november-bottles'
-   curl --silent --show-error --head \
-     -H 'Accept-Language: zh-TW,zh;q=0.9' \
-     https://PROJECT.pages.dev/
+   curl --silent --show-error --head https://PROJECT.pages.dev/
    ```
 
-   Expected: `/en/` is HTTP 200; the Chinese feed links the newest post;
-   `/` is HTTP 302 with `Location: https://PROJECT.pages.dev/zh-TW/` and
-   `Vary: Accept-Language`.
+   Expected: `/en/` is HTTP 302 to `/zh-TW/` (the English edition is
+   parked); `/zh-tw/` is HTTP 301 to `/zh-TW/`; the Chinese feed links the
+   newest post; `/` is HTTP 302 to `/zh-TW/` whatever the reader's
+   language.
 
 Cloudflare's [Astro Pages guide](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/)
 specifies the `dist` output and Git-backed deploy flow. Its current v3
@@ -182,20 +182,19 @@ Expected results:
 The old posts behind these slugs are hidden (`published: false`), so every
 legacy slug lands on the zh-TW home; `public/_redirects` is the source of truth.
 
-Then verify the root negotiation and built content:
+Then verify the redirects and built content:
 
 ```sh
-curl -sS -D - -o /dev/null -H 'Accept-Language: zh-TW,zh;q=0.9' \
-  https://jhihcing.li/
-curl -sS -D - -o /dev/null -H 'Accept-Language: en-US,en;q=0.9' \
-  https://jhihcing.li/
+curl -sS -D - -o /dev/null https://jhihcing.li/
+curl -sS -D - -o /dev/null https://jhihcing.li/en/
+curl -sS -D - -o /dev/null https://jhihcing.li/zh-tw/
 curl -sS https://jhihcing.li/zh-TW/ | rg 'november-bottles'
 curl -sS https://jhihcing.li/zh-TW/atom.xml | rg \
   'application/atom\+xml|<feed|<entry'
 ```
 
-Expected: Chinese root request redirects 302 to `/zh-TW/`, English redirects
-302 to `/en/`, both include `Vary: Accept-Language`, the feed links the
+Expected: `/` and `/en/` redirect 302 to `/zh-TW/`, `/zh-tw/` redirects 301
+to `/zh-TW/`, the feed links the
 newest post, and the Atom response contains a feed with entries.
 
 The committed old-slug rules live in `public/_redirects` and are asserted from

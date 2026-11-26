@@ -1,6 +1,6 @@
 // In production the root route is a Cloudflare Pages Function
-// (functions/index.js) that sends readers to /zh-TW/ or /en/ by their
-// Accept-Language. `astro dev` doesn't run Pages Functions, so without this
+// (functions/index.js) that sends readers to the zh-TW home.
+// `astro dev` doesn't run Pages Functions, so without this
 // the dev root is a 404. This dev-only middleware calls that same function
 // for "/"; builds are untouched.
 export function devRootRedirect() {

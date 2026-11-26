@@ -1248,3 +1248,8 @@
 - Intent: record the deploy of aa7c638 and the Safari attempt
 - Why: user asked for push and deploy; they enabled safaridriver
 - Result: pages.dev served the new build 45s after the push (head seed script, `returning` state in the body script, CSS naming only the hero bottle). safaridriver on :4444 runs, but `POST /session` times out twice ("Request creation of a new automation session"): Safari's Allow Remote Automation (Settings ▸ Developer) is likely still off, or a Safari prompt is waiting. Safari focus ring and Safari morph remain unverified
+
+## 2026-11-26 18:25 · claude-code
+- Intent: send /, /en/ and a lowercase /zh-tw/ to the zh-TW home on jhihcing.li
+- Why: user reports https://jhihcing.li/zh-tw/ is an empty page (Pages paths are case-sensitive: 404) and /en/ shows no posts; both should land on the zh-TW home. The English edition has no posts, so it is parked: / no longer negotiates Accept-Language, /en and /en/* 302 to /zh-TW/ (temporary, it may return), hreflang alternates dropped (no reachable counterpart). Lowercase goes through a Pages Function (functions/zh-tw/[[path]].js) that compares case itself, so it cannot loop on /zh-TW/ even if Pages routing ignores case. Verify on a preview branch deployment before master: the legacy /zh-TW/blog/* redirects and assets must still work if the function also catches /zh-TW/*
+- Result: pending

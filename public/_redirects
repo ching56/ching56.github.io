@@ -1,3 +1,8 @@
+# The English edition has no posts yet and is parked: its paths go to the
+# zh-TW home. Temporary (302), so it can come back.
+/en /zh-TW/ 302
+/en/* /zh-TW/ 302
+
 # Legacy WordPress permalinks. Keep both forms because old bookmarks may include
 # the trailing slash WordPress normally emitted.
 /hello-world /zh-TW/ 301

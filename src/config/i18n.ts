@@ -40,8 +40,3 @@ export const SITE_LANGUAGES = Object.keys(UI) as SiteLanguage[];
 export function getAtomFeedUrl(language: SiteLanguage) {
   return new URL(`${UI[language].homePath}atom.xml`, SITE.url);
 }
-
-export const EDITION_HOME_ALTERNATES = [
-  { language: "zh-TW", path: "/zh-TW/" },
-  { language: "en", path: "/en/" },
-] as const;

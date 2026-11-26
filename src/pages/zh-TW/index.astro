@@ -5,7 +5,7 @@ import BottleHead from "../../components/BottleHead.astro";
 import BottleMark from "../../components/BottleMark.astro";
 import NowSection from "../../components/NowSection.astro";
 import DiaryFeed from "../../components/DiaryFeed.astro";
-import { EDITION_HOME_ALTERNATES, UI } from "../../config/i18n";
+import { UI } from "../../config/i18n";
 import { getPageByLanguage, hasContent } from "../../lib/posts";
 
 const about = await getPageByLanguage("zh-TW", "about");
@@ -16,7 +16,7 @@ if (!about) {
 }
 ---
 
-<BaseLayout language="zh-TW" alternates={EDITION_HOME_ALTERNATES} showHeader={false}>
+<BaseLayout language="zh-TW" showHeader={false}>
   <BottleHead slot="head" />
   <div class="home-stage">
     <div class="home-flow">

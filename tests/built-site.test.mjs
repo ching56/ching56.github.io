@@ -603,65 +603,54 @@ test("post pages progressively enhance with the vanilla likes control", async ()
   }
 });
 
-test("hreflang alternates appear only for pages with a translated counterpart", async () => {
+test("no page advertises an hreflang alternate while English is parked", async () => {
   const [englishList, chineseList, chineseOnlyPost] = await Promise.all([
     readFile(new URL("en/index.html", distDirectory), "utf8"),
     readFile(listPage, "utf8"),
     readFile(new URL("zh-TW/blog/bottles/index.html", distDirectory), "utf8"),
   ]);
-  const listAlternates = [
-    '<link rel="alternate" hreflang="zh-TW" href="https://jhihcing.li/zh-TW/">',
-    '<link rel="alternate" hreflang="en" href="https://jhihcing.li/en/">',
-  ];
 
-  for (const alternate of listAlternates) {
-    assert.ok(chineseList.includes(alternate));
-    assert.ok(englishList.includes(alternate));
+  for (const html of [englishList, chineseList, chineseOnlyPost]) {
+    assert.doesNotMatch(html, /hreflang=/);
   }
-
-  assert.doesNotMatch(chineseOnlyPost, /hreflang=/);
 });
 
-test("the root route redirects readers by their preferred supported language", async () => {
+test("the root route sends every reader to the zh-TW home", async () => {
   const { onRequest } = await import("../functions/index.js");
-  const cases = [
-    {
-      acceptLanguage: "zh-TW,zh;q=0.9,en;q=0.8",
-      location: "https://jhihcing.li/zh-TW/",
-    },
-    {
-      acceptLanguage: "en-US,en;q=0.9,zh-TW;q=0.8",
-      location: "https://jhihcing.li/en/",
-    },
-    {
-      acceptLanguage: "fr-FR,fr;q=0.9",
-      location: "https://jhihcing.li/en/",
-    },
-    {
-      acceptLanguage: "zh-TW;Q=0,en;q=1",
-      location: "https://jhihcing.li/en/",
-    },
-    {
-      acceptLanguage: "en;q=0,*;q=1,zh;q=0.5",
-      location: "https://jhihcing.li/zh-TW/",
-    },
-    {
-      acceptLanguage: null,
-      location: "https://jhihcing.li/en/",
-    },
-  ];
 
-  for (const { acceptLanguage, location } of cases) {
-    const headers = acceptLanguage
-      ? { "Accept-Language": acceptLanguage }
-      : undefined;
-    const request = new Request("https://jhihcing.li/", { headers });
-    const response = onRequest({ request });
+  for (const acceptLanguage of ["zh-TW,zh;q=0.9", "en-US,en;q=0.9", null]) {
+    const headers = acceptLanguage ? { "Accept-Language": acceptLanguage } : undefined;
+    const response = onRequest({ request: new Request("https://jhihcing.li/", { headers }) });
 
     assert.equal(response.status, 302);
-    assert.equal(response.headers.get("Location"), location);
-    assert.equal(response.headers.get("Vary"), "Accept-Language");
+    assert.equal(response.headers.get("Location"), "https://jhihcing.li/zh-TW/");
   }
+});
+
+test("the parked English edition redirects to the zh-TW home", async () => {
+  const redirects = await readFile(new URL("_redirects", distDirectory), "utf8");
+
+  assert.match(redirects, /^\/en \/zh-TW\/ 302$/m);
+  assert.match(redirects, /^\/en\/\* \/zh-TW\/ 302$/m);
+});
+
+test("a wrongly cased /zh-tw/ path redirects to /zh-TW/ and the real one passes", async () => {
+  const { onRequest } = await import("../functions/zh-tw/[[path]].js");
+  const next = () => new Response("page");
+  const cases = [
+    ["https://jhihcing.li/zh-tw/", "https://jhihcing.li/zh-TW/"],
+    ["https://jhihcing.li/zh-tw", "https://jhihcing.li/zh-TW/"],
+    ["https://jhihcing.li/ZH-TW/blog/bottles/?a=1", "https://jhihcing.li/zh-TW/blog/bottles/?a=1"],
+  ];
+
+  for (const [from, to] of cases) {
+    const response = onRequest({ request: new Request(from), next });
+    assert.equal(response.status, 301);
+    assert.equal(response.headers.get("Location"), to);
+  }
+
+  const passed = onRequest({ request: new Request("https://jhihcing.li/zh-TW/blog/bottles/"), next });
+  assert.equal(await passed.text(), "page");
 });
 
 for (const post of expectedPosts) {
