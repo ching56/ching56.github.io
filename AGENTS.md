@@ -29,7 +29,7 @@ There is no linter. A clean `yarn check` plus `yarn test` is the verification ba
 `yarn check` plus `yarn test` don't see motion or devices. For a bug the user reports:
 
 1. Reproduce it on the platform they saw it on before changing code: an iPhone report means the iOS Simulator (its Safari reaches `yarn dev` at localhost), not desktop Chrome.
-2. Verify motion frame by frame on that platform. Open any dev page with `?probe` to get a frame recording overlaid on the page, or run `yarn -s motion:record` on desktop.
+2. Verify motion frame by frame on that platform. Open any dev page with `?probe` to get a frame recording overlaid on the page, or run `yarn -s motion:record` on desktop. The probe reads computed styles, not the screen: on iOS, also record the Simulator screen and read its frames, since iOS can hold back frames during a fast flick.
 3. If it doesn't reproduce there, say so. Don't fix a neighbouring bug and call the reported one fixed.
 
 How to do each step: `docs/testing-motion.md`.

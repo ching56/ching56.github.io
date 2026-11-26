@@ -27,10 +27,14 @@
      return time here and the docking time while docked (a style query
      below); it cannot be computed from --docked, because a value derived
      from an animation is invalid in transition properties. */
-  --dock-out-duration: 450ms;
+  --dock-out-duration: 600ms;
   --dock-in-duration: 550ms;
   --dock-duration: var(--dock-in-duration);
-  --dock-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Ease-in-out, not a fast-start curve: during a fast flick iOS holds back
+     the page's frames for about the first 100ms while the transition clock
+     runs, so a curve that front-loads its motion was all but over by the
+     first frame shown, and the move looked skipped. */
+  --dock-ease: cubic-bezier(0.65, 0, 0.35, 1);
   /* 1: the turntable turns once on the way; 0: it does not. */
   --dock-spin: 1;
   /* How far into the move the photo starts to darken (0 to 0.9). */

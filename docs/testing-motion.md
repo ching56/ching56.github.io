@@ -54,6 +54,39 @@ Mobile Safari in the Simulator reaches the dev server at `localhost`.
 The Simulator has no CJK font, so Chinese text shows as `?` boxes. That doesn't matter
 for motion.
 
+### What the probe can't see: the painted screen
+
+The probe reads computed styles on the page's main thread, not what reaches the
+screen. On iOS the two can differ. In a fast flick, iOS holds back the page's frames
+for about the first 100 ms while the transition clock keeps running: the probe shows a
+smooth 450 ms move, while the screen shows the bottle still, then a jump (2026-11-26).
+When motion "disappears" on a phone, record the Simulator screen and read its frames:
+
+```sh
+xcrun simctl io booted recordVideo --codec=h264 --force /tmp/motion.mp4
+```
+
+Stop it with Ctrl-C (or `kill -INT`) after the gesture. Frames are written only when the
+screen changes, so list their times to find where the motion starts:
+
+```sh
+ffprobe -v error -select_streams v -show_entries frame=pts_time -of csv=p=0 /tmp/motion.mp4
+```
+
+Then tile about 0.75 s from just before that time into one image. Replace `1.70` with
+that time, and adjust the crop (width:height:x:y, in device pixels) to the region you
+need:
+
+```sh
+ffmpeg -v error -y -ss 1.70 -t 0.75 -i /tmp/motion.mp4 \
+  -vf "crop=600:1000:0:0,scale=150:250,drawtext=text='%{pts\:flt}':x=4:y=230:fontsize=14:fontcolor=red,tile=10x4" \
+  -frames:v 1 /tmp/motion.png
+```
+
+Compare a fast flick with a slow swipe. If the slow one paints every step and the fast
+one jumps, the curve front-loads its motion into the frames iOS skips. The dock uses an
+ease-in-out curve for this reason (`--dock-ease`).
+
 ## On desktop: `yarn motion:record`
 
 Headless Chrome injects the same probe into any URL, production included, scrolls the
