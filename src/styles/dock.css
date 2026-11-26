@@ -178,6 +178,20 @@ html[data-bottle="docked"] {
   --docked: 1;
 }
 
+/* With the script, a spring in bottle-home.js moves the dock (it writes
+   --docked on the bottle and the strip every frame), so the move's own
+   transitions are off; only the hover colour still eases. Under reduced
+   motion the script leaves --docked to CSS and the fade above runs. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-bottle] .home-bottle {
+    transition: color 120ms ease-out;
+  }
+
+  html[data-bottle] .home-band {
+    transition: none;
+  }
+}
+
 html[data-bottle-motion="still"] .home-bottle,
 html[data-bottle-motion="still"] .home-band {
   transition: none !important;

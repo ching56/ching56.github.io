@@ -51,15 +51,66 @@
   const narrow = matchMedia("(max-width: 48rem)");
   const size = () => (narrow.matches ? "small" : "large");
 
+  // The dock moves on a spring, not a CSS transition: every frame it writes
+  // --docked (0 hero, 1 docked; CSS derives the whole move from it) on the
+  // bottle and its paper strip. A new target keeps the current position and
+  // velocity, so reversing mid-move turns smoothly. Each step advances at
+  // most 1/30 s, so frames the browser holds back slow the move rather than
+  // skip it. Critically damped (react-spring's default tension and
+  // friction): no overshoot. While motion is still, or under reduced motion
+  // (CSS fades instead), it jumps.
+  //   spring  rest --aim--> moving --settle--> rest
+  const movers = [bottle, document.querySelector(".home-band")].filter(Boolean);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  const target = () => (place.state === "hero" ? 0 : 1);
+  let x = target();
+  let v = 0;
+  let last = 0;
+  const spring = machine({ rest: { aim: "moving" }, moving: { settle: "rest" } }, "rest", () => {});
+  const write = () => {
+    for (const mover of movers) {
+      if (reduced.matches) mover.style.removeProperty("--docked");
+      else mover.style.setProperty("--docked", Math.min(1, Math.max(0, x)).toFixed(4));
+    }
+  };
+  const step = (now) => {
+    const dt = Math.min((now - last) / 1000, 1 / 30);
+    last = now;
+    v += (170 * (target() - x) - 26 * v) * dt;
+    x += v * dt;
+    if (Math.abs(target() - x) < 0.001 && Math.abs(v) < 0.01) {
+      x = target();
+      v = 0;
+      spring.send("settle");
+    } else requestAnimationFrame(step);
+    write();
+  };
+  const aim = () => {
+    if (motion.state === "still" || reduced.matches) {
+      x = target();
+      v = 0;
+      write();
+    } else if (x !== target() && spring.send("aim")) {
+      last = performance.now();
+      requestAnimationFrame(step);
+    }
+  };
+
   const threshold = () => parseFloat(getComputedStyle(root).getPropertyValue("--dock-threshold"));
-  const track = () => place.send(scrollY >= threshold() ? "past" : "back");
+  const track = () => {
+    place.send(scrollY >= threshold() ? "past" : "back");
+    aim();
+  };
   render();
   track();
+  write();
+  reduced.addEventListener("change", write);
   addEventListener("scroll", track, { passive: true });
   for (const type of ["wheel", "touchstart", "keydown", "pointerdown"]) {
     addEventListener(type, () => {
       motion.send("hand");
       if (place.send("hand")) track();
+      else aim();
     }, { passive: true });
   }
 

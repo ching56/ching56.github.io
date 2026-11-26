@@ -19,6 +19,8 @@ the watched element changed, as JSON on stdout.
 Options:
   --scroll <how>     wheel (default) | key (PageDown) | script (scrollTo) | none
   --delta <px>       wheel delta or scrollTo target (default 300)
+  --steps <list>     instead of --scroll, a sequence, e.g. "wheel:300,wait:150,wheel:-300"
+                     (wheel:<dy> | script:<y> | key:<Key> | wait:<ms>)
   --selector <css>   element to watch (default .home-bottle)
   --props <a,b>      computed properties to read (default --dock-t,translate,scale)
   --after <ms>       keep recording this long after the first scroll (default 1500)
@@ -45,6 +47,7 @@ try {
     options: {
       scroll: { type: "string", default: "wheel" },
       delta: { type: "string", default: "300" },
+      steps: { type: "string" },
       selector: { type: "string", default: ".home-bottle" },
       props: { type: "string", default: "--dock-t,translate,scale" },
       after: { type: "string", default: "1500" },
@@ -64,6 +67,11 @@ if (options.help) {
   process.exit(0);
 }
 if (positionals.length !== 1) fail(1, "Pass exactly one URL, e.g. http://localhost:4321/zh-TW/ (run with --help).");
+const steps = (options.steps ?? "").split(",").filter(Boolean).map((step) => {
+  const [kind, value = ""] = step.split(":");
+  if (!["wheel", "script", "key", "wait"].includes(kind)) fail(1, `Unknown step "${step}": use wheel:<dy>, script:<y>, key:<Key> or wait:<ms>.`);
+  return { kind, value };
+});
 if (!["wheel", "key", "script", "none"].includes(options.scroll)) fail(1, `--scroll must be wheel, key, script or none, not "${options.scroll}".`);
 if (!existsSync(options.chrome)) fail(1, `No Chrome at ${options.chrome}. Pass its binary with --chrome.`);
 
@@ -128,7 +136,20 @@ try {
   await send("Page.navigate", { url: target.href });
   await sleep(Number(options.settle));
 
-  if (options.scroll === "wheel") {
+  const keyCodes = { PageDown: 34, PageUp: 33, ArrowDown: 40, ArrowUp: 38, Home: 36, End: 35 };
+  for (const { kind, value } of steps) {
+    if (kind === "wait") await sleep(Number(value));
+    if (kind === "wheel") await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: 200, y: 300, deltaX: 0, deltaY: Number(value) });
+    if (kind === "script") await evaluate(`scrollTo(0, ${Number(value)})`);
+    if (kind === "key") {
+      const key = { key: value, code: value, windowsVirtualKeyCode: keyCodes[value] ?? 0 };
+      await send("Input.dispatchKeyEvent", { type: "keyDown", ...key });
+      await send("Input.dispatchKeyEvent", { type: "keyUp", ...key });
+    }
+  }
+  if (steps.length) {
+    // The sequence replaced --scroll.
+  } else if (options.scroll === "wheel") {
     await send("Input.dispatchMouseEvent", { type: "mouseWheel", x: 200, y: 300, deltaX: 0, deltaY: delta });
   } else if (options.scroll === "key") {
     const key = { key: "PageDown", code: "PageDown", windowsVirtualKeyCode: 34 };

@@ -100,7 +100,7 @@ yarn -s motion:record http://localhost:4321/zh-TW/ --scroll script
 yarn -s motion:record https://jhihcing.li/zh-TW/ --width 390 --height 844
 ```
 
-`--scroll` takes `wheel` (the default), `key`, `script` or `none`. Run it with
+`--scroll` takes `wheel` (the default), `key`, `script` or `none`. For a sequence, such as reversing mid-move to test that the motion can be interrupted, use `--steps "wheel:300,wait:150,wheel:-300"`. Run it with
 `--help` for the other options and the exit codes.
 
 A phone width in desktop Chrome is still desktop Chrome: there is no toolbar resizing
